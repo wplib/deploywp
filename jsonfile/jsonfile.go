@@ -36,6 +36,8 @@ func Load(config cfg.Config) (jf *JsonFile) {
 			break
 		}
 
+		fixup(jf)
+
 	}
 	if err != nil {
 		log.Fatalf("Config file '%s' cannot be processed. It is likely invalid JSON or is not using the correct schema: %s.",
@@ -59,7 +61,7 @@ func (me *JsonFile) load() (b []byte, err error) {
 			isnew = string(b) == GetDefault()
 			break
 		}
-		b,err = me.makenew(fp)
+		b, err = me.makenew(fp)
 		isnew = true
 	}
 	if isnew {
@@ -104,9 +106,8 @@ func (me *JsonFile) makenew(fp Filepath) (b []byte, err error) {
 		}
 	}
 	_ = f.Close()
-	return b,err
+	return b, err
 }
-
 
 func (me *JsonFile) Filepath() (fp string) {
 	return fmt.Sprintf("%s%c%s",

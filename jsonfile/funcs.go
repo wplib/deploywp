@@ -1,5 +1,107 @@
 package jsonfile
 
+import (
+	"fmt"
+	"reflect"
+	"strings"
+)
+
+type Node interface{}
+
+//
+// @see https://gist.github.com/hvoecking/10772475
+// @see https://medium.com/capital-one-tech/learning-to-use-go-reflection-822a0aed74b7
+//
+func fixup(node Node) Node {
+	original := reflect.ValueOf(node)
+	temp := reflect.New(original.Type()).Elem()
+	fmt.Printf("<root>")
+	fixuprecursive(original, temp, 0)
+	return temp.Interface()
+}
+
+const spacer = "  "
+
+func fixuprecursive(original, temp reflect.Value, depth int) {
+	for range Once {
+		indent := strings.Repeat(spacer, depth)
+
+		pt := func() { fmt.Printf(" [%+v]", original.Type()) }
+
+		switch original.Kind() {
+		case reflect.Ptr:
+			ov := original.Elem()
+			if !ov.IsValid() {
+				break
+			}
+			temp.Set(reflect.New(ov.Type()))
+			fixuprecursive(ov, temp.Elem(), depth)
+
+		case reflect.Interface:
+			ov := original.Elem()
+			if !ov.IsValid() {
+				break
+			}
+			tv := reflect.New(ov.Type()).Elem()
+			fixuprecursive(ov, tv, depth)
+			temp.Set(tv)
+
+		case reflect.Struct:
+			pt()
+			depth++
+			for i := 0; i < original.NumField(); i++ {
+				cf := temp.Field(i)
+				ct := temp.Type().Field(i)
+				name := ct.Tag.Get("json")
+				if !cf.CanSet() {
+					continue
+				}
+				if name != "-" {
+					fmt.Printf("\n%s%s— %s", spacer, indent, ct.Tag.Get("json"))
+				}
+				fixuprecursive(original.Field(i), cf, depth)
+			}
+
+		case reflect.Slice:
+			pt()
+			depth++
+			o := original
+			temp.Set(reflect.MakeSlice(o.Type(), o.Len(), o.Cap()))
+			for i := 0; i < o.Len(); i += 1 {
+				fmt.Printf("\n%s%s[%d]", spacer, indent, i)
+				fixuprecursive(original.Index(i), temp.Index(i), depth)
+			}
+
+		case reflect.Map:
+			pt()
+			depth++
+			temp.Set(reflect.MakeMap(original.Type()))
+			for _, key := range original.MapKeys() {
+				fmt.Printf("\n%s%s[%s]", spacer, indent, key)
+				ov := original.MapIndex(key)
+				tv := reflect.New(ov.Type()).Elem()
+				fixuprecursive(ov, tv, depth)
+				temp.SetMapIndex(key, tv)
+			}
+
+		case reflect.String:
+			pt()
+			fmt.Printf(": %s", original.Interface())
+			temp.Set(original)
+
+		default:
+			if !original.CanInterface() {
+				break
+			}
+			pt()
+			fmt.Printf(": %+v", original.Interface())
+			temp.Set(original)
+
+		}
+
+	}
+}
+
 func GetDefault() string {
 	return `{
    "deploywp": {
