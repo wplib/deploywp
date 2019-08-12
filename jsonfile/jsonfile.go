@@ -12,11 +12,13 @@ import (
 )
 
 type JsonFile struct {
-	DeployWP DeployWP    `json:"deploywp"`
-	Site     Site        `json:"site"`
-	Source   Source      `json:"source"`
-	Targets  Targets     `json:"targets"`
-	config   *cfg.Config `json:"-"`
+	DeployWP DeployWP     `json:"deploywp"`
+	Site     Site         `json:"site"`
+	Source   Source       `json:"source"`
+	Targets  Targets      `json:"targets"`
+	config   *cfg.Config  `json:"-"`
+	rootvar  *TemplateVar `json:"-"`
+	rootnode *Node        `json:"-"`
 }
 
 func Load(config cfg.Config) (jf *JsonFile) {
@@ -36,7 +38,7 @@ func Load(config cfg.Config) (jf *JsonFile) {
 			break
 		}
 
-		fixup(jf)
+		jf.Fixup()
 
 	}
 	if err != nil {

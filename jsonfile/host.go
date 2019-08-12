@@ -12,7 +12,7 @@ type Host struct {
 	DomainSuffix Domain             `json:"domain_suffix"`
 	ProviderSlug Slug               `json:"provider"`
 	provider     providers.Provider `json:"-"`
-	Name         Name               `json:"name"`
+	Name         ReadableName       `json:"name"`
 	Label        Label              `json:"label"`
 	Branch       Slug               `json:"branch"`
 	WebRoot      Path               `json:"web_root"`
