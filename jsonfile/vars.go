@@ -1,16 +1,19 @@
 package jsonfile
 
+import (
+	"fmt"
+	"strings"
+)
+
 type Vars struct {
-	value    Value
-	absolute TemplateVarMap
-	local    TemplateVarMap
+	value Value
+	vars  []string
 }
 
-func NewVars(value Value, abslen int, loclen int) *Vars {
+func NewVars(value Value, count int) *Vars {
 	return &Vars{
-		value:    value,
-		absolute: make(TemplateVarMap, abslen),
-		local:    make(TemplateVarMap, loclen),
+		value: value,
+		vars:  make([]string, count),
 	}
 }
 
@@ -27,56 +30,69 @@ func NewVars(value Value, abslen int, loclen int) *Vars {
 //
 //		[animal.name count.value]
 //
-func ExtractVars(v Value, args *FixupArgs) *Vars {
-	const absolute = 1
-	const local = 2
-	avm := make(map[string]bool, 0)
-	lvm := make(map[string]bool, 0)
-	s := v.String()
-	var invar bool
-	var name []byte
-	var scope int
-	for i := 0; i < len(s); i++ {
-		if s[i] == '{' {
-			invar = true
-			continue
+func ExtractVars(v Value, args *FixupArgs) (vs *Vars) {
+	for range Once {
+		n := v.Type().Name()
+		noop(n)
+		s := v.String()
+		if !strings.Contains(s, "{") {
+			break
 		}
-		if !invar {
-			continue
-		}
-		if scope == 0 {
-			if s[i] != '.' {
-				scope = local
-			} else {
-				scope = absolute
+		vm := make(map[string]bool, 0)
+		var invar bool
+		var name []byte
+		var ch [10]bool
+		fpn := args.ParentNode.FullName()
+		pn := fpn
+		di := 0 // Dot index
+		for i := 0; i < len(s); i++ {
+			if s[i] == '{' {
+				invar = true
+				di = 1
+				ch[di] = true
 				continue
 			}
-		}
-		if s[i] == '}' {
-			switch scope {
-			case absolute:
-				avm[string(name)] = true
-			case local:
-				lvm[string(name)] = true
+			if !invar {
+				continue
 			}
-			invar = false
-			name = []byte("")
-			scope = 0
-			continue
+			if ch[di] {
+				if s[i] != '.' {
+					name = []byte(fmt.Sprintf("%s.%s", pn, string(s[i])))
+					pn = fpn
+					ch[di] = false
+					di = 0
+					continue
+				}
+				if i == len(s)-1 {
+					ch[di] = false
+					continue
+				}
+				if s[i+1] != '.' {
+					continue
+				}
+				ch[di] = false
+				di++
+				ch[di] = true
+				ldi := strings.LastIndexByte(pn, '.')
+				if ldi != -1 {
+					pn = pn[:ldi]
+				}
+				continue
+			}
+			if s[i] == '}' {
+				vm[string(name)] = true
+				invar = false
+				name = []byte("")
+				continue
+			}
+			name = append(name, s[i])
 		}
-		name = append(name, s[i])
-	}
-	vs := NewVars(v.Addr(), len(avm), len(lvm))
-	i := 0
-	for n := range avm {
-		vs.absolute[n] = NewTemplateVar(n, v, args.ParentVar)
-		vs.absolute.ParseTemplateVar(n, v, args.ParentVar)
-		i++
-	}
-	for n := range lvm {
-		vs.local[n] = NewTemplateVar(n, v, args.ParentVar)
-		vs.local.ParseTemplateVar(n, v, args.ParentVar)
-		i++
+		vs = NewVars(v.Addr(), len(vm))
+		i := 0
+		for n := range vm {
+			vs.vars[i] = n
+			i++
+		}
 	}
 	return vs
 }

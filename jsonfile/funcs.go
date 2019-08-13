@@ -1,8 +1,6 @@
 package jsonfile
 
-func (me *JsonFile) applyTemplateVars() {
-
-}
+func noop(i ...interface{}) interface{} { return i }
 
 func GetDefault() string {
 	return `{

@@ -9,22 +9,17 @@ import (
 const spacer = "  "
 
 type FixupArgs struct {
+	ParentName Identifier
 	RootNode   *Node
 	ParentNode *Node
 	Node       *Node
-	RootVar    *TemplateVar
-	ParentVar  *TemplateVar
-	Var        *TemplateVar
 }
 
-func MakeChildArgs(name Identifier, value Value, childnode *Node, parent *FixupArgs) *FixupArgs {
+func MakeChildArgs(childnode *Node, parent *FixupArgs) *FixupArgs {
 	ca := &FixupArgs{}
 	*ca = *parent
 	ca.Node = childnode
-	ca.ParentVar = parent.Var
 	ca.ParentNode = parent.Node
-	ca.Var = NewTemplateVar(name, value, parent.Var)
-	childnode.Fullname = ca.Var.FullName()
 	return ca
 }
 
@@ -36,24 +31,16 @@ func (me *JsonFile) Fixup() {
 	original := reflect.ValueOf(me)
 	temp := reflect.New(original.Type()).Elem()
 	fmt.Printf("<root>")
-	rootvar := NewTemplateVar(".", reflect.ValueOf(me), nil)
 	rootnode := NewNode(".", nil)
 	fixupRecursive(original, temp, 0, &FixupArgs{
-		RootVar:  rootvar,
-		Var:      rootvar,
 		Node:     rootnode,
 		RootNode: rootnode,
 	})
 	jf := temp.Interface().(*JsonFile)
 	jf.config = me.config
-	jf.rootvar = rootvar
 	jf.rootnode = rootnode
-	nav := rootnode.GetAvailableVars()
+	nav := rootnode.GetVarNames()
 	fmt.Printf("%+v", nav)
-	lvs := rootvar.GetLocalVars()
-	fmt.Printf("%+v", lvs)
-	avs := rootvar.GetAbsoluteVars()
-	fmt.Printf("%+v", avs)
 	*me = *jf
 }
 
@@ -102,11 +89,12 @@ func fixupRecursive(original Value, temp Value, depth int, args *FixupArgs) {
 					cn = NewNode(name, args.RootNode)
 					args.Node.Children[name] = cn
 				}
+				cn.Parent = args.Node
 				fixupRecursive(
 					original.Field(i),
 					cf,
 					depth,
-					MakeChildArgs(name, cf, cn, args),
+					MakeChildArgs(cn, args),
 				)
 			}
 
