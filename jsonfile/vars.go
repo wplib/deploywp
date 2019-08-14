@@ -68,6 +68,12 @@ func ExtractVars(v Value, args *NodeTreeArgs) (vs *Vars) {
 					continue
 				}
 				if s[i+1] != '.' {
+					if s[i] == '.' {
+						name = []byte(fmt.Sprintf("%s%s", pn, string(s[i])))
+						pn = fpn
+						ch[di] = false
+						di = 0
+					}
 					continue
 				}
 				ch[di] = false

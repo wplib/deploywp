@@ -13,26 +13,26 @@ import (
 )
 
 type JsonFile struct {
-	DeployWP DeployWP        `json:"deploywp"`
-	Site     Site            `json:"site"`
-	Source   Source          `json:"source"`
-	Targets  Targets         `json:"targets"`
-	config   *cfg.Config     `json:"-"`
-	rootnode *Node           `json:"-"`
-	rvmap    ReflectValueMap `json:"-"`
+	DeployWP DeployWP    `json:"deploywp"`
+	Site     Site        `json:"site"`
+	Source   Source      `json:"source"`
+	Targets  Targets     `json:"targets"`
+	config   *cfg.Config `json:"-"`
+	rootnode *Node       `json:"-"`
+	nodemap  NodeMap     `json:"-"`
 }
 
 func NewJsonFile(config cfg.Config) *JsonFile {
 	return &JsonFile{
-		config: &config,
-		rvmap:  make(ReflectValueMap, 0),
+		config:  &config,
+		nodemap: make(NodeMap, 0),
 	}
 }
 
 func (me *JsonFile) GetVarNames() (vns []string) {
-	vns = make([]string, len(me.rvmap))
+	vns = make([]string, len(me.nodemap))
 	i := 0
-	for vn := range me.rvmap {
+	for vn := range me.nodemap {
 		vns[i] = vn
 	}
 	return vns
@@ -54,7 +54,17 @@ func Load(config cfg.Config) (jf *JsonFile) {
 			break
 		}
 
-		jf.WalkNodeTree()
+		jf.walkNodeTree()
+
+		for _, node := range jf.nodemap {
+			if node.Vars == nil {
+				continue
+			}
+			for _, v := range node.Vars.vars {
+				fmt.Println(v, " is contained in ", node.FullName())
+				continue
+			}
+		}
 
 	}
 	if err != nil {
@@ -141,13 +151,13 @@ func (me *JsonFile) Filepath() (fp string) {
 // @see https://gist.github.com/hvoecking/10772475
 // @see https://medium.com/capital-one-tech/learning-to-use-go-reflection-822a0aed74b7
 //
-func (me *JsonFile) WalkNodeTree() {
+func (me *JsonFile) walkNodeTree() {
 	//fmt.Printf("<root>")
-	me.walkrecursive(reflect.ValueOf(me), nil, -1)
-	fmt.Printf("%+v", me.GetVarNames())
+	me.walkRecursive(reflect.ValueOf(me), nil, -1)
+	//fmt.Printf("%+v", me.GetVarNames())
 }
 
-func (me *JsonFile) walkrecursive(v Value, args *NodeTreeArgs, depth int) {
+func (me *JsonFile) walkRecursive(v Value, args *NodeTreeArgs, depth int) {
 
 	if depth == -1 {
 		if args == nil {
@@ -160,26 +170,22 @@ func (me *JsonFile) walkrecursive(v Value, args *NodeTreeArgs, depth int) {
 		depth++
 	}
 
-	//indent := strings.Repeat(spacer, depth)
-	//pt := func() { fmt.Printf(" [%+v]", v.Type()) }
-
 	switch v.Kind() {
 	case reflect.Ptr:
 		ov := v.Elem()
 		if !ov.IsValid() {
 			break
 		}
-		me.walkrecursive(ov, args, depth)
+		me.walkRecursive(ov, args, depth)
 
 	case reflect.Interface:
 		ov := v.Elem()
 		if !ov.IsValid() {
 			break
 		}
-		me.walkrecursive(ov, args, depth)
+		me.walkRecursive(ov, args, depth)
 
 	case reflect.Struct:
-		//pt()
 		depth++
 		for i := 0; i < v.NumField(); i++ {
 			f := v.Field(i)
@@ -187,52 +193,53 @@ func (me *JsonFile) walkrecursive(v Value, args *NodeTreeArgs, depth int) {
 				continue
 			}
 			t := v.Type().Field(i)
-			name := t.Tag.Get("json")
-			//if name != "-" {
-			//	fmt.Printf("\n%s%s— %s", spacer, indent, name)
-			//}
-			var ok bool
-			var cn *Node
-			cn, ok = args.Node.Children[name]
-			if !ok {
-				cn = NewNode(name, me.rootnode)
-				args.Node.Children[name] = cn
-			}
-			cn.Parent = args.Node
-			me.walkrecursive(f, MakeChildArgs(cn, args), depth)
+			ca := me.makeChildArgs(t.Tag.Get("json"), args)
+			me.walkRecursive(f, ca, depth)
 		}
 
 	case reflect.Slice:
-		//pt()
 		depth++
 		o := v
 		for i := 0; i < o.Len(); i += 1 {
-			//fmt.Printf("\n%s%s[%d]", spacer, indent, i)
-			me.walkrecursive(o.Index(i), args, depth)
+			name := fmt.Sprintf("[%d]", i)
+			cn := me.makeChildArgs(name, args)
+			me.walkRecursive(o.Index(i), cn, depth)
 		}
 
 	case reflect.Map:
-		//pt()
 		depth++
 		for _, key := range v.MapKeys() {
-			//fmt.Printf("\n%s%s[%s]", spacer, indent, key)
-			ov := v.MapIndex(key)
-			me.walkrecursive(ov, args, depth)
+			mi := v.MapIndex(key)
+			name := fmt.Sprintf("[%s]", key.Type().Name())
+			cn := me.makeChildArgs(name, args)
+			me.walkRecursive(mi, cn, depth)
 		}
 
 	default: // Includes `case: default.String`
-		if !v.CanInterface() {
-			break
-		}
-		//pt()
-		//fmt.Printf(": %s", v.Interface())
-
 		// Extract vars from string and capture them
 		args.Node.Vars = ExtractVars(v, args)
 
 		// Capture a pointer to this value so we can update is.
-		me.rvmap[args.Node.FullName()] = v.Addr()
+		me.nodemap[args.Node.FullName()] = args.Node
 
 	}
 
+}
+
+func (me *JsonFile) makeChildArgs(name Identifier, parent *NodeTreeArgs) *NodeTreeArgs {
+
+	var ok bool
+	var childnode *Node
+	childnode, ok = parent.Node.Children[name]
+	if !ok {
+		childnode = NewNode(name, me.rootnode)
+		parent.Node.Children[name] = childnode
+	}
+	childnode.Parent = parent.Node
+
+	args := &NodeTreeArgs{}
+	*args = *parent
+	args.Node = childnode
+	args.Parent = parent.Node
+	return args
 }

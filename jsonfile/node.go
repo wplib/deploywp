@@ -13,7 +13,6 @@ type NodeMap map[Identifier]*Node
 type Node struct {
 	Root     *Node
 	Name     Identifier
-	Value    Value
 	Vars     *Vars
 	Children NodeMap
 	Parent   *Node
@@ -27,6 +26,14 @@ func NewNode(name Identifier, root *Node) *Node {
 	}
 }
 
+func (me *Node) VarCount() (count int) {
+	count = 0
+	if me.Vars != nil {
+		count = len(me.Vars.vars)
+	}
+	return count
+}
+
 func (me *Node) FullName() (fn Identifier) {
 	if me.Parent == nil {
 		fn = me.Name
@@ -35,15 +42,11 @@ func (me *Node) FullName() (fn Identifier) {
 		if pn == "." {
 			pn = ""
 		}
-		fn = fmt.Sprintf("%s.%s", pn, me.Name)
+		f := "%s.%s"
+		if len(me.Name) > 0 && me.Name[:1] == "[" {
+			f = "%s%s"
+		}
+		fn = fmt.Sprintf(f, pn, me.Name)
 	}
 	return fn
-}
-
-func MakeChildArgs(childnode *Node, parent *NodeTreeArgs) *NodeTreeArgs {
-	args := &NodeTreeArgs{}
-	*args = *parent
-	args.Node = childnode
-	args.Parent = parent.Node
-	return args
 }
