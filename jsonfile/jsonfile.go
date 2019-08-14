@@ -9,23 +9,40 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
+	"reflect"
 )
 
 type JsonFile struct {
-	DeployWP DeployWP    `json:"deploywp"`
-	Site     Site        `json:"site"`
-	Source   Source      `json:"source"`
-	Targets  Targets     `json:"targets"`
-	config   *cfg.Config `json:"-"`
-	rootnode *Node       `json:"-"`
+	DeployWP DeployWP        `json:"deploywp"`
+	Site     Site            `json:"site"`
+	Source   Source          `json:"source"`
+	Targets  Targets         `json:"targets"`
+	config   *cfg.Config     `json:"-"`
+	rootnode *Node           `json:"-"`
+	rvmap    ReflectValueMap `json:"-"`
+}
+
+func NewJsonFile(config cfg.Config) *JsonFile {
+	return &JsonFile{
+		config: &config,
+		rvmap:  make(ReflectValueMap, 0),
+	}
+}
+
+func (me *JsonFile) GetVarNames() (vns []string) {
+	vns = make([]string, len(me.rvmap))
+	i := 0
+	for vn := range me.rvmap {
+		vns[i] = vn
+	}
+	return vns
 }
 
 func Load(config cfg.Config) (jf *JsonFile) {
 	var err error
 	for range Once {
-		jf = &JsonFile{
-			config: &config,
-		}
+		jf = NewJsonFile(config)
+
 		var b []byte
 		b, err = jf.load()
 		if err != nil {
@@ -37,7 +54,7 @@ func Load(config cfg.Config) (jf *JsonFile) {
 			break
 		}
 
-		jf.Fixup()
+		jf.WalkNodeTree()
 
 	}
 	if err != nil {
@@ -116,4 +133,106 @@ func (me *JsonFile) Filepath() (fp string) {
 		os.PathSeparator,
 		app.DeployFile,
 	)
+}
+
+//const spacer = "  "
+
+//
+// @see https://gist.github.com/hvoecking/10772475
+// @see https://medium.com/capital-one-tech/learning-to-use-go-reflection-822a0aed74b7
+//
+func (me *JsonFile) WalkNodeTree() {
+	//fmt.Printf("<root>")
+	me.walkrecursive(reflect.ValueOf(me), nil, -1)
+	fmt.Printf("%+v", me.GetVarNames())
+}
+
+func (me *JsonFile) walkrecursive(v Value, args *NodeTreeArgs, depth int) {
+
+	if depth == -1 {
+		if args == nil {
+			args = &NodeTreeArgs{}
+		}
+		if args.Node == nil {
+			args.Node = NewNode(".", nil)
+		}
+		me.rootnode = args.Node
+		depth++
+	}
+
+	//indent := strings.Repeat(spacer, depth)
+	//pt := func() { fmt.Printf(" [%+v]", v.Type()) }
+
+	switch v.Kind() {
+	case reflect.Ptr:
+		ov := v.Elem()
+		if !ov.IsValid() {
+			break
+		}
+		me.walkrecursive(ov, args, depth)
+
+	case reflect.Interface:
+		ov := v.Elem()
+		if !ov.IsValid() {
+			break
+		}
+		me.walkrecursive(ov, args, depth)
+
+	case reflect.Struct:
+		//pt()
+		depth++
+		for i := 0; i < v.NumField(); i++ {
+			f := v.Field(i)
+			if !f.CanSet() {
+				continue
+			}
+			t := v.Type().Field(i)
+			name := t.Tag.Get("json")
+			//if name != "-" {
+			//	fmt.Printf("\n%s%s— %s", spacer, indent, name)
+			//}
+			var ok bool
+			var cn *Node
+			cn, ok = args.Node.Children[name]
+			if !ok {
+				cn = NewNode(name, me.rootnode)
+				args.Node.Children[name] = cn
+			}
+			cn.Parent = args.Node
+			me.walkrecursive(f, MakeChildArgs(cn, args), depth)
+		}
+
+	case reflect.Slice:
+		//pt()
+		depth++
+		o := v
+		for i := 0; i < o.Len(); i += 1 {
+			//fmt.Printf("\n%s%s[%d]", spacer, indent, i)
+			me.walkrecursive(o.Index(i), args, depth)
+		}
+
+	case reflect.Map:
+		//pt()
+		depth++
+		for _, key := range v.MapKeys() {
+			//fmt.Printf("\n%s%s[%s]", spacer, indent, key)
+			ov := v.MapIndex(key)
+			me.walkrecursive(ov, args, depth)
+		}
+
+	default: // Includes `case: default.String`
+		if !v.CanInterface() {
+			break
+		}
+		//pt()
+		//fmt.Printf(": %s", v.Interface())
+
+		// Extract vars from string and capture them
+		args.Node.Vars = ExtractVars(v, args)
+
+		// Capture a pointer to this value so we can update is.
+		me.rvmap[args.Node.FullName()] = v.Addr()
+
+	}
+
 }

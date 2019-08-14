@@ -16,5 +16,6 @@ type (
 	ReadableName = string
 	Identifier   = Slug
 
-	Value = reflect.Value
+	Value           = reflect.Value
+	ReflectValueMap = map[Identifier]reflect.Value
 )

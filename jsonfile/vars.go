@@ -30,7 +30,7 @@ func NewVars(value Value, count int) *Vars {
 //
 //		[animal.name count.value]
 //
-func ExtractVars(v Value, args *FixupArgs) (vs *Vars) {
+func ExtractVars(v Value, args *NodeTreeArgs) (vs *Vars) {
 	for range Once {
 		n := v.Type().Name()
 		noop(n)
@@ -42,7 +42,7 @@ func ExtractVars(v Value, args *FixupArgs) (vs *Vars) {
 		var invar bool
 		var name []byte
 		var ch [10]bool
-		fpn := args.ParentNode.FullName()
+		fpn := args.Parent.FullName()
 		pn := fpn
 		di := 0 // Dot index
 		for i := 0; i < len(s); i++ {
