@@ -1,29 +1,25 @@
-package easy
+package inspect
 
 import "reflect"
 
 type Element struct {
-	*Reflector
+	*Inspector
 	reflect.StructField
 }
 
 func NewElement(rv reflect.Value, i ...int) *Element {
-	r := &Reflector{
-		Value: NewValue(rv),
-	}
-	t := rv.Type()
-	r.SetType(t)
+	r := NewInspector(rv)
 	var sf reflect.StructField
 	if rv.Kind() == reflect.Struct {
 		if len(i) == 0 {
 			i = []int{0}
 		}
 		if i[0] != InvalidElementIndex {
-			sf = t.Field(i[0])
+			sf = rv.Type().Field(i[0])
 		}
 	}
 	return &Element{
-		Reflector:   r,
+		Inspector:   r,
 		StructField: sf,
 	}
 }

@@ -1,3 +1,3 @@
-package easy
+package inspect
 
 type ReadableName = string

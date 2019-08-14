@@ -1,4 +1,4 @@
-package easy
+package inspect
 
 import (
 	"fmt"
@@ -90,6 +90,11 @@ func (me *Value) Keys() (keys []string) {
 	v := me.GetNormalized()
 	switch v.kind {
 	case reflect.Map:
+		mapkeys := v.value.MapKeys()
+		keys = make([]string, len(mapkeys))
+		for i, key := range mapkeys {
+			keys[i] = key.String()
+		}
 	case reflect.Struct, reflect.Slice, reflect.Array:
 		keys = []string{}
 		for i := 0; i < me.Count(); i++ {
@@ -99,7 +104,6 @@ func (me *Value) Keys() (keys []string) {
 		keys = []string{}
 	}
 	return keys
-
 }
 
 // Returns a non-pointer or unwrapped interface

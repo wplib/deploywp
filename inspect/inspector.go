@@ -1,11 +1,11 @@
-package easy
+package inspect
 
 import (
 	"fmt"
 	"reflect"
 )
 
-type Reflector struct {
+type Inspector struct {
 	*Value
 	typ      reflect.Type
 	kind     reflect.Kind
@@ -13,16 +13,15 @@ type Reflector struct {
 	KindName ReadableName
 }
 
-//@TODO UNCOMMENT ONCE IT IS IN USE
-//func NewReflector(item interface{}) *Reflector {
-//	r := Reflector{
-//		Value: NewValue(item),
-//	}
-//	r.SetType(reflect.TypeOf(item))
-//	return &r
-//}
+func NewInspector(item interface{}) *Inspector {
+	i := Inspector{
+		Value: NewValue(item),
+	}
+	i.SetType(i.value.Type())
+	return &i
+}
 
-func (me *Reflector) SetType(t reflect.Type) *Reflector {
+func (me *Inspector) SetType(t reflect.Type) *Inspector {
 	me.typ = t
 	me.kind = me.typ.Kind()
 	me.TypeName = me.typ.Name()
@@ -30,7 +29,7 @@ func (me *Reflector) SetType(t reflect.Type) *Reflector {
 	return me
 }
 
-func (me *Reflector) String() string {
+func (me *Inspector) String() string {
 	return fmt.Sprintf("%s/%s: %s",
 		me.TypeName,
 		me.KindName,
