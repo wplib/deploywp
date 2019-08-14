@@ -39,59 +39,54 @@ func ExtractVars(v Value, args *NodeTreeArgs) (vs *Vars) {
 			break
 		}
 		vm := make(map[string]bool, 0)
-		var invar bool
 		var name []byte
-		var ch [10]bool
 		fpn := args.Parent.FullName()
-		pn := fpn
-		di := 0 // Dot index
-		for i := 0; i < len(s); i++ {
-			if s[i] == '{' {
+		dots := -1
+		indots := false
+		invar := false
+		for pos := 0; pos < len(s); pos++ {
+			if s[pos] == '{' {
+				dots = 0
 				invar = true
-				di = 1
-				ch[di] = true
+				indots = true
 				continue
 			}
 			if !invar {
 				continue
 			}
-			if ch[di] {
-				if s[i] != '.' {
-					name = []byte(fmt.Sprintf("%s.%s", pn, string(s[i])))
-					pn = fpn
-					ch[di] = false
-					di = 0
-					continue
-				}
-				if i == len(s)-1 {
-					ch[di] = false
-					continue
-				}
-				if s[i+1] != '.' {
-					if s[i] == '.' {
-						name = []byte(fmt.Sprintf("%s%s", pn, string(s[i])))
-						pn = fpn
-						ch[di] = false
-						di = 0
+			if indots {
+				if s[pos] == '.' {
+					dots++
+					if dots == 1 {
+						name = []byte(".")
 					}
 					continue
 				}
-				ch[di] = false
-				di++
-				ch[di] = true
-				ldi := strings.LastIndexByte(pn, '.')
-				if ldi != -1 {
-					pn = pn[:ldi]
+				if pos == len(s)-1 {
+					break
 				}
+				if dots == 1 {
+					name = append(name, s[pos])
+					indots = false
+					dots = -1
+					continue
+				}
+				pn := parentName(fpn, dots-1)
+				name = []byte(fmt.Sprintf("%s.%s", pn, string(s[pos])))
+				indots = false
+				dots = -1
 				continue
 			}
-			if s[i] == '}' {
+			if pos == len(s)-1 {
+				break
+			}
+			if s[pos] == '}' {
 				vm[string(name)] = true
-				invar = false
 				name = []byte("")
+				invar = false
 				continue
 			}
-			name = append(name, s[i])
+			name = append(name, s[pos])
 		}
 		vs = NewVars(v.Addr(), len(vm))
 		i := 0
@@ -101,4 +96,18 @@ func ExtractVars(v Value, args *NodeTreeArgs) (vs *Vars) {
 		}
 	}
 	return vs
+}
+func parentName(s string, remove int) string {
+	pos := len(s) - 1
+	for pos > 0 {
+		if s[pos] == '.' {
+			s = s[:pos]
+			remove--
+		}
+		if remove == 0 {
+			break
+		}
+		pos--
+	}
+	return s
 }
