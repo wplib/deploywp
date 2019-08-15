@@ -23,70 +23,45 @@ func NewVars(value Value, count int) *Vars {
 // Example:
 //
 //		phrase := "A {.animal.name} in the hand is worth {.count.value} in the bush."
-//		tvars := extractvars(phrase)
+//		tvars := extractVars(phrase)
 //		fmt.Print(tvars)
 //
 //	Prints:
 //
-//		[animal.name count.value]
+//		[.animal.name .count.value]
 //
-func ExtractVars(v Value, args *NodeTreeArgs) (vs *Vars) {
+func extractVars(v Value, args *NodeTreeArgs) (vs *Vars) {
 	for range Once {
-		n := v.Type().Name()
-		noop(n)
 		s := v.String()
 		if !strings.Contains(s, "{") {
 			break
 		}
-		vm := make(map[string]bool, 0)
-		var name []byte
 		fpn := args.Parent.FullName()
-		dots := -1
-		indots := false
-		invar := false
-		for pos := 0; pos < len(s); pos++ {
-			if s[pos] == '{' {
-				dots = 0
-				invar = true
-				indots = true
-				continue
-			}
-			if !invar {
-				continue
-			}
-			if indots {
-				if s[pos] == '.' {
-					dots++
-					if dots == 1 {
-						name = []byte(".")
-					}
-					continue
-				}
-				if pos == len(s)-1 {
-					break
-				}
-				if dots == 1 {
-					name = append(name, s[pos])
-					indots = false
-					dots = -1
-					continue
-				}
-				pn := parentName(fpn, dots-1)
-				name = []byte(fmt.Sprintf("%s.%s", pn, string(s[pos])))
-				indots = false
-				dots = -1
-				continue
-			}
-			if pos == len(s)-1 {
+		vm := make(map[string]bool, 0)
+		p := newParser(s)
+		for p.canParse() {
+			if !p.eat('{') {
 				break
 			}
-			if s[pos] == '}' {
-				vm[string(name)] = true
-				name = []byte("")
-				invar = false
-				continue
+			dots := p.count('.')
+			if dots == -1 {
+				break
 			}
-			name = append(name, s[pos])
+			name := p.captureTo('}')
+			if name == "" {
+				break
+			}
+			switch dots {
+			case 0:
+				name = fmt.Sprintf("%s.%s", fpn, name)
+			case 1:
+				name = fmt.Sprintf(".%s", name)
+			default:
+				pn := parentName(fpn, dots-1)
+				name = fmt.Sprintf("%s.%s", pn, name)
+			}
+			vm[name] = true
+
 		}
 		vs = NewVars(v.Addr(), len(vm))
 		i := 0
@@ -97,11 +72,31 @@ func ExtractVars(v Value, args *NodeTreeArgs) (vs *Vars) {
 	}
 	return vs
 }
-func parentName(s string, remove int) string {
-	pos := len(s) - 1
+
+//
+// Returns the name of the parent given a node name
+//
+// Examples:
+//
+// 		parentName(".foo.bar.baz", 0) => .foo.bar.baz
+// 		parentName(".foo.bar.baz", 1) => .foo.bar
+// 		parentName(".foo.bar.baz", 2) => .foo
+//
+// Params
+//
+//		id: 	Node identifier
+//
+//		remove: Segments to remove
+//
+// 			0: self
+// 			1: parent
+// 			2: grandparent
+//
+func parentName(id string, remove int) string {
+	pos := len(id) - 1
 	for pos > 0 {
-		if s[pos] == '.' {
-			s = s[:pos]
+		if id[pos] == '.' {
+			id = id[:pos]
 			remove--
 		}
 		if remove == 0 {
@@ -109,5 +104,5 @@ func parentName(s string, remove int) string {
 		}
 		pos--
 	}
-	return s
+	return id
 }

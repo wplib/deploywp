@@ -10,12 +10,15 @@ type NodeTreeArgs struct {
 }
 
 type NodeMap map[Identifier]*Node
+type Nodes []*Node
 type Node struct {
 	Root     *Node
 	Name     Identifier
 	Vars     *Vars
 	Children NodeMap
 	Parent   *Node
+	Contains Nodes
+	IsPartOf Nodes
 }
 
 func NewNode(name Identifier, root *Node) *Node {
@@ -24,6 +27,14 @@ func NewNode(name Identifier, root *Node) *Node {
 		Name:     name,
 		Children: make(NodeMap, 0),
 	}
+}
+
+func (me *Node) VarNames() (vns []string) {
+	if me.Vars == nil {
+		me.Vars = &Vars{}
+		me.Vars.vars = []string{}
+	}
+	return me.Vars.vars
 }
 
 func (me *Node) VarCount() (count int) {

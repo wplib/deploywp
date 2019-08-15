@@ -20,12 +20,14 @@ type JsonFile struct {
 	config   *cfg.Config `json:"-"`
 	rootnode *Node       `json:"-"`
 	nodemap  NodeMap     `json:"-"`
+	varnodes NodeMap     `json:"-"`
 }
 
 func NewJsonFile(config cfg.Config) *JsonFile {
 	return &JsonFile{
-		config:  &config,
-		nodemap: make(NodeMap, 0),
+		config:   &config,
+		nodemap:  make(NodeMap, 0),
+		varnodes: make(NodeMap, 0),
 	}
 }
 
@@ -53,18 +55,9 @@ func Load(config cfg.Config) (jf *JsonFile) {
 		if err != nil {
 			break
 		}
-
-		jf.walkNodeTree()
-
-		for _, node := range jf.nodemap {
-			if node.Vars == nil {
-				continue
-			}
-			for _, v := range node.Vars.vars {
-				fmt.Println(v, " is contained in ", node.FullName())
-				continue
-			}
-		}
+		b = nil
+		jf.walkTree()
+		jf.indexTree()
 
 	}
 	if err != nil {
@@ -89,7 +82,7 @@ func (me *JsonFile) load() (b []byte, err error) {
 			isnew = string(b) == GetDefault()
 			break
 		}
-		b, err = me.makenew(fp)
+		b, err = me.makeNew(fp)
 		isnew = true
 	}
 	if isnew {
@@ -100,7 +93,7 @@ func (me *JsonFile) load() (b []byte, err error) {
 	return b, err
 }
 
-func (me *JsonFile) makenew(fp Filepath) (b []byte, err error) {
+func (me *JsonFile) makeNew(fp Filepath) (b []byte, err error) {
 	var f *os.File
 	for range Once {
 		f, err = os.Create(fp)
@@ -145,13 +138,7 @@ func (me *JsonFile) Filepath() (fp string) {
 	)
 }
 
-//const spacer = "  "
-
-//
-// @see https://gist.github.com/hvoecking/10772475
-// @see https://medium.com/capital-one-tech/learning-to-use-go-reflection-822a0aed74b7
-//
-func (me *JsonFile) walkNodeTree() {
+func (me *JsonFile) walkTree() {
 	//fmt.Printf("<root>")
 	me.walkRecursive(reflect.ValueOf(me), nil, -1)
 	//fmt.Printf("%+v", me.GetVarNames())
@@ -215,11 +202,11 @@ func (me *JsonFile) walkRecursive(v Value, args *NodeTreeArgs, depth int) {
 			me.walkRecursive(mi, cn, depth)
 		}
 
-	default: // Includes `case: default.String`
+	default: // Includes `case: default.text`
 		// Extract vars from string and capture them
-		args.Node.Vars = ExtractVars(v, args)
+		args.Node.Vars = extractVars(v, args)
 
-		// Capture a pointer to this value so we can update is.
+		// captureTo a pointer to this value so we can update is.
 		me.nodemap[args.Node.FullName()] = args.Node
 
 	}
@@ -242,4 +229,21 @@ func (me *JsonFile) makeChildArgs(name Identifier, parent *NodeTreeArgs) *NodeTr
 	args.Node = childnode
 	args.Parent = parent.Node
 	return args
+}
+
+func (me *JsonFile) indexTree() {
+	for _, node := range me.nodemap {
+		for _, varname := range node.VarNames() {
+			varnode := me.nodemap[varname]
+			varnode.IsPartOf = append(varnode.IsPartOf, node)
+			node.Contains = append(node.Contains, varnode)
+			me.varnodes[varnode.FullName()] = varnode
+		}
+		if node.Vars == nil {
+			continue
+		}
+		for _, v := range node.Vars.vars {
+			fmt.Printf("%s contains %s\n", node.FullName(), v)
+		}
+	}
 }
