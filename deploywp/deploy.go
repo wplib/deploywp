@@ -2,6 +2,7 @@ package deploywp
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/wplib/deploywp/app"
 	"github.com/wplib/deploywp/cfg"
 	"github.com/wplib/deploywp/jsonfile"
@@ -25,6 +26,6 @@ func (me *Deploy) Run() {
 	jf := jsonfile.Load(*app.Config())
 	b, _ := json.MarshalIndent(jf, "", "\t")
 	noop(b)
-	//fmt.Printf("%s",string(b))
+	fmt.Printf("%s", string(b))
 	return
 }

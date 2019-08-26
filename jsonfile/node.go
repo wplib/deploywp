@@ -2,6 +2,7 @@ package jsonfile
 
 import (
 	"fmt"
+	"reflect"
 )
 
 type NodeTreeArgs struct {
@@ -13,8 +14,10 @@ type NodeMap map[Identifier]*Node
 type Nodes []*Node
 type Node struct {
 	Root     *Node
+	Value    Value
 	Name     Identifier
-	Vars     *Vars
+	fullname Identifier
+	VarMap   VarMap
 	Children NodeMap
 	Parent   *Node
 	Contains Nodes
@@ -29,18 +32,45 @@ func NewNode(name Identifier, root *Node) *Node {
 	}
 }
 
-func (me *Node) VarNames() (vns []string) {
-	if me.Vars == nil {
-		me.Vars = &Vars{}
-		me.Vars.vars = []string{}
+func (me *Node) String() (s string) {
+	switch me.Value.Kind() {
+	case reflect.Ptr:
+		s = me.Value.Elem().String()
+	case reflect.String:
+		s = me.Value.String()
 	}
-	return me.Vars.vars
+	return s
+}
+
+func (me *Node) SetString(s string) {
+	switch me.Value.Kind() {
+	case reflect.Ptr:
+		me.Value.Elem().SetString(s)
+	case reflect.String:
+		me.Value.SetString(s)
+	}
+}
+
+func (me *Node) VarNames() (vns []string) {
+	for range Once {
+		if len(me.VarMap) == 0 {
+			vns = make([]string, 0)
+			break
+		}
+		vns = make([]string, len(me.VarMap))
+		i := 0
+		for v := range me.VarMap {
+			vns[i] = v
+			i++
+		}
+	}
+	return vns
 }
 
 func (me *Node) VarCount() (count int) {
 	count = 0
-	if me.Vars != nil {
-		count = len(me.Vars.vars)
+	if me.VarMap != nil {
+		count = len(me.VarMap)
 	}
 	return count
 }
@@ -59,5 +89,6 @@ func (me *Node) FullName() (fn Identifier) {
 		}
 		fn = fmt.Sprintf(f, pn, me.Name)
 	}
+	me.fullname = fn
 	return fn
 }

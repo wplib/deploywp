@@ -5,39 +5,21 @@ import (
 	"strings"
 )
 
-type Vars struct {
-	value Value
-	vars  []string
-}
-
-func NewVars(value Value, count int) *Vars {
-	return &Vars{
-		value: value,
-		vars:  make([]string, count),
-	}
-}
+type VarMap = map[Identifier]Identifier
 
 //
-// Extract a slice of template Vars in the form '{.foo.bar}'
+// Extract a map of template vars in the form "{.foo.bar}" => "{bar}"
 //
-// Example:
+// @TODO Need to document the thinking behind this func...
 //
-//		phrase := "A {.animal.name} in the hand is worth {.count.value} in the bush."
-//		tvars := extractVars(phrase)
-//		fmt.Print(tvars)
-//
-//	Prints:
-//
-//		[.animal.name .count.value]
-//
-func extractVars(v Value, args *NodeTreeArgs) (vs *Vars) {
+func extractVarMap(v Value, args *NodeTreeArgs) (vm VarMap) {
+	vm = make(VarMap, 0)
 	for range Once {
 		s := v.String()
 		if !strings.Contains(s, "{") {
 			break
 		}
 		fpn := args.Parent.FullName()
-		vm := make(map[string]bool, 0)
 		p := newParser(s)
 		for p.canParse() {
 			if !p.eat('{') {
@@ -51,26 +33,25 @@ func extractVars(v Value, args *NodeTreeArgs) (vs *Vars) {
 			if name == "" {
 				break
 			}
+			var fullname string
 			switch dots {
 			case 0:
-				name = fmt.Sprintf("%s.%s", fpn, name)
+				fullname = fmt.Sprintf("%s.%s", fpn, name)
 			case 1:
-				name = fmt.Sprintf(".%s", name)
+				fullname = fmt.Sprintf(".%s", name)
+				name = fullname
 			default:
 				pn := parentName(fpn, dots-1)
-				name = fmt.Sprintf("%s.%s", pn, name)
+				fullname = fmt.Sprintf("%s.%s", pn, name)
+				name = fmt.Sprintf("%s%s",
+					strings.Repeat(".", dots),
+					name,
+				)
 			}
-			vm[name] = true
-
-		}
-		vs = NewVars(v.Addr(), len(vm))
-		i := 0
-		for n := range vm {
-			vs.vars[i] = n
-			i++
+			vm[fullname] = name
 		}
 	}
-	return vs
+	return vm
 }
 
 //

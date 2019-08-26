@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"strings"
 )
 
 type JsonFile struct {
@@ -58,6 +59,7 @@ func Load(config cfg.Config) (jf *JsonFile) {
 		b = nil
 		jf.walkTree()
 		jf.indexTree()
+		jf.applyVars()
 
 	}
 	if err != nil {
@@ -204,10 +206,14 @@ func (me *JsonFile) walkRecursive(v Value, args *NodeTreeArgs, depth int) {
 
 	default: // Includes `case: default.text`
 		// Extract vars from string and capture them
-		args.Node.Vars = extractVars(v, args)
-
-		// captureTo a pointer to this value so we can update is.
-		me.nodemap[args.Node.FullName()] = args.Node
+		//
+		// Capture pointer to this value so we can update it
+		//
+		n := args.Node
+		n.Value = v
+		n.VarMap = extractVarMap(v, args)
+		me.nodemap[n.FullName()] = n
+		args.Node = n
 
 	}
 
@@ -239,11 +245,48 @@ func (me *JsonFile) indexTree() {
 			node.Contains = append(node.Contains, varnode)
 			me.varnodes[varnode.FullName()] = varnode
 		}
-		if node.Vars == nil {
+		if node.VarMap == nil {
 			continue
 		}
-		for _, v := range node.Vars.vars {
-			fmt.Printf("%s contains %s\n", node.FullName(), v)
-		}
 	}
+}
+func (me *JsonFile) applyVars() {
+	for _, vn := range me.varnodes {
+		me._applyVars(vn, nil, 0)
+	}
+}
+func (me *JsonFile) _applyVars(vn *Node, pn *Node, depth int) {
+	if pn != nil {
+		_applyVar(pn, vn)
+	}
+	for _, cn := range vn.IsPartOf {
+		me._applyVars(cn, vn, depth+1)
+	}
+}
+
+func _applyVar(vn *Node, cn *Node) {
+
+	// Get the content template for which we want to replace a var
+	// e.g. "https://www.{domain}"
+	ct := cn.String()
+
+	// Get the var value to replace into ct
+	// e.g. "example.com"
+	vv := vn.String()
+
+	// Get the var name used in ct, which might be a short name
+	// e.g. (vn.FullName() = ".site.domain" => "domain")
+	n := cn.VarMap[vn.FullName()]
+
+	// Wrap n with braces so it will represent a var
+	// and fully replace the var in ct, e.g. "{domain}"
+	nv := fmt.Sprintf("{%s}", n)
+
+	// Replace occurances of nv in ct with vv
+	// e.g. ("https://www.{domain}","{domain}","example.com") =>  "https://www.example.com"
+	s := strings.ReplaceAll(ct, nv, vv)
+
+	// Finally put the replaces string back into the content not
+	// @TODO Need to keep a copy of original around for save .JSON file
+	cn.SetString(s)
 }
