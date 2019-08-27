@@ -57,6 +57,7 @@ func Load(config cfg.Config) (jf *JsonFile) {
 			break
 		}
 		b = nil
+		jf.applyDefaults()
 		jf.walkTree()
 		jf.indexTree()
 		jf.applyVars()
@@ -138,6 +139,30 @@ func (me *JsonFile) Filepath() (fp string) {
 		os.PathSeparator,
 		app.DeployFile,
 	)
+}
+
+func (me *JsonFile) applyDefaults() {
+	for range Once {
+		if me.Targets.Hosts == nil {
+			break
+		}
+		if me.Targets.Defaults == nil {
+			break
+		}
+		d := me.Targets.Defaults
+
+		for i, h := range me.Targets.Hosts {
+			err := h.ApplyDefaults(d)
+			if err != nil {
+				log.Printf("unable to merge host defaults into '%s': %s",
+					h.Name,
+					err.Error(),
+				)
+				continue
+			}
+			me.Targets.Hosts[i] = h
+		}
+	}
 }
 
 func (me *JsonFile) walkTree() {
