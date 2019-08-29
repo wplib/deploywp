@@ -2,25 +2,40 @@ package jsonfile
 
 import (
 	"fmt"
+	"github.com/wplib/deploywp/deploywp"
 	"reflect"
 )
 
+var _ deploywp.HostsGetter = (*Hosts)(nil)
+var _ deploywp.HostGetter = (*Host)(nil)
+
 type Hosts []*Host
 
+func (me Hosts) Count() int {
+	return len(me)
+}
+func (me Hosts) Hosts() (hs deploywp.Hosts) {
+	hs = make(deploywp.Hosts, me.Count())
+	for i, h := range me {
+		hs[i] = deploywp.NewHostFromGetter(h)
+	}
+	return hs
+}
+
 type Host struct {
-	Id           Slug             `json:"id"`
+	Id           Identifier       `json:"id"`
 	SiteGuid     Guid             `json:"site_guid"`
 	Domain       Domain           `json:"domain"`
 	DomainSuffix Domain           `json:"domain_suffix"`
-	Provider     Slug             `json:"provider"`
+	Provider     Identifier       `json:"provider"`
 	Name         ReadableName     `json:"name"`
 	Label        Label            `json:"label"`
-	Branch       Slug             `json:"branch"`
+	Branch       Identifier       `json:"branch"`
 	WebRoot      Path             `json:"web_root"`
 	Repository   Repository       `json:"repository"`
 	Paths        WordPressPaths   `json:"wp_paths"`
-	After        string           `json:"after"`
 	Files        FileDispositions `json:"files"`
+	After        string           `json:"after"`
 }
 
 func (me *Host) ApplyDefaults(defaults *Host) (err error) {
@@ -55,4 +70,44 @@ func (me *Host) ApplyDefaults(defaults *Host) (err error) {
 		}
 	}
 	return err
+}
+
+func (me *Host) GetId() deploywp.Identifier {
+	return me.Id
+}
+func (me *Host) GetSiteGuid() deploywp.Guid {
+	return me.SiteGuid
+}
+func (me *Host) GetDomain() deploywp.Domain {
+	return me.Domain
+}
+func (me *Host) GetDomainSuffix() deploywp.Domain {
+	return me.DomainSuffix
+}
+func (me *Host) GetProvider() deploywp.Identifier {
+	return me.Provider
+}
+func (me *Host) GetName() deploywp.ReadableName {
+	return me.Name
+}
+func (me *Host) GetLabel() deploywp.Label {
+	return me.Label
+}
+func (me *Host) GetBranch() deploywp.Identifier {
+	return me.Branch
+}
+func (me *Host) GetWebRoot() deploywp.Path {
+	return me.WebRoot
+}
+func (me *Host) GetRepository() *deploywp.Repository {
+	return deploywp.NewRepositoryFromGetter(me.Repository)
+}
+func (me *Host) GetPaths() *deploywp.WordPressPaths {
+	return deploywp.NewWordPressPathsFromGetter(me.Paths)
+}
+func (me *Host) GetAfter() string {
+	return me.After
+}
+func (me *Host) GetFiles() *deploywp.FileDispositions {
+	return deploywp.NewFileDispositionsFromGetter(me.Files)
 }

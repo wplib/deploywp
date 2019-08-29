@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/wplib/deploywp/app"
 	"github.com/wplib/deploywp/cfg"
+	"github.com/wplib/deploywp/deploywp"
 	"github.com/wplib/deploywp/util"
 	"io/ioutil"
 	"log"
@@ -13,8 +14,10 @@ import (
 	"strings"
 )
 
+var _ deploywp.Getter = (*JsonFile)(nil)
+
 type JsonFile struct {
-	DeployWP DeployWP    `json:"deploywp"`
+	Meta     Meta        `json:"deploywp"`
 	Site     Site        `json:"site"`
 	Source   Source      `json:"source"`
 	Targets  Targets     `json:"targets"`
@@ -32,6 +35,26 @@ func NewJsonFile(config cfg.Config) *JsonFile {
 	}
 }
 
+func (me *JsonFile) GetConfig() *cfg.Config {
+	return me.config
+}
+
+func (me *JsonFile) GetMeta() *deploywp.Meta {
+	return deploywp.NewMetaFromGetter(me.Meta)
+}
+
+func (me *JsonFile) GetSite() *deploywp.Site {
+	return deploywp.NewSiteFromGetter(me.Site)
+}
+
+func (me *JsonFile) GetSource() *deploywp.Source {
+	return deploywp.NewSourceFromGetter(me.Source)
+}
+
+func (me *JsonFile) GetTargets() *deploywp.Targets {
+	return deploywp.NewTargetsFromGetter(me.Targets)
+}
+
 func (me *JsonFile) GetVarNames() (vns []string) {
 	vns = make([]string, len(me.nodemap))
 	i := 0
@@ -41,35 +64,46 @@ func (me *JsonFile) GetVarNames() (vns []string) {
 	return vns
 }
 
-func Load(config cfg.Config) (jf *JsonFile) {
-	var err error
+func (me *JsonFile) Load() (err error) {
 	for range Once {
-		jf = NewJsonFile(config)
 
 		var b []byte
-		b, err = jf.load()
+		b, err = me.load()
 		if err != nil {
+			err = fmt.Errorf("unable to unmarshal JSON from %s: %s",
+				me.config.GetConfigFile(),
+				err.Error(),
+			)
 			break
 		}
 
-		err = json.Unmarshal(b, &jf)
+		err = json.Unmarshal(b, &me)
 		if err != nil {
+			err = fmt.Errorf("unable to unmarshal JSON from %s: %s",
+				me.config.GetConfigFile(),
+				err.Error(),
+			)
 			break
 		}
 		b = nil
-		jf.applyDefaults()
-		jf.walkTree()
-		jf.indexTree()
-		jf.applyVars()
+		me.applyDefaults()
+		me.walkTree()
+		me.indexTree()
+		me.applyVars()
+
+		// Release memory after fixup
+		me.nodemap = nil
+		me.varnodes = nil
+		me.rootnode = nil
 
 	}
 	if err != nil {
-		log.Fatalf("Config file '%s' cannot be processed. It is likely invalid JSON or is not using the correct schema: %s.",
+		err = fmt.Errorf("config file '%s' cannot be processed. It is likely invalid JSON or is not using the correct schema: %s",
 			"@TODO: Put acceptable schema number here...",
 			err,
 		)
 	}
-	return jf
+	return err
 }
 
 func (me *JsonFile) load() (b []byte, err error) {
@@ -77,8 +111,8 @@ func (me *JsonFile) load() (b []byte, err error) {
 	fp := me.Filepath()
 	for range Once {
 		if !util.FileExists(fp) {
-			fmt.Printf("A deploy file '%s' does not exist.", fp)
-			os.Exit(1)
+			err = fmt.Errorf("the deploy file '%s' does not exist", fp)
+			break
 		}
 		b, err = ioutil.ReadFile(fp)
 		if err == nil {

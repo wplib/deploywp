@@ -4,17 +4,20 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/wplib/deploywp/app"
 	"github.com/wplib/deploywp/deploywp"
+	"github.com/wplib/deploywp/jsonfile"
 )
 
 var RunCmd = &cobra.Command{
-	Use:   "run",
-	SuggestFor: []string{"deploy","run","now"},
-	Short: "Deploy a WordPress website to a Pantheon site",
+	Use:        "run",
+	SuggestFor: []string{"deploy", "run", "now"},
+	Short:      "DeployWP a WordPress website to a Pantheon site",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		app.Initialize()
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		deploywp.NewDeploy(app.Config()).Run()
+		c := app.Config()
+		jf := jsonfile.NewJsonFile(*c)
+		deploywp.NewDeployWP(c).Run(jf)
 	},
 }
 
