@@ -6,12 +6,12 @@ import (
 )
 
 type Repository struct {
-	Provider *providers.Provider
+	Provider providers.Provider
 	Url      *url.URL
 }
 
 type RepositoryGetter interface {
-	GetProvider() *providers.Provider
+	GetProvider() providers.Provider
 	GetUrl() *url.URL
 }
 

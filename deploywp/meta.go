@@ -16,12 +16,13 @@ type MetaGetter interface {
 	GetCommit() Reference
 }
 
-func NewMetaFromGetter(mg MetaGetter) (m *Meta) {
-	return &Meta{
+func NewMetaFromGetter(mg MetaGetter) *Meta {
+	m := Meta{
 		Schema:     mg.GetSchema(),
 		Repository: mg.GetRepository(),
 		Tag:        mg.GetTag(),
 		Branch:     mg.GetBranch(),
 		Commit:     mg.GetCommit(),
 	}
+	return &m
 }

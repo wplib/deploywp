@@ -1,8 +1,9 @@
 package jsonfile
 
 import (
+	"fmt"
 	"github.com/wplib/deploywp/deploywp"
-	"log"
+	"github.com/wplib/deploywp/providers"
 	"net/url"
 )
 
@@ -26,12 +27,7 @@ func (me Site) GetDomain() deploywp.Domain {
 }
 
 func (me Site) GetWebsite() *url.URL {
-	ws, err := url.Parse(me.Website)
-	if err != nil {
-		log.Printf("unable to parse website URL '%s' for site '%s",
-			me.Website,
-			me.Id,
-		)
-	}
-	return ws
+	return providers.ParseUrl(me.Website,
+		fmt.Sprintf("website '%s'", me.Id),
+	)
 }

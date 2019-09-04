@@ -300,8 +300,8 @@ func (me *JsonFile) indexTree() {
 	for _, node := range me.nodemap {
 		for _, varname := range node.VarNames() {
 			varnode := me.nodemap[varname]
-			varnode.IsPartOf = append(varnode.IsPartOf, node)
-			node.Contains = append(node.Contains, varnode)
+			node.Suppliers = append(node.Suppliers, varnode)
+			varnode.Consumers = append(varnode.Consumers, node)
 			me.varnodes[varnode.FullName()] = varnode
 		}
 		if node.VarMap == nil {
@@ -314,38 +314,107 @@ func (me *JsonFile) applyVars() {
 		me._applyVars(vn, nil, 0)
 	}
 }
-func (me *JsonFile) _applyVars(vn *Node, pn *Node, depth int) {
-	if pn != nil {
-		_applyVar(pn, vn)
+
+func (me *JsonFile) _applyVars(supplier *Node, consumer *Node, depth int) {
+	i := 0
+	for len(supplier.Suppliers) > i {
+		ss := supplier.Suppliers[i]
+		me._applyVars(ss, supplier, depth+1)
+		if len(supplier.Suppliers) <= i {
+			break
+		}
+		if ss != supplier.Suppliers[i] {
+			// Values were removed from the Needs list
+			// in a recursive call, so what we keep the
+			// same index and get a new value
+			ss = supplier.Suppliers[i]
+			continue
+		}
+		i++
 	}
-	for _, cn := range vn.IsPartOf {
-		me._applyVars(cn, vn, depth+1)
+	for range Once {
+		if consumer == nil {
+			break
+		}
+		if len(consumer.Suppliers) == 0 {
+			break
+		}
+		_applyVar(consumer, supplier)
+	}
+	i = 0
+	for len(supplier.Consumers) > i {
+		sc := supplier.Consumers[i]
+		me._applyVars(sc, supplier, depth+1)
+		if len(sc.Consumers) <= i {
+			break
+		}
+		if supplier != sc.Consumers[i] {
+			// Values were removed from the Has list
+			// in a recursive call, so what we keep the
+			// same index and get a new value
+			sc = supplier.Consumers[i]
+			continue
+		}
+		i++
 	}
 }
 
-func _applyVar(vn *Node, cn *Node) {
+func _applyVar(consumer *Node, supplier *Node) {
 
 	// Get the content template for which we want to replace a var
 	// e.g. "https://www.{domain}"
-	ct := cn.String()
+	consumerTemplate := consumer.String()
 
-	// Get the var value to replace into ct
+	if !strings.Contains(consumerTemplate, "{") {
+		app.Fail("Attempting to apply substituation to value with no template var: '%s'", consumerTemplate)
+	}
+
+	// Get the var name used in consumerTemplate, which might be a short name
+	// e.g. (supplier.FullName() = ".site.domain" => "domain")
+	supplierName := consumer.VarMap[supplier.FullName()]
+
+	// Get the var value to replace into consumerTemplate
 	// e.g. "example.com"
-	vv := vn.String()
+	supplierValue := supplier.String()
 
-	// Get the var name used in ct, which might be a short name
-	// e.g. (vn.FullName() = ".site.domain" => "domain")
-	n := cn.VarMap[vn.FullName()]
+	// Wrap supplierName with braces so it will represent a var
+	// and fully replace the var in consumerTemplate, e.g. "{domain}"
+	supplierVar := fmt.Sprintf("{%s}", supplierName)
 
-	// Wrap n with braces so it will represent a var
-	// and fully replace the var in ct, e.g. "{domain}"
-	nv := fmt.Sprintf("{%s}", n)
-
-	// Replace occurances of nv in ct with vv
+	// Replace occurances of supplierVar in consumerTemplate with supplierValue
 	// e.g. ("https://www.{domain}","{domain}","example.com") =>  "https://www.example.com"
-	s := strings.ReplaceAll(ct, nv, vv)
+	s := strings.ReplaceAll(consumerTemplate, supplierVar, supplierValue)
 
 	// Finally put the replaces string back into the content not
 	// @TODO Need to keep a copy of original around for save .JSON file
-	cn.SetString(s)
+	consumer.SetString(s)
+
+	// Remove these dependencies so we do not recurse infinitely
+	supplier.removeConsumer(consumer)
+	consumer.removeSupplier(supplier)
+
+}
+
+func (me *Node) removeSupplier(n *Node) {
+	i := 0
+	for len(me.Suppliers) > i {
+		an := me.Suppliers[i]
+		if an == n {
+			me.Suppliers = append(me.Suppliers[:i], me.Suppliers[i+1:]...)
+			break
+		}
+		i++
+	}
+}
+
+func (me *Node) removeConsumer(n *Node) {
+	i := 0
+	for len(me.Consumers) > i {
+		an := me.Consumers[i]
+		if an == n {
+			me.Consumers = append(me.Consumers[:i], me.Consumers[i+1:]...)
+			break
+		}
+		i++
+	}
 }

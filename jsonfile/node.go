@@ -13,15 +13,15 @@ type NodeTreeArgs struct {
 type NodeMap map[Identifier]*Node
 type Nodes []*Node
 type Node struct {
-	Root     *Node
-	Value    Value
-	Name     Identifier
-	fullname Identifier
-	VarMap   VarMap
-	Children NodeMap
-	Parent   *Node
-	Contains Nodes
-	IsPartOf Nodes
+	Root      *Node
+	Value     Value
+	Name      Identifier
+	fullname  Identifier
+	VarMap    VarMap
+	Children  NodeMap
+	Parent    *Node
+	Suppliers Nodes
+	Consumers Nodes
 }
 
 func NewNode(name Identifier, root *Node) *Node {
