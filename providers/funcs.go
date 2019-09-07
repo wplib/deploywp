@@ -1,7 +1,6 @@
 package providers
 
 import (
-	"github.com/asaskevich/govalidator"
 	"github.com/wplib/deploywp/app"
 	"net/url"
 )
@@ -24,32 +23,24 @@ func Dispense(pid ProviderId) (p Provider) {
 	return p
 }
 
-func DetectByUrl(u Url) (p Provider, nu Url) {
-	for range Once {
-		for _, _p := range providersMap {
-			var d bool
-			d, nu = _p.DetectByUrl(u)
-			if !d {
-				continue
-			}
-			p = _p
-			break
+func DetectByUrl(u Url) (p Provider) {
+	for _, _p := range providersMap {
+		if !_p.DetectByUrl(u) {
+			continue
 		}
-		if govalidator.IsURL(nu) {
-			break
-		}
-		app.Fail("Invalid URL '%s'", nu)
+		p = _p
+		break
 	}
 	if p == nil {
 		app.Fail("Cannot detect provider by URL '%s'", u)
 	}
-	return p, nu
+	return p
 }
 
 func ParseUrl(u Url, kind ReadableName) *url.URL {
 	uu, err := url.Parse(u)
 	if err != nil {
-		app.Fail("Invalid URL '%s' for %s; parse error: %s", u, kind, err.Error())
+		app.Fail("invalid URL '%s' for '%s'; parse error: %s", u, kind, err.Error())
 	}
 	return uu
 }

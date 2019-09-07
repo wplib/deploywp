@@ -7,6 +7,6 @@ type Provider interface {
 	GetType() ProviderType
 	GetName() Name
 	GetWebsite() *url.URL
-	DetectByUrl(u Url) (bool, Url) // See https://stackoverflow.com/questions/31801271/what-are-the-supported-git-url-formats
-
+	NormalizeUrl(u Url) Url
+	DetectByUrl(u Url) bool // See https://stackoverflow.com/questions/31801271/what-are-the-supported-git-url-formats
 }

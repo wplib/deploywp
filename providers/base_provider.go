@@ -41,7 +41,11 @@ func (me *BaseProvider) GetName() ReadableName {
 func (me *BaseProvider) GetWebsite() *url.URL {
 	return me.Website
 }
-func (me *BaseProvider) DetectByUrl(u Url) (bool, Url) {
+func (me *BaseProvider) DetectByUrl(u Url) bool {
 	app.Fail("Concrete provider '%s' must implement the method DetectByUrl", me.Id)
-	return false, u
+	return false
+}
+func (me *BaseProvider) NormalizeUrl(u Url) Url {
+	app.Fail("Concrete provider '%s' must implement the method NormalizeUrl", me.Id)
+	return u
 }

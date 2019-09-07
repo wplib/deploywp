@@ -2,17 +2,16 @@ package deploywp
 
 import (
 	"github.com/wplib/deploywp/providers"
-	"net/url"
 )
 
 type Repository struct {
 	Provider providers.Provider
-	Url      *url.URL
+	Url      Url
 }
 
 type RepositoryGetter interface {
 	GetProvider() providers.Provider
-	GetUrl() *url.URL
+	GetUrl() Url
 }
 
 func NewRepositoryFromGetter(rg RepositoryGetter) (r *Repository) {
