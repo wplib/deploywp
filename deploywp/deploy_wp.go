@@ -51,8 +51,9 @@ func (me *DeployWP) Run(loader Loader) {
 		fmt.Println("Unable to assert Loader to be a Getter. This is a programming error.")
 		os.Exit(1)
 	}
-
+	loader = nil
 	me.InitializeFromGetter(getter)
+	getter = nil
 	fmt.Printf("%#+v", me)
 	return
 }
