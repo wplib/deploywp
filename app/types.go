@@ -32,5 +32,3 @@ type Protocol string
 //)
 
 type UnixTime = int64
-
-type ProviderType string

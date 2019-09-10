@@ -1,6 +1,8 @@
 package providers
 
 import (
+	"fmt"
+	"github.com/wplib/deploywp/app"
 	"regexp"
 	"strings"
 )
@@ -49,4 +51,72 @@ func (me *Pantheon) NormalizeUrl(u Url) Url {
 		u = strings.Join(m, "")
 	}
 	return u
+}
+
+func (me *Pantheon) ValidateHostDefaults(hg HostGetterSetter) {
+	for range Once {
+		if hg.GetSiteGuid() == "" {
+			app.Fail("targets.defaults.site_guid not set")
+		}
+		if hg.GetSiteGuid() == "" {
+			app.Fail("targets.defaults.site_guid not set")
+		}
+		if hg.GetSiteGuid() == "" {
+			app.Fail("targets.defaults.site_guid not set")
+		}
+
+	}
+}
+
+func (me *Pantheon) ValidateHost(hg HostGetterSetter) {
+	for range Once {
+		if hg.GetId() == "" {
+			app.Fail("targets.host[n].id not set")
+		}
+		if hg.GetName() == "" {
+			app.Fail("targets.host[n].name not set")
+		}
+	}
+}
+
+func (me *Pantheon) initializeRepository(r *Repository) *Repository {
+	if r == nil {
+		r = &Repository{}
+	}
+	if r.Provider == nil {
+		r.Provider = Dispense("pantheon")
+	}
+	if r.Url == "" {
+		r.Url = "codeserver.dev.{..site_guid}@codeserver.dev.{..site_guid}.drush.in:2222/~/repository.git"
+	}
+	r.normalizeUrl()
+	return r
+}
+
+func (me *Pantheon) InitializeHost(hg HostGetterSetter) {
+	for range Once {
+		r := me.initializeRepository(hg.GetRepository())
+		hg.SetRepository(r)
+
+		if hg.GetDomainSuffix() == "" {
+			hg.SetDomainSuffix("{.site.id}.pantheonsite.io")
+		}
+
+		if hg.GetWebRoot() == "" {
+			hg.SetWebRoot("/code")
+		}
+
+		hostid := hg.GetId()
+		if hostid == "" {
+			break
+		}
+
+		if hg.GetDomain() == "" {
+			hg.SetDomain(fmt.Sprintf("%s-{domain_suffix}", hostid))
+		}
+
+		if hg.GetBranch() == "" {
+			hg.SetBranch(hostid)
+		}
+	}
 }

@@ -14,9 +14,8 @@ func Register(pid ProviderId, p Provider) {
 	providersMap[pid] = p
 }
 
-func Dispense(pid ProviderId) (p Provider) {
-	var ok bool
-	p, ok = providersMap[pid]
+func Dispense(pid ProviderId) Provider {
+	p, ok := providersMap[pid]
 	if !ok {
 		app.Fail("Invalid provider ID '%s'", pid)
 	}

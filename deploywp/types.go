@@ -1,7 +1,5 @@
 package deploywp
 
-type ProviderType string
-
 type (
 	Dir          = string
 	Path         = string

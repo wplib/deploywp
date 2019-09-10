@@ -25,3 +25,26 @@ func (me WordPressPaths) GetContentPath() deploywp.Path {
 func (me WordPressPaths) GetVendorPath() deploywp.Path {
 	return me.VendorPath
 }
+func (me WordPressPaths) ApplyDefaults(wpp *WordPressPaths) *WordPressPaths {
+	if me.RootPath == "" {
+		me.RootPath = wpp.RootPath
+	}
+	if me.CorePath == "" {
+		me.CorePath = wpp.CorePath
+	}
+	if me.ContentPath == "" {
+		me.ContentPath = wpp.ContentPath
+	}
+	if me.VendorPath == "" {
+		me.VendorPath = wpp.VendorPath
+	}
+	return &me
+}
+func NewWordPressPaths() *WordPressPaths {
+	return &WordPressPaths{
+		RootPath:    "/",
+		CorePath:    "/",
+		ContentPath: "/wp-content",
+		VendorPath:  "/vendor",
+	}
+}

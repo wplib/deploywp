@@ -1,6 +1,9 @@
 package jsonfile
 
-import "reflect"
+import (
+	"github.com/wplib/deploywp/providers"
+	"reflect"
+)
 
 type (
 	Path      = string
@@ -18,3 +21,5 @@ type (
 	Value           = reflect.Value
 	ReflectValueMap = map[Identifier]reflect.Value
 )
+
+type ProviderType = providers.ProviderType

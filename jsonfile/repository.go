@@ -1,7 +1,6 @@
 package jsonfile
 
 import (
-	"github.com/wplib/deploywp/app"
 	"github.com/wplib/deploywp/deploywp"
 	"github.com/wplib/deploywp/providers"
 )
@@ -9,63 +8,50 @@ import (
 var _ deploywp.RepositoryGetter = (*Repository)(nil)
 
 type Repository struct {
-	Provider Identifier         `json:"provider"`
-	Url      Url                `json:"url"`
-	provider providers.Provider `json:"-"`
+	ProviderId    Identifier `json:"provider"`
+	Url           Url        `json:"url"`
+	provider      providers.Provider
+	urlNormalized bool
+}
+
+func (me Repository) GetProviderId() (pid providers.ProviderId) {
+	for range Once {
+		if me.provider != nil {
+			pid = me.provider.GetId()
+			break
+		}
+		if me.ProviderId != "" {
+			pid = me.ProviderId
+			break
+		}
+		p := providers.DetectByUrl(me.GetUrl())
+		pid = p.GetId()
+	}
+	return pid
 }
 
 func (me Repository) GetProvider() providers.Provider {
-	for range Once {
-		if me.provider != nil {
-			break
-		}
-		if me.Provider != "" {
-			me.provider = providers.Dispense(me.Provider)
-		}
-		if me.provider != nil {
-			break
-		}
-		me.SetProvider(me.detectProvider())
-	}
-	return me.provider
+	return providers.Dispense(me.GetProviderId())
 }
 
-func (me Repository) GetUrl() Url {
-	me.normalizeUrl()
+func (me Repository) GetUrl() providers.Url {
+	for range Once {
+		if me.Url == "" {
+			break
+		}
+		if me.urlNormalized {
+			break
+		}
+		me.urlNormalized = true
+		p := providers.Dispense(me.GetProviderId())
+		me.Url = p.NormalizeUrl(me.Url)
+	}
 	return me.Url
 }
 
-func (me Repository) detectProvider() (p providers.Provider) {
-	return providers.DetectByUrl(me.Url)
-}
-
-func (me *Repository) SetProvider(p providers.Provider) {
-	me.provider = p
-	me.Provider = p.GetId()
-}
-
-func (me *Repository) SetUrl(u Url) {
-	me.Url = u
-}
-
-func (me *Repository) normalizeUrl() {
-	me.ensureProvider()
-	me.ensureURL()
-	me.SetUrl(me.provider.NormalizeUrl(me.Url))
-}
-
-func (me *Repository) ensureURL() {
-	if me.Url == "" {
-		app.Fail("URL not specified for repository")
-	}
-}
-
-func (me *Repository) ensureProvider() {
-	for range Once {
-		p := me.provider
-		if p == nil {
-			p = me.detectProvider()
-		}
-		me.SetProvider(p)
+func NewRepository(pid providers.ProviderId, u Url) *Repository {
+	return &Repository{
+		ProviderId: pid,
+		Url:        u,
 	}
 }

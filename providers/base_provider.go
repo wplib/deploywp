@@ -30,6 +30,10 @@ func (me *BaseProvider) GetId() ProviderId {
 	return me.Id
 }
 
+func (me *BaseProvider) SetId(pid ProviderId) {
+	me.Id = pid
+}
+
 func (me *BaseProvider) GetType() ProviderType {
 	return me.Type
 }
@@ -48,4 +52,16 @@ func (me *BaseProvider) DetectByUrl(u Url) bool {
 func (me *BaseProvider) NormalizeUrl(u Url) Url {
 	app.Fail("Concrete provider '%s' must implement the method NormalizeUrl", me.Id)
 	return u
+}
+
+func (me *BaseProvider) ValidateHostDefaults(hgs HostGetterSetter) {
+	// Nothing to do
+}
+
+func (me *BaseProvider) ValidateHost(hgs HostGetterSetter) {
+	// Nothing to do
+}
+
+func (me *BaseProvider) InitializeHost(hg HostGetterSetter) {
+	// Nothing to do
 }

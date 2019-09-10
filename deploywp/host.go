@@ -36,7 +36,7 @@ type HostGetter interface {
 	GetSiteGuid() Guid
 	GetDomain() Domain
 	GetDomainSuffix() Domain
-	GetProvider() Identifier
+	GetProviderId() Identifier
 	GetName() ReadableName
 	GetLabel() Label
 	GetBranch() Identifier
@@ -53,7 +53,7 @@ func NewHostFromGetter(hg HostGetter) (h *Host) {
 		SiteGuid:     hg.GetSiteGuid(),
 		Domain:       hg.GetDomain(),
 		DomainSuffix: hg.GetDomainSuffix(),
-		Provider:     hg.GetProvider(),
+		Provider:     hg.GetProviderId(),
 		Name:         hg.GetName(),
 		Label:        hg.GetLabel(),
 		Branch:       hg.GetBranch(),

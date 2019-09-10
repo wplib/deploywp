@@ -66,3 +66,15 @@ func (me *Github) NormalizeUrl(u Url) Url {
 	}
 	return u
 }
+
+func (me *Github) ValidateHostDefaults(hgs HostGetterSetter) {
+	// Nothing to do
+}
+
+func (me *Github) ValidateHost(hgs HostGetterSetter) {
+	// Nothing to do
+}
+
+func (me *Github) InitializeHost(hg HostGetterSetter) {
+	// Nothing to do
+}

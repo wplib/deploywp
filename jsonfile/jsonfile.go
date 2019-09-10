@@ -6,6 +6,7 @@ import (
 	"github.com/wplib/deploywp/app"
 	"github.com/wplib/deploywp/cfg"
 	"github.com/wplib/deploywp/deploywp"
+	"github.com/wplib/deploywp/providers"
 	"github.com/wplib/deploywp/util"
 	"io/ioutil"
 	"log"
@@ -86,6 +87,7 @@ func (me *JsonFile) Load() (err error) {
 			break
 		}
 		b = nil
+		me.initialize()
 		me.applyDefaults()
 		me.walkTree()
 		me.indexTree()
@@ -416,5 +418,68 @@ func (me *Node) removeConsumer(n *Node) {
 			break
 		}
 		i++
+	}
+}
+
+func (me *JsonFile) initialize() {
+	me.initializeDefaults()
+	me.initializeWebHosts()
+}
+
+func (me *JsonFile) initializeDefaults() {
+	me.initializeWebHost(me.Targets.Defaults, "defaults")
+}
+
+func (me *JsonFile) initializeWebHosts() {
+	for range Once {
+		if me.Targets.Hosts == nil {
+			app.Fail("No target hosts specified in '%s'",
+				me.config.GetConfigFile(),
+			)
+		}
+		for _, h := range me.Targets.Hosts {
+			if h.ProviderId == "" {
+				h.ProviderId = me.Targets.Defaults.ProviderId
+			}
+			if h.ProviderId == "" {
+				app.Fail("Provider Id not specified in targets.host[n].ProviderId nor in target.defaults.provider_id")
+				continue
+			}
+			if h.GetProviderType() != providers.WebHostingProvider {
+				continue
+			}
+			me.initializeWebHost(h, "host")
+		}
+	}
+}
+
+func (me *JsonFile) initializeWebHost(h *Host, what string) {
+	var err error
+	for range Once {
+		if h == nil {
+			err = fmt.Errorf("%s is nil", what)
+			break
+		}
+		if h.ProviderId == "" {
+			err = fmt.Errorf("provider is empty")
+			break
+		}
+		p := providers.Dispense(h.ProviderId)
+		wpp := NewWordPressPaths()
+		if h.Paths == nil {
+			h.Paths = wpp
+		} else {
+			h.Paths.ApplyDefaults(wpp)
+		}
+		if h.Files == nil {
+			h.Files = &FileDispositions{}
+		}
+		p.InitializeHost(h)
+	}
+	if err != nil {
+		app.Fail("Targets specified in '%s': %s",
+			me.config.GetConfigFile(),
+			err.Error(),
+		)
 	}
 }
