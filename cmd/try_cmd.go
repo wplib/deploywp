@@ -5,20 +5,20 @@ import (
 	"github.com/wplib/deploywp/app"
 )
 
-var RunCmd = &cobra.Command{
-	Use:        "run",
-	SuggestFor: []string{"deploy", "run", "now"},
-	Short:      "DeployWP a WordPress website to a Pantheon site",
+var TryCmd = &cobra.Command{
+	Use:        "try",
+	SuggestFor: []string{"test"},
+	Short:      "A place to try things",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		app.Initialize()
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		MakeDeployWP().Run()
+		MakeDeployWP().Try()
 	},
 }
 
 func init() {
-	RootCmd.AddCommand(RunCmd)
-	//fs := RunCmd.Flags()
+	RootCmd.AddCommand(TryCmd)
+	//fs := TryCmd.Flags()
 	//fs.StringVar(&app.Domain, "domain", "", "Domain to deploy")
 }

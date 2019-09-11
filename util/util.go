@@ -12,6 +12,16 @@ func SecondsDuration(n float64) time.Duration {
 	return d
 }
 
+func AfterByte(str string, chr byte) string {
+	var i int
+	for i = len(str) - 1; i >= 0; i-- {
+		if chr == str[i] {
+			break
+		}
+	}
+	return str[i+1:]
+}
+
 func StripWhitespace(str string) string {
 	ctr := 0
 	f := func(r rune) rune {
