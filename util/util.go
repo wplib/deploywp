@@ -1,6 +1,8 @@
 package util
 
 import (
+	"fmt"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -43,3 +45,8 @@ func StripWhitespace(str string) string {
 }
 
 func noop(i ...interface{}) interface{} { return i }
+
+func Fail(message string, args ...interface{}) {
+	fmt.Printf(message, args...)
+	os.Exit(1)
+}

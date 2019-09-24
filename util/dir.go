@@ -44,7 +44,7 @@ func ExecDir() Dir {
 func GetCurrentDir() Dir {
 	dir, err := os.Getwd()
 	if err != nil {
-		panic(err)
+		Fail("Cannot get current directory")
 	}
 	return dir
 }

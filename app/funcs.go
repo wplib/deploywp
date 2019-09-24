@@ -1,10 +1,8 @@
 package app
 
 import (
-	"fmt"
 	"github.com/wplib/deploywp/cfg"
 	"github.com/wplib/deploywp/util"
-	"os"
 )
 
 func Config() *cfg.Config {
@@ -22,6 +20,5 @@ func Initialize() string {
 }
 
 func Fail(message string, args ...interface{}) {
-	fmt.Printf(message, args...)
-	os.Exit(1)
+	util.Fail(message, args...)
 }

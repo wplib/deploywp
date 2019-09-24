@@ -11,6 +11,10 @@ var RootCmd = &cobra.Command{
 	Use:   "deploywp",
 	Short: "Deploy a WordPress site to Pantheon.",
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) (err error) {
+		if app.AttachDebugger {
+			fmt.Printf("Connect debugger then press [Enter]...")
+			_, _ = fmt.Scanln()
+		}
 		return err
 	},
 }
@@ -26,12 +30,17 @@ func init() {
 		"Filepath to a config.json to load for deploying",
 	)
 
+	pf.BoolVarP(&app.AttachDebugger,
+		"debug",
+		"",
+		app.AttachDebugger,
+		"Pause CLI app to allow GoLand to attach debugger",
+	)
 
 	pf.StringVarP(&app.DeployDir,
 		"deploy",
 		"",
 		util.GetCurrentDir(),
-		fmt.Sprintf("Directory to deploy; e.g. containing '%s'",app.DeployFile),
+		fmt.Sprintf("Directory to deploy; e.g. containing '%s'", app.DeployFile),
 	)
 }
-
