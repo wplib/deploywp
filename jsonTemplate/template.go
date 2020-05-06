@@ -57,7 +57,7 @@ func (me *Template) TemplateAddFunctions() (*template.Template, ux.State) {
 		// helpers.github.go
 		tfm["GitHubGetOrganization"] = helpers.GitHubGetOrganization
 		tfm["GitHubLogin"] = helpers.GitHubLogin
-		tfm["GitHubGetRepository"] = helpers.GitHubGetRepository
+		//tfm["GitHubGetRepository"] = helpers.GetRepository
 
 		// helpers.prompt.go
 		tfm["UserPrompt"] = helpers.UserPrompt

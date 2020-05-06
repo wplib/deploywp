@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6ea60209-f7f6-4d59-98a1-cf188c90fa33" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/helpers.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/json.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/template.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/github.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/github.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/prompt.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/prompt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/template.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/template.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,38 +69,38 @@
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="861" y="173" key="#deploywp/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588739946721" />
-    <state width="1470" height="286" key="GridCell.Tab.0.bottom" timestamp="1588744992700">
+    <state width="1470" height="306" key="GridCell.Tab.0.bottom" timestamp="1588751418840">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="286" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744992700" />
-    <state width="1470" height="286" key="GridCell.Tab.0.center" timestamp="1588744992699">
+    <state width="1470" height="306" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588751418840" />
+    <state width="1470" height="306" key="GridCell.Tab.0.center" timestamp="1588751418838">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="286" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744992699" />
-    <state width="1470" height="286" key="GridCell.Tab.0.left" timestamp="1588744992698">
+    <state width="1470" height="306" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588751418838" />
+    <state width="1470" height="306" key="GridCell.Tab.0.left" timestamp="1588751418837">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="286" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744992698" />
-    <state width="1470" height="286" key="GridCell.Tab.0.right" timestamp="1588744992699">
+    <state width="1470" height="306" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588751418837" />
+    <state width="1470" height="306" key="GridCell.Tab.0.right" timestamp="1588751418839">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="286" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744992699" />
-    <state width="1470" height="306" key="GridCell.Tab.1.bottom" timestamp="1588744299436">
+    <state width="1470" height="306" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588751418839" />
+    <state width="1470" height="306" key="GridCell.Tab.1.bottom" timestamp="1588751414852">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="306" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744299436" />
-    <state width="1470" height="306" key="GridCell.Tab.1.center" timestamp="1588744299436">
+    <state width="1470" height="306" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588751414852" />
+    <state width="1470" height="306" key="GridCell.Tab.1.center" timestamp="1588751414851">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="306" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744299436" />
-    <state width="1470" height="306" key="GridCell.Tab.1.left" timestamp="1588744299436">
+    <state width="1470" height="306" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588751414851" />
+    <state width="1470" height="306" key="GridCell.Tab.1.left" timestamp="1588751414850">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="306" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744299436" />
-    <state width="1470" height="306" key="GridCell.Tab.1.right" timestamp="1588744299436">
+    <state width="1470" height="306" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588751414850" />
+    <state width="1470" height="306" key="GridCell.Tab.1.right" timestamp="1588751414851">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="306" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744299436" />
+    <state width="1470" height="306" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588751414851" />
     <state width="756" height="503" key="XDebugger.FullValuePopup" timestamp="1588744287954">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
@@ -121,41 +120,16 @@
           <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github.go</url>
-          <line>38</line>
-          <option name="timeStamp" value="64" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github.go</url>
-          <line>39</line>
-          <option name="timeStamp" value="66" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github.go</url>
-          <line>29</line>
-          <option name="timeStamp" value="74" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github.go</url>
-          <line>102</line>
-          <option name="timeStamp" value="76" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github.go</url>
-          <line>70</line>
-          <option name="timeStamp" value="77" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/exec.go</url>
-          <line>19</line>
-          <option name="timeStamp" value="79" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/exec.go</url>
-          <line>37</line>
-          <option name="timeStamp" value="81" />
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github_repository.go</url>
+          <line>80</line>
+          <option name="timeStamp" value="89" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="GoApplicationRunConfiguration">
+        <watch expression="*(*&quot;github.com/google/go-github/v31/github.Reference&quot;)(824637487104)" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

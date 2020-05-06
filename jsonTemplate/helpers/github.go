@@ -2,24 +2,11 @@ package helpers
 
 import (
 	"context"
-	"fmt"
 	"github.com/google/go-github/v31/github"
-	"github.com/src/golang.org/x/oauth2"
 	"github.com/wplib/deploywp/only"
 	"reflect"
 	"strings"
 )
-
-
-func GitHubGetBranch(i interface{}) bool {
-	v := reflect.ValueOf(i)
-	switch v.Kind() {
-		case reflect.Int, reflect.Int8, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint32, reflect.Uint64, reflect.Float32, reflect.Float64:
-			return true
-		default:
-			return false
-	}
-}
 
 
 // Usage: {{ array := GitHubGetOrganization "gearboxworks" }}
@@ -61,25 +48,34 @@ func fetchOrganizations(username string) ([]*github.Organization, error) {
 type TypeGitHubLogin struct {
 	Valid bool
 	Error error
-	Data *github.User
+	User *github.User
+	Client *github.Client
 }
 func GitHubLogin(username interface{}, password interface{}, twofactor interface{}) TypeGitHubLogin {
-	var user TypeGitHubLogin
+	var auth TypeGitHubLogin
 
 	for range only.Once {
 		usernameString := ""
 		if u := ReflectString(username); u != nil {
 			usernameString = *u
 		} else {
+			usernameString = ""
+		}
+		if usernameString == "" {
 			usernameString = UserPrompt("GitHub username: ")
 		}
+
 
 		passwordString := ""
 		if p := ReflectString(password); p != nil {
 			passwordString = *p
 		} else {
+			passwordString = ""
+		}
+		if passwordString == "" {
 			passwordString = UserPromptHidden("GitHub password: ")
 		}
+
 
 		twofactorString := ""
 		if f := ReflectString(twofactor); f != nil {
@@ -96,71 +92,298 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 
 		//fmt.Printf("username: %s\tpassword: %s\t 2fa: %s\n", u.String(), p.String(), f.String())
 
-		client := github.NewClient(tp.Client())
+		auth.Client = github.NewClient(tp.Client())
 		ctx := context.Background()
 
-		user.Data, _, user.Error = client.Users.Get(ctx, "")
-		if _, ok := user.Error.(*github.TwoFactorAuthError); ok {
+		auth.User, _, auth.Error = auth.Client.Users.Get(ctx, "")
+		if _, ok := auth.Error.(*github.TwoFactorAuthError); ok {
 			// Is this a two-factor auth error? If so, prompt for OTP and try again.
 			if twofactorString == "" {
 				twofactorString = UserPrompt("GitHub 2FA password: ")
 			}
 
 			tp.OTP = strings.TrimSpace(twofactorString)
-			user.Data, _, user.Error = client.Users.Get(ctx, "")
+			auth.User, _, auth.Error = auth.Client.Users.Get(ctx, "")
 		}
 
-		if user.Error != nil {
+		if auth.Error != nil {
 			break
 		}
 
-		user.Valid = true
-		fmt.Printf("\n%v\n", github.Stringify(user))
+		auth.Valid = true
+		//fmt.Printf("\n%v\n", github.Stringify(auth))
 	}
 
-	return user
+	return auth
 }
 
 
-// Usage: {{ $user := GitHubGetRepository TypeGitHubLogin.Data }}
-type TypeGitHubGetRepository struct {
-	Valid bool
-	Error error
-	Data *github.Repository
-}
-func GitHubGetRepository(auth interface{}, owner interface{}, repo interface{}) TypeGitHubGetRepository {
-	var r TypeGitHubGetRepository
-
-	for range only.Once {
-		op := ReflectString(owner)
-		if op == nil {
-			break
-		}
-
-		rp := ReflectString(repo)
-		if rp == nil {
-			break
-		}
-
-
-		ctx := context.Background()
-
-		tokenService := oauth2.StaticTokenSource(
-			&oauth2.Token{AccessToken: "<!-- Your API Keys -->"},
-		)
-		tokenClient := oauth2.NewClient(ctx, tokenService)
-
-		client := github.NewClient(tokenClient)
-
-		r.Data, _, r.Error = client.Repositories.Get(ctx, *op, *rp)
-
-		if r.Error != nil {
-			break
-		}
-
-		//fmt.Printf("%+v\n", pack)
-		r.Valid = true
-	}
-
-	return r
-}
+//// Usage: {{ $user := GitHubLogin "gearboxworks" "docker-template" "master" }}
+//type TypeGetBranch struct {
+//	Valid bool
+//	Error error
+//	Reference *github.Reference
+//}
+//func (me TypeGitHubLogin) GetBranch(owner interface{}, repo interface{}, reference interface{}) TypeGetBranch {
+//	var ret TypeGetBranch
+//
+//	for range only.Once {
+//		op := ReflectString(owner)
+//		if op == nil {
+//			break
+//		}
+//
+//		rp := ReflectString(repo)
+//		if rp == nil {
+//			break
+//		}
+//
+//		rfp := ReflectString(reference)
+//		if rfp == nil {
+//			break
+//		}
+//		if *rfp == "" {
+//			*rfp = "master"
+//		}
+//
+//		var ctx = context.Background()
+//		ret.Reference, _, ret.Error = me.Client.Git.GetRef(ctx, *op, *rp, "refs/heads/" + *rfp)
+//		if me.Error != nil {
+//			break
+//		}
+//
+//		if ret.Reference == nil {
+//			break
+//		}
+//
+//		ret.Valid = true
+//		//fmt.Printf("\n>%s\n", ret.Reference.String())
+//	}
+//
+//	return ret
+//}
+//
+//
+//
+//// Usage: {{ $user := GitHubGetRepository "gearboxworks" "docker-template" }}
+//type TypeGitHubGetRepository struct {
+//	Valid bool
+//	Error error
+//	Data *github.Repository
+//}
+//func (me TypeGitHubLogin) GetRepository(owner interface{}, repo interface{}) TypeGitHubGetRepository {
+//	var ret TypeGitHubGetRepository
+//
+//	for range only.Once {
+//		op := ReflectString(owner)
+//		if op == nil {
+//			break
+//		}
+//
+//		rp := ReflectString(repo)
+//		if rp == nil {
+//			break
+//		}
+//
+//		ctx := context.Background()
+//		ret.Data, _, ret.Error = me.Client.Repositories.Get(ctx, *op, *rp)
+//
+//		if ret.Error != nil {
+//			break
+//		}
+//
+//		ret.Valid = true
+//	}
+//
+//	return ret
+//}
+//func (me TypeGitHubGetRepository) GetName() TypeGenericStringArray {
+//	var ret TypeGenericStringArray
+//
+//	for range only.Once {
+//		ret.Data = append(ret.Data, *me.Data.Name)
+//		ret.Valid = true
+//	}
+//
+//	return ret
+//}
+//func (me TypeGitHubGetRepository) GetFullName() TypeGenericStringArray {
+//	var ret TypeGenericStringArray
+//
+//	for range only.Once {
+//		ret.Data = append(ret.Data, *me.Data.FullName)
+//		ret.Valid = true
+//	}
+//
+//	return ret
+//}
+//func (me TypeGitHubGetRepository) GetUrl() TypeGenericStringArray {
+//	var ret TypeGenericStringArray
+//
+//	for range only.Once {
+//		ret.Data = append(ret.Data, *me.Data.URL)
+//		ret.Valid = true
+//	}
+//
+//	return ret
+//}
+//
+//
+//// Usage: {{ $user := GitHubGetRepositories "gearboxworks" }}
+//type TypeGitHubGetRepositories struct {
+//	Valid bool
+//	Error error
+//	Data []*github.Repository
+//}
+//func (me TypeGitHubLogin) GetRepositories(owner interface{}) TypeGitHubGetRepositories {
+//	var ret TypeGitHubGetRepositories
+//
+//	for range only.Once {
+//		op := ReflectString(owner)
+//		if op == nil {
+//			break
+//		}
+//
+//		ctx := context.Background()
+//		ret.Data, _, ret.Error = me.Client.Repositories.List(ctx, *op, nil)
+//
+//		if ret.Error != nil {
+//			break
+//		}
+//
+//		//fmt.Printf("%+v\n", pack)
+//		ret.Valid = true
+//	}
+//
+//	return ret
+//}
+//func (me TypeGitHubGetRepositories) GetNames() TypeGenericStringArray {
+//	var ret TypeGenericStringArray
+//
+//	for range only.Once {
+//		for _, v := range me.Data {
+//			ret.Data = append(ret.Data, *v.Name)
+//		}
+//		ret.Valid = true
+//	}
+//
+//	return ret
+//}
+//func (me TypeGitHubGetRepositories) GetFullNames() TypeGenericStringArray {
+//	var ret TypeGenericStringArray
+//
+//	for range only.Once {
+//		for _, v := range me.Data {
+//			ret.Data = append(ret.Data, *v.FullName)
+//		}
+//		ret.Valid = true
+//	}
+//
+//	return ret
+//}
+//func (me TypeGitHubGetRepositories) GetUrls() TypeGenericStringArray {
+//	var ret TypeGenericStringArray
+//
+//	for range only.Once {
+//		for _, v := range me.Data {
+//			ret.Data = append(ret.Data, *v.URL)
+//		}
+//		ret.Valid = true
+//	}
+//
+//	return ret
+//}
+//
+//
+//// Usage: {{ $user := GetCurrentBranchFromRepository "gearboxworks" "docker-template" }}
+//func (me TypeGitHubGetRepository) GetCurrentBranchFromRepository() TypeGenericString {
+//	var ret TypeGenericString
+//
+//	for range only.Once {
+//		repo := ret.Data
+//
+//		branchRefs, ret.Error = repo.Branches()
+//		if ret.Error != nil {
+//			break
+//		}
+//
+//		headRef, ret.Error = repository.Head()
+//		if ret.Error != nil {
+//			return "", err
+//		}
+//
+//		var currentBranchName string
+//		err = branchRefs.ForEach(func(branchRef *plumbing.Reference) error {
+//			if branchRef.Hash() == headRef.Hash() {
+//				ret.Data = branchRef.Name().String()
+//
+//				return nil
+//			}
+//
+//			return nil
+//		})
+//		if ret.Error != nil {
+//			return "", err
+//		}
+//	}
+//
+//	return ret
+//}
+//
+//func (me TypeGitHubGetRepository) GetCurrentCommitFromRepository() TypeGenericString {
+//	var ret TypeGenericString
+//
+//	for range only.Once {
+//		headRef, ret.Error = repository.Head()
+//		if ret.Error != nil {
+//			break
+//		}
+//
+//		ret.Data = headRef.Hash().String()
+//	}
+//
+//	return ret
+//}
+//
+//func (me TypeGitHubGetRepository) GetLatestTagFromRepository() TypeGenericString {
+//	var ret TypeGenericString
+//
+//	for range only.Once {
+//		tagRefs, ret.Error = repository.Tags()
+//		if ret.Error != nil {
+//			break
+//		}
+//
+//		var latestTagCommit *object.Commit
+//		err = tagRefs.ForEach(func(tagRef *plumbing.Reference) error {
+//			revision := plumbing.Revision(tagRef.Name().String())
+//			tagCommitHash, ret.Error = repository.ResolveRevision(revision)
+//			if ret.Error != nil {
+//				return err
+//			}
+//
+//			commit, ret.Error = repository.CommitObject(*tagCommitHash)
+//			if ret.Error != nil {
+//				return err
+//			}
+//
+//			if latestTagCommit == nil {
+//				latestTagCommit = commit
+//				ret.Data = tagRef.Name().String()
+//			}
+//
+//			if commit.Committer.When.After(latestTagCommit.Committer.When) {
+//				latestTagCommit = commit
+//				ret.Data = tagRef.Name().String()
+//			}
+//
+//			return nil
+//		})
+//
+//		if ret.Error != nil {
+//			break
+//		}
+//	}
+//
+//	return ret
+//}
