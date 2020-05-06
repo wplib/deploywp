@@ -1,4 +1,4 @@
-package main
+package jsonTemplate
 
 type jsonStruct struct {
 	DirPath string

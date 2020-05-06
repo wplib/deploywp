@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6ea60209-f7f6-4d59-98a1-cf188c90fa33" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/helpers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/json.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/template.go" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
+  </component>
+  <component name="GOROOT" path="/usr/local/go" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1XmVjZMeqSSD1j09iPpneYwFIer" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="go.sdk.automatically.set" value="true" />
+    <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="restartRequiresConfirmation" value="false" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RunManager">
+    <configuration name="deploywp" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="deploywp" />
+      <working_directory value="$PROJECT_DIR$/tests/" />
+      <go_parameters value="-i" />
+      <parameters value="process" />
+      <kind value="DIRECTORY" />
+      <filePath value="$PROJECT_DIR$/main.go" />
+      <package value="github.com/wplib/deploywp" />
+      <directory value="$PROJECT_DIR$/" />
+      <output_directory value="$PROJECT_DIR$/bin" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588739952515">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588739952515" />
+    <state x="861" y="173" key="#deploywp" timestamp="1588739946721">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state x="861" y="173" key="#deploywp/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588739946721" />
+    <state width="1470" height="286" key="GridCell.Tab.0.bottom" timestamp="1588744992700">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state width="1470" height="286" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744992700" />
+    <state width="1470" height="286" key="GridCell.Tab.0.center" timestamp="1588744992699">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state width="1470" height="286" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744992699" />
+    <state width="1470" height="286" key="GridCell.Tab.0.left" timestamp="1588744992698">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state width="1470" height="286" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744992698" />
+    <state width="1470" height="286" key="GridCell.Tab.0.right" timestamp="1588744992699">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state width="1470" height="286" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744992699" />
+    <state width="1470" height="306" key="GridCell.Tab.1.bottom" timestamp="1588744299436">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state width="1470" height="306" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744299436" />
+    <state width="1470" height="306" key="GridCell.Tab.1.center" timestamp="1588744299436">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state width="1470" height="306" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744299436" />
+    <state width="1470" height="306" key="GridCell.Tab.1.left" timestamp="1588744299436">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state width="1470" height="306" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744299436" />
+    <state width="1470" height="306" key="GridCell.Tab.1.right" timestamp="1588744299436">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state width="1470" height="306" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744299436" />
+    <state width="756" height="503" key="XDebugger.FullValuePopup" timestamp="1588744287954">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state width="756" height="503" key="XDebugger.FullValuePopup/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588744287954" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$USER_HOME$/go/src/github.com/wplib/deploywp/jsonTemplate/template.go</url>
+          <line>324</line>
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/template.go</url>
+          <line>296</line>
+          <option name="timeStamp" value="62" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github.go</url>
+          <line>38</line>
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github.go</url>
+          <line>39</line>
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github.go</url>
+          <line>29</line>
+          <option name="timeStamp" value="74" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github.go</url>
+          <line>102</line>
+          <option name="timeStamp" value="76" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github.go</url>
+          <line>70</line>
+          <option name="timeStamp" value="77" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/exec.go</url>
+          <line>19</line>
+          <option name="timeStamp" value="79" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/exec.go</url>
+          <line>37</line>
+          <option name="timeStamp" value="81" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

@@ -1,9 +1,9 @@
-package main
+package jsonTemplate
 
 import (
-	"MickMake/JsonToConfig/only"
 	"encoding/json"
 	"fmt"
+	"github.com/wplib/deploywp/only"
 	"io/ioutil"
 	"os"
 	"reflect"
