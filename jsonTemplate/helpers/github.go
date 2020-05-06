@@ -51,6 +51,7 @@ type TypeGitHubLogin struct {
 	User *github.User
 	Client *github.Client
 }
+
 func GitHubLogin(username interface{}, password interface{}, twofactor interface{}) TypeGitHubLogin {
 	var auth TypeGitHubLogin
 

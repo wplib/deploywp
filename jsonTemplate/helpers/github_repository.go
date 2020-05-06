@@ -179,6 +179,7 @@ type TypeGitHubGetRepositories struct {
 	Error error
 	Data []*github.Repository
 }
+
 func (me TypeGitHubLogin) GetRepositories(owner interface{}) TypeGitHubGetRepositories {
 	var ret TypeGitHubGetRepositories
 
@@ -201,6 +202,7 @@ func (me TypeGitHubLogin) GetRepositories(owner interface{}) TypeGitHubGetReposi
 
 	return ret
 }
+
 func (me TypeGitHubGetRepositories) GetNames() TypeGenericStringArray {
 	var ret TypeGenericStringArray
 
@@ -213,6 +215,7 @@ func (me TypeGitHubGetRepositories) GetNames() TypeGenericStringArray {
 
 	return ret
 }
+
 func (me TypeGitHubGetRepositories) GetFullNames() TypeGenericStringArray {
 	var ret TypeGenericStringArray
 
@@ -225,6 +228,7 @@ func (me TypeGitHubGetRepositories) GetFullNames() TypeGenericStringArray {
 
 	return ret
 }
+
 func (me TypeGitHubGetRepositories) GetUrls() TypeGenericStringArray {
 	var ret TypeGenericStringArray
 
