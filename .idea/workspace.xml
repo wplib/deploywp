@@ -3,6 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="6ea60209-f7f6-4d59-98a1-cf188c90fa33" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/process.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/process.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/exec.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/exec.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/funcs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/strings.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/strings.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/template.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/template.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +47,7 @@
     <property name="restartRequiresConfirmation" value="false" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Go Build.deploywp">
     <configuration name="deploywp" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="deploywp" />
       <working_directory value="$PROJECT_DIR$/tests/" />
@@ -53,51 +60,69 @@
       <output_directory value="$PROJECT_DIR$/bin" />
       <method v="2" />
     </configuration>
+    <configuration name="deploywp2" type="GoApplicationRunConfiguration" factoryName="Go Application">
+      <module name="deploywp" />
+      <working_directory value="$PROJECT_DIR$/" />
+      <go_parameters value="-i" />
+      <parameters value="process" />
+      <kind value="DIRECTORY" />
+      <filePath value="$PROJECT_DIR$/" />
+      <directory value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Go Build.deploywp" />
+      <item itemvalue="Go Build.deploywp2" />
+    </list>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1588739952515">
+    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589087768501">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588739952515" />
+    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589087768501" />
     <state x="861" y="173" key="#deploywp" timestamp="1588739946721">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="861" y="173" key="#deploywp/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588739946721" />
-    <state width="1470" height="306" key="GridCell.Tab.0.bottom" timestamp="1588923770278">
+    <state x="1023" y="263" width="684" height="633" key="EnvironmentVariablesDialog" timestamp="1589083326960">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="306" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588923770278" />
-    <state width="1470" height="306" key="GridCell.Tab.0.center" timestamp="1588923770278">
+    <state x="1023" y="263" width="684" height="633" key="EnvironmentVariablesDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589083326960" />
+    <state width="1470" height="308" key="GridCell.Tab.0.bottom" timestamp="1589105568425">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="306" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588923770278" />
-    <state width="1470" height="306" key="GridCell.Tab.0.left" timestamp="1588923770278">
+    <state width="1470" height="308" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589105568425" />
+    <state width="1470" height="308" key="GridCell.Tab.0.center" timestamp="1589105568423">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="306" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588923770278" />
-    <state width="1470" height="306" key="GridCell.Tab.0.right" timestamp="1588923770278">
+    <state width="1470" height="308" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589105568423" />
+    <state width="1470" height="308" key="GridCell.Tab.0.left" timestamp="1589105568422">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="306" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588923770278" />
-    <state width="1470" height="306" key="GridCell.Tab.1.bottom" timestamp="1588923770279">
+    <state width="1470" height="308" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589105568422" />
+    <state width="1470" height="308" key="GridCell.Tab.0.right" timestamp="1589105568424">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="306" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588923770279" />
-    <state width="1470" height="306" key="GridCell.Tab.1.center" timestamp="1588923770279">
+    <state width="1470" height="308" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589105568424" />
+    <state width="1470" height="308" key="GridCell.Tab.1.bottom" timestamp="1589094149312">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="306" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588923770279" />
-    <state width="1470" height="306" key="GridCell.Tab.1.left" timestamp="1588923770278">
+    <state width="1470" height="308" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589094149312" />
+    <state width="1470" height="308" key="GridCell.Tab.1.center" timestamp="1589094149312">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="306" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588923770278" />
-    <state width="1470" height="306" key="GridCell.Tab.1.right" timestamp="1588923770279">
+    <state width="1470" height="308" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589094149312" />
+    <state width="1470" height="308" key="GridCell.Tab.1.left" timestamp="1589094149312">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="306" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1588923770279" />
+    <state width="1470" height="308" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589094149312" />
+    <state width="1470" height="308" key="GridCell.Tab.1.right" timestamp="1589094149312">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state width="1470" height="308" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589094149312" />
     <state width="756" height="503" key="XDebugger.FullValuePopup" timestamp="1588744287954">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
@@ -110,11 +135,6 @@
           <url>file://$USER_HOME$/go/src/github.com/wplib/deploywp/jsonTemplate/template.go</url>
           <line>324</line>
           <option name="timeStamp" value="50" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/template.go</url>
-          <line>296</line>
-          <option name="timeStamp" value="62" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github_repository.go</url>

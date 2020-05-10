@@ -6,6 +6,7 @@ import (
 	"strings"
 )
 
+
 // Usage: {{ if ExecParseOutput $output "uid=%s" "mick" ... }}YES{{ end }}
 func Contains(s interface{}, substr interface{}) bool {
 	var ret bool

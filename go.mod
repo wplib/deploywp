@@ -6,6 +6,7 @@ require (
 	github.com/Masterminds/goutils v1.1.0 // indirect
 	github.com/Masterminds/semver v1.5.0 // indirect
 	github.com/Masterminds/sprig v2.22.0+incompatible
+	github.com/davecgh/go-spew v1.1.1
 	github.com/gdamore/tcell v1.3.0
 	github.com/gizak/termui/v3 v3.1.0
 	github.com/google/go-cmp v0.3.1 // indirect
@@ -15,6 +16,7 @@ require (
 	github.com/imdario/mergo v0.3.9 // indirect
 	github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381
 	github.com/mitchellh/copystructure v1.0.0 // indirect
+	github.com/mitchellh/mapstructure v1.1.2
 	github.com/rivo/tview v0.0.0-20200414130344-8e06c826b3a5
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.3.2

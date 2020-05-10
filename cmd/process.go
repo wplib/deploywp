@@ -8,6 +8,7 @@ import (
 	"github.com/wplib/deploywp/ux"
 )
 
+
 // releaseCmd represents the release command
 var releaseCmd = &cobra.Command{
 	Use:   "process",

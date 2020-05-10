@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/Masterminds/sprig"
 	"github.com/wplib/deploywp/jsonTemplate/helpers"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/deploywp"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"os"
@@ -41,6 +42,9 @@ func (me *Template) TemplateAddFunctions() (*template.Template, ux.State) {
 		// Define additional template functions.
 		tfm := sprig.TxtFuncMap()
 
+		// @TODO - Replace with an Add() method within each helper package to automatically import
+		// @TODO - all helper methods.
+
 		// General functions.
 		tfm["isInt"] = isInt
 		tfm["isString"] = isString
@@ -57,7 +61,6 @@ func (me *Template) TemplateAddFunctions() (*template.Template, ux.State) {
 		// helpers.github.go
 		tfm["GitHubGetOrganization"] = helpers.GitHubGetOrganization
 		tfm["GitHubLogin"] = helpers.GitHubLogin
-		//tfm["GitHubGetRepository"] = helpers.GetRepository
 
 		// helpers.prompt.go
 		tfm["UserPrompt"] = helpers.UserPrompt
@@ -66,10 +69,14 @@ func (me *Template) TemplateAddFunctions() (*template.Template, ux.State) {
 		// helpers.exec.go
 		tfm["ExecCommand"] = helpers.ExecCommand
 		tfm["ExecParseOutput"] = helpers.ExecParseOutput
+		tfm["OsExit"] = helpers.OsExit
 
 		// helpers.strings.go
 		tfm["Contains"] = helpers.Contains
 		tfm["Sprintf"] = helpers.Sprintf
+
+		// helpers.deploywp.deploywp.go
+		tfm["LoadDeployWp"] = deploywp.LoadDeployWp
 
 		t = template.New("JSON").Funcs(tfm)
 	}

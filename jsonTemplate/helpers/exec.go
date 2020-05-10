@@ -3,6 +3,7 @@ package helpers
 import (
 	"fmt"
 	"github.com/wplib/deploywp/only"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -49,6 +50,20 @@ func ExecParseOutput(output interface{}, search interface{}, args ...interface{}
 		p := fmt.Sprintf(*op, args...)
 
 		ret = strings.Contains(p, s)
+	}
+
+	return ret
+}
+
+
+
+// Usage: {{ OsExit 1 }}
+func OsExit(e ...interface{}) bool {
+	var ret bool
+
+	for range only.Once {
+		value := ReflectInt(e)
+		os.Exit(int(*value))
 	}
 
 	return ret
