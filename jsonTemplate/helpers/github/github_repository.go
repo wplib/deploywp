@@ -1,29 +1,32 @@
-package helpers
+package github
 
 import (
 	"context"
 	"github.com/google/go-github/v31/github"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/general"
 	"github.com/wplib/deploywp/only"
 )
 
 
-// Usage: {{ $user := GitHubGetRepository "gearboxworks" "docker-template" }}
-type TypeGitHubGetRepository struct {
+type TypeGetRepository struct {
 	Valid bool
 	Error error
 	Data *github.Repository
 }
 
-func (me TypeGitHubLogin) GetRepository(owner interface{}, repo interface{}) TypeGitHubGetRepository {
-	var ret TypeGitHubGetRepository
+// Usage:
+//		{{ $git := GitHubLogin }}
+//		{{ $repos := $git.GetRepository "gearboxworks" "docker-template" }}
+func (me TypeLogin) GetRepository(owner interface{}, repo interface{}) TypeGetRepository {
+	var ret TypeGetRepository
 
 	for range only.Once {
-		op := ReflectString(owner)
+		op := general.ReflectString(owner)
 		if op == nil {
 			break
 		}
 
-		rp := ReflectString(repo)
+		rp := general.ReflectString(repo)
 		if rp == nil {
 			break
 		}
@@ -41,33 +44,33 @@ func (me TypeGitHubLogin) GetRepository(owner interface{}, repo interface{}) Typ
 	return ret
 }
 
-func (me TypeGitHubGetRepository) GetName() TypeGenericStringArray {
-	var ret TypeGenericStringArray
+func (me TypeGetRepository) GetName() general.TypeGenericStringArray {
+	var ret general.TypeGenericStringArray
 
 	for range only.Once {
-		ret.Data = append(ret.Data, *me.Data.Name)
+		ret.Array = append(ret.Array, *me.Data.Name)
 		ret.Valid = true
 	}
 
 	return ret
 }
 
-func (me TypeGitHubGetRepository) GetFullName() TypeGenericStringArray {
-	var ret TypeGenericStringArray
+func (me TypeGetRepository) GetFullName() general.TypeGenericStringArray {
+	var ret general.TypeGenericStringArray
 
 	for range only.Once {
-		ret.Data = append(ret.Data, *me.Data.FullName)
+		ret.Array = append(ret.Array, *me.Data.FullName)
 		ret.Valid = true
 	}
 
 	return ret
 }
 
-func (me TypeGitHubGetRepository) GetUrl() TypeGenericStringArray {
-	var ret TypeGenericStringArray
+func (me TypeGetRepository) GetUrl() general.TypeGenericStringArray {
+	var ret general.TypeGenericStringArray
 
 	for range only.Once {
-		ret.Data = append(ret.Data, *me.Data.URL)
+		ret.Array = append(ret.Array, *me.Data.URL)
 		ret.Valid = true
 	}
 
@@ -75,10 +78,10 @@ func (me TypeGitHubGetRepository) GetUrl() TypeGenericStringArray {
 }
 
 // Usage: {{ $branch := GetHeadBranch }}
-func (me TypeGitHubGetRepository) GetHeadBranch() TypeGenericString {
-	var ret TypeGenericString
+func (me TypeGetRepository) GetHeadBranch() general.TypeGenericString {
+	var ret general.TypeGenericString
 
-	ret.Data = me.Data.GetDefaultBranch()
+	ret.String = me.Data.GetDefaultBranch()
 
 	//for range only.Once {
 	//	ret.Data = me.Data.GetDefaultBranch()
@@ -112,8 +115,8 @@ func (me TypeGitHubGetRepository) GetHeadBranch() TypeGenericString {
 	return ret
 }
 
-func (me TypeGitHubGetRepository) GetCurrentCommitFromRepository() TypeGenericString {
-	var ret TypeGenericString
+func (me TypeGetRepository) GetCurrentCommitFromRepository() general.TypeGenericString {
+	var ret general.TypeGenericString
 
 	//for range only.Once {
 	//	headRef, ret.Error = repository.Head()
@@ -127,8 +130,8 @@ func (me TypeGitHubGetRepository) GetCurrentCommitFromRepository() TypeGenericSt
 	return ret
 }
 
-func (me TypeGitHubGetRepository) GetLatestTagFromRepository() TypeGenericString {
-	var ret TypeGenericString
+func (me TypeGetRepository) GetLatestTagFromRepository() general.TypeGenericString {
+	var ret general.TypeGenericString
 
 	//for range only.Once {
 	//	tagRefs, ret.Error = repository.Tags()
@@ -173,18 +176,20 @@ func (me TypeGitHubGetRepository) GetLatestTagFromRepository() TypeGenericString
 
 //////////////////////////////////////////////////////////////////////
 
-// Usage: {{ $user := GitHubGetRepositories "gearboxworks" }}
-type TypeGitHubGetRepositories struct {
+type TypeGetRepositories struct {
 	Valid bool
 	Error error
 	Data []*github.Repository
 }
 
-func (me TypeGitHubLogin) GetRepositories(owner interface{}) TypeGitHubGetRepositories {
-	var ret TypeGitHubGetRepositories
+// Usage:
+//		{{ $git := GitHubLogin }}
+//		{{ $repos := $git.GetRepositories "gearboxworks" }}
+func (me TypeLogin) GetRepositories(owner interface{}) TypeGetRepositories {
+	var ret TypeGetRepositories
 
 	for range only.Once {
-		op := ReflectString(owner)
+		op := general.ReflectString(owner)
 		if op == nil {
 			break
 		}
@@ -203,12 +208,16 @@ func (me TypeGitHubLogin) GetRepositories(owner interface{}) TypeGitHubGetReposi
 	return ret
 }
 
-func (me TypeGitHubGetRepositories) GetNames() TypeGenericStringArray {
-	var ret TypeGenericStringArray
+// Usage:
+//		{{ $git := GitHubLogin }}
+//		{{ $repos := $git.GetRepositories "gearboxworks" }}
+//		{{ $names := $repos.GetNames }}
+func (me TypeGetRepositories) GetNames() general.TypeGenericStringArray {
+	var ret general.TypeGenericStringArray
 
 	for range only.Once {
 		for _, v := range me.Data {
-			ret.Data = append(ret.Data, *v.Name)
+			ret.Array = append(ret.Array, *v.Name)
 		}
 		ret.Valid = true
 	}
@@ -216,12 +225,16 @@ func (me TypeGitHubGetRepositories) GetNames() TypeGenericStringArray {
 	return ret
 }
 
-func (me TypeGitHubGetRepositories) GetFullNames() TypeGenericStringArray {
-	var ret TypeGenericStringArray
+// Usage:
+//		{{ $git := GitHubLogin }}
+//		{{ $repos := $git.GetRepositories "gearboxworks" }}
+//		{{ $names := $repos.GetFullNames }}
+func (me TypeGetRepositories) GetFullNames() general.TypeGenericStringArray {
+	var ret general.TypeGenericStringArray
 
 	for range only.Once {
 		for _, v := range me.Data {
-			ret.Data = append(ret.Data, *v.FullName)
+			ret.Array = append(ret.Array, *v.FullName)
 		}
 		ret.Valid = true
 	}
@@ -229,12 +242,16 @@ func (me TypeGitHubGetRepositories) GetFullNames() TypeGenericStringArray {
 	return ret
 }
 
-func (me TypeGitHubGetRepositories) GetUrls() TypeGenericStringArray {
-	var ret TypeGenericStringArray
+// Usage:
+//		{{ $git := GitHubLogin }}
+//		{{ $repos := $git.GetRepositories "gearboxworks" }}
+//		{{ $urls := $repos.GetUrls }}
+func (me TypeGetRepositories) GetUrls() general.TypeGenericStringArray {
+	var ret general.TypeGenericStringArray
 
 	for range only.Once {
 		for _, v := range me.Data {
-			ret.Data = append(ret.Data, *v.URL)
+			ret.Array = append(ret.Array, *v.URL)
 		}
 		ret.Valid = true
 	}

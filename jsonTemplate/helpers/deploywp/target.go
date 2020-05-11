@@ -45,11 +45,11 @@ func (me *Target) IsNil() bool {
 
 	for range only.Once {
 		if me == nil {
-			ok = false
+			ok = true
 		}
 		// @TODO - perform other validity checks here.
 
-		ok = true
+		ok = false
 	}
 
 	return ok

@@ -2,11 +2,9 @@ package deploywp
 // MM
 
 import (
-	"errors"
 	"github.com/mitchellh/mapstructure"
 	//"github.com/davecgh/go-spew/spew"
 	"github.com/wplib/deploywp/only"
-	"reflect"
 )
 
 
@@ -35,7 +33,7 @@ func LoadDeployWp(str interface{}) *DeployWp {
 	var j DeployWp
 
 	for range only.Once {
-		//value := ReflectString(str)
+		//value := general.ReflectString(str)
 		//if value == nil {
 		//	j.Error = errors.New("Failed to reflect")
 		//	break
@@ -68,20 +66,20 @@ func LoadDeployWp(str interface{}) *DeployWp {
 }
 
 
-func ReflectString(ref interface{}) *string {
-	var s string
-
-	for range only.Once {
-		value := reflect.ValueOf(ref)
-		if value.Kind() != reflect.String {
-			break
-		}
-
-		s = value.String()
-	}
-
-	return &s
-}
+//func ReflectString(ref interface{}) *string {
+//	var s string
+//
+//	for range only.Once {
+//		value := reflect.ValueOf(ref)
+//		if value.Kind() != reflect.String {
+//			break
+//		}
+//
+//		s = value.String()
+//	}
+//
+//	return &s
+//}
 
 
 func (me *DeployWp) IsNil() bool {
@@ -89,11 +87,11 @@ func (me *DeployWp) IsNil() bool {
 
 	for range only.Once {
 		if me == nil {
-			ok = false
+			ok = true
 		}
 		// @TODO - perform other validity checks here.
 
-		ok = true
+		ok = false
 	}
 
 	return ok
@@ -313,7 +311,7 @@ func (me *DeployWp) GetTargetWebRootPath() string {
 			break
 		}
 
-		ret = me.Target.Paths.GetWebRootPath()
+		ret = me.Target.GetWebRootPath()
 	}
 
 	return ret
@@ -326,7 +324,7 @@ func (me *DeployWp) GetTargetContentPath() string {
 			break
 		}
 
-		ret = me.Target.Paths.GetContentPath()
+		ret = me.Target.GetContentPath()
 	}
 
 	return ret
@@ -339,7 +337,7 @@ func (me *DeployWp) GetTargetCorePath() string {
 			break
 		}
 
-		ret = me.Target.Paths.GetCorePath()
+		ret = me.Target.GetCorePath()
 	}
 
 	return ret
@@ -352,7 +350,7 @@ func (me *DeployWp) GetTargetRootPath() string {
 			break
 		}
 
-		ret = me.Target.Paths.GetRootPath()
+		ret = me.Target.GetRootPath()
 	}
 
 	return ret
@@ -365,11 +363,90 @@ func (me *DeployWp) GetTargetVendorPath() string {
 			break
 		}
 
-		ret = me.Target.Paths.GetVendorPath()
+		ret = me.Target.GetVendorPath()
 	}
 
 	return ret
 }
+
+//func (me *DeployWp) GetTargetPaths() *Paths {
+//	var ret *Paths
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		ret = &me.Target.Paths
+//	}
+//
+//	return ret
+//}
+//func (me *DeployWp) GetTargetWebRootPath() string {
+//	var ret string
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		ret = me.Target.Paths.GetWebRootPath()
+//	}
+//
+//	return ret
+//}
+//func (me *DeployWp) GetTargetContentPath() string {
+//	var ret string
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		ret = me.Target.Paths.GetContentPath()
+//	}
+//
+//	return ret
+//}
+//func (me *DeployWp) GetTargetCorePath() string {
+//	var ret string
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		ret = me.Target.Paths.GetCorePath()
+//	}
+//
+//	return ret
+//}
+//func (me *DeployWp) GetTargetRootPath() string {
+//	var ret string
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		ret = me.Target.Paths.GetRootPath()
+//	}
+//
+//	return ret
+//}
+//func (me *DeployWp) GetTargetVendorPath() string {
+//	var ret string
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		ret = me.Target.Paths.GetVendorPath()
+//	}
+//
+//	return ret
+//}
 
 
 // ////////////////////////////////////////////////////////////////////////////////

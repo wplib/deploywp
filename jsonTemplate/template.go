@@ -4,8 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/Masterminds/sprig"
-	"github.com/wplib/deploywp/jsonTemplate/helpers"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/deploywp"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/general"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/github"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"os"
@@ -58,24 +59,24 @@ func (me *Template) TemplateAddFunctions() (*template.Template, ux.State) {
 		tfm["ReadFile"] = ReadFile
 		tfm["PrintEnv"] = PrintEnv
 
-		// helpers.github.go
-		tfm["GitHubGetOrganization"] = helpers.GitHubGetOrganization
-		tfm["GitHubLogin"] = helpers.GitHubLogin
+		// helpers/github.go
+		tfm["GitHubLogin"] = github.Login
+		tfm["GitHubGetOrganization"] = github.GetOrganization
 
-		// helpers.prompt.go
-		tfm["UserPrompt"] = helpers.UserPrompt
-		tfm["UserPromptHidden"] = helpers.UserPromptHidden
+		// helpers/prompt.go
+		tfm["UserPrompt"] = general.UserPrompt
+		tfm["UserPromptHidden"] = general.UserPromptHidden
 
-		// helpers.exec.go
-		tfm["ExecCommand"] = helpers.ExecCommand
-		tfm["ExecParseOutput"] = helpers.ExecParseOutput
-		tfm["OsExit"] = helpers.OsExit
+		// helpers/exec.go
+		tfm["ExecCommand"] = general.ExecCommand
+		tfm["ExecParseOutput"] = general.ExecParseOutput
+		tfm["OsExit"] = general.OsExit
 
-		// helpers.strings.go
-		tfm["Contains"] = helpers.Contains
-		tfm["Sprintf"] = helpers.Sprintf
+		// helpers/strings.go
+		tfm["Contains"] = general.Contains
+		tfm["Sprintf"] = general.Sprintf
 
-		// helpers.deploywp.deploywp.go
+		// helpers/deploywp.deploywp.go
 		tfm["LoadDeployWp"] = deploywp.LoadDeployWp
 
 		t = template.New("JSON").Funcs(tfm)
@@ -104,7 +105,6 @@ func (me *Template) TemplateFiles() (*template.Template, ux.State) {
 		tfm["FindInMap"] = FindInMap
 		tfm["ReadFile"] = ReadFile
 		tfm["PrintEnv"] = PrintEnv
-		tfm["PrintEnv"] = helpers.GitHubGetOrganization
 
 		t = template.New("JSON").Funcs(tfm)
 	}

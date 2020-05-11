@@ -1,8 +1,9 @@
-package helpers
+package github
 
 import (
 	"context"
 	"github.com/google/go-github/v31/github"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/general"
 	"github.com/wplib/deploywp/only"
 	"reflect"
 	"strings"
@@ -10,7 +11,7 @@ import (
 
 
 // Usage: {{ array := GitHubGetOrganization "gearboxworks" }}
-func GitHubGetOrganization(i interface{}) []string {
+func GetOrganization(i interface{}) []string {
 	var sa []string
 
 	for range only.Once {
@@ -45,41 +46,41 @@ func fetchOrganizations(username string) ([]*github.Organization, error) {
 
 
 // Usage: {{ $user := GitHubLogin "username" "password" "" }}
-type TypeGitHubLogin struct {
+type TypeLogin struct {
 	Valid bool
 	Error error
 	User *github.User
 	Client *github.Client
 }
 
-func GitHubLogin(username interface{}, password interface{}, twofactor interface{}) TypeGitHubLogin {
-	var auth TypeGitHubLogin
+func Login(username interface{}, password interface{}, twofactor interface{}) TypeLogin {
+	var auth TypeLogin
 
 	for range only.Once {
 		usernameString := ""
-		if u := ReflectString(username); u != nil {
+		if u := general.ReflectString(username); u != nil {
 			usernameString = *u
 		} else {
 			usernameString = ""
 		}
 		if usernameString == "" {
-			usernameString = UserPrompt("GitHub username: ")
+			usernameString = general.UserPrompt("GitHub username: ")
 		}
 
 
 		passwordString := ""
-		if p := ReflectString(password); p != nil {
+		if p := general.ReflectString(password); p != nil {
 			passwordString = *p
 		} else {
 			passwordString = ""
 		}
 		if passwordString == "" {
-			passwordString = UserPromptHidden("GitHub password: ")
+			passwordString = general.UserPromptHidden("GitHub password: ")
 		}
 
 
 		twofactorString := ""
-		if f := ReflectString(twofactor); f != nil {
+		if f := general.ReflectString(twofactor); f != nil {
 			twofactorString = *f
 		} else {
 			twofactorString = ""
@@ -100,7 +101,7 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 		if _, ok := auth.Error.(*github.TwoFactorAuthError); ok {
 			// Is this a two-factor auth error? If so, prompt for OTP and try again.
 			if twofactorString == "" {
-				twofactorString = UserPrompt("GitHub 2FA password: ")
+				twofactorString = general.UserPrompt("GitHub 2FA password: ")
 			}
 
 			tp.OTP = strings.TrimSpace(twofactorString)
@@ -125,21 +126,21 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 //	Error error
 //	Reference *github.Reference
 //}
-//func (me TypeGitHubLogin) GetBranch(owner interface{}, repo interface{}, reference interface{}) TypeGetBranch {
+//func (me TypeLogin) GetBranch(owner interface{}, repo interface{}, reference interface{}) TypeGetBranch {
 //	var ret TypeGetBranch
 //
 //	for range only.Once {
-//		op := ReflectString(owner)
+//		op := general.ReflectString(owner)
 //		if op == nil {
 //			break
 //		}
 //
-//		rp := ReflectString(repo)
+//		rp := general.ReflectString(repo)
 //		if rp == nil {
 //			break
 //		}
 //
-//		rfp := ReflectString(reference)
+//		rfp := general.ReflectString(reference)
 //		if rfp == nil {
 //			break
 //		}
@@ -167,21 +168,21 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 //
 //
 //// Usage: {{ $user := GitHubGetRepository "gearboxworks" "docker-template" }}
-//type TypeGitHubGetRepository struct {
+//type TypeGetRepository struct {
 //	Valid bool
 //	Error error
 //	Data *github.Repository
 //}
-//func (me TypeGitHubLogin) GetRepository(owner interface{}, repo interface{}) TypeGitHubGetRepository {
-//	var ret TypeGitHubGetRepository
+//func (me TypeLogin) GetRepository(owner interface{}, repo interface{}) TypeGetRepository {
+//	var ret TypeGetRepository
 //
 //	for range only.Once {
-//		op := ReflectString(owner)
+//		op := general.ReflectString(owner)
 //		if op == nil {
 //			break
 //		}
 //
-//		rp := ReflectString(repo)
+//		rp := general.ReflectString(repo)
 //		if rp == nil {
 //			break
 //		}
@@ -198,7 +199,7 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 //
 //	return ret
 //}
-//func (me TypeGitHubGetRepository) GetName() TypeGenericStringArray {
+//func (me TypeGetRepository) GetName() TypeGenericStringArray {
 //	var ret TypeGenericStringArray
 //
 //	for range only.Once {
@@ -208,7 +209,7 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 //
 //	return ret
 //}
-//func (me TypeGitHubGetRepository) GetFullName() TypeGenericStringArray {
+//func (me TypeGetRepository) GetFullName() TypeGenericStringArray {
 //	var ret TypeGenericStringArray
 //
 //	for range only.Once {
@@ -218,7 +219,7 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 //
 //	return ret
 //}
-//func (me TypeGitHubGetRepository) GetUrl() TypeGenericStringArray {
+//func (me TypeGetRepository) GetUrl() TypeGenericStringArray {
 //	var ret TypeGenericStringArray
 //
 //	for range only.Once {
@@ -231,16 +232,16 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 //
 //
 //// Usage: {{ $user := GitHubGetRepositories "gearboxworks" }}
-//type TypeGitHubGetRepositories struct {
+//type TypeGetRepositories struct {
 //	Valid bool
 //	Error error
 //	Data []*github.Repository
 //}
-//func (me TypeGitHubLogin) GetRepositories(owner interface{}) TypeGitHubGetRepositories {
-//	var ret TypeGitHubGetRepositories
+//func (me TypeLogin) GetRepositories(owner interface{}) TypeGetRepositories {
+//	var ret TypeGetRepositories
 //
 //	for range only.Once {
-//		op := ReflectString(owner)
+//		op := general.ReflectString(owner)
 //		if op == nil {
 //			break
 //		}
@@ -258,7 +259,7 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 //
 //	return ret
 //}
-//func (me TypeGitHubGetRepositories) GetNames() TypeGenericStringArray {
+//func (me TypeGetRepositories) GetNames() TypeGenericStringArray {
 //	var ret TypeGenericStringArray
 //
 //	for range only.Once {
@@ -270,7 +271,7 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 //
 //	return ret
 //}
-//func (me TypeGitHubGetRepositories) GetFullNames() TypeGenericStringArray {
+//func (me TypeGetRepositories) GetFullNames() TypeGenericStringArray {
 //	var ret TypeGenericStringArray
 //
 //	for range only.Once {
@@ -282,7 +283,7 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 //
 //	return ret
 //}
-//func (me TypeGitHubGetRepositories) GetUrls() TypeGenericStringArray {
+//func (me TypeGetRepositories) GetUrls() TypeGenericStringArray {
 //	var ret TypeGenericStringArray
 //
 //	for range only.Once {
@@ -297,7 +298,7 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 //
 //
 //// Usage: {{ $user := GetCurrentBranchFromRepository "gearboxworks" "docker-template" }}
-//func (me TypeGitHubGetRepository) GetCurrentBranchFromRepository() TypeGenericString {
+//func (me TypeGetRepository) GetCurrentBranchFromRepository() TypeGenericString {
 //	var ret TypeGenericString
 //
 //	for range only.Once {
@@ -331,7 +332,7 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 //	return ret
 //}
 //
-//func (me TypeGitHubGetRepository) GetCurrentCommitFromRepository() TypeGenericString {
+//func (me TypeGetRepository) GetCurrentCommitFromRepository() TypeGenericString {
 //	var ret TypeGenericString
 //
 //	for range only.Once {
@@ -346,7 +347,7 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 //	return ret
 //}
 //
-//func (me TypeGitHubGetRepository) GetLatestTagFromRepository() TypeGenericString {
+//func (me TypeGetRepository) GetLatestTagFromRepository() TypeGenericString {
 //	var ret TypeGenericString
 //
 //	for range only.Once {

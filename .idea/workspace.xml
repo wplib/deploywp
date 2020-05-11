@@ -3,12 +3,25 @@
   <component name="ChangeListManager">
     <list default="true" id="6ea60209-f7f6-4d59-98a1-cf188c90fa33" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/process.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/process.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/exec.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/exec.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/funcs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/strings.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/strings.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/deploywp.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/deploywp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/hosts.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/hosts.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/paths.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/paths.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_build.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_build.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_revision.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_revision.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_files.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_files.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_providers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_providers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_revisions.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_revisions.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/exec.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/funcs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/github.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/github_branch.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/github_repository.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/prompt.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/strings.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/structs.go" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/jsonTemplate/template.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/template.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -50,7 +63,7 @@
   <component name="RunManager" selected="Go Build.deploywp">
     <configuration name="deploywp" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="deploywp" />
-      <working_directory value="$PROJECT_DIR$/tests/" />
+      <working_directory value="$PROJECT_DIR$/../deploywp-dev" />
       <go_parameters value="-i" />
       <parameters value="process" />
       <kind value="DIRECTORY" />
@@ -79,10 +92,10 @@
     <option name="version" value="2" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589087768501">
+    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589153952985">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589087768501" />
+    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589153952985" />
     <state x="861" y="173" key="#deploywp" timestamp="1588739946721">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
@@ -91,38 +104,38 @@
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="1023" y="263" width="684" height="633" key="EnvironmentVariablesDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589083326960" />
-    <state width="1470" height="308" key="GridCell.Tab.0.bottom" timestamp="1589105568425">
+    <state width="1470" height="308" key="GridCell.Tab.0.bottom" timestamp="1589157947641">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="308" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589105568425" />
-    <state width="1470" height="308" key="GridCell.Tab.0.center" timestamp="1589105568423">
+    <state width="1470" height="308" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589157947641" />
+    <state width="1470" height="308" key="GridCell.Tab.0.center" timestamp="1589157947640">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="308" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589105568423" />
-    <state width="1470" height="308" key="GridCell.Tab.0.left" timestamp="1589105568422">
+    <state width="1470" height="308" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589157947640" />
+    <state width="1470" height="308" key="GridCell.Tab.0.left" timestamp="1589157947640">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="308" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589105568422" />
-    <state width="1470" height="308" key="GridCell.Tab.0.right" timestamp="1589105568424">
+    <state width="1470" height="308" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589157947640" />
+    <state width="1470" height="308" key="GridCell.Tab.0.right" timestamp="1589157947640">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="308" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589105568424" />
-    <state width="1470" height="308" key="GridCell.Tab.1.bottom" timestamp="1589094149312">
+    <state width="1470" height="308" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589157947640" />
+    <state width="1470" height="308" key="GridCell.Tab.1.bottom" timestamp="1589157947641">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="308" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589094149312" />
-    <state width="1470" height="308" key="GridCell.Tab.1.center" timestamp="1589094149312">
+    <state width="1470" height="308" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589157947641" />
+    <state width="1470" height="308" key="GridCell.Tab.1.center" timestamp="1589157947641">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="308" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589094149312" />
-    <state width="1470" height="308" key="GridCell.Tab.1.left" timestamp="1589094149312">
+    <state width="1470" height="308" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589157947641" />
+    <state width="1470" height="308" key="GridCell.Tab.1.left" timestamp="1589157947641">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="308" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589094149312" />
-    <state width="1470" height="308" key="GridCell.Tab.1.right" timestamp="1589094149312">
+    <state width="1470" height="308" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589157947641" />
+    <state width="1470" height="308" key="GridCell.Tab.1.right" timestamp="1589157947641">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="308" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589094149312" />
+    <state width="1470" height="308" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589157947641" />
     <state width="756" height="503" key="XDebugger.FullValuePopup" timestamp="1588744287954">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
@@ -137,9 +150,34 @@
           <option name="timeStamp" value="50" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/github_repository.go</url>
-          <line>80</line>
-          <option name="timeStamp" value="89" />
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/paths.go</url>
+          <line>81</line>
+          <option name="timeStamp" value="130" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/paths.go</url>
+          <line>99</line>
+          <option name="timeStamp" value="131" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/paths.go</url>
+          <line>117</line>
+          <option name="timeStamp" value="132" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/paths.go</url>
+          <line>135</line>
+          <option name="timeStamp" value="133" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/paths.go</url>
+          <line>153</line>
+          <option name="timeStamp" value="134" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/deploywp.go</url>
+          <line>300</line>
+          <option name="timeStamp" value="136" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

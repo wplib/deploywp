@@ -1,6 +1,7 @@
 package deploywp
 
 import (
+	"github.com/wplib/deploywp/jsonTemplate/helpers/general"
 	"github.com/wplib/deploywp/only"
 )
 
@@ -45,11 +46,11 @@ func (me *Files) IsNil() bool {
 
 	for range only.Once {
 		if me == nil {
-			ok = false
+			ok = true
 		}
 		// @TODO - perform other validity checks here.
 
-		ok = true
+		ok = false
 	}
 
 	return ok
@@ -71,7 +72,7 @@ func (me *Files) GetFiles(action interface{}) *FilesArray {
 			break
 		}
 
-		value := ReflectString(action)
+		value := general.ReflectString(action)
 		if value == nil {
 			//ret.Error = errors.New("GetTargetFiles arg not a string")
 			break

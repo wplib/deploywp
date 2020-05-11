@@ -13,9 +13,13 @@ type Repository struct {
 	Error error
 }
 
-
 type URL string
 func (me *URL) ToString() string {
+	return string(*me)
+}
+
+type String string
+func (me *String) ToString() string {
 	return string(*me)
 }
 
@@ -38,11 +42,11 @@ func (me *Repository) IsNil() bool {
 
 	for range only.Once {
 		if me == nil {
-			ok = false
+			ok = true
 		}
 		// @TODO - perform other validity checks here.
 
-		ok = true
+		ok = false
 	}
 
 	return ok

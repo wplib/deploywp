@@ -2,6 +2,7 @@ package deploywp
 
 import (
 	"errors"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/general"
 	"github.com/wplib/deploywp/only"
 )
 
@@ -57,11 +58,11 @@ func (me *Hosts) IsNil() bool {
 
 	for range only.Once {
 		if me == nil {
-			ok = false
+			ok = true
 		}
 		// @TODO - perform other validity checks here.
 
-		ok = true
+		ok = false
 	}
 
 	return ok
@@ -76,7 +77,7 @@ func (me *Hosts) GetHost(host interface{}) *Host {
 			break
 		}
 
-		value := ReflectString(host)
+		value := general.ReflectString(host)
 		if value == nil {
 			ret.Error = errors.New("GetHost arg not a string")
 			break

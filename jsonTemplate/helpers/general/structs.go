@@ -1,13 +1,13 @@
-package helpers
+package general
 
 type TypeGenericString struct {
 	Valid bool
 	Error error
-	Data string
+	String string
 }
 
 type TypeGenericStringArray struct {
 	Valid bool
 	Error error
-	Data []string
+	Array []string
 }

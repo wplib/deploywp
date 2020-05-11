@@ -2,6 +2,7 @@ package deploywp
 
 import (
 	"errors"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/general"
 	"github.com/wplib/deploywp/only"
 )
 
@@ -41,11 +42,11 @@ func (me *Providers) IsNil() bool {
 
 	for range only.Once {
 		if me == nil {
-			ok = false
+			ok = true
 		}
 		// @TODO - perform other validity checks here.
 
-		ok = true
+		ok = false
 	}
 
 	return ok
@@ -72,11 +73,11 @@ func (me *Meta) IsNil() bool {
 
 	for range only.Once {
 		if me == nil {
-			ok = false
+			ok = true
 		}
 		// @TODO - perform other validity checks here.
 
-		ok = true
+		ok = false
 	}
 
 	return ok
@@ -113,7 +114,7 @@ func (me *Providers) GetProvider(provider interface{}) *Provider {
 			break
 		}
 
-		value := ReflectString(provider)
+		value := general.ReflectString(provider)
 		if value == nil {
 			ret.Error = errors.New("GetProvider arg not a string")
 			break

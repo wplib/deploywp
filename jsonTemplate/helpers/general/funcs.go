@@ -1,4 +1,4 @@
-package helpers
+package general
 
 import (
 	"github.com/wplib/deploywp/only"
