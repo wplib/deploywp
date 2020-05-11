@@ -11,6 +11,7 @@ type Source struct {
 	Repository Repository `json:"repository"`
 	Revision   Revision   `json:"revision"`
 
+	AbsPaths   Paths
 	Valid bool
 	Error error
 }
@@ -31,7 +32,8 @@ func (me *Source) Process() error {
 			break
 		}
 
-		me.Error = me.Paths.ExpandPaths()
+		me.AbsPaths = me.Paths
+		me.Error = me.AbsPaths.ExpandPaths()
 	}
 
 	return me.Error

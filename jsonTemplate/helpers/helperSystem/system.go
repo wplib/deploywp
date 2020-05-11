@@ -12,6 +12,10 @@ type TypeDir struct {
 	Dir string
 }
 
+type TypeError struct {
+	Error error
+}
+
 
 // Usage:
 //		{{ $response := Chdir "/root" }}

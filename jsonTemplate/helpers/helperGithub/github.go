@@ -54,7 +54,7 @@ type TypeLogin struct {
 	Client *github.Client
 }
 
-func GitHubLogin(username interface{}, password interface{}, twofactor interface{}) TypeLogin {
+func GitHubLogin(username interface{}, password interface{}, twofactor interface{}) *TypeLogin {
 	var auth TypeLogin
 
 	for range only.Once {
@@ -114,10 +114,11 @@ func GitHubLogin(username interface{}, password interface{}, twofactor interface
 		}
 
 		auth.Valid = true
+
 		//fmt.Printf("\n%v\n", github.Stringify(auth))
 	}
 
-	return auth
+	return &auth
 }
 
 

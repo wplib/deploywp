@@ -1,6 +1,7 @@
 package deploywp
 
 import (
+	"github.com/jinzhu/copier"
 	"github.com/wplib/deploywp/only"
 )
 
@@ -11,6 +12,8 @@ type Target struct {
 	Providers Providers       `json:"providers"`
 	Revisions TargetRevisions `json:"revisions"`
 
+	AbsPaths  Paths
+	AbsFiles  Files
 	Valid bool
 	Error error
 }
@@ -34,8 +37,27 @@ func (me *Target) Process() error {
 			break
 		}
 
-		me.Error = me.Paths.ExpandPaths()
-		me.Error = me.Files.Process()
+		me.Error = copier.Copy(&me.AbsPaths, &me.Paths)
+		if me.Error != nil {
+			break
+		}
+
+		me.Error = me.AbsPaths.ExpandPaths()
+		if me.Error != nil {
+			break
+		}
+
+		me.AbsFiles.Copy = append(me.AbsFiles.Copy, me.Files.Copy...)
+		me.AbsFiles.Delete = append(me.AbsFiles.Delete, me.Files.Delete...)
+		me.AbsFiles.Exclude = append(me.AbsFiles.Exclude, me.Files.Exclude...)
+		me.AbsFiles.Keep = append(me.AbsFiles.Keep, me.Files.Keep...)
+
+		me.Error = me.AbsFiles.Process(me.AbsPaths)
+		if me.Error != nil {
+			break
+		}
+
+		me.Error = me.Files.Process(me.Paths)
 	}
 
 	return me.Error

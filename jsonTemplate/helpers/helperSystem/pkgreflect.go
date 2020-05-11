@@ -7,8 +7,10 @@ import "reflect"
 var Types = map[string]reflect.Type{
 	"Environment": reflect.TypeOf((*Environment)(nil)).Elem(),
 	"TypeDir": reflect.TypeOf((*TypeDir)(nil)).Elem(),
+	"TypeError": reflect.TypeOf((*TypeError)(nil)).Elem(),
 	"TypeExecCommand": reflect.TypeOf((*TypeExecCommand)(nil)).Elem(),
 	"TypeFile": reflect.TypeOf((*TypeFile)(nil)).Elem(),
+	"TypeRsync": reflect.TypeOf((*TypeRsync)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
@@ -18,6 +20,7 @@ var Functions = map[string]reflect.Value{
 	"ExecParseOutput": reflect.ValueOf(ExecParseOutput),
 	"GetEnv": reflect.ValueOf(GetEnv),
 	"Getwd": reflect.ValueOf(Getwd),
+	"NewRsync": reflect.ValueOf(NewRsync),
 	"OsExit": reflect.ValueOf(OsExit),
 	"PrintEnv": reflect.ValueOf(PrintEnv),
 	"ReadFile": reflect.ValueOf(ReadFile),

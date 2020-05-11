@@ -4,21 +4,39 @@ import (
 	"fmt"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 	"os"
 	"os/exec"
 	"strings"
+	"syscall"
 )
 
 
 type TypeExecCommand struct {
+	Exit int
 	Error error
 	Output string
 }
 
 
 // Usage:
+//		{{ OsExit 1 }}
+func (me *TypeExecCommand) PrintError() string {
+	var ret string
+
+	for range only.Once {
+		if me.Exit != 0 {
+			ret = ux.SprintfRed("ERROR: %s - %s", me.Error, me.Output)
+		}
+	}
+
+	return ret
+}
+
+
+// Usage:
 //		{{ $output := ExecCommand "ps %s" "-eaf" ... }}
-func ExecCommand(cmd ...interface{}) TypeExecCommand {
+func ExecCommand(cmd ...interface{}) *TypeExecCommand {
 	var ret TypeExecCommand
 
 	for range only.Once {
@@ -27,12 +45,25 @@ func ExecCommand(cmd ...interface{}) TypeExecCommand {
 			break
 		}
 
+		c := exec.Command((*cmds)[0], (*cmds)[1:]...)
+
 		var out []byte
-		out, ret.Error = exec.Command((*cmds)[0], (*cmds)[1:]...).Output()
+		out, ret.Error = c.CombinedOutput()
 		ret.Output = string(out)
+
+		if ret.Error != nil {
+			if exitError, ok := ret.Error.(*exec.ExitError); ok {
+				waitStatus := exitError.Sys().(syscall.WaitStatus)
+				ret.Exit = waitStatus.ExitStatus()
+			}
+			break
+		}
+
+		waitStatus := c.ProcessState.Sys().(syscall.WaitStatus)
+		ret.Exit = waitStatus.ExitStatus()
 	}
 
-	return ret
+	return &ret
 }
 
 
@@ -62,7 +93,6 @@ func ExecParseOutput(output interface{}, search interface{}, args ...interface{}
 }
 
 
-
 // Usage:
 //		{{ OsExit 1 }}
 func OsExit(e ...interface{}) bool {
@@ -75,24 +105,3 @@ func OsExit(e ...interface{}) bool {
 
 	return ret
 }
-
-
-//func ExecCommand2(cmd interface{}, args ...interface{}) TypeExecCommand {
-//	var ret TypeExecCommand
-//
-//	for range only.Once {
-//		cs := ReflectString(cmd)
-//		if cs == nil {
-//			break
-//		}
-//
-//		ce := fmt.Sprintf(*cs, args...)
-//		cea := strings.Fields(ce)
-//
-//		var out []byte
-//		out, ret.Error = exec.Command(cea).Output()
-//		ret.Output = string(out)
-//	}
-//
-//	return ret
-//}

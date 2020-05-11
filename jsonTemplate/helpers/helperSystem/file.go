@@ -6,11 +6,13 @@ import (
 	"github.com/wplib/deploywp/only"
 	"io/ioutil"
 	"path/filepath"
+	"strings"
 )
 
 type TypeFile struct {
 	Error error
-	Data string
+	String string
+	Array []string
 }
 
 
@@ -45,6 +47,7 @@ func ReadFile(file interface{}) TypeFile {
 	for range only.Once {
 		f := helperTypes.ReflectString(file)
 		if f == nil {
+			ret.Error = errors.New("file name empty")
 			break
 		}
 
@@ -60,7 +63,8 @@ func ReadFile(file interface{}) TypeFile {
 			break
 		}
 
-		ret.Data = string(d)
+		ret.String = string(d)
+		ret.Array = strings.Split(string(d), "\n")
 	}
 
 	return ret
@@ -69,17 +73,19 @@ func ReadFile(file interface{}) TypeFile {
 
 // Usage:
 //		{{ $return := WriteFile "filename.txt" .Data.Source 0644 }}
-func WriteFile(file interface{}, contents interface{}, perms interface{}) TypeFile {
-	var ret TypeFile
+func WriteFile(file interface{}, contents interface{}, perms interface{}) TypeError {
+	var ret TypeError
 
 	for range only.Once {
 		f := helperTypes.ReflectString(file)
 		if f == nil {
+			ret.Error = errors.New("file name empty")
 			break
 		}
 
 		c := helperTypes.ReflectByteArray(contents)
 		if c == nil {
+			ret.Error = errors.New("contents empty")
 			break
 		}
 

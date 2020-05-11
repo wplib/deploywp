@@ -15,6 +15,9 @@ func ProcessArgs(cmd *cobra.Command, args []string) (*jsonTemplate.Template, ux.
 		var err error
 		var s string
 
+		_ = tmpl.SetArgs(cmd.Use)
+		_ = tmpl.AddArgs(args...)
+
 		fl := cmd.Flags()
 
 		s, err = fl.GetString(argJsonFile)

@@ -7,9 +7,11 @@ import (
 
 
 type Paths struct {
-	BasePath string `json:"base_path" mapstructure:"base_path"`
+	BasePath    string `json:"base_path" mapstructure:"base_path"`
 	WebrootPath string `json:"webroot_path" mapstructure:"webroot_path"`
-	Wordpress Wordpress `json:"wordpress"`
+	Wordpress   Wordpress `json:"wordpress"`
+
+	//BaseAbsPath string
 
 	Valid bool
 	Error error
@@ -84,7 +86,6 @@ func _FileToAbs(f ...string) string {
 			break
 		}
 	}
-	//ret = strings.ReplaceAll(ret, "//", "/")
 
 	return ret
 }
@@ -111,7 +112,7 @@ func (me *Paths) GetBasePath() string {
 		if me.IsNil() {
 			break
 		}
-		ret = _FileToAbs(me.BasePath)
+		ret = me.BasePath
 	}
 
 	return ret
@@ -124,7 +125,7 @@ func (me *Paths) GetWebRootPath() string {
 		if me.IsNil() {
 			break
 		}
-		ret = _FileToAbs(me.BasePath, me.WebrootPath)
+		ret = filepath.Join(me.BasePath, me.WebrootPath)
 	}
 
 	return ret
@@ -137,7 +138,7 @@ func (me *Paths) GetContentPath() string {
 		if me.IsNil() {
 			break
 		}
-		ret = _FileToAbs(me.BasePath, me.WebrootPath, me.Wordpress.ContentPath)
+		ret = filepath.Join(me.BasePath, me.WebrootPath, me.Wordpress.ContentPath)
 	}
 
 	return ret
@@ -150,7 +151,7 @@ func (me *Paths) GetCorePath() string {
 		if me.IsNil() {
 			break
 		}
-		ret = _FileToAbs(me.BasePath, me.WebrootPath, me.Wordpress.CorePath)
+		ret = filepath.Join(me.BasePath, me.WebrootPath, me.Wordpress.CorePath)
 	}
 
 	return ret
@@ -163,7 +164,7 @@ func (me *Paths) GetRootPath() string {
 		if me.IsNil() {
 			break
 		}
-		ret = _FileToAbs(me.BasePath, me.WebrootPath, me.Wordpress.RootPath)
+		ret = filepath.Join(me.BasePath, me.WebrootPath, me.Wordpress.RootPath)
 	}
 
 	return ret
@@ -176,7 +177,7 @@ func (me *Paths) GetVendorPath() string {
 		if me.IsNil() {
 			break
 		}
-		ret = _FileToAbs(me.BasePath, me.WebrootPath, me.Wordpress.VendorPath)
+		ret = filepath.Join(me.BasePath, me.WebrootPath, me.Wordpress.VendorPath)
 	}
 
 	return ret

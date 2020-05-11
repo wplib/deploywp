@@ -22,7 +22,8 @@ import (
 )
 
 type Template struct {
-	version string
+	//version string
+	exec Exec
 
 	jsonFile string
 	jsonString string
@@ -69,9 +70,16 @@ func (me *Template) ProcessTemplate() ux.State {
 
 	for range only.Once {
 		var jsonStr jsonStruct
-		jsonStr.ExecName, err = os.Executable()
-		jsonStr.DirPath = path.Dir(jsonStr.ExecName)
-		jsonStr.ExecVersion = me.version
+		//jsonStr.ExecName, err = os.Executable()
+		//jsonStr.DirPath = path.Dir(jsonStr.ExecName)
+		//jsonStr.ExecVersion = me.version
+		//jsonStr.ExecArgs = me.args
+		jsonStr.Exec.Cmd, err = os.Executable()
+		jsonStr.Exec.CmdDir = path.Dir(jsonStr.Exec.Cmd)
+		jsonStr.Exec.CmdFile = path.Base(jsonStr.Exec.Cmd)
+		jsonStr.Exec.CmdVersion = me.exec.CmdVersion
+		jsonStr.Exec.Args = me.exec.Args
+
 		now := time.Now()
 		jsonStr.CreationEpoch = now.Unix()
 		jsonStr.CreationDate = now.Format("2006-01-02T15:04:05-0700")
@@ -178,6 +186,7 @@ func (me *Template) ProcessTemplate() ux.State {
 
 		var t *template.Template
 		t, state = me.CreateTemplate()
+		t.Option("missingkey=error")
 
 		var tt *template.Template
 		tt, err = t.Parse(me.templateString)
@@ -185,6 +194,7 @@ func (me *Template) ProcessTemplate() ux.State {
 			state.SetError("Processing error: %s", err)
 			break
 		}
+		tt.Option("missingkey=error")
 
 		if me.outFile == "" {
 			err = tt.Execute(os.Stdout, &jsonStr)
@@ -299,7 +309,27 @@ func (me *Template) SetVersion(s string) error {
 	var err error
 
 	for range only.Once {
-		me.version = s
+		me.exec.CmdVersion = s
+	}
+
+	return err
+}
+
+
+func (me *Template) SetArgs(a ...string) error {
+	var err error
+
+	for range only.Once {
+		me.exec.Args = a
+	}
+
+	return err
+}
+func (me *Template) AddArgs(a ...string) error {
+	var err error
+
+	for range only.Once {
+		me.exec.Args = append(me.exec.Args, a...)
 	}
 
 	return err

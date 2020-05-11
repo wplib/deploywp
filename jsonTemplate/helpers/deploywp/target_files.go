@@ -1,9 +1,9 @@
 package deploywp
 
 import (
-	"fmt"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"strings"
 )
 
 
@@ -32,13 +32,50 @@ func (me *Files) New() Files {
 	return *me
 }
 
-func (me *Files) Process() error {
+func (me *Files) Process(paths Paths) error {
 	for range only.Once {
 		if me.IsNil() {
 			break
 		}
 
-		fmt.Printf("EXPANDPATHS Files.Process()\n")
+		for i, p := range me.Copy {
+			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath())
+			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath())
+			p = strings.ReplaceAll(p, "{wordpress.vendor_path}", paths.GetVendorPath())
+			p = strings.ReplaceAll(p, "{wordpress.core_path}", paths.GetCorePath())
+			p = strings.ReplaceAll(p, "{wordpress.root_path}", paths.GetRootPath())
+			me.Copy[i] = p
+		}
+
+		for i, p := range me.Delete {
+			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath())
+			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath())
+			p = strings.ReplaceAll(p, "{wordpress.vendor_path}", paths.GetVendorPath())
+			p = strings.ReplaceAll(p, "{wordpress.core_path}", paths.GetCorePath())
+			p = strings.ReplaceAll(p, "{wordpress.root_path}", paths.GetRootPath())
+			me.Delete[i] = p
+		}
+
+		for i, p := range me.Exclude {
+			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath())
+			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath())
+			p = strings.ReplaceAll(p, "{wordpress.vendor_path}", paths.GetVendorPath())
+			p = strings.ReplaceAll(p, "{wordpress.core_path}", paths.GetCorePath())
+			p = strings.ReplaceAll(p, "{wordpress.root_path}", paths.GetRootPath())
+			me.Exclude[i] = p
+		}
+
+		for i, p := range me.Keep {
+			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath())
+			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath())
+			p = strings.ReplaceAll(p, "{wordpress.vendor_path}", paths.GetVendorPath())
+			p = strings.ReplaceAll(p, "{wordpress.core_path}", paths.GetCorePath())
+			p = strings.ReplaceAll(p, "{wordpress.root_path}", paths.GetRootPath())
+			me.Keep[i] = p
+		}
+
+		//bp := paths.GetWebRootPath()
+		//fmt.Printf("EXPANDPATHS Files.Process()\n", bp)
 	}
 
 	return me.Error
