@@ -60,3 +60,24 @@ func fileToString(fileName string) ([]byte, error) {
 
 	return jsonString, err
 }
+
+func _FileToAbs(f ...string) string {
+	var ret string
+
+	for range only.Once {
+		ret = filepath.Join(f...)
+
+		if filepath.IsAbs(ret) {
+			break
+		}
+
+		var err error
+		ret, err = filepath.Abs(ret)
+		if err != nil {
+			ret = ""
+			break
+		}
+	}
+
+	return ret
+}

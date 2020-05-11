@@ -30,6 +30,8 @@ func (me *Source) Process() error {
 		if me.IsNil() {
 			break
 		}
+
+		me.Error = me.Paths.ExpandPaths()
 	}
 
 	return me.Error
@@ -62,6 +64,19 @@ func (me *Source) GetPaths() *Paths {
 		}
 
 		ret = &me.Paths
+	}
+
+	return ret
+}
+func (me *Source) GetBasePath() string {
+	var ret string
+
+	for range only.Once {
+		if me.IsNil() {
+			break
+		}
+
+		ret = me.Paths.GetBasePath()
 	}
 
 	return ret

@@ -34,6 +34,7 @@ func (me *Target) Process() error {
 			break
 		}
 
+		me.Error = me.Paths.ExpandPaths()
 		me.Error = me.Files.Process()
 	}
 
@@ -84,6 +85,19 @@ func (me *Target) GetPaths() *Paths {
 		}
 
 		ret = &me.Paths
+	}
+
+	return ret
+}
+func (me *Target) GetBasePath() string {
+	var ret string
+
+	for range only.Once {
+		if me.IsNil() {
+			break
+		}
+
+		ret = me.Paths.GetBasePath()
 	}
 
 	return ret

@@ -3,13 +3,19 @@ package jsonTemplate
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/Masterminds/sprig"
 	"github.com/wplib/deploywp/jsonTemplate/helpers"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/deploywp"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGithub"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"os"
 	"os/exec"
 	"path"
+	"reflect"
+	"runtime"
 	"strings"
 	"text/template"
 	"time"
@@ -33,53 +39,22 @@ type Template struct {
 	valid bool
 }
 
+
 func (me *Template) CreateTemplate() (*template.Template, ux.State) {
 	var state ux.State
 	var t *template.Template
 
 	for range only.Once {
-		// Define additional template functions.
 		var tfm template.FuncMap
 		var err error
+
+		// Define additional template functions.
 		tfm, err = helpers.DiscoverHelpers()
 		if err != nil {
 			break
 		}
 
-		//// @TODO - Replace with an Add() method within each helper package to automatically import all helper methods.
-		//
-		//// General functions.
-		//tfm["isInt"] = helperTypes.IsInt
-		//tfm["isString"] = helperTypes.IsString
-		//tfm["isSlice"] = helperTypes.IsSlice
-		//tfm["isArray"] = helperTypes.IsArray
-		//tfm["isMap"] = helperTypes.IsMap
-		//tfm["ToUpper"] = helperTypes.ToUpper
-		//tfm["ToLower"] = helperTypes.ToLower
-		//tfm["ToString"] = helperTypes.ToString
-		//tfm["FindInMap"] = helperTypes.FindInMap
-		//tfm["ReadFile"] = helperSystem.ReadFile
-		//tfm["PrintEnv"] = helperSystem.PrintEnv
-		//
-		//// helpers/github.go
-		//tfm["GitHubLogin"] = helperGithub.Login
-		//tfm["GitHubGetOrganization"] = helperGithub.GetOrganization
-		//
-		//// helpers/prompt.go
-		//tfm["UserPrompt"] = helperSystem.UserPrompt
-		//tfm["UserPromptHidden"] = helperSystem.UserPromptHidden
-		//
-		//// helpers/exec.go
-		//tfm["ExecCommand"] = helperSystem.ExecCommand
-		//tfm["ExecParseOutput"] = helperSystem.ExecParseOutput
-		//tfm["OsExit"] = helperSystem.OsExit
-		//
-		//// helpers/strings.go
-		//tfm["Contains"] = helperTypes.Contains
-		//tfm["Sprintf"] = helperTypes.Sprintf
-		//
-		//// helpers/deploywp.deploywp.go
-		//tfm["LoadDeployWp"] = deploywp.LoadDeployWp
+		tfm["PrintHelpers"] = helpers.PrintHelpers
 
 		t = template.New("JSON").Funcs(tfm)
 	}
@@ -87,32 +62,6 @@ func (me *Template) CreateTemplate() (*template.Template, ux.State) {
 	return t, state
 }
 
-//func (me *Template) TemplateFiles() (*template.Template, ux.State) {
-//	var state ux.State
-//	var t *template.Template
-//
-//	for range only.Once {
-//		// Define additional template functions.
-//		tfm := sprig.TxtFuncMap()
-//
-//		// Additional functions.
-//		tfm["isInt"] = helperTypes.IsInt
-//		tfm["isString"] = helperTypes.IsString
-//		tfm["isSlice"] = helperTypes.IsSlice
-//		tfm["isArray"] = helperTypes.IsArray
-//		tfm["isMap"] = helperTypes.IsMap
-//		tfm["ToUpper"] = helperTypes.ToUpper
-//		tfm["ToLower"] = helperTypes.ToLower
-//		tfm["ToString"] = helperTypes.ToString
-//		tfm["FindInMap"] = helperTypes.FindInMap
-//		tfm["ReadFile"] = helperSystem.ReadFile
-//		tfm["PrintEnv"] = helperSystem.PrintEnv
-//
-//		t = template.New("JSON").Funcs(tfm)
-//	}
-//
-//	return t, state
-//}
 
 func (me *Template) ProcessTemplate() ux.State {
 	var state ux.State
@@ -265,7 +214,8 @@ func (me *Template) ProcessTemplate() ux.State {
 
 		// Are we treating this as a shell script?
 		if me.execShell {
-			fn := fmt.Sprintf("%s/%s", jsonStr.OutFile.Dir, jsonStr.OutFile.Name)
+			fn := _FileToAbs(jsonStr.OutFile.Dir, jsonStr.OutFile.Name)
+			//fn := fmt.Sprintf("%s/%s", jsonStr.OutFile.Dir, jsonStr.OutFile.Name)
 
 			err = os.Chmod(fn, 0755)
 			if err != nil {
@@ -291,7 +241,8 @@ func (me *Template) ProcessTemplate() ux.State {
 		}
 
 		if me.removeFiles {
-			fn := fmt.Sprintf("%s/%s", jsonStr.TemplateFile.Dir, jsonStr.TemplateFile.Name)
+			fn := _FileToAbs(jsonStr.TemplateFile.Dir, jsonStr.TemplateFile.Name)
+			//fn := fmt.Sprintf("%s/%s", jsonStr.TemplateFile.Dir, jsonStr.TemplateFile.Name)
 
 			err = os.Remove(fn)
 			if err != nil {
@@ -303,6 +254,44 @@ func (me *Template) ProcessTemplate() ux.State {
 	}
 
 	return state
+}
+
+
+// This method will print exported helper functions within each helper package.
+// You need to run `pkgreflect jsonTemplate/helpers` after code changes.
+func PrintHelpers() error {
+	var err error
+	var tfm template.FuncMap
+
+	for range only.Once {
+		// Define additional template functions.
+		tfm = sprig.TxtFuncMap()
+
+		for name, fn := range deploywp.GetHelpers {
+			tfm[name] = fn
+
+			foo1 := reflect.ValueOf(fn)
+			foo2 := foo1.Pointer()
+			foo3 := runtime.FuncForPC(foo2)
+			foo4 := foo3.Name()
+
+			fmt.Printf("Name: %s", foo4)
+		}
+
+		for name, fn := range helperGithub.GetHelpers {
+			tfm[name] = fn
+		}
+
+		for name, fn := range helperSystem.GetHelpers {
+			tfm[name] = fn
+		}
+
+		for name, fn := range helperTypes.GetHelpers {
+			tfm[name] = fn
+		}
+	}
+
+	return err
 }
 
 

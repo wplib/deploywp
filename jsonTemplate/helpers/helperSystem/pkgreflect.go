@@ -6,18 +6,24 @@ import "reflect"
 
 var Types = map[string]reflect.Type{
 	"Environment": reflect.TypeOf((*Environment)(nil)).Elem(),
+	"TypeDir": reflect.TypeOf((*TypeDir)(nil)).Elem(),
 	"TypeExecCommand": reflect.TypeOf((*TypeExecCommand)(nil)).Elem(),
+	"TypeFile": reflect.TypeOf((*TypeFile)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
+	"Chdir": reflect.ValueOf(Chdir),
+	"Chmod": reflect.ValueOf(Chmod),
 	"ExecCommand": reflect.ValueOf(ExecCommand),
 	"ExecParseOutput": reflect.ValueOf(ExecParseOutput),
 	"GetEnv": reflect.ValueOf(GetEnv),
+	"Getwd": reflect.ValueOf(Getwd),
 	"OsExit": reflect.ValueOf(OsExit),
 	"PrintEnv": reflect.ValueOf(PrintEnv),
 	"ReadFile": reflect.ValueOf(ReadFile),
 	"UserPrompt": reflect.ValueOf(UserPrompt),
 	"UserPromptHidden": reflect.ValueOf(UserPromptHidden),
+	"WriteFile": reflect.ValueOf(WriteFile),
 }
 
 var Variables = map[string]reflect.Value{

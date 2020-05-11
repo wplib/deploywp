@@ -6,6 +6,8 @@ before:
     - go mod download
     # you may remove this if you don't need go generate
     - go generate ./...
+    # Make sure pkgreflect is installed.
+    - make pkgreflect
 
 builds:
 - env:

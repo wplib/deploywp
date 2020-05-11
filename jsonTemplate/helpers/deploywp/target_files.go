@@ -1,6 +1,7 @@
 package deploywp
 
 import (
+	"fmt"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 )
@@ -36,6 +37,8 @@ func (me *Files) Process() error {
 		if me.IsNil() {
 			break
 		}
+
+		fmt.Printf("EXPANDPATHS Files.Process()\n")
 	}
 
 	return me.Error

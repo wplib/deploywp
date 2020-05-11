@@ -17,6 +17,8 @@ var Functions = map[string]reflect.Value{
 	"IsMap": reflect.ValueOf(IsMap),
 	"IsSlice": reflect.ValueOf(IsSlice),
 	"IsString": reflect.ValueOf(IsString),
+	"ReflectByteArray": reflect.ValueOf(ReflectByteArray),
+	"ReflectFileMode": reflect.ValueOf(ReflectFileMode),
 	"ReflectInt": reflect.ValueOf(ReflectInt),
 	"ReflectString": reflect.ValueOf(ReflectString),
 	"ReflectStrings": reflect.ValueOf(ReflectStrings),

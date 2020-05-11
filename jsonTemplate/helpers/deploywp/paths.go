@@ -1,14 +1,13 @@
 package deploywp
 
 import (
-	"fmt"
 	"github.com/wplib/deploywp/only"
 	"path/filepath"
 )
 
 
 type Paths struct {
-	Prefix string `json:"prefix"`
+	BasePath string `json:"base_path" mapstructure:"base_path"`
 	WebrootPath string `json:"webroot_path" mapstructure:"webroot_path"`
 	Wordpress Wordpress `json:"wordpress"`
 
@@ -68,6 +67,55 @@ func (me *Paths) IsNil() bool {
 	return ok
 }
 
+func _FileToAbs(f ...string) string {
+	var ret string
+
+	for range only.Once {
+		ret = filepath.Join(f...)
+
+		if filepath.IsAbs(ret) {
+			break
+		}
+
+		var err error
+		ret, err = filepath.Abs(ret)
+		if err != nil {
+			ret = ""
+			break
+		}
+	}
+	//ret = strings.ReplaceAll(ret, "//", "/")
+
+	return ret
+}
+
+func (me *Paths) ExpandPaths() error {
+	var err error
+
+	for range only.Once {
+		if me.IsNil() {
+			break
+		}
+
+		me.BasePath = _FileToAbs(me.BasePath)
+	}
+
+	return err
+}
+
+
+func (me *Paths) GetBasePath() string {
+	var ret string
+
+	for range only.Once {
+		if me.IsNil() {
+			break
+		}
+		ret = _FileToAbs(me.BasePath)
+	}
+
+	return ret
+}
 
 func (me *Paths) GetWebRootPath() string {
 	var ret string
@@ -76,12 +124,7 @@ func (me *Paths) GetWebRootPath() string {
 		if me.IsNil() {
 			break
 		}
-
-		var err error
-		ret, err = filepath.Abs(fmt.Sprintf("%s/%s", me.Prefix, me.WebrootPath))
-		if err != nil {
-			ret = ""
-		}
+		ret = _FileToAbs(me.BasePath, me.WebrootPath)
 	}
 
 	return ret
@@ -94,12 +137,7 @@ func (me *Paths) GetContentPath() string {
 		if me.IsNil() {
 			break
 		}
-
-		var err error
-		ret, err = filepath.Abs(fmt.Sprintf("%s/%s/%s", me.Prefix, me.WebrootPath, me.Wordpress.ContentPath))
-		if err != nil {
-			ret = ""
-		}
+		ret = _FileToAbs(me.BasePath, me.WebrootPath, me.Wordpress.ContentPath)
 	}
 
 	return ret
@@ -112,12 +150,7 @@ func (me *Paths) GetCorePath() string {
 		if me.IsNil() {
 			break
 		}
-
-		var err error
-		ret, err = filepath.Abs(fmt.Sprintf("%s/%s/%s", me.Prefix, me.WebrootPath, me.Wordpress.CorePath))
-		if err != nil {
-			ret = ""
-		}
+		ret = _FileToAbs(me.BasePath, me.WebrootPath, me.Wordpress.CorePath)
 	}
 
 	return ret
@@ -130,12 +163,7 @@ func (me *Paths) GetRootPath() string {
 		if me.IsNil() {
 			break
 		}
-
-		var err error
-		ret, err = filepath.Abs(fmt.Sprintf("%s/%s/%s", me.Prefix, me.WebrootPath, me.Wordpress.RootPath))
-		if err != nil {
-			ret = ""
-		}
+		ret = _FileToAbs(me.BasePath, me.WebrootPath, me.Wordpress.RootPath)
 	}
 
 	return ret
@@ -148,12 +176,7 @@ func (me *Paths) GetVendorPath() string {
 		if me.IsNil() {
 			break
 		}
-
-		var err error
-		ret, err = filepath.Abs(fmt.Sprintf("%s/%s/%s", me.Prefix, me.WebrootPath, me.Wordpress.VendorPath))
-		if err != nil {
-			ret = ""
-		}
+		ret = _FileToAbs(me.BasePath, me.WebrootPath, me.Wordpress.VendorPath)
 	}
 
 	return ret

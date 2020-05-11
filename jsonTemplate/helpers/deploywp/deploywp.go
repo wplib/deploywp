@@ -12,10 +12,14 @@ type DeployWp struct {
 	Source Source `json:"source"`
 	Target Target `json:"target"`
 
+	Meta RuntimeMeta
 	Valid bool
 	Error error
 }
 
+type RuntimeMeta struct {
+
+}
 
 func _NewJsonFile() *DeployWp {
 	var jf DeployWp
@@ -26,7 +30,6 @@ func _NewJsonFile() *DeployWp {
 
 	return &jf
 }
-
 
 func LoadDeployWp(str interface{}) *DeployWp {
 	var j DeployWp
@@ -99,6 +102,19 @@ func (me *DeployWp) GetSourcePaths() *Paths {
 		}
 
 		ret = &me.Source.Paths
+	}
+
+	return ret
+}
+func (me *DeployWp) GetSourceBasePath() string {
+	var ret string
+
+	for range only.Once {
+		if me.IsNil() {
+			break
+		}
+
+		ret = me.Source.GetBasePath()
 	}
 
 	return ret
@@ -282,6 +298,19 @@ func (me *DeployWp) GetTargetPaths() *Paths {
 		}
 
 		ret = &me.Target.Paths
+	}
+
+	return ret
+}
+func (me *DeployWp) GetTargetBasePath() string {
+	var ret string
+
+	for range only.Once {
+		if me.IsNil() {
+			break
+		}
+
+		ret = me.Target.GetBasePath()
 	}
 
 	return ret
