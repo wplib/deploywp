@@ -2,7 +2,7 @@ package deploywp
 
 import (
 	"errors"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/general"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 )
 
@@ -114,7 +114,7 @@ func (me *Providers) GetProvider(provider interface{}) *Provider {
 			break
 		}
 
-		value := general.ReflectString(provider)
+		value := helperTypes.ReflectString(provider)
 		if value == nil {
 			ret.Error = errors.New("GetProvider arg not a string")
 			break

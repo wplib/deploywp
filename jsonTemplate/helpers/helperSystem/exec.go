@@ -1,7 +1,8 @@
-package general
+package helperSystem
 
 import (
 	"fmt"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 	"os"
 	"os/exec"
@@ -9,16 +10,19 @@ import (
 )
 
 
-// Usage: {{ ExecCommand "ps %s" "-eaf" ... }}
 type TypeExecCommand struct {
 	Error error
 	Output string
 }
+
+
+// Usage:
+//		{{ $output := ExecCommand "ps %s" "-eaf" ... }}
 func ExecCommand(cmd ...interface{}) TypeExecCommand {
 	var ret TypeExecCommand
 
 	for range only.Once {
-		cmds := ReflectStrings(cmd...)
+		cmds := helperTypes.ReflectStrings(cmd...)
 		if cmds == nil {
 			break
 		}
@@ -32,18 +36,20 @@ func ExecCommand(cmd ...interface{}) TypeExecCommand {
 }
 
 
-// Usage: {{ if ExecParseOutput $output "uid=%s" "mick" ... }}YES{{ end }}
+// Usage:
+//		{{ $output := ExecCommand "ps %s" "-eaf" ... }}
+//		{{ if ExecParseOutput $output "uid=%s" "mick" ... }}YES{{ end }}
 func ExecParseOutput(output interface{}, search interface{}, args ...interface{}) bool {
 	var ret bool
 
 	for range only.Once {
-		sp := ReflectString(search)
+		sp := helperTypes.ReflectString(search)
 		if sp == nil {
 			break
 		}
 		s := fmt.Sprintf(*sp, args...)
 
-		op := ReflectString(output)
+		op := helperTypes.ReflectString(output)
 		if op == nil {
 			break
 		}
@@ -57,12 +63,13 @@ func ExecParseOutput(output interface{}, search interface{}, args ...interface{}
 
 
 
-// Usage: {{ OsExit 1 }}
+// Usage:
+//		{{ OsExit 1 }}
 func OsExit(e ...interface{}) bool {
 	var ret bool
 
 	for range only.Once {
-		value := ReflectInt(e)
+		value := helperTypes.ReflectInt(e)
 		os.Exit(int(*value))
 	}
 

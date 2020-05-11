@@ -1,5 +1,7 @@
 package jsonTemplate
 
+import "github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
+
 type jsonStruct struct {
 	DirPath string
 	ExecName string
@@ -7,7 +9,7 @@ type jsonStruct struct {
 	TemplateFile FileInfo
 	JsonFile FileInfo
 	OutFile FileInfo
-	Env Environment
+	Env helperSystem.Environment
 
 	JsonString string
 	CreationEpoch int64
@@ -17,5 +19,4 @@ type jsonStruct struct {
 
 	Json map[string]interface{}
 }
-type Environment map[string]string
 

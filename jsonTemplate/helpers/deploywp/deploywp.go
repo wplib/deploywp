@@ -1,5 +1,4 @@
 package deploywp
-// MM
 
 import (
 	"github.com/mitchellh/mapstructure"
@@ -18,7 +17,7 @@ type DeployWp struct {
 }
 
 
-func NewJsonFile() *DeployWp {
+func _NewJsonFile() *DeployWp {
 	var jf DeployWp
 
 	jf.Hosts.New()
@@ -64,22 +63,6 @@ func LoadDeployWp(str interface{}) *DeployWp {
 
 	return &j
 }
-
-
-//func ReflectString(ref interface{}) *string {
-//	var s string
-//
-//	for range only.Once {
-//		value := reflect.ValueOf(ref)
-//		if value.Kind() != reflect.String {
-//			break
-//		}
-//
-//		s = value.String()
-//	}
-//
-//	return &s
-//}
 
 
 func (me *DeployWp) IsNil() bool {

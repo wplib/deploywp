@@ -1,7 +1,7 @@
 package deploywp
 
 import (
-	"github.com/wplib/deploywp/jsonTemplate/helpers/general"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 )
 
@@ -72,7 +72,7 @@ func (me *Files) GetFiles(action interface{}) *FilesArray {
 			break
 		}
 
-		value := general.ReflectString(action)
+		value := helperTypes.ReflectString(action)
 		if value == nil {
 			//ret.Error = errors.New("GetTargetFiles arg not a string")
 			break

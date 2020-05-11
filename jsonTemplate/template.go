@@ -3,10 +3,8 @@ package jsonTemplate
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Masterminds/sprig"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/deploywp"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/general"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/github"
+	"github.com/wplib/deploywp/jsonTemplate/helpers"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"os"
@@ -35,49 +33,53 @@ type Template struct {
 	valid bool
 }
 
-func (me *Template) TemplateAddFunctions() (*template.Template, ux.State) {
+func (me *Template) CreateTemplate() (*template.Template, ux.State) {
 	var state ux.State
 	var t *template.Template
 
 	for range only.Once {
 		// Define additional template functions.
-		tfm := sprig.TxtFuncMap()
+		var tfm template.FuncMap
+		var err error
+		tfm, err = helpers.DiscoverHelpers()
+		if err != nil {
+			break
+		}
 
-		// @TODO - Replace with an Add() method within each helper package to automatically import
-		// @TODO - all helper methods.
-
-		// General functions.
-		tfm["isInt"] = isInt
-		tfm["isString"] = isString
-		tfm["isSlice"] = isSlice
-		tfm["isArray"] = isArray
-		tfm["isMap"] = isMap
-		tfm["ToUpper"] = ToUpper
-		tfm["ToLower"] = ToLower
-		tfm["ToString"] = ToString
-		tfm["FindInMap"] = FindInMap
-		tfm["ReadFile"] = ReadFile
-		tfm["PrintEnv"] = PrintEnv
-
-		// helpers/github.go
-		tfm["GitHubLogin"] = github.Login
-		tfm["GitHubGetOrganization"] = github.GetOrganization
-
-		// helpers/prompt.go
-		tfm["UserPrompt"] = general.UserPrompt
-		tfm["UserPromptHidden"] = general.UserPromptHidden
-
-		// helpers/exec.go
-		tfm["ExecCommand"] = general.ExecCommand
-		tfm["ExecParseOutput"] = general.ExecParseOutput
-		tfm["OsExit"] = general.OsExit
-
-		// helpers/strings.go
-		tfm["Contains"] = general.Contains
-		tfm["Sprintf"] = general.Sprintf
-
-		// helpers/deploywp.deploywp.go
-		tfm["LoadDeployWp"] = deploywp.LoadDeployWp
+		//// @TODO - Replace with an Add() method within each helper package to automatically import all helper methods.
+		//
+		//// General functions.
+		//tfm["isInt"] = helperTypes.IsInt
+		//tfm["isString"] = helperTypes.IsString
+		//tfm["isSlice"] = helperTypes.IsSlice
+		//tfm["isArray"] = helperTypes.IsArray
+		//tfm["isMap"] = helperTypes.IsMap
+		//tfm["ToUpper"] = helperTypes.ToUpper
+		//tfm["ToLower"] = helperTypes.ToLower
+		//tfm["ToString"] = helperTypes.ToString
+		//tfm["FindInMap"] = helperTypes.FindInMap
+		//tfm["ReadFile"] = helperSystem.ReadFile
+		//tfm["PrintEnv"] = helperSystem.PrintEnv
+		//
+		//// helpers/github.go
+		//tfm["GitHubLogin"] = helperGithub.Login
+		//tfm["GitHubGetOrganization"] = helperGithub.GetOrganization
+		//
+		//// helpers/prompt.go
+		//tfm["UserPrompt"] = helperSystem.UserPrompt
+		//tfm["UserPromptHidden"] = helperSystem.UserPromptHidden
+		//
+		//// helpers/exec.go
+		//tfm["ExecCommand"] = helperSystem.ExecCommand
+		//tfm["ExecParseOutput"] = helperSystem.ExecParseOutput
+		//tfm["OsExit"] = helperSystem.OsExit
+		//
+		//// helpers/strings.go
+		//tfm["Contains"] = helperTypes.Contains
+		//tfm["Sprintf"] = helperTypes.Sprintf
+		//
+		//// helpers/deploywp.deploywp.go
+		//tfm["LoadDeployWp"] = deploywp.LoadDeployWp
 
 		t = template.New("JSON").Funcs(tfm)
 	}
@@ -85,33 +87,32 @@ func (me *Template) TemplateAddFunctions() (*template.Template, ux.State) {
 	return t, state
 }
 
-func (me *Template) TemplateFiles() (*template.Template, ux.State) {
-	var state ux.State
-	var t *template.Template
-
-	for range only.Once {
-		// Define additional template functions.
-		tfm := sprig.TxtFuncMap()
-
-		// Additional functions.
-		tfm["isInt"] = isInt
-		tfm["isString"] = isString
-		tfm["isSlice"] = isSlice
-		tfm["isArray"] = isArray
-		tfm["isMap"] = isMap
-		tfm["ToUpper"] = ToUpper
-		tfm["ToLower"] = ToLower
-		tfm["ToString"] = ToString
-		tfm["FindInMap"] = FindInMap
-		tfm["ReadFile"] = ReadFile
-		tfm["PrintEnv"] = PrintEnv
-
-		t = template.New("JSON").Funcs(tfm)
-	}
-
-	return t, state
-}
-
+//func (me *Template) TemplateFiles() (*template.Template, ux.State) {
+//	var state ux.State
+//	var t *template.Template
+//
+//	for range only.Once {
+//		// Define additional template functions.
+//		tfm := sprig.TxtFuncMap()
+//
+//		// Additional functions.
+//		tfm["isInt"] = helperTypes.IsInt
+//		tfm["isString"] = helperTypes.IsString
+//		tfm["isSlice"] = helperTypes.IsSlice
+//		tfm["isArray"] = helperTypes.IsArray
+//		tfm["isMap"] = helperTypes.IsMap
+//		tfm["ToUpper"] = helperTypes.ToUpper
+//		tfm["ToLower"] = helperTypes.ToLower
+//		tfm["ToString"] = helperTypes.ToString
+//		tfm["FindInMap"] = helperTypes.FindInMap
+//		tfm["ReadFile"] = helperSystem.ReadFile
+//		tfm["PrintEnv"] = helperSystem.PrintEnv
+//
+//		t = template.New("JSON").Funcs(tfm)
+//	}
+//
+//	return t, state
+//}
 
 func (me *Template) ProcessTemplate() ux.State {
 	var state ux.State
@@ -125,7 +126,7 @@ func (me *Template) ProcessTemplate() ux.State {
 		now := time.Now()
 		jsonStr.CreationEpoch = now.Unix()
 		jsonStr.CreationDate = now.Format("2006-01-02T15:04:05-0700")
-		jsonStr.Env, _ = getEnv()
+		jsonStr.Env, _ = helperSystem.GetEnv()
 
 
 		// Pull in JSON data.
@@ -227,7 +228,7 @@ func (me *Template) ProcessTemplate() ux.State {
 		}
 
 		var t *template.Template
-		t, state = me.TemplateAddFunctions()
+		t, state = me.CreateTemplate()
 
 		var tt *template.Template
 		tt, err = t.Parse(me.templateString)

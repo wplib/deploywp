@@ -1,9 +1,9 @@
-package github
+package helperGithub
 
 import (
 	"context"
 	"github.com/google/go-github/v31/github"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/general"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 )
 
@@ -21,12 +21,12 @@ func (me TypeLogin) GetRepository(owner interface{}, repo interface{}) TypeGetRe
 	var ret TypeGetRepository
 
 	for range only.Once {
-		op := general.ReflectString(owner)
+		op := helperTypes.ReflectString(owner)
 		if op == nil {
 			break
 		}
 
-		rp := general.ReflectString(repo)
+		rp := helperTypes.ReflectString(repo)
 		if rp == nil {
 			break
 		}
@@ -44,8 +44,8 @@ func (me TypeLogin) GetRepository(owner interface{}, repo interface{}) TypeGetRe
 	return ret
 }
 
-func (me TypeGetRepository) GetName() general.TypeGenericStringArray {
-	var ret general.TypeGenericStringArray
+func (me TypeGetRepository) GetName() helperTypes.TypeGenericStringArray {
+	var ret helperTypes.TypeGenericStringArray
 
 	for range only.Once {
 		ret.Array = append(ret.Array, *me.Data.Name)
@@ -55,8 +55,8 @@ func (me TypeGetRepository) GetName() general.TypeGenericStringArray {
 	return ret
 }
 
-func (me TypeGetRepository) GetFullName() general.TypeGenericStringArray {
-	var ret general.TypeGenericStringArray
+func (me TypeGetRepository) GetFullName() helperTypes.TypeGenericStringArray {
+	var ret helperTypes.TypeGenericStringArray
 
 	for range only.Once {
 		ret.Array = append(ret.Array, *me.Data.FullName)
@@ -66,8 +66,8 @@ func (me TypeGetRepository) GetFullName() general.TypeGenericStringArray {
 	return ret
 }
 
-func (me TypeGetRepository) GetUrl() general.TypeGenericStringArray {
-	var ret general.TypeGenericStringArray
+func (me TypeGetRepository) GetUrl() helperTypes.TypeGenericStringArray {
+	var ret helperTypes.TypeGenericStringArray
 
 	for range only.Once {
 		ret.Array = append(ret.Array, *me.Data.URL)
@@ -78,8 +78,8 @@ func (me TypeGetRepository) GetUrl() general.TypeGenericStringArray {
 }
 
 // Usage: {{ $branch := GetHeadBranch }}
-func (me TypeGetRepository) GetHeadBranch() general.TypeGenericString {
-	var ret general.TypeGenericString
+func (me TypeGetRepository) GetHeadBranch() helperTypes.TypeGenericString {
+	var ret helperTypes.TypeGenericString
 
 	ret.String = me.Data.GetDefaultBranch()
 
@@ -115,8 +115,8 @@ func (me TypeGetRepository) GetHeadBranch() general.TypeGenericString {
 	return ret
 }
 
-func (me TypeGetRepository) GetCurrentCommitFromRepository() general.TypeGenericString {
-	var ret general.TypeGenericString
+func (me TypeGetRepository) GetCurrentCommitFromRepository() helperTypes.TypeGenericString {
+	var ret helperTypes.TypeGenericString
 
 	//for range only.Once {
 	//	headRef, ret.Error = repository.Head()
@@ -130,8 +130,8 @@ func (me TypeGetRepository) GetCurrentCommitFromRepository() general.TypeGeneric
 	return ret
 }
 
-func (me TypeGetRepository) GetLatestTagFromRepository() general.TypeGenericString {
-	var ret general.TypeGenericString
+func (me TypeGetRepository) GetLatestTagFromRepository() helperTypes.TypeGenericString {
+	var ret helperTypes.TypeGenericString
 
 	//for range only.Once {
 	//	tagRefs, ret.Error = repository.Tags()
@@ -189,7 +189,7 @@ func (me TypeLogin) GetRepositories(owner interface{}) TypeGetRepositories {
 	var ret TypeGetRepositories
 
 	for range only.Once {
-		op := general.ReflectString(owner)
+		op := helperTypes.ReflectString(owner)
 		if op == nil {
 			break
 		}
@@ -212,8 +212,8 @@ func (me TypeLogin) GetRepositories(owner interface{}) TypeGetRepositories {
 //		{{ $git := GitHubLogin }}
 //		{{ $repos := $git.GetRepositories "gearboxworks" }}
 //		{{ $names := $repos.GetNames }}
-func (me TypeGetRepositories) GetNames() general.TypeGenericStringArray {
-	var ret general.TypeGenericStringArray
+func (me TypeGetRepositories) GetNames() helperTypes.TypeGenericStringArray {
+	var ret helperTypes.TypeGenericStringArray
 
 	for range only.Once {
 		for _, v := range me.Data {
@@ -229,8 +229,8 @@ func (me TypeGetRepositories) GetNames() general.TypeGenericStringArray {
 //		{{ $git := GitHubLogin }}
 //		{{ $repos := $git.GetRepositories "gearboxworks" }}
 //		{{ $names := $repos.GetFullNames }}
-func (me TypeGetRepositories) GetFullNames() general.TypeGenericStringArray {
-	var ret general.TypeGenericStringArray
+func (me TypeGetRepositories) GetFullNames() helperTypes.TypeGenericStringArray {
+	var ret helperTypes.TypeGenericStringArray
 
 	for range only.Once {
 		for _, v := range me.Data {
@@ -246,8 +246,8 @@ func (me TypeGetRepositories) GetFullNames() general.TypeGenericStringArray {
 //		{{ $git := GitHubLogin }}
 //		{{ $repos := $git.GetRepositories "gearboxworks" }}
 //		{{ $urls := $repos.GetUrls }}
-func (me TypeGetRepositories) GetUrls() general.TypeGenericStringArray {
-	var ret general.TypeGenericStringArray
+func (me TypeGetRepositories) GetUrls() helperTypes.TypeGenericStringArray {
+	var ret helperTypes.TypeGenericStringArray
 
 	for range only.Once {
 		for _, v := range me.Data {

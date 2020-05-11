@@ -1,9 +1,10 @@
-package github
+package helperGithub
 
 import (
 	"context"
 	"github.com/google/go-github/v31/github"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/general"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 	"reflect"
 	"strings"
@@ -11,7 +12,7 @@ import (
 
 
 // Usage: {{ array := GitHubGetOrganization "gearboxworks" }}
-func GetOrganization(i interface{}) []string {
+func GitHubGetOrganization(i interface{}) []string {
 	var sa []string
 
 	for range only.Once {
@@ -53,34 +54,34 @@ type TypeLogin struct {
 	Client *github.Client
 }
 
-func Login(username interface{}, password interface{}, twofactor interface{}) TypeLogin {
+func GitHubLogin(username interface{}, password interface{}, twofactor interface{}) TypeLogin {
 	var auth TypeLogin
 
 	for range only.Once {
 		usernameString := ""
-		if u := general.ReflectString(username); u != nil {
+		if u := helperTypes.ReflectString(username); u != nil {
 			usernameString = *u
 		} else {
 			usernameString = ""
 		}
 		if usernameString == "" {
-			usernameString = general.UserPrompt("GitHub username: ")
+			usernameString = helperSystem.UserPrompt("GitHub username: ")
 		}
 
 
 		passwordString := ""
-		if p := general.ReflectString(password); p != nil {
+		if p := helperTypes.ReflectString(password); p != nil {
 			passwordString = *p
 		} else {
 			passwordString = ""
 		}
 		if passwordString == "" {
-			passwordString = general.UserPromptHidden("GitHub password: ")
+			passwordString = helperSystem.UserPromptHidden("GitHub password: ")
 		}
 
 
 		twofactorString := ""
-		if f := general.ReflectString(twofactor); f != nil {
+		if f := helperTypes.ReflectString(twofactor); f != nil {
 			twofactorString = *f
 		} else {
 			twofactorString = ""
@@ -101,7 +102,7 @@ func Login(username interface{}, password interface{}, twofactor interface{}) Ty
 		if _, ok := auth.Error.(*github.TwoFactorAuthError); ok {
 			// Is this a two-factor auth error? If so, prompt for OTP and try again.
 			if twofactorString == "" {
-				twofactorString = general.UserPrompt("GitHub 2FA password: ")
+				twofactorString = helperSystem.UserPrompt("GitHub 2FA password: ")
 			}
 
 			tp.OTP = strings.TrimSpace(twofactorString)

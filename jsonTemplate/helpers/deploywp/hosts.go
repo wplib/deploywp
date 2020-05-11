@@ -2,7 +2,7 @@ package deploywp
 
 import (
 	"errors"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/general"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 )
 
@@ -77,7 +77,7 @@ func (me *Hosts) GetHost(host interface{}) *Host {
 			break
 		}
 
-		value := general.ReflectString(host)
+		value := helperTypes.ReflectString(host)
 		if value == nil {
 			ret.Error = errors.New("GetHost arg not a string")
 			break

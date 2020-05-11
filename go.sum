@@ -107,6 +107,8 @@ github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UV
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
 github.com/tsuyoshiwada/go-gitcmd v0.0.0-20180205145712-5f1f5f9475df/go.mod h1:pnyouUty/nBr/zm3GYwTIt+qFTLWbdjeLjZmJdzJOu8=
 github.com/ugorji/go/codec v0.0.0-20181204163529-d75b2dcb6bc8/go.mod h1:VFNgLljTbGfSG7qAOspJ7OScBnGdDN/yBr0sguwnwf0=
+github.com/ungerik/pkgreflect v0.0.0-20170905122726-bfeb2a931863 h1:dHyLkSlucRGhdxes0MgPD3ssqaKuP/UgatG9Y+MtHT4=
+github.com/ungerik/pkgreflect v0.0.0-20170905122726-bfeb2a931863/go.mod h1:7BUOYDBcsUKbB1yDwkUV8YpTj4Z5jEylGg9rvcRXR3A=
 github.com/wplib/deploywp v0.0.0-20200506004903-e26a876beb4b h1:3f7BE6uHvzno3AEim54LYY3y6TO/z6YiXIUnnCI3rOo=
 github.com/wplib/deploywp v0.0.0-20200506004903-e26a876beb4b/go.mod h1:cg0/t5kVrScnq8cdn1ZWWJp3fHqacv5dryn5ByzXhhE=
 github.com/xanzy/ssh-agent v0.2.1/go.mod h1:mLlQY/MoOhWBj+gOGMQkOeiEvkx+8pJSI+0Bx9h2kr4=

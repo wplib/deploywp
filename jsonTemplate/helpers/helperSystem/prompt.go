@@ -1,8 +1,9 @@
-package general
+package helperSystem
 
 import (
 	"bufio"
 	"fmt"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 	"golang.org/x/crypto/ssh/terminal"
 	"os"
@@ -10,13 +11,15 @@ import (
 )
 
 
+// Usage:
+//		{{ $str := UserPrompt "Enter something %s:" "here" }}
 func UserPrompt(prompt interface{}, args ...interface{}) string {
 	var ret string
 
 	for range only.Once {
 		var err error
 
-		p := ReflectString(prompt)
+		p := helperTypes.ReflectString(prompt)
 		if p == nil {
 			break
 		}
@@ -35,13 +38,15 @@ func UserPrompt(prompt interface{}, args ...interface{}) string {
 }
 
 
+// Usage:
+//		{{ $str := UserPromptHidden "Enter something %s:" "here" }}
 func UserPromptHidden(prompt interface{}, args ...interface{}) string {
 	var ret string
 
 	for range only.Once {
 		var err error
 
-		p := ReflectString(prompt)
+		p := helperTypes.ReflectString(prompt)
 		if p == nil {
 			break
 		}
