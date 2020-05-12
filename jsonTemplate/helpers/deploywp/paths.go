@@ -28,8 +28,6 @@ type Wordpress struct {
 }
 
 
-//var _ deploywp.PathsGetter = (*Paths)(nil)
-
 func (me *Paths) New() Paths {
 	if me == nil {
 		me = &Paths {

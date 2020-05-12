@@ -1,4 +1,4 @@
-package helperGitHub
+package helperGit
 
 import (
 	"context"
@@ -46,7 +46,6 @@ func fetchOrganizations(username string) ([]*github.Organization, error) {
 }
 
 
-// Usage: {{ $user := GitHubLogin "username" "password" "" }}
 type TypeLogin struct {
 	Valid bool
 	Error error
@@ -54,6 +53,8 @@ type TypeLogin struct {
 	Client *github.Client
 }
 
+// Usage:
+//		{{ $user := GitHubLogin "username" "password" "" }}
 func HelperGitHubLogin(username interface{}, password interface{}, twofactor interface{}) *TypeLogin {
 	var auth TypeLogin
 

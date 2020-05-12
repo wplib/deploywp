@@ -5,87 +5,77 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 	"io/ioutil"
-	"path/filepath"
 	"strings"
 )
 
-type TypeFile struct {
-	Error error
+type TypeReadFile struct {
+	TypeError
+	File *TypeOsPath
 	String string
-	Array []string
+	Array  []string
 }
 
-
-func _FileToAbs(f ...string) string {
-	var ret string
-
-	for range only.Once {
-		ret = filepath.Join(f...)
-
-		if filepath.IsAbs(ret) {
-			break
-		}
-
-		var err error
-		ret, err = filepath.Abs(ret)
-		if err != nil {
-			ret = ""
-			break
-		}
-	}
-	//ret = strings.ReplaceAll(ret, "//", "/")
-
-	return ret
+type TypeWriteFile struct {
+	TypeError
+	File *TypeOsPath
 }
 
 
 // Usage:
 //		{{ $str := ReadFile "filename.txt" }}
-func ReadFile(file interface{}) TypeFile {
-	var ret TypeFile
+func HelperReadFile(file ...interface{}) *TypeReadFile {
+	var rf TypeReadFile
 
 	for range only.Once {
-		f := helperTypes.ReflectString(file)
+		f := helperTypes.ReflectPath(file...)
 		if f == nil {
-			ret.Error = errors.New("file name empty")
+			rf.Error = errors.New("filename empty")
 			break
 		}
 
-		rf := _FileToAbs(*f)
-		if rf == "" {
-			ret.Error = errors.New("file name not defined")
+		rf.File = ResolveAbsPath(*f)
+		if rf.File.IsError() {
+			rf.Error = rf.File.Error
+			break
+		}
+		if !rf.File.Exists {
+			rf.Error = errors.New("filename not found")
+			break
+		}
+		if rf.File.IsDir {
+			rf.Error = errors.New("filename is a directory")
 			break
 		}
 
 		var d []byte
-		d, ret.Error = ioutil.ReadFile(rf)
-		if ret.Error != nil {
+		d, rf.Error = ioutil.ReadFile(rf.File.Path)
+		if rf.Error != nil {
 			break
 		}
 
-		ret.String = string(d)
-		ret.Array = strings.Split(string(d), "\n")
+		rf.String = string(d)
+		rf.Array = strings.Split(string(d), "\n")
 	}
 
-	return ret
+	return &rf
 }
 
 
 // Usage:
-//		{{ $return := WriteFile "filename.txt" .Data.Source 0644 }}
-func WriteFile(file interface{}, contents interface{}, perms interface{}) TypeError {
-	var ret TypeError
+//		{{ $return := WriteFile .Data.Source 0644 "dir1" "dir2/dir3" "filename.txt" }}
+func HelperWriteFile(contents interface{}, perms interface{}, file ...interface{}) *TypeWriteFile {
+	var ret TypeWriteFile
 
 	for range only.Once {
-		f := helperTypes.ReflectString(file)
+		f := helperTypes.ReflectPath(file...)
 		if f == nil {
-			ret.Error = errors.New("file name empty")
+			ret.Error = errors.New("filename is nil")
 			break
 		}
 
 		c := helperTypes.ReflectByteArray(contents)
 		if c == nil {
-			ret.Error = errors.New("contents empty")
+			ret.Error = errors.New("content string is nil")
 			break
 		}
 
@@ -97,17 +87,27 @@ func WriteFile(file interface{}, contents interface{}, perms interface{}) TypeEr
 			*p = 0644
 		}
 
-		wf := _FileToAbs(*f)
-		if wf == "" {
-			ret.Error = errors.New("file name not defined")
+
+		ret.File = ResolveAbsPath(*f)
+		if ret.File.IsError() {
+			ret.Error = ret.File.Error
+			break
+		}
+		//if !ret.File.Exists {
+		//	ret.Error = errors.New("filename not found")
+		//	break
+		//}
+		if ret.File.IsDir {
+			ret.Error = errors.New("filename is a directory")
 			break
 		}
 
-		ret.Error = ioutil.WriteFile(wf, c, *p)
+
+		ret.Error = ioutil.WriteFile(ret.File.Path, c, *p)
 		if ret.Error != nil {
 			break
 		}
 	}
 
-	return ret
+	return &ret
 }

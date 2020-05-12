@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"github.com/Masterminds/sprig"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/deploywp"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGithub"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGit"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGitHub"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
@@ -28,7 +29,11 @@ func DiscoverHelpers() (template.FuncMap, error) {
 			tfm[name] = fn
 		}
 
-		for name, fn := range helperGithub.GetHelpers {
+		for name, fn := range helperGitHub.GetHelpers {
+			tfm[name] = fn
+		}
+
+		for name, fn := range helperGit.GetHelpers {
 			tfm[name] = fn
 		}
 
@@ -59,7 +64,11 @@ func PrintHelpers() error {
 			tfm[name] = fn
 		}
 
-		for name, fn := range helperGithub.GetHelpers {
+		for name, fn := range helperGitHub.GetHelpers {
+			tfm[name] = fn
+		}
+
+		for name, fn := range helperGit.GetHelpers {
 			tfm[name] = fn
 		}
 

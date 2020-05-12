@@ -6,7 +6,7 @@ import (
 	"github.com/Masterminds/sprig"
 	"github.com/wplib/deploywp/jsonTemplate/helpers"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/deploywp"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGithub"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGitHub"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
@@ -288,7 +288,7 @@ func PrintHelpers() error {
 			fmt.Printf("Name: %s", foo4)
 		}
 
-		for name, fn := range helperGithub.GetHelpers {
+		for name, fn := range helperGitHub.GetHelpers {
 			tfm[name] = fn
 		}
 

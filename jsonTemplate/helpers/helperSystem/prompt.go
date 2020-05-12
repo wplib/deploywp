@@ -13,7 +13,7 @@ import (
 
 // Usage:
 //		{{ $str := UserPrompt "Enter something %s:" "here" }}
-func UserPrompt(prompt interface{}, args ...interface{}) string {
+func HelperUserPrompt(prompt interface{}, args ...interface{}) string {
 	var ret string
 
 	for range only.Once {
@@ -40,7 +40,7 @@ func UserPrompt(prompt interface{}, args ...interface{}) string {
 
 // Usage:
 //		{{ $str := UserPromptHidden "Enter something %s:" "here" }}
-func UserPromptHidden(prompt interface{}, args ...interface{}) string {
+func HelperUserPromptHidden(prompt interface{}, args ...interface{}) string {
 	var ret string
 
 	for range only.Once {

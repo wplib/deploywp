@@ -6,27 +6,33 @@ import "reflect"
 
 var Types = map[string]reflect.Type{
 	"Environment": reflect.TypeOf((*Environment)(nil)).Elem(),
-	"TypeDir": reflect.TypeOf((*TypeDir)(nil)).Elem(),
 	"TypeError": reflect.TypeOf((*TypeError)(nil)).Elem(),
 	"TypeExecCommand": reflect.TypeOf((*TypeExecCommand)(nil)).Elem(),
-	"TypeFile": reflect.TypeOf((*TypeFile)(nil)).Elem(),
+	"TypeOsPath": reflect.TypeOf((*TypeOsPath)(nil)).Elem(),
+	"TypeReadFile": reflect.TypeOf((*TypeReadFile)(nil)).Elem(),
 	"TypeRsync": reflect.TypeOf((*TypeRsync)(nil)).Elem(),
+	"TypeWriteFile": reflect.TypeOf((*TypeWriteFile)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
-	"Chdir": reflect.ValueOf(Chdir),
-	"Chmod": reflect.ValueOf(Chmod),
 	"ExecCommand": reflect.ValueOf(ExecCommand),
-	"ExecParseOutput": reflect.ValueOf(ExecParseOutput),
+	"FileToAbs": reflect.ValueOf(FileToAbs),
 	"GetEnv": reflect.ValueOf(GetEnv),
-	"Getwd": reflect.ValueOf(Getwd),
-	"NewRsync": reflect.ValueOf(NewRsync),
-	"OsExit": reflect.ValueOf(OsExit),
+	"HelperChdir": reflect.ValueOf(HelperChdir),
+	"HelperChmod": reflect.ValueOf(HelperChmod),
+	"HelperCopyFiles": reflect.ValueOf(HelperCopyFiles),
+	"HelperExec": reflect.ValueOf(HelperExec),
+	"HelperExecCommand": reflect.ValueOf(HelperExecCommand),
+	"HelperGetwd": reflect.ValueOf(HelperGetwd),
+	"HelperOsExit": reflect.ValueOf(HelperOsExit),
+	"HelperReadFile": reflect.ValueOf(HelperReadFile),
+	"HelperRsync": reflect.ValueOf(HelperRsync),
+	"HelperUserPrompt": reflect.ValueOf(HelperUserPrompt),
+	"HelperUserPromptHidden": reflect.ValueOf(HelperUserPromptHidden),
+	"HelperWriteFile": reflect.ValueOf(HelperWriteFile),
 	"PrintEnv": reflect.ValueOf(PrintEnv),
-	"ReadFile": reflect.ValueOf(ReadFile),
-	"UserPrompt": reflect.ValueOf(UserPrompt),
-	"UserPromptHidden": reflect.ValueOf(UserPromptHidden),
-	"WriteFile": reflect.ValueOf(WriteFile),
+	"ResolveAbsPath": reflect.ValueOf(ResolveAbsPath),
+	"ResolvePath": reflect.ValueOf(ResolvePath),
 }
 
 var Variables = map[string]reflect.Value{
@@ -34,5 +40,6 @@ var Variables = map[string]reflect.Value{
 }
 
 var Consts = map[string]reflect.Value{
+	"HelperPrefix": reflect.ValueOf(HelperPrefix),
 }
 

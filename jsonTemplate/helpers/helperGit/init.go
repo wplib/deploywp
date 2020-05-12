@@ -1,4 +1,4 @@
-package helperTypes
+package helperGit
 
 import (
 	"strings"
@@ -9,7 +9,7 @@ const HelperPrefix = "Helper"
 var GetHelpers template.FuncMap
 func init() {
 	// @TODO - How can we pull in all Helper functions automatically?
-	//
+	// 
 	// Turns out we can't do it at runtime, (makes sense)...
 	// https://stackoverflow.com/questions/41629293/how-do-i-list-the-public-methods-of-a-package-in-golang
 	//

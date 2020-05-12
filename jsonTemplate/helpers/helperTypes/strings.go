@@ -23,7 +23,7 @@ type TypeGenericStringArray struct {
 
 // Usage:
 //		{{ if IsString $output }}YES{{ end }}
-func IsString(i interface{}) bool {
+func HelperIsString(i interface{}) bool {
 	v := reflect.ValueOf(i)
 	switch v.Kind() {
 		case reflect.String:
@@ -36,7 +36,7 @@ func IsString(i interface{}) bool {
 
 // Usage:
 //		{{ $str := ToUpper "lowercase" }}
-func ToUpper(i interface{}) string {
+func HelperToUpper(i interface{}) string {
 	v := reflect.ValueOf(i)
 	switch v.Kind() {
 		case reflect.String:
@@ -49,7 +49,7 @@ func ToUpper(i interface{}) string {
 
 // Usage:
 //		{{ $str := ToLower "UPPERCASE" }}
-func ToLower(i interface{}) string {
+func HelperToLower(i interface{}) string {
 	v := reflect.ValueOf(i)
 	switch v.Kind() {
 		case reflect.String:
@@ -62,7 +62,7 @@ func ToLower(i interface{}) string {
 
 // Usage:
 //		{{ $str := ToString .Json.array }}
-func ToString(i interface{}) string {
+func HelperToString(i interface{}) string {
 	ret := ""
 	var j []byte
 	var err error
@@ -76,7 +76,7 @@ func ToString(i interface{}) string {
 
 // Usage:
 //		{{ if ExecParseOutput $output "uid=%s" "mick" ... }}YES{{ end }}
-func Contains(s interface{}, substr interface{}) bool {
+func HelperContains(s interface{}, substr interface{}) bool {
 	var ret bool
 
 	for range only.Once {
@@ -99,7 +99,7 @@ func Contains(s interface{}, substr interface{}) bool {
 
 // Usage:
 //		{{ Sprintf "uid=%s" "mick" ... }}
-func Sprintf(format interface{}, a ...interface{}) string {
+func HelperSprintf(format interface{}, a ...interface{}) string {
 	var ret string
 
 	for range only.Once {

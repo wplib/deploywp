@@ -7,78 +7,88 @@ import (
 	"os"
 )
 
-type TypeDir struct {
-	Error error
-	Dir string
-}
+var _ helperTypes.TypeOsPathGetter = (*TypeOsPath)(nil)
+type TypeOsPath helperTypes.TypeOsPath
 
-type TypeError struct {
-	Error error
-}
+var _ helperTypes.TypeErrorGetter = (*TypeError)(nil)
+type TypeError helperTypes.TypeError
 
 
 // Usage:
-//		{{ $response := Chdir "/root" }}
-func Chdir(dir interface{}) TypeDir {
-	var ret TypeDir
+//		{{ $ret := Chdir "/root" }}
+//		{{ if $ret.IsOk }}OK{{ end }}
+func HelperChdir(dir ...interface{}) *TypeOsPath {
+	var cd TypeOsPath
 
 	for range only.Once {
-		d := helperTypes.ReflectString(dir)
-		if d == nil {
+		f := helperTypes.ReflectPath(dir...)
+		if f == nil {
+			cd.Error = errors.New("directory empty")
 			break
 		}
 
-		wd := _FileToAbs(*d)
-		if wd == "" {
-			ret.Error = errors.New("file name not defined")
+		cd = *ResolveAbsPath(*f)
+		if cd.IsError() {
+			cd.Error = cd.Error
+			break
+		}
+		if !cd.Exists {
+			cd.Error = errors.New("directory not found")
+			break
+		}
+		if cd.IsFile {
+			cd.Error = errors.New("directory is a file")
 			break
 		}
 
-		err := os.Chdir(wd)
-		if err != nil {
+		cd.Error = os.Chdir(cd.Dirname)
+		if cd.Error != nil {
 			break
 		}
 
 		var cwd string
-		cwd, err = os.Getwd()
-		if err != nil {
+		cwd, cd.Error = os.Getwd()
+		if cd.Error != nil {
 			break
 		}
-		if cwd != wd {
+		if cwd != cd.Dirname {
 			break
 		}
-
-		ret.Dir = cwd
 	}
 
-	return ret
+	return &cd
 }
 
 
 // Usage:
-//		{{ $response := Getwd }}
-func Getwd() TypeDir {
-	var ret TypeDir
+//		{{ $ret := Getwd }}
+//		{{ if $ret.IsOk }}Current directory is {{ $ret.Dir }}{{ end }}
+func HelperGetwd() *TypeOsPath {
+	var ret TypeOsPath
 
 	for range only.Once {
-		ret.Dir, ret.Error = os.Getwd()
+		ret.Path, ret.Error = os.Getwd()
 		if ret.Error != nil {
 			break
 		}
+
+		ret = *ResolveAbsPath(ret.Path)
 	}
 
-	return ret
+	return &ret
 }
 
 
 // Usage:
-//		{{ $response := Getwd }}
-func Chmod(name interface{}, mode interface{}) TypeDir {
-	var ret TypeDir
+//		{{ $ret := Chmod 0644 "/root" ... }}
+//		{{ if $ret.IsOk }}Changed perms of file {{ $ret.Dir }}{{ end }}
+func HelperChmod(mode interface{}, name ...interface{}) *TypeOsPath {
+	var cd TypeOsPath
 
 	for range only.Once {
-		n := helperTypes.ReflectString(name)
-		if n == nil {
+		f := helperTypes.ReflectPath(name...)
+		if f == nil {
+			cd.Error = errors.New("directory empty")
 			break
 		}
 
@@ -87,11 +97,25 @@ func Chmod(name interface{}, mode interface{}) TypeDir {
 			break
 		}
 
-		ret.Error = os.Chmod(*n, *m)
-		if ret.Error != nil {
+		cd = *ResolveAbsPath(*f)
+		if cd.IsError() {
+			cd.Error = cd.Error
+			break
+		}
+		if !cd.Exists {
+			cd.Error = errors.New("directory not found")
+			break
+		}
+		if cd.IsFile {
+			cd.Error = errors.New("directory is a file")
+			break
+		}
+
+		cd.Error = os.Chmod(cd.Path, *m)
+		if cd.Error != nil {
 			break
 		}
 	}
 
-	return ret
+	return &cd
 }

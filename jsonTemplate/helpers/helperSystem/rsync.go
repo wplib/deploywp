@@ -11,6 +11,7 @@ import (
 	"syscall"
 )
 
+
 type TypeRsync struct {
 	SourcePath string
 	DestinationPath string
@@ -22,9 +23,10 @@ type TypeRsync struct {
 	Error error
 }
 
+
 // Usage:
 //		{{ $return := WriteFile "filename.txt" .Data.Source 0644 }}
-func NewRsync(src interface{}, dest interface{}, options interface{}, exclude ...interface{}) *TypeRsync {
+func HelperRsync(src interface{}, dest interface{}, options interface{}, exclude ...interface{}) *TypeRsync {
 	var ret TypeRsync
 
 	for range only.Once {
@@ -33,7 +35,7 @@ func NewRsync(src interface{}, dest interface{}, options interface{}, exclude ..
 			ret.Error = errors.New("rsync source empty")
 			break
 		}
-		ret.SourcePath = _FileToAbs(*s) + "/"	// Always add a "/" postfix
+		ret.SourcePath = FileToAbs(*s) + "/"	// Always add a "/" postfix
 		if ret.SourcePath == "" {
 			ret.Error = errors.New("rsync source empty")
 			break
@@ -44,7 +46,7 @@ func NewRsync(src interface{}, dest interface{}, options interface{}, exclude ..
 			ret.Error = errors.New("rsync destination empty")
 			break
 		}
-		ret.DestinationPath = _FileToAbs(*d) + "/"	// Always add a "/" postfix
+		ret.DestinationPath = FileToAbs(*d) + "/"	// Always add a "/" postfix
 		if ret.DestinationPath == "" {
 			ret.Error = errors.New("rsync destination empty")
 			break
@@ -74,6 +76,14 @@ func NewRsync(src interface{}, dest interface{}, options interface{}, exclude ..
 	return &ret
 }
 
+
+// Alias of Rsync || Tar || whatever - basically determine what tool to use based on availability.
+// @TODO - To be implemented.
+func HelperCopyFiles(cmd ...interface{}) *TypeRsync {
+	return HelperRsync(cmd[0], cmd[1], cmd[2], cmd...)
+}
+
+
 // Usage:
 //		{{ $return := WriteFile "filename.txt" .Data.Source 0644 }}
 func (me *TypeRsync) Run() *TypeExecCommand {
@@ -84,7 +94,6 @@ func (me *TypeRsync) Run() *TypeExecCommand {
 		opts = append(opts, me.Options...)
 		opts = append(opts, me.SourcePath)
 		opts = append(opts, me.DestinationPath)
-		fmt.Printf("rsync %s\n", strings.Join(opts, " "))
 
 		c := exec.Command("rsync", opts...)
 
@@ -98,7 +107,7 @@ func (me *TypeRsync) Run() *TypeExecCommand {
 				ret.Exit = waitStatus.ExitStatus()
 			}
 
-			fmt.Printf("%s\n", ret.PrintError())
+			//fmt.Printf("%s\n", ret.PrintError())
 			break
 		}
 
@@ -106,10 +115,11 @@ func (me *TypeRsync) Run() *TypeExecCommand {
 		ret.Exit = waitStatus.ExitStatus()
 
 		if ret.Error != nil {
-			ret.PrintError()
+			//ret.PrintError()
 			break
 		}
 
+		fmt.Printf("\nrsync %s\n", strings.Join(opts, " "))
 		ret.Output = ux.SprintfGreen("%s\n", ret.Output)
 	}
 

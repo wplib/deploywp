@@ -31,7 +31,7 @@ var Types = map[string]reflect.Type{
 }
 
 var Functions = map[string]reflect.Value{
-	"LoadDeployWp": reflect.ValueOf(LoadDeployWp),
+	"HelperLoadDeployWp": reflect.ValueOf(HelperLoadDeployWp),
 }
 
 var Variables = map[string]reflect.Value{
@@ -39,6 +39,7 @@ var Variables = map[string]reflect.Value{
 }
 
 var Consts = map[string]reflect.Value{
+	"HelperPrefix": reflect.ValueOf(HelperPrefix),
 	"TargetActionCopy": reflect.ValueOf(TargetActionCopy),
 	"TargetActionDelete": reflect.ValueOf(TargetActionDelete),
 	"TargetActionExclude": reflect.ValueOf(TargetActionExclude),

@@ -5,27 +5,35 @@ package helperTypes
 import "reflect"
 
 var Types = map[string]reflect.Type{
+	"TypeError": reflect.TypeOf((*TypeError)(nil)).Elem(),
+	"TypeErrorGetter": reflect.TypeOf((*TypeErrorGetter)(nil)).Elem(),
+	"TypeExecCommand": reflect.TypeOf((*TypeExecCommand)(nil)).Elem(),
+	"TypeExecCommandGetter": reflect.TypeOf((*TypeExecCommandGetter)(nil)).Elem(),
 	"TypeGenericString": reflect.TypeOf((*TypeGenericString)(nil)).Elem(),
 	"TypeGenericStringArray": reflect.TypeOf((*TypeGenericStringArray)(nil)).Elem(),
+	"TypeOsPath": reflect.TypeOf((*TypeOsPath)(nil)).Elem(),
+	"TypeOsPathGetter": reflect.TypeOf((*TypeOsPathGetter)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
-	"Contains": reflect.ValueOf(Contains),
-	"FindInMap": reflect.ValueOf(FindInMap),
-	"IsArray": reflect.ValueOf(IsArray),
-	"IsInt": reflect.ValueOf(IsInt),
-	"IsMap": reflect.ValueOf(IsMap),
-	"IsSlice": reflect.ValueOf(IsSlice),
-	"IsString": reflect.ValueOf(IsString),
+	"HelperContains": reflect.ValueOf(HelperContains),
+	"HelperFindInMap": reflect.ValueOf(HelperFindInMap),
+	"HelperIsArray": reflect.ValueOf(HelperIsArray),
+	"HelperIsInt": reflect.ValueOf(HelperIsInt),
+	"HelperIsMap": reflect.ValueOf(HelperIsMap),
+	"HelperIsSlice": reflect.ValueOf(HelperIsSlice),
+	"HelperIsString": reflect.ValueOf(HelperIsString),
+	"HelperSprintf": reflect.ValueOf(HelperSprintf),
+	"HelperToLower": reflect.ValueOf(HelperToLower),
+	"HelperToString": reflect.ValueOf(HelperToString),
+	"HelperToUpper": reflect.ValueOf(HelperToUpper),
 	"ReflectByteArray": reflect.ValueOf(ReflectByteArray),
+	"ReflectExecCommand": reflect.ValueOf(ReflectExecCommand),
 	"ReflectFileMode": reflect.ValueOf(ReflectFileMode),
 	"ReflectInt": reflect.ValueOf(ReflectInt),
+	"ReflectPath": reflect.ValueOf(ReflectPath),
 	"ReflectString": reflect.ValueOf(ReflectString),
 	"ReflectStrings": reflect.ValueOf(ReflectStrings),
-	"Sprintf": reflect.ValueOf(Sprintf),
-	"ToLower": reflect.ValueOf(ToLower),
-	"ToString": reflect.ValueOf(ToString),
-	"ToUpper": reflect.ValueOf(ToUpper),
 }
 
 var Variables = map[string]reflect.Value{
@@ -33,5 +41,6 @@ var Variables = map[string]reflect.Value{
 }
 
 var Consts = map[string]reflect.Value{
+	"HelperPrefix": reflect.ValueOf(HelperPrefix),
 }
 

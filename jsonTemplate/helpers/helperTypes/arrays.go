@@ -17,7 +17,7 @@ func foo() {
 }
 
 
-func IsSlice(i interface{}) bool {
+func HelperIsSlice(i interface{}) bool {
 	v := reflect.ValueOf(i)
 	switch v.Kind() {
 		case reflect.Slice:
@@ -27,7 +27,7 @@ func IsSlice(i interface{}) bool {
 	}
 }
 
-func IsArray(i interface{}) bool {
+func HelperIsArray(i interface{}) bool {
 	v := reflect.ValueOf(i)
 	switch v.Kind() {
 		case reflect.Array:
@@ -37,7 +37,7 @@ func IsArray(i interface{}) bool {
 	}
 }
 
-func IsMap(i interface{}) bool {
+func HelperIsMap(i interface{}) bool {
 	v := reflect.ValueOf(i)
 	switch v.Kind() {
 		case reflect.Map:
@@ -48,7 +48,7 @@ func IsMap(i interface{}) bool {
 }
 
 // FindInMap function.
-func FindInMap(i interface{}, n string) interface{} {
+func HelperFindInMap(i interface{}, n string) interface{} {
 	var ret interface{}
 	n = strings.TrimPrefix(n, "\"")
 	n = strings.TrimSuffix(n, "\"")

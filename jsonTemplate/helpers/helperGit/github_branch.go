@@ -1,4 +1,4 @@
-package helperGitHub
+package helperGit
 
 import (
 	"reflect"

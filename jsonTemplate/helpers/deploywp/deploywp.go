@@ -31,7 +31,7 @@ func _NewJsonFile() *DeployWp {
 	return &jf
 }
 
-func LoadDeployWp(str interface{}) *DeployWp {
+func HelperLoadDeployWp(str interface{}) *DeployWp {
 	var j DeployWp
 
 	for range only.Once {
@@ -106,84 +106,6 @@ func (me *DeployWp) GetSourcePaths() *Paths {
 
 	return ret
 }
-//func (me *DeployWp) GetSourceBasePath() string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		ret = me.Source.GetBasePath()
-//	}
-//
-//	return ret
-//}
-//func (me *DeployWp) GetSourceWebRootPath() string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		ret = me.Source.GetWebRootPath()
-//	}
-//
-//	return ret
-//}
-//func (me *DeployWp) GetSourceContentPath() string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		ret = me.Source.GetContentPath()
-//	}
-//
-//	return ret
-//}
-//func (me *DeployWp) GetSourceCorePath() string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		ret = me.Source.GetCorePath()
-//	}
-//
-//	return ret
-//}
-//func (me *DeployWp) GetSourceRootPath() string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		ret = me.Source.GetRootPath()
-//	}
-//
-//	return ret
-//}
-//func (me *DeployWp) GetSourceVendorPath() string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		ret = me.Source.GetVendorPath()
-//	}
-//
-//	return ret
-//}
 
 
 // ////////////////////////////////////////////////////////////////////////////////
@@ -302,84 +224,6 @@ func (me *DeployWp) GetTargetPaths() *Paths {
 
 	return ret
 }
-//func (me *DeployWp) GetTargetBasePath() string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		ret = me.Target.GetBasePath()
-//	}
-//
-//	return ret
-//}
-//func (me *DeployWp) GetTargetWebRootPath() string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		ret = me.Target.GetWebRootPath()
-//	}
-//
-//	return ret
-//}
-//func (me *DeployWp) GetTargetContentPath() string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		ret = me.Target.GetContentPath()
-//	}
-//
-//	return ret
-//}
-//func (me *DeployWp) GetTargetCorePath() string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		ret = me.Target.GetCorePath()
-//	}
-//
-//	return ret
-//}
-//func (me *DeployWp) GetTargetRootPath() string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		ret = me.Target.GetRootPath()
-//	}
-//
-//	return ret
-//}
-//func (me *DeployWp) GetTargetVendorPath() string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		ret = me.Target.GetVendorPath()
-//	}
-//
-//	return ret
-//}
 
 
 // ////////////////////////////////////////////////////////////////////////////////
