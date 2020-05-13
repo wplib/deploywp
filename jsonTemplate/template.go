@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"path"
+	"path/filepath"
 	"strings"
 	"text/template"
 	"time"
@@ -317,6 +318,11 @@ func (me *Template) SetJsonFile(s string) error {
 	var err error
 
 	for range only.Once {
+		s, err = filepath.Abs(s)
+		if err != nil {
+			break
+		}
+
 		// Check JSON file exists.
 		_, err = os.Stat(s)
 		if os.IsNotExist(err) {
@@ -329,6 +335,10 @@ func (me *Template) SetJsonFile(s string) error {
 
 	return err
 }
+func (me *Template) GetJsonFile() string {
+	return me.jsonFile
+}
+
 
 func (me *Template) SetJsonString(s string) error {
 	var err error
@@ -344,6 +354,11 @@ func (me *Template) SetTemplateFile(s string) error {
 	var err error
 
 	for range only.Once {
+		s, err = filepath.Abs(s)
+		if err != nil {
+			break
+		}
+
 		// Check template file exists.
 		_, err = os.Stat(s)
 		if os.IsNotExist(err) {
@@ -356,6 +371,10 @@ func (me *Template) SetTemplateFile(s string) error {
 
 	return err
 }
+func (me *Template) GetTemplateFile() string {
+	return me.templateFile
+}
+
 
 func (me *Template) SetTemplateString(s string) error {
 	var err error
@@ -393,4 +412,9 @@ func UnescapeString(s string) string {
 	s = strings.ReplaceAll(s, `\"`, `"`)
 
 	return s
+}
+
+
+func (me *Template) PrintHelpers() {
+	_, _ = fmt.Fprintf(os.Stderr, helpers.PrintHelpers())
 }

@@ -18,6 +18,8 @@ var Types = map[string]reflect.Type{
 var Functions = map[string]reflect.Value{
 	"HelperContains": reflect.ValueOf(HelperContains),
 	"HelperFindInMap": reflect.ValueOf(HelperFindInMap),
+	"HelperGrep": reflect.ValueOf(HelperGrep),
+	"HelperGrepArray": reflect.ValueOf(HelperGrepArray),
 	"HelperIsArray": reflect.ValueOf(HelperIsArray),
 	"HelperIsInt": reflect.ValueOf(HelperIsInt),
 	"HelperIsMap": reflect.ValueOf(HelperIsMap),

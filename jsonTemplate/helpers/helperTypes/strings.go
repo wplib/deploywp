@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/wplib/deploywp/only"
 	"reflect"
+	"regexp"
 	"strings"
 )
 
@@ -108,6 +109,52 @@ func HelperSprintf(format interface{}, a ...interface{}) string {
 			break
 		}
 		ret = fmt.Sprintf(*p, a...)
+	}
+
+	return ret
+}
+
+
+// Usage:
+//		{{ HelperGrep .This.String "uid=%s" "mick" ... }}
+func HelperGrepArray(str interface{}, format interface{}, a ...interface{}) []string {
+	var ret []string
+
+	for range only.Once {
+		s := ReflectString(str)
+		if s == nil {
+			break
+		}
+		text := strings.Split(*s, "\n")
+
+		f := ReflectString(format)
+		if f == nil {
+			break
+		}
+
+		res := fmt.Sprintf(*f, a...)
+		re := regexp.MustCompile(res)
+
+		for _, line := range text {
+			if re.MatchString(line) {
+				ret = append(ret, line)
+			}
+		}
+	}
+
+	return ret
+}
+
+
+// Usage:
+//		{{ HelperGrep .This.String "uid=%s" "mick" ... }}
+func HelperGrep(str interface{}, format interface{}, a ...interface{}) string {
+	var ret string
+
+	for range only.Once {
+		sa := HelperGrepArray(str, format, a...)
+
+		ret = strings.Join(sa, "\n")
 	}
 
 	return ret
