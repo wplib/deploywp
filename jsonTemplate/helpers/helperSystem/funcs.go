@@ -1,12 +1,16 @@
 package helperSystem
 
 import (
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"syscall"
 )
+
+//var _ helperTypes.TypeOsPathGetter = (*TypeOsPath)(nil)
+//var _ helperTypes.TypeExecCommandGetter = (*TypeExecCommand)(nil)
 
 
 func ExecCommand(ec *TypeExecCommand) *TypeExecCommand {
@@ -15,11 +19,13 @@ func ExecCommand(ec *TypeExecCommand) *TypeExecCommand {
 		c := exec.Command(ec.Exe, ec.Args...)
 
 		var out []byte
-		out, ec.Error = c.CombinedOutput()
+		var err error
+		out, err = c.CombinedOutput()
+		ec.SetError(err)
 		ec.Output = string(out)
 
 		if ec.IsError() {
-			if exitError, ok := ec.Error.(*exec.ExitError); ok {
+			if exitError, ok := err.(*exec.ExitError); ok {
 				waitStatus := exitError.Sys().(syscall.WaitStatus)
 				ec.Exit = waitStatus.ExitStatus()
 			}
@@ -57,19 +63,19 @@ func FileToAbs(f ...string) string {
 }
 
 
-func ResolvePath(path ...string) *TypeOsPath {
-	var ret TypeOsPath
+func ResolvePath(path ...string) *helperTypes.TypeOsPath {
+	var ret helperTypes.TypeOsPath
 
 	for range only.Once {
 		ret.Path = FileToAbs(path...)
 
 		var stat os.FileInfo
-		stat, ret.Error = os.Stat(ret.Path)
-		//if ret.Error != nil {
+		stat, ret.ErrorValue = os.Stat(ret.Path)
+		//if err != nil {
 		//	break
 		//}
 
-		if os.IsNotExist(ret.Error) {
+		if os.IsNotExist(ret.ErrorValue) {
 			ret.Exists = false
 			break
 		}
@@ -98,6 +104,6 @@ func ResolvePath(path ...string) *TypeOsPath {
 }
 
 
-func ResolveAbsPath(path ...string) *TypeOsPath {
+func ResolveAbsPath(path ...string) *helperTypes.TypeOsPath {
 	return ResolvePath(FileToAbs(path...))
 }

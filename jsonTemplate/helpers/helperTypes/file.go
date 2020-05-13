@@ -24,6 +24,18 @@ type TypeOsPath struct {
 	Size     int64
 }
 
+type TypeReadFile struct {
+	TypeError
+	File *TypeOsPath
+	String string
+	Array  []string
+}
+
+type TypeWriteFile struct {
+	TypeError
+	File *TypeOsPath
+}
+
 
 func ReflectFileMode(ref interface{}) *os.FileMode {
 	var fm os.FileMode

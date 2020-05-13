@@ -209,19 +209,19 @@ func (me *TypeGit) GetTagObject(tag interface{}) *helperTypes.TypeExecCommand {
 		}
 
 		var h *git.Repository
-		h, me.Cmd.Error = me.getHandle()
+		h, me.Cmd.ErrorValue = me.getHandle()
 		if me.Cmd.IsError() {
 			break
 		}
 
 		var r *Reference
-		r, me.Cmd.Error = h.Tag(*t)
+		r, me.Cmd.ErrorValue = h.Tag(*t)
 		if me.Cmd.IsError() {
 			break
 		}
 
 		var to *Tag
-		to, me.Cmd.Error = h.TagObject(r.Hash())
+		to, me.Cmd.ErrorValue = h.TagObject(r.Hash())
 		if me.Cmd.IsError() {
 			break
 		}
@@ -230,7 +230,7 @@ func (me *TypeGit) GetTagObject(tag interface{}) *helperTypes.TypeExecCommand {
 	}
 
 	if me.Cmd.IsError() {
-		me.Cmd.SetError("unable to access tag object '%v''; %s", tag, me.Cmd.Error)
+		me.Cmd.SetError("unable to access tag object '%v''; %s", tag, me.Cmd.ErrorValue)
 	}
 
 	return me.Cmd

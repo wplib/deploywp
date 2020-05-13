@@ -97,12 +97,12 @@ func (me *TypeRsync) Run() *TypeExecCommand {
 
 		c := exec.Command("rsync", opts...)
 
-		var out []byte
-		out, ret.Error = c.CombinedOutput()
+		out, err := c.CombinedOutput()
 		ret.Output = string(out)
+		ret.SetError(err)
 
-		if ret.Error != nil {
-			if exitError, ok := ret.Error.(*exec.ExitError); ok {
+		if ret.IsError() {
+			if exitError, ok := err.(*exec.ExitError); ok {
 				waitStatus := exitError.Sys().(syscall.WaitStatus)
 				ret.Exit = waitStatus.ExitStatus()
 			}
@@ -114,7 +114,7 @@ func (me *TypeRsync) Run() *TypeExecCommand {
 		waitStatus := c.ProcessState.Sys().(syscall.WaitStatus)
 		ret.Exit = waitStatus.ExitStatus()
 
-		if ret.Error != nil {
+		if ret.IsError() {
 			//ret.PrintError()
 			break
 		}

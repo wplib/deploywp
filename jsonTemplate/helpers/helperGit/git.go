@@ -1,6 +1,7 @@
 package helperGit
 
 import (
+	"fmt"
 	"github.com/tsuyoshiwada/go-gitcmd"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
@@ -12,13 +13,13 @@ import (
 //var _ helperTypes.TypeOsPathGetter = (*TypeOsPath)(nil)
 //type TypeOsPath helperTypes.TypeOsPath
 
-//var _ helperTypes.TypeExecCommandGetter = (*TypeExecCommand)(nil)
-//type TypeExecCommand helperTypes.TypeExecCommand
+var _ helperTypes.TypeExecCommandGetter = (*TypeExecCommand)(nil)
+type TypeExecCommand helperTypes.TypeExecCommand
 
 
 type TypeGit struct {
 	Url string
-	Base *helperSystem.TypeOsPath
+	Base *helperTypes.TypeOsPath
 	GitConfig *gitcmd.Config
 	GitOptions []string
 
@@ -57,7 +58,7 @@ func HelperGitLogin(path ...interface{}) *TypeGit {
 // Usage:
 //		{{ $cmd := $git.Chdir .Some.Directory }}
 //		{{ if $git.IsOk }}Changed to directory {{ $git.Dir }}{{ end }}
-func (me *TypeGit) Chdir(dir interface{}) *helperSystem.TypeOsPath {
+func (me *TypeGit) Chdir(dir interface{}) *helperTypes.TypeOsPath {
 	return helperSystem.HelperChdir(dir)
 }
 
@@ -82,8 +83,8 @@ func (me *TypeGit) Open() *helperTypes.TypeExecCommand {
 
 		me.Cmd = me.Exec("rev-parse", "--is-inside-work-tree")
 		if me.Cmd.Output != "true" {
-			if me.Cmd.Error != nil {
-				me.Cmd.SetError("current directory does not contain a valid .Git repository: %s", me.Cmd.Error)
+			if me.Cmd.IsError() {
+				me.Cmd.SetError("current directory does not contain a valid .Git repository: %s", me.Cmd.ErrorValue)
 				break
 			}
 
@@ -91,11 +92,17 @@ func (me *TypeGit) Open() *helperTypes.TypeExecCommand {
 			break
 		}
 
-		me.repository, me.Cmd.Error = git.PlainOpen(me.Base.Path)
-		if me.Cmd.IsError() {
+		var err error
+		me.repository, err = git.PlainOpen(me.Base.Path)
+		if err != nil {
+			me.Cmd.SetError(err)
 			break
 		}
 
+		c, _ := me.repository.Config()
+		me.Url = c.Remotes["origin"].URLs[0]
+
+		me.Cmd.Output = fmt.Sprintf("Opened directory %s.\nRemote origin is set to %s\n", me.Base.Path, me.Url)
 		me.Cmd.Data = true
 	}
 
@@ -118,12 +125,12 @@ func (me *TypeGit) GetStatus() (sts Status, err error) {
 		}
 
 		var wt *git.Worktree
-		wt, me.Cmd.Error = me.repository.Worktree()
+		wt, me.Cmd.ErrorValue = me.repository.Worktree()
 		if me.Cmd.IsError() {
 			break
 		}
 
-		sts, me.Cmd.Error = wt.Status()
+		sts, me.Cmd.ErrorValue = wt.Status()
 		if me.Cmd.IsError() {
 			break
 		}
@@ -162,7 +169,7 @@ func (me *TypeGit) Lock() *helperTypes.TypeExecCommand {
 }
 
 
-// Usage:FOO
+// Usage:
 //		{{- $cmd := $git.IsNil }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) IsNil() *helperTypes.TypeExecCommand {
@@ -177,14 +184,14 @@ func (me *TypeGit) IsNil() *helperTypes.TypeExecCommand {
 }
 
 
-// Usage:IsExec
-//		{{- $cmd := $git.Open }}
+// Usage:
+//		{{- $cmd := $git.IsExec }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) IsExec() *helperTypes.TypeExecCommand {
 	for range only.Once {
-		me.Cmd.Error = me.client.CanExec()
+		me.Cmd.ErrorValue = me.client.CanExec()
 		if me.Cmd.IsError() {
-			me.Cmd.SetError("`git` does not exist or its command file is not executable: %s", me.Cmd.Error)
+			me.Cmd.SetError("`git` does not exist or its command file is not executable: %s", me.Cmd.ErrorValue)
 			break
 		}
 	}
@@ -209,6 +216,13 @@ func (me *TypeGit) IsNilRepository() *helperTypes.TypeExecCommand {
 
 // Usage:
 //		{{ if $ret.IsError }}{{ $cmd.PrintError }}{{ end }}
+func (me *TypeGit) SetError(format interface{}, a ...interface{}) {
+	me.Cmd.SetError(format, a...)
+}
+
+
+// Usage:
+//		{{ if $ret.IsError }}{{ $cmd.PrintError }}{{ end }}
 func (me *TypeGit) IsError() bool {
 	return me.Cmd.IsError()
 }
@@ -225,4 +239,11 @@ func (me *TypeGit) IsOk() bool {
 //		{{ if $ret.IsOk }}OK{{ end }}
 func (me *TypeGit) PrintError() string {
 	return me.Cmd.PrintError()
+}
+
+
+// Usage:
+//		{{ if $ret.IsOk }}OK{{ end }}
+func (me *TypeGit) ExitOnError() string {
+	return me.Cmd.ExitOnError()
 }

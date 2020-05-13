@@ -1,6 +1,7 @@
 package deploywp
 
 import (
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 )
 
@@ -57,11 +58,16 @@ func (me *Source) IsNil() bool {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Paths
-func (me *Source) GetPaths() *Paths {
+func (me *Source) GetPaths(abs ...interface{}) *Paths {
 	var ret *Paths
 
 	for range only.Once {
 		if me.IsNil() {
+			break
+		}
+
+		if helperTypes.ReflectBoolArg(abs) {
+			ret = &me.AbsPaths
 			break
 		}
 
@@ -70,84 +76,113 @@ func (me *Source) GetPaths() *Paths {
 
 	return ret
 }
-func (me *Source) GetBasePath() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Paths.GetBasePath()
-	}
-
-	return ret
-}
-func (me *Source) GetWebRootPath() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Paths.GetWebRootPath()
-	}
-
-	return ret
-}
-func (me *Source) GetContentPath() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Paths.GetContentPath()
-	}
-
-	return ret
-}
-func (me *Source) GetCorePath() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Paths.GetCorePath()
-	}
-
-	return ret
-}
-func (me *Source) GetRootPath() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Paths.GetRootPath()
-	}
-
-	return ret
-}
-func (me *Source) GetVendorPath() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Paths.GetVendorPath()
-	}
-
-	return ret
-}
+//func (me *Source) GetBasePath(abs ...interface{}) string {
+//	var ret string
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		if helperTypes.ReflectBoolArg(abs) {
+//			ret = me.AbsPaths.GetBasePath()
+//			break
+//		}
+//
+//		ret = me.Paths.GetBasePath()
+//	}
+//
+//	return ret
+//}
+//func (me *Source) GetWebRootPath(abs ...interface{}) string {
+//	var ret string
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		if helperTypes.ReflectBoolArg(abs) {
+//			ret = me.AbsPaths.GetWebRootPath()
+//			break
+//		}
+//
+//		ret = me.Paths.GetWebRootPath()
+//	}
+//
+//	return ret
+//}
+//func (me *Source) GetContentPath(abs ...interface{}) string {
+//	var ret string
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		if helperTypes.ReflectBoolArg(abs) {
+//			ret = me.AbsPaths.GetContentPath()
+//			break
+//		}
+//		ret = me.Paths.GetContentPath()
+//	}
+//
+//	return ret
+//}
+//func (me *Source) GetCorePath(abs ...interface{}) string {
+//	var ret string
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		if helperTypes.ReflectBoolArg(abs) {
+//			ret = me.AbsPaths.GetCorePath()
+//			break
+//		}
+//
+//		ret = me.Paths.GetCorePath()
+//	}
+//
+//	return ret
+//}
+//func (me *Source) GetRootPath(abs ...interface{}) string {
+//	var ret string
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		if helperTypes.ReflectBoolArg(abs) {
+//			ret = me.AbsPaths.GetRootPath()
+//			break
+//		}
+//
+//		ret = me.Paths.GetRootPath()
+//	}
+//
+//	return ret
+//}
+//func (me *Source) GetVendorPath(abs ...interface{}) string {
+//	var ret string
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		if helperTypes.ReflectBoolArg(abs) {
+//			ret = me.AbsPaths.GetVendorPath()
+//			break
+//		}
+//
+//		ret = me.Paths.GetVendorPath()
+//	}
+//
+//	return ret
+//}
 
 
 // ////////////////////////////////////////////////////////////////////////////////

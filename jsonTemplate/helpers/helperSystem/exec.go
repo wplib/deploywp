@@ -26,25 +26,6 @@ func HelperExecCommand(cmd ...interface{}) *TypeExecCommand {
 		ecp := TypeExecCommand(*ec)
 
 		ret = ExecCommand(&ecp)
-		ret.PrintError()
-
-		////c := exec.Command((*cmds)[0], (*cmds)[1:]...)
-		//c := exec.Command(ec.Exe, ec.Args...)
-		//
-		//var out []byte
-		//out, ret.Error = c.CombinedOutput()
-		//ret.Output = string(out)
-		//
-		//if ret.Error != nil {
-		//	if exitError, ok := ret.Error.(*exec.ExitError); ok {
-		//		waitStatus := exitError.Sys().(syscall.WaitStatus)
-		//		ret.Exit = waitStatus.ExitStatus()
-		//	}
-		//	break
-		//}
-		//
-		//waitStatus := c.ProcessState.Sys().(syscall.WaitStatus)
-		//ret.Exit = waitStatus.ExitStatus()
 	}
 
 	return ret
@@ -52,6 +33,14 @@ func HelperExecCommand(cmd ...interface{}) *TypeExecCommand {
 // Alias of ExecCommand
 func HelperExec(cmd ...interface{}) *TypeExecCommand {
 	return HelperExecCommand(cmd...)
+}
+
+
+func (me *TypeExecCommand) IsNil() bool {
+	if me == nil {
+		return true
+	}
+	return false
 }
 
 
@@ -64,9 +53,9 @@ func (me *TypeExecCommand) PrintError() string {
 	for range only.Once {
 		switch {
 			case me.Exit != 0:
-				ret = ux.SprintfError("ERROR: Exit(%d) '%s'\n%s", me.Exit, me.Error, me.Output)
-			case me.Error != nil:
-				ret = ux.SprintfError("ERROR: '%s'\n%s", me.Error, me.Output)
+				ret = ux.SprintfError("ERROR: Exit(%d) '%s'\n%s", me.Exit, me.ErrorValue, me.Output)
+			case me.ErrorValue != nil:
+				ret = ux.SprintfError("ERROR: '%s'\n%s", me.ErrorValue, me.Output)
 		}
 	}
 
@@ -83,9 +72,9 @@ func (me *TypeExecCommand) PrintResponse() string {
 	for range only.Once {
 		switch {
 			case me.Exit != 0:
-				ret = ux.SprintfError("ERROR: Exit(%d) '%s'\n%s", me.Exit, me.Error, me.Output)
-			case me.Error != nil:
-				ret = ux.SprintfError("ERROR: '%s'\n%s", me.Error, me.Output)
+				ret = ux.SprintfError("ERROR: Exit(%d) '%s'\n%s", me.Exit, me.ErrorValue, me.Output)
+			case me.ErrorValue != nil:
+				ret = ux.SprintfError("ERROR: '%s'\n%s", me.ErrorValue, me.Output)
 			default:
 				ret = ux.SprintfOk("%s", me.Output)
 		}
@@ -141,6 +130,24 @@ func (me *TypeExecCommand) Grep(format interface{}, a ...interface{}) string {
 			break
 		}
 		ret = helperTypes.HelperGrep(me.Output, format, a...)
+	}
+
+	return ret
+}
+
+
+// Usage:
+//		{{ $cmd.ExitOnError }}
+func (me *TypeExecCommand) ExitOnError() string {
+	var ret string
+
+	for range only.Once {
+		if me.Exit == 0 {
+			break
+		}
+
+		_, _ = fmt.Fprintf(os.Stderr,"%s", me.PrintError())
+		os.Exit(me.Exit)
 	}
 
 	return ret

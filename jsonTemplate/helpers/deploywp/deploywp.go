@@ -99,6 +99,40 @@ func (me *DeployWp) GetSourcePaths() *Paths {
 
 	return ret
 }
+//func (me *DeployWp) GetSourcePaths(abs ...interface{}) *Paths {
+//	var ret *Paths
+//
+//	for range only.Once {
+//		if me.IsNil() {
+//			break
+//		}
+//
+//		if len(abs) > 0 {
+//			ok := helperTypes.ReflectBoolArg(abs[0])
+//			if ok {
+//				ret = &me.Source.AbsPaths
+//				break
+//			}
+//		}
+//
+//		ret = &me.Source.Paths
+//	}
+//
+//	return ret
+//}
+func (me *DeployWp) GetSourceAbsPaths() *Paths {
+	var ret *Paths
+
+	for range only.Once {
+		if me.IsNil() {
+			break
+		}
+
+		ret = &me.Source.AbsPaths
+	}
+
+	return ret
+}
 
 
 // ////////////////////////////////////////////////////////////////////////////////
@@ -213,6 +247,19 @@ func (me *DeployWp) GetTargetPaths() *Paths {
 		}
 
 		ret = &me.Target.Paths
+	}
+
+	return ret
+}
+func (me *DeployWp) GetTargetAbsPaths() *Paths {
+	var ret *Paths
+
+	for range only.Once {
+		if me.IsNil() {
+			break
+		}
+
+		ret = &me.Target.AbsPaths
 	}
 
 	return ret

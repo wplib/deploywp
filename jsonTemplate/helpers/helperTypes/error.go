@@ -4,38 +4,42 @@ import (
 	"errors"
 	"fmt"
 	"github.com/wplib/deploywp/only"
-	"github.com/wplib/deploywp/ux"
+	"reflect"
 )
 
 type TypeErrorGetter interface {
+	//IsError() bool
+	//IsOk() bool
+	//SetError(format interface{}, a ...interface{})
+	//GetError() error
 }
 
 type TypeError struct {
-	Error error
+	ErrorValue error
 }
 
 
-// Usage:
-//		{{ if $ret.IsError }}ERROR{{ end }}
-func (me *TypeError) SetError(format interface{}, a ...interface{}) {
+func ReflectError(ref interface{}) *error {
+	var s error
+
 	for range only.Once {
-		f := ReflectString(format)
-		if f == nil {
+		value := reflect.ValueOf(ref)
+		if value.Kind() != reflect.String {
 			break
 		}
 
-		me.Error = errors.New(fmt.Sprintf(*f, a...))
+		s = errors.New(value.String())
 	}
+
+	return &s
 }
 
 
-// Usage:
-//		{{ if $ret.IsError }}ERROR{{ end }}
 func (me *TypeError) IsError() bool {
 	var ret bool
 
 	for range only.Once {
-		if me.Error == nil {
+		if me.ErrorValue == nil {
 			break
 		}
 		ret = true
@@ -43,25 +47,29 @@ func (me *TypeError) IsError() bool {
 
 	return ret
 }
-
-
-// Usage:
-//		{{ if $ret.IsOk }}OK{{ end }}
 func (me *TypeError) IsOk() bool {
 	return !me.IsError()
 }
 
 
-// Usage:
-//		{{ if $ret.IsOk }}OK{{ end }}
-func (me *TypeExecCommand) PrintError() string {
-	var ret string
-
+func (me *TypeError) SetError(format interface{}, a ...interface{}) {
 	for range only.Once {
-		if me.Exit != 0 {
-			ret = ux.SprintfRed("ERROR: %s - %s", me.Error, me.Output)
+		f := ReflectString(format)
+		if f == nil {
+			me.ErrorValue = nil
+			break
 		}
-	}
 
-	return ret
+		str := fmt.Sprintf(*f, a...)
+		if str == "" {
+			break
+		}
+
+		me.ErrorValue = errors.New(str)
+	}
+}
+
+
+func (me *TypeError) GetError() error {
+	return me.ErrorValue
 }

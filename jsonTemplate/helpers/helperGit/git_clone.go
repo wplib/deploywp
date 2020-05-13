@@ -4,10 +4,11 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"strings"
 )
 
 type TypeGitClone struct {
-	Base *helperSystem.TypeOsPath
+	Base *helperTypes.TypeOsPath
 	Cmd *helperTypes.TypeExecCommand
 }
 
@@ -33,7 +34,7 @@ func (me *TypeGit) Clone(url interface{}) *helperTypes.TypeExecCommand {
 		}
 
 		me.Url = *value
-		me.Cmd = me.Exec("clone", me.Url)
+		me.Cmd = me.Exec(gitCommandClone, me.Url)
 	}
 
 	return me.Cmd
@@ -58,7 +59,7 @@ func (me *TypeGit) SetPath(path ...interface{}) *helperTypes.TypeExecCommand {
 
 		ps := helperSystem.ResolveAbsPath(*p)
 		if ps.IsError() {
-			me.Cmd.Error = ps.Error
+			me.Cmd.ErrorValue = ps.ErrorValue
 			break
 		}
 		//if !ps.Exists {
@@ -71,6 +72,29 @@ func (me *TypeGit) SetPath(path ...interface{}) *helperTypes.TypeExecCommand {
 		}
 
 		me.Base = ps
+	}
+
+	return me.Cmd
+}
+
+
+// Usage:
+//		{{- $cmd := $git.GetUrl }}
+//		{{- if $cmd.IsOk }}{{ $cmd.Data }}{{- end }}
+func (me *TypeGit) GetUrl() *helperTypes.TypeExecCommand {
+	for range only.Once {
+		me.Cmd = me.IsNil()
+		if me.Cmd.IsError() {
+			break
+		}
+
+		me.Cmd = me.Exec("config", "--get", "remote.origin.url")
+		if me.Cmd.IsError() {
+			break
+		}
+
+		me.Url = strings.TrimSpace(me.Cmd.Output)
+		me.Cmd.Data = me.Url
 	}
 
 	return me.Cmd

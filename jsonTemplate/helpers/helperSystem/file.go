@@ -1,55 +1,64 @@
 package helperSystem
 
 import (
-	"errors"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 	"io/ioutil"
 	"strings"
 )
 
-type TypeReadFile struct {
-	TypeError
-	File *TypeOsPath
-	String string
-	Array  []string
-}
+var _ helperTypes.TypeOsPathGetter = (*TypeOsPath)(nil)
+type TypeOsPath helperTypes.TypeOsPath
+var _ helperTypes.TypeOsPathGetter = (*TypeReadFile)(nil)
+type TypeReadFile helperTypes.TypeReadFile
+var _ helperTypes.TypeOsPathGetter = (*TypeWriteFile)(nil)
+type TypeWriteFile helperTypes.TypeWriteFile
 
-type TypeWriteFile struct {
-	TypeError
-	File *TypeOsPath
-}
+
+//type TypeReadFile struct {
+//	TypeError
+//	File *TypeOsPath
+//	String string
+//	Array  []string
+//}
+//
+//type TypeWriteFile struct {
+//	TypeError
+//	File *TypeOsPath
+//}
 
 
 // Usage:
 //		{{ $str := ReadFile "filename.txt" }}
-func HelperReadFile(file ...interface{}) *TypeReadFile {
-	var rf TypeReadFile
+func HelperReadFile(file ...interface{}) *helperTypes.TypeReadFile {
+	var rf helperTypes.TypeReadFile
 
 	for range only.Once {
 		f := helperTypes.ReflectPath(file...)
 		if f == nil {
-			rf.Error = errors.New("filename empty")
+			rf.SetError("filename empty")
 			break
 		}
 
 		rf.File = ResolveAbsPath(*f)
 		if rf.File.IsError() {
-			rf.Error = rf.File.Error
+			rf.SetError(rf.File.ErrorValue)
 			break
 		}
 		if !rf.File.Exists {
-			rf.Error = errors.New("filename not found")
+			rf.SetError("filename not found")
 			break
 		}
 		if rf.File.IsDir {
-			rf.Error = errors.New("filename is a directory")
+			rf.SetError("filename is a directory")
 			break
 		}
 
 		var d []byte
-		d, rf.Error = ioutil.ReadFile(rf.File.Path)
-		if rf.Error != nil {
+		var err error
+		d, err = ioutil.ReadFile(rf.File.Path)
+		if err != nil {
+			rf.SetError(err)
 			break
 		}
 
@@ -63,19 +72,19 @@ func HelperReadFile(file ...interface{}) *TypeReadFile {
 
 // Usage:
 //		{{ $return := WriteFile .Data.Source 0644 "dir1" "dir2/dir3" "filename.txt" }}
-func HelperWriteFile(contents interface{}, perms interface{}, file ...interface{}) *TypeWriteFile {
-	var ret TypeWriteFile
+func HelperWriteFile(contents interface{}, perms interface{}, file ...interface{}) *helperTypes.TypeWriteFile {
+	var ret helperTypes.TypeWriteFile
 
 	for range only.Once {
 		f := helperTypes.ReflectPath(file...)
 		if f == nil {
-			ret.Error = errors.New("filename is nil")
+			ret.SetError("filename is nil")
 			break
 		}
 
 		c := helperTypes.ReflectByteArray(contents)
 		if c == nil {
-			ret.Error = errors.New("content string is nil")
+			ret.SetError("content string is nil")
 			break
 		}
 
@@ -89,22 +98,22 @@ func HelperWriteFile(contents interface{}, perms interface{}, file ...interface{
 
 
 		ret.File = ResolveAbsPath(*f)
-		if ret.File.IsError() {
-			ret.Error = ret.File.Error
-			break
-		}
+		//if ret.File.IsError() {
+		//	break
+		//}
 		//if !ret.File.Exists {
 		//	ret.Error = errors.New("filename not found")
 		//	break
 		//}
 		if ret.File.IsDir {
-			ret.Error = errors.New("filename is a directory")
+			ret.SetError("filename is a directory")
 			break
 		}
 
 
-		ret.Error = ioutil.WriteFile(ret.File.Path, c, *p)
-		if ret.Error != nil {
+		err := ioutil.WriteFile(ret.File.Path, c, *p)
+		if err != nil {
+			ret.SetError(err)
 			break
 		}
 	}

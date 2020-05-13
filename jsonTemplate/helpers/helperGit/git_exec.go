@@ -28,28 +28,32 @@ func (me *TypeGit) Exec(cmd interface{}, args ...interface{}) *helperTypes.TypeE
 		if a == nil {
 			break
 		}
+
+		me.Cmd.Args = []string{}
 		me.Cmd.Args = append(me.Cmd.Args, me.GitOptions...)
 		me.Cmd.Args = append(me.Cmd.Args, *a...)
 
 		//me.Exe = me.NonHelperExec(ret.Exe, ret.Args...)
 
 		cwd := helperSystem.HelperGetwd()
-		cd := helperSystem.HelperChdir(me.Base.Path)
-		if cd.IsError() {
-			ux.PrintfError("Cannot change directory to '%s'", me.Base.Path)
-			break
+		if cwd.Path != me.Base.Path {
+			cd := helperSystem.HelperChdir(me.Base.Path)
+			if cd.IsError() {
+				ux.PrintfError("Cannot change directory to '%s'", me.Base.Path)
+				break
+			}
 		}
 
-		me.Cmd.Output, me.Cmd.Error = me.client.Exec(me.Cmd.Exe, me.Cmd.Args...)
-		if me.Cmd.Error != nil {
+		me.Cmd.Output, me.Cmd.ErrorValue = me.client.Exec(me.Cmd.Exe, me.Cmd.Args...)
+		if me.Cmd.ErrorValue != nil {
 			me.Cmd.Exit = 1	// Fake an exit code.
 		}
 
-		cd = helperSystem.HelperChdir(me.Base.Path)
-		if cd.IsError() {
-			ux.PrintfError("Cannot change back to directory '%s'", cwd.Path)
-			break
-		}
+		//cd = helperSystem.HelperChdir(me.Base.Path)
+		//if cd.IsError() {
+		//	ux.PrintfError("Cannot change back to directory '%s'", cwd.Path)
+		//	break
+		//}
 	}
 
 	return me.Cmd

@@ -1,7 +1,10 @@
 package helperTypes
 
 import (
+	"fmt"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
+	"os"
 )
 
 type TypeExecCommandGetter interface {
@@ -44,11 +47,11 @@ func (me *TypeExecCommand) EnsureNotNil() *TypeExecCommand {
 		}
 
 		me = &TypeExecCommand {
-			Exe:       "",
-			Args:      nil,
-			Exit:      0,
-			Output:    "",
-			Data:      nil,
+			Exe:    "",
+			Args:   nil,
+			Exit:   0,
+			Output: "",
+			Data:   nil,
 			TypeError: TypeError{},
 		}
 	}
@@ -57,9 +60,59 @@ func (me *TypeExecCommand) EnsureNotNil() *TypeExecCommand {
 }
 
 
-func (me *TypeExecCommand) IsNil() bool {
-	if me == nil {
-		return true
+// Usage:
+//		{{ $cmd := ExecCommand "ps %s" "-eaf" ... }}
+//		{{ $cmd.PrintError }}
+func (me *TypeExecCommand) PrintError() string {
+	var ret string
+
+	for range only.Once {
+		switch {
+			case me.Exit != 0:
+				ret = ux.SprintfError("ERROR: Exit(%d) '%s'\n%s", me.Exit, me.ErrorValue, me.Output)
+			case me.ErrorValue != nil:
+				ret = ux.SprintfError("ERROR: '%s'\n%s", me.ErrorValue, me.Output)
+		}
 	}
-	return false
+
+	return ret
+}
+
+
+// Usage:
+//		{{ $cmd := ExecCommand "ps %s" "-eaf" ... }}
+//		{{ $cmd.PrintResponse }}
+func (me *TypeExecCommand) PrintResponse() string {
+	var ret string
+
+	for range only.Once {
+		switch {
+			case me.Exit != 0:
+				ret = ux.SprintfError("ERROR: Exit(%d) '%s'\n%s", me.Exit, me.ErrorValue, me.Output)
+			case me.ErrorValue != nil:
+				ret = ux.SprintfError("ERROR: '%s'\n%s", me.ErrorValue, me.Output)
+			default:
+				ret = ux.SprintfOk("%s", me.Output)
+		}
+	}
+
+	return ret
+}
+
+
+// Usage:
+//		{{ $cmd.ExitOnError }}
+func (me *TypeExecCommand) ExitOnError() string {
+	var ret string
+
+	for range only.Once {
+		if me.Exit == 0 {
+			break
+		}
+
+		_, _ = fmt.Fprintf(os.Stderr,"%s", me.PrintError())
+		os.Exit(me.Exit)
+	}
+
+	return ret
 }
