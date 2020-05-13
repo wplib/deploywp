@@ -35,7 +35,6 @@ func (me *TypeGit) Clone(url interface{}, dir ...interface{}) *helperTypes.TypeE
 			me.Cmd.SetError("URL is nil")
 			break
 		}
-		me.SetUrl(*u)
 
 		d := helperTypes.ReflectPath(dir...)
 		if d == nil {
@@ -48,13 +47,14 @@ func (me *TypeGit) Clone(url interface{}, dir ...interface{}) *helperTypes.TypeE
 		}
 		if ps.IsDir {
 			if ps.Exists {
-				me.Cmd.SetError("Repository exists for directory '%s'", me.Base.Path)
+				me.Cmd.SetError("Repository exists for directory '%s'", ps.Path)
 				me.Cmd.Exit = 1
 				break
 			}
 		}
-		me.Base = ps
 
+		me.SetUrl(*u)
+		me.Base = ps
 		ux.PrintfWhite("Cloning %s into %s\n", me.Url, me.Base.Path)
 
 		me.skipDirCheck = true
