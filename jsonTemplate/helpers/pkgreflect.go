@@ -5,6 +5,9 @@ package helpers
 import "reflect"
 
 var Types = map[string]reflect.Type{
+	"Files": reflect.TypeOf((*Files)(nil)).Elem(),
+	"Helper": reflect.TypeOf((*Helper)(nil)).Elem(),
+	"Helpers": reflect.TypeOf((*Helpers)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
@@ -16,5 +19,6 @@ var Variables = map[string]reflect.Value{
 }
 
 var Consts = map[string]reflect.Value{
+	"HelperPrefix": reflect.ValueOf(HelperPrefix),
 }
 

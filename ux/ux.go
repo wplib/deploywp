@@ -116,42 +116,57 @@ func SprintfMagenta(format string, args ...interface{}) string {
 }
 
 
+func Sprintf(format string, args ...interface{}) string {
+	inline := fmt.Sprintf(format, args...)
+	return fmt.Sprintf("%s%s%s", aurora.BrightCyan("deploywp: ").Bold(), inline, aurora.Reset(""))
+}
 func Printf(format string, args ...interface{}) {
-	for range only.Once {
-		inline := fmt.Sprintf(format, args...)
-		_, _ = fmt.Fprintf(os.Stderr, "%s%s%s", aurora.BrightCyan("deploywp: ").Bold(), inline, aurora.Reset(""))
-	}
+	_, _ = fmt.Fprintf(os.Stderr, Sprintf(format, args...))
 }
 
+
+func SprintfOk(format string, args ...interface{}) string {
+	inline := fmt.Sprintf(format, args...)
+	return Sprintf("%s", aurora.BrightGreen(inline))
+}
 func PrintfOk(format string, args ...interface{}) {
-	for range only.Once {
-		inline := fmt.Sprintf(format, args...)
-		Printf("%s", aurora.BrightGreen(inline))
-	}
+	_, _ = fmt.Fprintf(os.Stderr, SprintfOk(format, args...))
 }
 
+
+func SprintfWarning(format string, args ...interface{}) string {
+	inline := fmt.Sprintf(format, args...)
+	return Sprintf("%s", aurora.BrightYellow(inline))
+}
 func PrintfWarning(format string, args ...interface{}) {
-	for range only.Once {
-		inline := fmt.Sprintf(format, args...)
-		Printf("%s", aurora.BrightYellow(inline))
-	}
+	_, _ = fmt.Fprintf(os.Stderr, SprintfWarning(format, args...))
 }
 
+
+func SprintfError(format string, args ...interface{}) string {
+	inline := fmt.Sprintf(format, args...)
+	return Sprintf("%s", aurora.BrightRed(inline))
+}
 func PrintfError(format string, args ...interface{}) {
-	for range only.Once {
-		inline := fmt.Sprintf(format, args...)
-		Printf("%s", aurora.BrightRed(inline))
-	}
+	_, _ = fmt.Fprintf(os.Stderr, SprintfError(format, args...))
 }
 
-func PrintError(err error) {
+
+func SprintError(err error) string {
+	var s string
+
 	for range only.Once {
 		if err == nil {
 			break
 		}
 
-		Printf("%s%s\n", aurora.BrightRed("ERROR: ").Framed(), aurora.BrightRed(err).Framed().SlowBlink().BgBrightWhite())
+		s = Sprintf("%s%s\n", aurora.BrightRed("ERROR: ").Framed(), aurora.BrightRed(err).Framed().SlowBlink().BgBrightWhite())
 	}
+
+	return s
+}
+func PrintError(err error) {
+	_, _ = fmt.Fprintf(os.Stderr, SprintError(err))
 }
 
 

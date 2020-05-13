@@ -8,7 +8,9 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGitHub"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperUx"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -26,6 +28,10 @@ func DiscoverHelpers() (template.FuncMap, error) {
 	for range only.Once {
 		// Define additional template functions.
 		tfm = sprig.TxtFuncMap()
+
+		for name, fn := range helperUx.GetHelpers {
+			tfm[name] = fn
+		}
 
 		for name, fn := range deploywp.GetHelpers {
 			tfm[name] = fn
@@ -54,13 +60,17 @@ func DiscoverHelpers() (template.FuncMap, error) {
 
 // This method will print exported helper functions within each helper package.
 // You need to run `pkgreflect jsonTemplate/helpers` after code changes.
-func PrintHelpers() error {
-	var err error
-	var tfm template.FuncMap
+func PrintHelpers() string {
+	var ret string
 
 	for range only.Once {
+		var tfm template.FuncMap
 		// Define additional template functions.
 		tfm = sprig.TxtFuncMap()
+
+		for name, fn := range helperUx.GetHelpers {
+			tfm[name] = fn
+		}
 
 		for name, fn := range deploywp.GetHelpers {
 			tfm[name] = fn
@@ -83,7 +93,7 @@ func PrintHelpers() error {
 		}
 
 		files := make(Files)
-		fmt.Printf("List of defined template functions:\n")
+		ux.PrintfCyan("List of defined template functions:\n")
 		for name, fn := range tfm {
 			helper := _GetFunctionInfo(fn)
 
@@ -92,19 +102,24 @@ func PrintHelpers() error {
 			}
 
 			files[helper.File][name] = *helper
-			fmt.Printf("Name[%s]: %s => %s\n", name, helper.Name, helper.Function)
+			//fmt.Printf("Name[%s]: %s => %s\n", name, helper.Name, helper.Function)
 		}
 
 		for fn, fp := range files {
-			fmt.Printf("\n# Helper functions within: %s\n", fn)
+			ux.PrintfWhite("\n# Helper functions within: %s\n", fn)
 			for _, hp := range fp {
-				fmt.Printf("%s( %s )\t=> ( %s )\n", hp.Name, hp.Args, hp.Return)
+				fmt.Printf("%s( %s )\t=> ( %s )\n",
+					ux.SprintfGreen(hp.Name),
+					ux.SprintfCyan(hp.Args),
+					ux.SprintfYellow(hp.Return),
+					)
+
 				// fmt.Printf("%s\n\tArgs: %s\n\tReturn: %s\n", hp.Function, hp.Args, hp.Return)
 			}
 		}
 	}
 
-	return err
+	return ret
 }
 
 

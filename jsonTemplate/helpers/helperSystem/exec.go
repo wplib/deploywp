@@ -62,8 +62,32 @@ func (me *TypeExecCommand) PrintError() string {
 	var ret string
 
 	for range only.Once {
-		if me.Exit != 0 {
-			ret = ux.SprintfRed("ERROR: %s - %s", me.Error, me.Output)
+		switch {
+			case me.Exit != 0:
+				ret = ux.SprintfError("ERROR: Exit(%d) '%s'\n%s", me.Exit, me.Error, me.Output)
+			case me.Error != nil:
+				ret = ux.SprintfError("ERROR: '%s'\n%s", me.Error, me.Output)
+		}
+	}
+
+	return ret
+}
+
+
+// Usage:
+//		{{ $cmd := ExecCommand "ps %s" "-eaf" ... }}
+//		{{ $cmd.PrintResponse }}
+func (me *TypeExecCommand) PrintResponse() string {
+	var ret string
+
+	for range only.Once {
+		switch {
+			case me.Exit != 0:
+				ret = ux.SprintfError("ERROR: Exit(%d) '%s'\n%s", me.Exit, me.Error, me.Output)
+			case me.Error != nil:
+				ret = ux.SprintfError("ERROR: '%s'\n%s", me.Error, me.Output)
+			default:
+				ret = ux.SprintfOk("%s", me.Output)
 		}
 	}
 
@@ -91,20 +115,36 @@ func (me *TypeExecCommand) ParseOutput(search interface{}, args ...interface{}) 
 }
 
 
-//// Usage:
-////		{{ $cmd := ExecCommand "ps %s" "-eaf" }}
-////		{{ if $cmd.IsError }}found error{{ end }}
-//func (me *TypeExecCommand) IsError() bool {
-//	return me.Error.IsError()
-//}
-//
-//
-//// Usage:
-////		{{ $cmd := ExecCommand "ps %s" "-eaf" }}
-////		{{ if $cmd.IsOk }}OK{{ end }}
-//func (me *TypeExecCommand) IsOk() bool {
-//	return me.Error.IsOk()
-//}
+// Usage:
+//		{{ HelperGrep .This.String "uid=%s" "mick" ... }}
+func (me *TypeExecCommand) GrepArray(format interface{}, a ...interface{}) []string {
+	var ret []string
+
+	for range only.Once {
+		if me.Output == "" {
+			break
+		}
+		ret = helperTypes.HelperGrepArray(me.Output, format, a...)
+	}
+
+	return ret
+}
+
+
+// Usage:
+//		{{ HelperGrep .This.String "uid=%s" "mick" ... }}
+func (me *TypeExecCommand) Grep(format interface{}, a ...interface{}) string {
+	var ret string
+
+	for range only.Once {
+		if me.Output == "" {
+			break
+		}
+		ret = helperTypes.HelperGrep(me.Output, format, a...)
+	}
+
+	return ret
+}
 
 
 // Usage:
