@@ -14,13 +14,11 @@ var Types = map[string]reflect.Type{
 	"PullOptions": reflect.TypeOf((*PullOptions)(nil)).Elem(),
 	"ReadableName": reflect.TypeOf((*ReadableName)(nil)).Elem(),
 	"Reference": reflect.TypeOf((*Reference)(nil)).Elem(),
-	"Repository": reflect.TypeOf((*Repository)(nil)).Elem(),
 	"Status": reflect.TypeOf((*Status)(nil)).Elem(),
 	"Tag": reflect.TypeOf((*Tag)(nil)).Elem(),
 	"Tagname": reflect.TypeOf((*Tagname)(nil)).Elem(),
 	"TypeExecCommand": reflect.TypeOf((*TypeExecCommand)(nil)).Elem(),
 	"TypeGit": reflect.TypeOf((*TypeGit)(nil)).Elem(),
-	"TypeGitClone": reflect.TypeOf((*TypeGitClone)(nil)).Elem(),
 	"Url": reflect.TypeOf((*Url)(nil)).Elem(),
 }
 

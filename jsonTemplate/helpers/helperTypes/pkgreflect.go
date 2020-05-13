@@ -31,6 +31,8 @@ var Functions = map[string]reflect.Value{
 	"HelperToLower": reflect.ValueOf(HelperToLower),
 	"HelperToString": reflect.ValueOf(HelperToString),
 	"HelperToUpper": reflect.ValueOf(HelperToUpper),
+	"ReflectBool": reflect.ValueOf(ReflectBool),
+	"ReflectBoolArg": reflect.ValueOf(ReflectBoolArg),
 	"ReflectByteArray": reflect.ValueOf(ReflectByteArray),
 	"ReflectError": reflect.ValueOf(ReflectError),
 	"ReflectExecCommand": reflect.ValueOf(ReflectExecCommand),

@@ -1,180 +1,178 @@
 package helperGit
 
 import (
+	"fmt"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
+	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 	"gopkg.in/src-d/go-git.v4"
+	"strings"
 )
 
 
-type Repository struct {
-	Dir    Dir
-	Url    Url
-	Handle *git.Repository
+//type Repository struct {
+//	Dir    Dir
+//	Url    Url
+//	Handle *git.Repository
+//}
+
+
+// Usage:
+//		{{- $cmd := $git.Clone }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
+func (me *TypeGit) Clone(url interface{}, dir ...interface{}) *helperTypes.TypeExecCommand {
+	for range only.Once {
+		me.Cmd = me.IsNil()
+		if me.Cmd.IsError() {
+			break
+		}
+
+		u := helperTypes.ReflectString(url)
+		if u == nil {
+			me.Cmd.SetError("URL is nil")
+			break
+		}
+
+		d := helperTypes.ReflectPath(dir...)
+		if d == nil {
+			me.Cmd.SetError("URL is nil")
+			break
+		}
+		ps := helperSystem.ResolveAbsPath(*d)
+		if ps.IsFile {
+			break
+		}
+		if ps.IsDir {
+			if ps.Exists {
+				me.Cmd.SetError("Repository exists for directory '%s'", ps.Path)
+				me.Cmd.Exit = 1
+				break
+			}
+		}
+
+		me.SetUrl(*u)
+		me.Base = ps
+		ux.PrintfWhite("Cloning %s into %s\n", me.Url, me.Base.Path)
+
+		me.skipDirCheck = true
+		me.Cmd = me.Exec(gitCommandClone, me.Url, me.Base.Path)
+		me.skipDirCheck = false
+	}
+
+	return me.Cmd
 }
 
 
-//func HelperNewRepository(d Dir) *Repository {
-//	r := Repository{
-//		Dir: d,
-//	}
-//	return &r
-//}
-//
-//
-//func (me *TypeGit) Open() *helperTypes.TypeExecCommand {
-//	for range only.Once {
-//		me.Client = gitcmd.New(nil)
-//		me.Exe.Error = me.Client.CanExec()
-//		if me.Exe.Error != nil {
-//			me.Exe.SetError("`git` does not exist or its command file is not executable: %s", me.Exe.Error)
-//			break
-//		}
-//
-//		me.Exe = me.Exec("rev-parse", "--is-inside-work-tree")
-//		if me.Exe.Output != "true" {
-//			if me.Exe.Error != nil {
-//				me.Exe.SetError("current directory does not contain a valid .Git repository: %s", me.Exe.Error)
-//				break
-//			}
-//
-//			me.Exe.SetError("current directory does not contain a valid Git repository")
-//			break
-//		}
-//	}
-//
-//	return me.Exe
-//}
-//
-//
-//func (me *Repository) Clone(u Url) (err error) {
-//	me.Url = u
-//	_, err = me.Exec("clone", u)
-//	return err
-//}
-//
-//func (me *Repository) Branch() (branch string, err error) {
-//	return me.Exec("symbolic-ref", "--short", "HEAD")
-//}
-//
-//func (me *Repository) Tags() (tags []string, err error) {
-//	var out string
-//	out, err = me.Exec("log", "-1", "--decorate=short", "--pretty=format:%D")
-//	tags = make([]string, 0)
-//	for _, t := range strings.Split(strings.TrimSpace(out), ",") {
-//		if t[:5] != " tag:" {
-//			continue
-//		}
-//		tags = append(tags, t[6:])
-//	}
-//	return tags, err
-//}
-//
-//func (me *Repository) Commit() (commit *Commit, err error) {
-//	var out string
-//	out, err = me.Exec("rev-parse", "--verify", "HEAD")
-//	if err == nil {
-//		commit = NewCommit(out)
-//	}
-//	return commit, err
-//}
-//
-//func (me *Repository) Status() (sts Status, err error) {
-//	for range only.Once {
-//		if me.Handle == nil {
-//			err = fmt.Errorf("repository not open")
-//			break
-//		}
-//		wt, err := me.Handle.Worktree()
-//		if err != nil {
-//			break
-//		}
-//		sts, err = wt.Status()
-//		if err != nil {
-//			break
-//		}
-//	}
-//	return sts, err
-//}
-//
-//func (me *Repository) FilesChanged() (fps Filepaths, err error) {
-//	for range only.Once {
-//		var out string
-//		out, err = me.Exec("status", "--porcelain")
-//		if err != nil {
-//			break
-//		}
-//		sts := strings.Split(strings.TrimSpace(out), "\n")
-//		fps = make(Filepaths, len(sts))
-//		for i, fp := range sts {
-//			fps[i] = fp[3:]
-//		}
-//	}
-//	return fps, err
-//}
-//
-//func (me *Repository) getHandle() (h *git.Repository, err error) {
-//	for range only.Once {
-//		h = me.Handle
-//		if h == nil {
-//			err = fmt.Errorf("repository handle is nil")
-//			break
-//		}
-//	}
-//	return h, err
-//}
-//
-//func (me *Repository) GetTagObject(tag Tagname) (to *Tag, err error) {
-//	for range only.Once {
-//		var h *git.Repository
-//		h, err = me.getHandle()
-//		if err != nil {
-//			break
-//		}
-//		var t *Reference
-//		t, err = h.Tag(tag)
-//		if err != nil {
-//			break
-//		}
-//		to, err = h.TagObject(t.Hash())
-//		if err != nil {
-//			break
-//		}
-//	}
-//	if err != nil {
-//		err = fmt.Errorf("unable to access tag object '%s''; %s",
-//			tag,
-//			err.Error(),
-//		)
-//	}
-//	return to, err
-//}
-//
-//func (me *Repository) Lock() (ok bool, err error) {
-//	for range only.Once {
-//		var to *object.Tag
-//		to, err = me.GetTagObject(LockTag)
-//		if err != nil {
-//			break
-//		}
-//		_ = to.ID()
-//	}
-//	return ok, err
-//}
-//
-//func (me *Repository) Pull(opts ...*PullOptions) (err error) {
-//	if len(opts) == 0 {
-//		opts = []*PullOptions{}
-//	}
-//	for range only.Once {
-//		var h *git.Repository
-//		h, err = me.getHandle()
-//		if err != nil {
-//			break
-//		}
-//		wt, err := h.Worktree()
-//		if err != nil {
-//			break
-//		}
-//		err = wt.Pull(opts[0])
-//	}
-//	return err
-//}
+// Usage:
+//		{{- $cmd := $git.Open }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
+func (me *TypeGit) Open() *helperTypes.TypeExecCommand {
+	for range only.Once {
+		me.Cmd = me.IsNil()
+		if me.Cmd.IsError() {
+			break
+		}
+
+		me.Cmd = me.Exec("rev-parse", "--is-inside-work-tree")
+		if me.Cmd.Output != "true" {
+			if me.Cmd.IsError() {
+				me.Cmd.SetError("current directory does not contain a valid .Git repository: %s", me.Cmd.ErrorValue)
+				break
+			}
+
+			me.Cmd.SetError("current directory does not contain a valid Git repository")
+			break
+		}
+
+		var err error
+		me.repository, err = git.PlainOpen(me.Base.Path)
+		if err != nil {
+			me.Cmd.SetError(err)
+			break
+		}
+
+		c, _ := me.repository.Config()
+		me.Url = c.Remotes["origin"].URLs[0]
+
+		me.Cmd.Output = fmt.Sprintf("Opened directory %s.\nRemote origin is set to %s\n", me.Base.Path, me.Url)
+		me.Cmd.Data = true
+	}
+
+	return me.Cmd
+}
+
+
+// Usage:
+//		{{- $cmd := $git.SetPath }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
+func (me *TypeGit) SetPath(path ...interface{}) *helperTypes.TypeExecCommand {
+	for range only.Once {
+		me.Cmd = me.IsNil()
+		if me.Cmd.IsError() {
+			break
+		}
+
+		p := helperTypes.ReflectPath(path...)
+		if p == nil {
+			me.Cmd.SetError("path repo is nil")
+			break
+		}
+
+		ps := helperSystem.ResolveAbsPath(*p)
+		if ps.IsError() {
+			me.Cmd.ErrorValue = ps.ErrorValue
+			break
+		}
+		//if !ps.Exists {
+		//	me.Exe.SetError("path not found")
+		//	break
+		//}
+		if ps.IsFile {
+			me.Cmd.SetError("path is not a directory")
+			break
+		}
+
+		me.Base = ps
+	}
+
+	return me.Cmd
+}
+
+
+// Usage:
+//		{{- $cmd := $git.GetUrl }}
+//		{{- if $cmd.IsOk }}{{ $cmd.Data }}{{- end }}
+func (me *TypeGit) GetUrl() *helperTypes.TypeExecCommand {
+	for range only.Once {
+		me.Cmd = me.IsNil()
+		if me.Cmd.IsError() {
+			break
+		}
+
+		me.Cmd = me.Exec("config", "--get", "remote.origin.url")
+		if me.Cmd.IsError() {
+			break
+		}
+
+		me.Url = strings.TrimSpace(me.Cmd.Output)
+		me.Cmd.Data = me.Url
+	}
+
+	return me.Cmd
+}
+
+
+// Usage:
+//		{{- $cmd := $git.SetUrl }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
+func (me *TypeGit) SetUrl(u Url) {
+	for range only.Once {
+		me.Cmd = me.IsNil()
+		if me.Cmd.IsError() {
+			break
+		}
+
+		me.Url = u
+	}
+}
