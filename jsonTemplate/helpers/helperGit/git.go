@@ -1,7 +1,6 @@
 package helperGit
 
 import (
-	"fmt"
 	"github.com/tsuyoshiwada/go-gitcmd"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
@@ -22,6 +21,7 @@ type TypeGit struct {
 	Base *helperTypes.TypeOsPath
 	GitConfig *gitcmd.Config
 	GitOptions []string
+	skipDirCheck bool
 
 	client gitcmd.Client
 	repository *git.Repository
@@ -68,45 +68,6 @@ func (me *TypeGit) Chdir(dir interface{}) *helperTypes.TypeOsPath {
 func (me *TypeGit) SetDryRun() bool {
 	me.GitOptions = append(me.GitOptions, "-n")
 	return true
-}
-
-
-// Usage:
-//		{{- $cmd := $git.Open }}
-//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) Open() *helperTypes.TypeExecCommand {
-	for range only.Once {
-		me.Cmd = me.IsNil()
-		if me.Cmd.IsError() {
-			break
-		}
-
-		me.Cmd = me.Exec("rev-parse", "--is-inside-work-tree")
-		if me.Cmd.Output != "true" {
-			if me.Cmd.IsError() {
-				me.Cmd.SetError("current directory does not contain a valid .Git repository: %s", me.Cmd.ErrorValue)
-				break
-			}
-
-			me.Cmd.SetError("current directory does not contain a valid Git repository")
-			break
-		}
-
-		var err error
-		me.repository, err = git.PlainOpen(me.Base.Path)
-		if err != nil {
-			me.Cmd.SetError(err)
-			break
-		}
-
-		c, _ := me.repository.Config()
-		me.Url = c.Remotes["origin"].URLs[0]
-
-		me.Cmd.Output = fmt.Sprintf("Opened directory %s.\nRemote origin is set to %s\n", me.Base.Path, me.Url)
-		me.Cmd.Data = true
-	}
-
-	return me.Cmd
 }
 
 
