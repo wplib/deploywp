@@ -7,6 +7,9 @@ import (
 )
 
 
+// Usage:
+//		{{- $cmd := $git.ChangedFiles }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) ChangedFiles() *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
@@ -40,6 +43,9 @@ func (me *TypeGit) ChangedFiles() *helperTypes.TypeExecCommand {
 }
 
 
+// Usage:
+//		{{- $cmd := $git.AddFiles }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) AddFiles() *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()

@@ -18,18 +18,12 @@ var Types = map[string]reflect.Type{
 	"Status": reflect.TypeOf((*Status)(nil)).Elem(),
 	"Tag": reflect.TypeOf((*Tag)(nil)).Elem(),
 	"Tagname": reflect.TypeOf((*Tagname)(nil)).Elem(),
-	"TypeGetRepositories": reflect.TypeOf((*TypeGetRepositories)(nil)).Elem(),
-	"TypeGetRepository": reflect.TypeOf((*TypeGetRepository)(nil)).Elem(),
 	"TypeGit": reflect.TypeOf((*TypeGit)(nil)).Elem(),
 	"TypeGitClone": reflect.TypeOf((*TypeGitClone)(nil)).Elem(),
-	"TypeLogin": reflect.TypeOf((*TypeLogin)(nil)).Elem(),
 	"Url": reflect.TypeOf((*Url)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
-	"HelperGitHubGetBranch": reflect.ValueOf(HelperGitHubGetBranch),
-	"HelperGitHubGetOrganization": reflect.ValueOf(HelperGitHubGetOrganization),
-	"HelperGitHubLogin": reflect.ValueOf(HelperGitHubLogin),
 	"HelperGitLogin": reflect.ValueOf(HelperGitLogin),
 }
 

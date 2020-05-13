@@ -12,6 +12,9 @@ type TypeGitClone struct {
 }
 
 
+// Usage:
+//		{{- $cmd := $git.Clone }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) Clone(url interface{}) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
@@ -37,6 +40,9 @@ func (me *TypeGit) Clone(url interface{}) *helperTypes.TypeExecCommand {
 }
 
 
+// Usage:
+//		{{- $cmd := $git.SetPath }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) SetPath(path ...interface{}) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
@@ -71,6 +77,9 @@ func (me *TypeGit) SetPath(path ...interface{}) *helperTypes.TypeExecCommand {
 }
 
 
+// Usage:
+//		{{- $cmd := $git.SetUrl }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) SetUrl(u Url) {
 	for range only.Once {
 		me.Cmd = me.IsNil()

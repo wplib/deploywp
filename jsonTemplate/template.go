@@ -3,19 +3,13 @@ package jsonTemplate
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Masterminds/sprig"
 	"github.com/wplib/deploywp/jsonTemplate/helpers"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/deploywp"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGitHub"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"os"
 	"os/exec"
 	"path"
-	"reflect"
-	"runtime"
 	"strings"
 	"text/template"
 	"time"
@@ -264,44 +258,6 @@ func (me *Template) ProcessTemplate() ux.State {
 	}
 
 	return state
-}
-
-
-// This method will print exported helper functions within each helper package.
-// You need to run `pkgreflect jsonTemplate/helpers` after code changes.
-func PrintHelpers() error {
-	var err error
-	var tfm template.FuncMap
-
-	for range only.Once {
-		// Define additional template functions.
-		tfm = sprig.TxtFuncMap()
-
-		for name, fn := range deploywp.GetHelpers {
-			tfm[name] = fn
-
-			foo1 := reflect.ValueOf(fn)
-			foo2 := foo1.Pointer()
-			foo3 := runtime.FuncForPC(foo2)
-			foo4 := foo3.Name()
-
-			fmt.Printf("Name: %s", foo4)
-		}
-
-		for name, fn := range helperGitHub.GetHelpers {
-			tfm[name] = fn
-		}
-
-		for name, fn := range helperSystem.GetHelpers {
-			tfm[name] = fn
-		}
-
-		for name, fn := range helperTypes.GetHelpers {
-			tfm[name] = fn
-		}
-	}
-
-	return err
 }
 
 

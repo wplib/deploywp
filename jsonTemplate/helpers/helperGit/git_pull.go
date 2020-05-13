@@ -6,6 +6,9 @@ import (
 )
 
 
+// Usage:FOO
+//		{{- $cmd := $git.Open }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) Pull(opts ...*PullOptions) (err error) {
 	for range only.Once {
 		me.Cmd = me.IsNil()

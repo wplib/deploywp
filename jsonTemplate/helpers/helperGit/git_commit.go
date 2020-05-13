@@ -17,6 +17,9 @@ func _NewCommit(hash string) *Commit {
 }
 
 
+// Usage:
+//		{{- $cmd := $git.Commit }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) Commit() *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()

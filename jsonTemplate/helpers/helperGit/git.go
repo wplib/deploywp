@@ -5,7 +5,6 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
-	"github.com/wplib/deploywp/ux"
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
@@ -28,22 +27,6 @@ type TypeGit struct {
 
 	Cmd *helperTypes.TypeExecCommand
 }
-
-
-//// Usage:
-////		{{ $git := GitLogin }}
-////		{{ if $git.IsError }}FAILED{{ end }}
-//func (me *TypeGit) IsError() bool {
-//	return me.Exe.Error.IsError()
-//}
-//
-//
-//// Usage:
-////		{{ $git := GitLogin }}
-////		{{ if $git.IsOk }}OK{{ end }}
-//func (me *TypeGit) IsOk() bool {
-//	return me.Exe.Error.IsOk()
-//}
 
 
 // Usage:
@@ -72,65 +55,24 @@ func HelperGitLogin(path ...interface{}) *TypeGit {
 
 
 // Usage:
-//		{{ $ret := $git.Chdir .Some.Directory }}
-//		{{ if $ret.IsOk }}Changed to directory {{ $ret.Dir }}{{ end }}
+//		{{ $cmd := $git.Chdir .Some.Directory }}
+//		{{ if $git.IsOk }}Changed to directory {{ $git.Dir }}{{ end }}
 func (me *TypeGit) Chdir(dir interface{}) *helperSystem.TypeOsPath {
 	return helperSystem.HelperChdir(dir)
 }
 
 
+// Usage:
+//		{{ $git.SetDryRun }}
 func (me *TypeGit) SetDryRun() bool {
 	me.GitOptions = append(me.GitOptions, "-n")
 	return true
 }
 
 
-func (me *TypeGit) Exec(cmd interface{}, args ...interface{}) *helperTypes.TypeExecCommand {
-	for range only.Once {
-		me.Cmd = me.IsNil()
-		if me.Cmd.IsError() {
-			break
-		}
-
-		c := helperTypes.ReflectString(cmd)
-		if c == nil {
-			break
-		}
-		me.Cmd.Exe = *c
-
-		a := helperTypes.ReflectStrings(args...)
-		if a == nil {
-			break
-		}
-		me.Cmd.Args = append(me.Cmd.Args, me.GitOptions...)
-		me.Cmd.Args = append(me.Cmd.Args, *a...)
-
-		//me.Exe = me.NonHelperExec(ret.Exe, ret.Args...)
-
-		cwd := helperSystem.HelperGetwd()
-		cd := helperSystem.HelperChdir(me.Base.Path)
-		if cd.IsError() {
-			ux.PrintfError("Cannot change directory to '%s'", me.Base.Path)
-			break
-		}
-
-		me.Cmd.Output, me.Cmd.Error = me.client.Exec(me.Cmd.Exe, me.Cmd.Args...)
-		if me.Cmd.Error != nil {
-			me.Cmd.Exit = 1	// Fake an exit code.
-		}
-
-		cd = helperSystem.HelperChdir(me.Base.Path)
-		if cd.IsError() {
-			ux.PrintfError("Cannot change back to directory '%s'", cwd.Path)
-			break
-		}
-	}
-
-	return me.Cmd
-}
-
-
-// @TODO
+// Usage:
+//		{{- $cmd := $git.Open }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) Open() *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
@@ -161,8 +103,10 @@ func (me *TypeGit) Open() *helperTypes.TypeExecCommand {
 }
 
 
-// @TODO
-func (me *TypeGit) Status() (sts Status, err error) {
+// Usage:
+//		{{- $cmd := $git.GetStatus }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
+func (me *TypeGit) GetStatus() (sts Status, err error) {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -189,7 +133,10 @@ func (me *TypeGit) Status() (sts Status, err error) {
 }
 
 
-func (me *TypeGit) Lock() (ok bool, err error) {
+// Usage:
+//		{{- $cmd := $git.Lock }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
+func (me *TypeGit) Lock() *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -200,18 +147,24 @@ func (me *TypeGit) Lock() (ok bool, err error) {
 			break
 		}
 
-		var to *object.Tag
-		to, err = me.GetTagObject(LockTag)
-		if err != nil {
+		me.Cmd = me.GetTagObject(LockTag)
+		if me.Cmd.IsError() {
 			break
 		}
+
+		var to *object.Tag
+		to = me.Cmd.Data.(*object.Tag)
+
 		_ = to.ID()
 	}
 
-	return ok, err
+	return me.Cmd
 }
 
 
+// Usage:FOO
+//		{{- $cmd := $git.IsNil }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) IsNil() *helperTypes.TypeExecCommand {
 	for range only.Once {
 		if me == nil {
@@ -224,10 +177,13 @@ func (me *TypeGit) IsNil() *helperTypes.TypeExecCommand {
 }
 
 
+// Usage:IsExec
+//		{{- $cmd := $git.Open }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) IsExec() *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd.Error = me.client.CanExec()
-		if me.Cmd.Error != nil {
+		if me.Cmd.IsError() {
 			me.Cmd.SetError("`git` does not exist or its command file is not executable: %s", me.Cmd.Error)
 			break
 		}
@@ -237,6 +193,9 @@ func (me *TypeGit) IsExec() *helperTypes.TypeExecCommand {
 }
 
 
+// Usage:
+//		{{- $cmd := $git.IsNilRepository }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) IsNilRepository() *helperTypes.TypeExecCommand {
 	for range only.Once {
 		if me.repository == nil {
@@ -249,7 +208,7 @@ func (me *TypeGit) IsNilRepository() *helperTypes.TypeExecCommand {
 
 
 // Usage:
-//		{{ if $ret.IsError }}ERROR{{ end }}
+//		{{ if $ret.IsError }}{{ $cmd.PrintError }}{{ end }}
 func (me *TypeGit) IsError() bool {
 	return me.Cmd.IsError()
 }

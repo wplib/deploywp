@@ -18,7 +18,6 @@ type DeployWp struct {
 }
 
 type RuntimeMeta struct {
-
 }
 
 func _NewJsonFile() *DeployWp {
@@ -35,12 +34,6 @@ func HelperLoadDeployWp(str interface{}) *DeployWp {
 	var j DeployWp
 
 	for range only.Once {
-		//value := general.ReflectString(str)
-		//if value == nil {
-		//	j.Error = errors.New("Failed to reflect")
-		//	break
-		//}
-
 		j.Error = mapstructure.Decode(str, &j)
 		if j.Error != nil {
 			break

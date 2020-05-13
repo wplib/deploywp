@@ -9,6 +9,9 @@ import (
 )
 
 
+// Usage:
+//		{{- $cmd := $git.GetBranch }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) GetBranch() *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
@@ -29,6 +32,9 @@ func (me *TypeGit) GetBranch() *helperTypes.TypeExecCommand {
 }
 
 
+// Usage:
+//		{{- $cmd := $git.GetTags }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) GetTags() *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
@@ -70,6 +76,9 @@ func (me *TypeGit) GetTags() *helperTypes.TypeExecCommand {
 }
 
 
+// Usage:
+//		{{- $cmd := $git.CreateTag "1.0" }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) CreateTag(tag interface{}) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
@@ -99,6 +108,9 @@ func (me *TypeGit) CreateTag(tag interface{}) *helperTypes.TypeExecCommand {
 }
 
 
+// Usage:
+//		{{- $cmd := $git.RemoveTag "1.0" }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) RemoveTag(tag interface{}) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
@@ -128,6 +140,9 @@ func (me *TypeGit) RemoveTag(tag interface{}) *helperTypes.TypeExecCommand {
 }
 
 
+// Usage:
+//		{{- $cmd := $git.TagExists "1.0" }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (me *TypeGit) TagExists(tag interface{}) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
@@ -173,7 +188,10 @@ func (me *TypeGit) getHandle() (*git.Repository, error) {
 }
 
 
-func (me *TypeGit) GetTagObject(tag Tagname) (to *Tag, err error) {
+// Usage:
+//		{{- $cmd := $git.GetTagObject "1.0" }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
+func (me *TypeGit) GetTagObject(tag interface{}) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -184,28 +202,36 @@ func (me *TypeGit) GetTagObject(tag Tagname) (to *Tag, err error) {
 			break
 		}
 
+		t := helperTypes.ReflectString(tag)
+		if t == nil {
+			me.Cmd.SetError("tag is nil")
+			break
+		}
+
 		var h *git.Repository
-		h, err = me.getHandle()
-		if err != nil {
+		h, me.Cmd.Error = me.getHandle()
+		if me.Cmd.IsError() {
 			break
 		}
-		var t *Reference
-		t, err = h.Tag(tag)
-		if err != nil {
+
+		var r *Reference
+		r, me.Cmd.Error = h.Tag(*t)
+		if me.Cmd.IsError() {
 			break
 		}
-		to, err = h.TagObject(t.Hash())
-		if err != nil {
+
+		var to *Tag
+		to, me.Cmd.Error = h.TagObject(r.Hash())
+		if me.Cmd.IsError() {
 			break
 		}
+
+		me.Cmd.Data = to
 	}
 
-	if err != nil {
-		err = fmt.Errorf("unable to access tag object '%s''; %s",
-			tag,
-			err.Error(),
-		)
+	if me.Cmd.IsError() {
+		me.Cmd.SetError("unable to access tag object '%v''; %s", tag, me.Cmd.Error)
 	}
 
-	return to, err
+	return me.Cmd
 }
