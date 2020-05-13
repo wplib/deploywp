@@ -41,6 +41,8 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&DeployWpTemplateFile, argTemplateFile, defaultTemplateFile, "deploywp template file.")
 	rootCmd.PersistentFlags().BoolVarP(&Debug, argDebug ,"d", false, "DEBUG mode.")
 
+	rootCmd.PersistentFlags().BoolP(argChdir, "c", false, "Change to directory containing deploywp.json.")
+
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	//rootCmd.Flags().BoolP("debug", "d", false, "DEBUG mode.")

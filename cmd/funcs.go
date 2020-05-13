@@ -5,7 +5,10 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
+	"os"
+	"path/filepath"
 )
+
 
 func ProcessArgs(cmd *cobra.Command, args []string) (*jsonTemplate.Template, ux.State) {
 	var tmpl jsonTemplate.Template
@@ -14,6 +17,7 @@ func ProcessArgs(cmd *cobra.Command, args []string) (*jsonTemplate.Template, ux.
 	for range only.Once {
 		var err error
 		var s string
+		var b bool
 
 		_ = tmpl.SetArgs(cmd.Use)
 		_ = tmpl.AddArgs(args...)
@@ -28,6 +32,18 @@ func ProcessArgs(cmd *cobra.Command, args []string) (*jsonTemplate.Template, ux.
 		if err != nil {
 			state.SetError("ERROR: %s", err)
 			break
+		}
+
+
+		b, err = fl.GetBool(argChdir)
+		if b {
+			dir := tmpl.GetJsonFile()
+			dir = filepath.Dir(dir)
+			err = os.Chdir(dir)
+			if err != nil {
+				state.SetError("ERROR: %s", err)
+				break
+			}
 		}
 
 

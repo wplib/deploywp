@@ -10,27 +10,17 @@ import (
 
 // releaseCmd represents the release command
 var releaseCmd = &cobra.Command{
-	Use:   "process",
-	Short: "Process and release a template file",
-	Long: `...`,
-	Run: Process,
+	Use:   "release",
+	Short: ux.SprintfBlue("Process and release a template file"),
+	Long: ux.SprintfBlue(`...`),
+	Run: Release,
 }
 
 func init() {
 	rootCmd.AddCommand(releaseCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// releaseCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// releaseCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
-func Process(cmd *cobra.Command, args []string) {
+func Release(cmd *cobra.Command, args []string) {
 	for range only.Once {
 		var state ux.State
 		var tmpl *jsonTemplate.Template
