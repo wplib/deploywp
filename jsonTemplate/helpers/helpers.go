@@ -92,8 +92,9 @@ func PrintHelpers() string {
 			tfm[name] = fn
 		}
 
+		ret += ux.SprintfCyan("List of defined template functions:\n")
+
 		files := make(Files)
-		ux.PrintfCyan("List of defined template functions:\n")
 		for name, fn := range tfm {
 			helper := _GetFunctionInfo(fn)
 
@@ -106,9 +107,9 @@ func PrintHelpers() string {
 		}
 
 		for fn, fp := range files {
-			ux.PrintfWhite("\n# Helper functions within: %s\n", fn)
+			ret += ux.SprintfWhite("\n# Helper functions within: %s\n", fn)
 			for _, hp := range fp {
-				fmt.Printf("%s( %s )\t=> ( %s )\n",
+				ret += fmt.Sprintf("%s( %s )\t=> ( %s )\n",
 					ux.SprintfGreen(hp.Name),
 					ux.SprintfCyan(hp.Args),
 					ux.SprintfYellow(hp.Return),

@@ -51,11 +51,15 @@ func (me *TypeExecCommand) PrintError() string {
 	var ret string
 
 	for range only.Once {
+		ev := ""
+		if me.ErrorValue != nil {
+			ev = fmt.Sprintf("'%s'", me.ErrorValue)
+		}
 		switch {
 			case me.Exit != 0:
-				ret = ux.SprintfError("ERROR: Exit(%d) '%s'\n%s", me.Exit, me.ErrorValue, me.Output)
+				ret = ux.SprintfError("ERROR: Exit(%d) %v\n%s", me.Exit, ev, me.Output)
 			case me.ErrorValue != nil:
-				ret = ux.SprintfError("ERROR: '%s'\n%s", me.ErrorValue, me.Output)
+				ret = ux.SprintfError("ERROR: %v\n%s", ev, me.Output)
 		}
 	}
 
@@ -70,11 +74,15 @@ func (me *TypeExecCommand) PrintResponse() string {
 	var ret string
 
 	for range only.Once {
+		ev := ""
+		if me.ErrorValue != nil {
+			ev = fmt.Sprintf("'%s'", me.ErrorValue)
+		}
 		switch {
 			case me.Exit != 0:
-				ret = ux.SprintfError("ERROR: Exit(%d) '%s'\n%s", me.Exit, me.ErrorValue, me.Output)
+				ret = ux.SprintfError("ERROR: Exit(%d) %v\n%s", me.Exit, ev, me.Output)
 			case me.ErrorValue != nil:
-				ret = ux.SprintfError("ERROR: '%s'\n%s", me.ErrorValue, me.Output)
+				ret = ux.SprintfError("ERROR: %v\n%s", ev, me.Output)
 			default:
 				ret = ux.SprintfOk("%s", me.Output)
 		}
