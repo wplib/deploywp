@@ -2,6 +2,7 @@ package helperGit
 
 import (
 	"github.com/tsuyoshiwada/go-gitcmd"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperFile"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
@@ -18,7 +19,7 @@ type TypeExecCommand helperTypes.TypeExecCommand
 
 type TypeGit struct {
 	Url string
-	Base *helperTypes.TypeOsPath
+	Base *helperFile.TypeOsPath
 	GitConfig *gitcmd.Config
 	GitOptions []string
 	skipDirCheck bool
@@ -58,8 +59,8 @@ func HelperGitLogin(path ...interface{}) *TypeGit {
 // Usage:
 //		{{ $cmd := $git.Chdir .Some.Directory }}
 //		{{ if $git.IsOk }}Changed to directory {{ $git.Dir }}{{ end }}
-func (me *TypeGit) Chdir(dir interface{}) *helperTypes.TypeOsPath {
-	return helperSystem.HelperChdir(dir)
+func (me *TypeGit) Chdir(dir ...interface{}) *helperTypes.TypeOsPath {
+	return helperSystem.HelperChdir(dir...)
 }
 
 

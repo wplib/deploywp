@@ -1,11 +1,8 @@
 package helperSystem
 
 import (
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
-	"os"
 	"os/exec"
-	"path/filepath"
 	"syscall"
 )
 
@@ -37,73 +34,4 @@ func ExecCommand(ec *TypeExecCommand) *TypeExecCommand {
 	}
 
 	return ec
-}
-
-
-func FileToAbs(f ...string) string {
-	var ret string
-
-	for range only.Once {
-		ret = filepath.Join(f...)
-
-		if filepath.IsAbs(ret) {
-			break
-		}
-
-		var err error
-		ret, err = filepath.Abs(ret)
-		if err != nil {
-			ret = ""
-			break
-		}
-	}
-	//ret = strings.ReplaceAll(ret, "//", "/")
-
-	return ret
-}
-
-
-func ResolvePath(path ...string) *helperTypes.TypeOsPath {
-	var ret helperTypes.TypeOsPath
-
-	for range only.Once {
-		ret.Path = FileToAbs(path...)
-
-		var stat os.FileInfo
-		stat, ret.ErrorValue = os.Stat(ret.Path)
-		//if err != nil {
-		//	break
-		//}
-
-		if os.IsNotExist(ret.ErrorValue) {
-			ret.Exists = false
-			break
-		}
-
-		ret.Exists = true
-		ret.ModTime = stat.ModTime()
-		//ret.ModTime = stat.Name()
-		ret.Mode = stat.Mode()
-		ret.Size = stat.Size()
-
-		if stat.IsDir() {
-			ret.IsDir = true
-			ret.IsFile = false
-			ret.Dirname = ret.Path
-			ret.Filename = ""
-
-		} else {
-			ret.IsDir = false
-			ret.IsFile = true
-			ret.Dirname = filepath.Dir(ret.Path)
-			ret.Filename = filepath.Base(ret.Path)
-		}
-	}
-
-	return &ret
-}
-
-
-func ResolveAbsPath(path ...string) *helperTypes.TypeOsPath {
-	return ResolvePath(FileToAbs(path...))
 }

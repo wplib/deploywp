@@ -8,31 +8,17 @@ var Types = map[string]reflect.Type{
 	"Environment": reflect.TypeOf((*Environment)(nil)).Elem(),
 	"TypeError": reflect.TypeOf((*TypeError)(nil)).Elem(),
 	"TypeExecCommand": reflect.TypeOf((*TypeExecCommand)(nil)).Elem(),
-	"TypeOsPath": reflect.TypeOf((*TypeOsPath)(nil)).Elem(),
-	"TypeReadFile": reflect.TypeOf((*TypeReadFile)(nil)).Elem(),
-	"TypeRsync": reflect.TypeOf((*TypeRsync)(nil)).Elem(),
-	"TypeWriteFile": reflect.TypeOf((*TypeWriteFile)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
 	"ExecCommand": reflect.ValueOf(ExecCommand),
-	"FileToAbs": reflect.ValueOf(FileToAbs),
 	"GetEnv": reflect.ValueOf(GetEnv),
-	"HelperChdir": reflect.ValueOf(HelperChdir),
-	"HelperChmod": reflect.ValueOf(HelperChmod),
-	"HelperCopyFiles": reflect.ValueOf(HelperCopyFiles),
 	"HelperExec": reflect.ValueOf(HelperExec),
 	"HelperExecCommand": reflect.ValueOf(HelperExecCommand),
-	"HelperGetwd": reflect.ValueOf(HelperGetwd),
 	"HelperOsExit": reflect.ValueOf(HelperOsExit),
-	"HelperReadFile": reflect.ValueOf(HelperReadFile),
-	"HelperRsync": reflect.ValueOf(HelperRsync),
 	"HelperUserPrompt": reflect.ValueOf(HelperUserPrompt),
 	"HelperUserPromptHidden": reflect.ValueOf(HelperUserPromptHidden),
-	"HelperWriteFile": reflect.ValueOf(HelperWriteFile),
 	"PrintEnv": reflect.ValueOf(PrintEnv),
-	"ResolveAbsPath": reflect.ValueOf(ResolveAbsPath),
-	"ResolvePath": reflect.ValueOf(ResolvePath),
 }
 
 var Variables = map[string]reflect.Value{

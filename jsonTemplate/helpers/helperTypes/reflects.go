@@ -7,7 +7,7 @@ import (
 
 
 func ReflectString(ref interface{}) *string {
-	var s string
+	var s *string
 
 	for range only.Once {
 		value := reflect.ValueOf(ref)
@@ -15,10 +15,11 @@ func ReflectString(ref interface{}) *string {
 			break
 		}
 
-		s = value.String()
+		st := value.String()
+		s = &st
 	}
 
-	return &s
+	return s
 }
 
 func ReflectStrings(ref ...interface{}) *[]string {
@@ -33,8 +34,8 @@ func ReflectStrings(ref ...interface{}) *[]string {
 	return &sa
 }
 
-func ReflectByteArray(ref interface{}) []byte {
-	var s []byte
+func ReflectByteArray(ref interface{}) *[]byte {
+	var s *[]byte
 
 	for range only.Once {
 		value := reflect.ValueOf(ref)
@@ -42,15 +43,15 @@ func ReflectByteArray(ref interface{}) []byte {
 			break
 		}
 
-		f := value.String()
-		s = []byte(f)
+		sa := []byte(value.String())
+		s = &sa
 	}
 
 	return s
 }
 
 func ReflectBool(ref interface{}) *bool {
-	var s bool
+	var b *bool
 
 	for range only.Once {
 		value := reflect.ValueOf(ref)
@@ -58,10 +59,11 @@ func ReflectBool(ref interface{}) *bool {
 			break
 		}
 
-		s = value.Bool()
+		ba := value.Bool()
+		b = &ba
 	}
 
-	return &s
+	return b
 }
 
 func ReflectBoolArg(ref interface{}) bool {

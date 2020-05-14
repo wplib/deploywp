@@ -21,7 +21,8 @@ import (
 // Usage:
 //		{{- $cmd := $git.Clone }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) Clone(url interface{}, dir ...interface{}) *helperTypes.TypeExecCommand {
+// func (me *TypeGit) Clone(url interface{}, dir ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) Clone(url string, dir ...interface{}) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -166,7 +167,7 @@ func (me *TypeGit) GetUrl() *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.SetUrl }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) SetUrl(u Url) {
+func (me *TypeGit) SetUrl(u Url) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -175,4 +176,43 @@ func (me *TypeGit) SetUrl(u Url) {
 
 		me.Url = u
 	}
+
+	return me.Cmd
+}
+
+
+// Usage:
+//		{{- $cmd := $git.Clone }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
+// func (me *TypeGit) Clone(url interface{}, dir ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) Remove() *helperTypes.TypeExecCommand {
+	for range only.Once {
+		me.Cmd = me.IsNil()
+		if me.Cmd.IsError() {
+			break
+		}
+
+		me.Base.Exists
+		ps := helperSystem.ResolveAbsPath(*d)
+		if ps.IsFile {
+			break
+		}
+		if ps.IsDir {
+			if ps.Exists {
+				me.Cmd.SetError("Repository exists for directory '%s'", ps.Path)
+				me.Cmd.Exit = 1
+				break
+			}
+		}
+
+		me.SetUrl(*u)
+		me.Base = ps
+		ux.PrintfWhite("Cloning %s into %s\n", me.Url, me.Base.Path)
+
+		me.skipDirCheck = true
+		me.Cmd = me.Exec(gitCommandClone, me.Url, me.Base.Path)
+		me.skipDirCheck = false
+	}
+
+	return me.Cmd
 }

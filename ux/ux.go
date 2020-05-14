@@ -1,3 +1,11 @@
+// Other possibilities:
+//
+// https://github.com/nsf/termbox-go
+// https://github.com/jroimartin/gocui
+// https://github.com/marcusolsson/tui-go
+// https://github.com/rivo/tview
+// https://github.com/gizak/termui
+// https://github.com/logrusorgru/aurora
 package ux
 
 import (
@@ -16,14 +24,39 @@ import (
 	"strings"
 )
 
-// Other possibilities:
-//
-// https://github.com/nsf/termbox-go
-// https://github.com/jroimartin/gocui
-// https://github.com/marcusolsson/tui-go
-// https://github.com/rivo/tview
-// https://github.com/gizak/termui
-// https://github.com/logrusorgru/aurora
+
+type UxGetter interface {
+	Open() error
+	Close()
+	PrintfWhite(format string, args ...interface{})
+	PrintfCyan(format string, args ...interface{})
+	PrintfYellow(format string, args ...interface{})
+	PrintfRed(format string, args ...interface{})
+	PrintfGreen(format string, args ...interface{})
+	PrintfBlue(format string, args ...interface{})
+	PrintfMagenta(format string, args ...interface{})
+	SprintfWhite(format string, args ...interface{}) string
+	SprintfCyan(format string, args ...interface{}) string
+	SprintfYellow(format string, args ...interface{}) string
+	SprintfRed(format string, args ...interface{}) string
+	SprintfGreen(format string, args ...interface{}) string
+	SprintfBlue(format string, args ...interface{}) string
+	SprintfMagenta(format string, args ...interface{}) string
+	Sprintf(format string, args ...interface{}) string
+	Printf(format string, args ...interface{})
+	SprintfOk(format string, args ...interface{}) string
+	PrintfOk(format string, args ...interface{})
+	SprintfWarning(format string, args ...interface{}) string
+	PrintfWarning(format string, args ...interface{})
+	SprintfError(format string, args ...interface{}) string
+	PrintfError(format string, args ...interface{})
+	SprintError(err error) string
+	PrintError(err error)
+	GetTerminalSize() (int, int, error)
+}
+
+type Ux struct {
+}
 
 
 var _defined bool
@@ -186,7 +219,7 @@ func GetTerminalSize() (int, int, error) {
 }
 
 
-func Printf2(format string, args ...interface{}) {
+func _Printf2(format string, args ...interface{}) {
 
 	for range only.Once {
 		var w int
@@ -226,7 +259,7 @@ func Printf2(format string, args ...interface{}) {
 	}
 }
 
-func Printf3(format string, args ...interface{}) {
+func _Printf3(format string, args ...interface{}) {
 
 	for range only.Once {
 		var w int
@@ -250,7 +283,7 @@ func Printf3(format string, args ...interface{}) {
 	}
 }
 
-func Draw2() error {
+func _Draw2() error {
 	var err error
 
 	for range only.Once {
@@ -270,7 +303,7 @@ func Draw2() error {
 	return err
 }
 
-func Draw3() {
+func _Draw3() {
 	l := widgets.NewList()
 	l.Title = "List"
 	l.Rows = []string{
@@ -330,7 +363,7 @@ func Draw3() {
 	}
 }
 
-func Draw4() error {
+func _Draw4() error {
 	var err error
 
 	for range only.Once {
@@ -389,7 +422,7 @@ func Draw4() error {
 	return err
 }
 
-func Draw5() error {
+func _Draw5() error {
 	var err error
 
 	for range only.Once {

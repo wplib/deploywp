@@ -11,29 +11,33 @@ import (
 // Usage:
 //		{{ $cmd := $git.Exec "tag" "-l" }}
 //		{{ if $git.IsOk }}OK{{ end }}
-func (me *TypeGit) Exec(cmd interface{}, args ...interface{}) *helperTypes.TypeExecCommand {
+// func (me *TypeGit) Exec(cmd interface{}, args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) Exec(cmd string, args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
 			break
 		}
 
-		c := helperTypes.ReflectString(cmd)
-		if c == nil {
-			break
-		}
-		me.Cmd.Exe = *c
+		//c := helperTypes.ReflectString(cmd)
+		//if c == nil {
+		//	break
+		//}
+		//me.Cmd.Exe = *c
+		//
+		//a := helperTypes.ReflectStrings(args...)
+		//if a == nil {
+		//	break
+		//}
+		//
+		//me.Cmd.Args = []string{}
+		//me.Cmd.Args = append(me.Cmd.Args, me.GitOptions...)
+		//me.Cmd.Args = append(me.Cmd.Args, *a...)
 
-		a := helperTypes.ReflectStrings(args...)
-		if a == nil {
-			break
-		}
-
+		me.Cmd.Exe = cmd
 		me.Cmd.Args = []string{}
 		me.Cmd.Args = append(me.Cmd.Args, me.GitOptions...)
-		me.Cmd.Args = append(me.Cmd.Args, *a...)
-
-		//me.Exe = me.NonHelperExec(ret.Exe, ret.Args...)
+		me.Cmd.Args = append(me.Cmd.Args, args...)
 
 		if !me.skipDirCheck {
 			cwd := helperSystem.HelperGetwd()
@@ -45,7 +49,6 @@ func (me *TypeGit) Exec(cmd interface{}, args ...interface{}) *helperTypes.TypeE
 				}
 			}
 		}
-
 
 		me.Cmd.Output, me.Cmd.ErrorValue = me.client.Exec(me.Cmd.Exe, me.Cmd.Args...)
 		if me.Cmd.ErrorValue != nil {
@@ -60,7 +63,8 @@ func (me *TypeGit) Exec(cmd interface{}, args ...interface{}) *helperTypes.TypeE
 // Usage:
 //		{{- $cmd := $git.GitClone }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitClone(args ...interface{}) *helperTypes.TypeExecCommand {
+// func (me *TypeGit) GitClone(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitClone(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -84,7 +88,7 @@ func (me *TypeGit) GitClone(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitInit }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitInit(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitInit(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -108,7 +112,7 @@ func (me *TypeGit) GitInit(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitAdd }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitAdd(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitAdd(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -132,7 +136,7 @@ func (me *TypeGit) GitAdd(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitMv }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitMv(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitMv(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -156,7 +160,7 @@ func (me *TypeGit) GitMv(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitReset }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitReset(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitReset(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -180,7 +184,7 @@ func (me *TypeGit) GitReset(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitRm }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitRm(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitRm(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -204,7 +208,7 @@ func (me *TypeGit) GitRm(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitBisect }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitBisect(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitBisect(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -228,7 +232,7 @@ func (me *TypeGit) GitBisect(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitGrep }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitGrep(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitGrep(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -252,7 +256,7 @@ func (me *TypeGit) GitGrep(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitLog }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitLog(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitLog(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -276,7 +280,7 @@ func (me *TypeGit) GitLog(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitShow }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitShow(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitShow(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -300,7 +304,7 @@ func (me *TypeGit) GitShow(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitStatus }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitStatus(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitStatus(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -324,7 +328,7 @@ func (me *TypeGit) GitStatus(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitBranch }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitBranch(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitBranch(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -348,7 +352,7 @@ func (me *TypeGit) GitBranch(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitCheckout }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitCheckout(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitCheckout(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -372,7 +376,7 @@ func (me *TypeGit) GitCheckout(args ...interface{}) *helperTypes.TypeExecCommand
 // Usage:
 //		{{- $cmd := $git.GitCommit }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitCommit(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitCommit(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -396,7 +400,7 @@ func (me *TypeGit) GitCommit(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitDiff }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitDiff(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitDiff(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -420,7 +424,7 @@ func (me *TypeGit) GitDiff(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitMerge }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitMerge(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitMerge(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -444,7 +448,7 @@ func (me *TypeGit) GitMerge(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitRebase }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitRebase(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitRebase(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -468,7 +472,7 @@ func (me *TypeGit) GitRebase(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitTag }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitTag(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitTag(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -492,7 +496,7 @@ func (me *TypeGit) GitTag(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitFetch }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitFetch(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitFetch(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -516,7 +520,7 @@ func (me *TypeGit) GitFetch(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitPull }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitPull(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitPull(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {
@@ -540,7 +544,7 @@ func (me *TypeGit) GitPull(args ...interface{}) *helperTypes.TypeExecCommand {
 // Usage:
 //		{{- $cmd := $git.GitPush }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GitPush(args ...interface{}) *helperTypes.TypeExecCommand {
+func (me *TypeGit) GitPush(args ...string) *helperTypes.TypeExecCommand {
 	for range only.Once {
 		me.Cmd = me.IsNil()
 		if me.Cmd.IsError() {

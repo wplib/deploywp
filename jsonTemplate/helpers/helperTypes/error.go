@@ -8,10 +8,6 @@ import (
 )
 
 type TypeErrorGetter interface {
-	//IsError() bool
-	//IsOk() bool
-	//SetError(format interface{}, a ...interface{})
-	//GetError() error
 }
 
 type TypeError struct {

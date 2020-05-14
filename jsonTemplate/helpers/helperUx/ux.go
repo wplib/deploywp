@@ -5,31 +5,121 @@ import (
 )
 
 
-//func HelperOpen() error {
-//	var err error
+// Was going to implement as a Getter interface, but no need.
+
+//var _ ux.UxGetter = (*Ux)(nil)
+//type Ux ux.Ux
 //
-//	for range only.Once {
-//		Color = aurora.NewAurora(true)
+//func (u *Ux) Open() error {
+//	panic("implement me")
+//}
 //
-//		//err = termui.Init();
-//		//if err != nil {
-//		//	fmt.Printf("failed to initialize termui: %v", err)
-//		//	break
-//		//}
+//func (u *Ux) Close() {
+//	panic("implement me")
+//}
 //
-//		_defined = true
-//	}
+//func (u *Ux) PrintfWhite(format string, args ...interface{}) {
+//	panic("implement me")
+//}
 //
-//	return err
+//func (u *Ux) PrintfCyan(format string, args ...interface{}) {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) PrintfYellow(format string, args ...interface{}) {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) PrintfRed(format string, args ...interface{}) {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) PrintfGreen(format string, args ...interface{}) {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) PrintfBlue(format string, args ...interface{}) {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) PrintfMagenta(format string, args ...interface{}) {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) SprintfWhite(format string, args ...interface{}) string {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) SprintfCyan(format string, args ...interface{}) string {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) SprintfYellow(format string, args ...interface{}) string {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) SprintfRed(format string, args ...interface{}) string {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) SprintfGreen(format string, args ...interface{}) string {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) SprintfBlue(format string, args ...interface{}) string {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) SprintfMagenta(format string, args ...interface{}) string {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) Sprintf(format string, args ...interface{}) string {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) Printf(format string, args ...interface{}) {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) SprintfOk(format string, args ...interface{}) string {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) PrintfOk(format string, args ...interface{}) {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) SprintfWarning(format string, args ...interface{}) string {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) PrintfWarning(format string, args ...interface{}) {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) SprintfError(format string, args ...interface{}) string {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) PrintfError(format string, args ...interface{}) {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) SprintError(err error) string {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) PrintError(err error) {
+//	panic("implement me")
+//}
+//
+//func (u *Ux) GetTerminalSize() (int, int, error) {
+//	panic("implement me")
 //}
 
 
-//func HelperClose() {
-//	if _defined {
-//		//termui.Close()
-//	}
-//}
-
+/////////////////////////////////////
 
 func HelperPrintfWhite(format string, args ...interface{}) string {
 	return ux.SprintfWhite(format, args...)

@@ -113,13 +113,12 @@ func (me *TypeExecCommand) PrintResponse() string {
 func (me *TypeExecCommand) ExitOnError() string {
 	var ret string
 
-	for range only.Once {
-		if me.Exit == 0 {
-			break
-		}
-
-		_, _ = fmt.Fprintf(os.Stderr,"%s", me.PrintError())
-		os.Exit(me.Exit)
+	switch {
+		case me.ErrorValue != nil:
+			fallthrough
+		case me.Exit > 0:
+			_, _ = fmt.Fprintf(os.Stderr,"%s", me.PrintError())
+			os.Exit(me.Exit)
 	}
 
 	return ret

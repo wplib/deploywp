@@ -11,10 +11,6 @@ var Types = map[string]reflect.Type{
 	"TypeExecCommandGetter": reflect.TypeOf((*TypeExecCommandGetter)(nil)).Elem(),
 	"TypeGenericString": reflect.TypeOf((*TypeGenericString)(nil)).Elem(),
 	"TypeGenericStringArray": reflect.TypeOf((*TypeGenericStringArray)(nil)).Elem(),
-	"TypeOsPath": reflect.TypeOf((*TypeOsPath)(nil)).Elem(),
-	"TypeOsPathGetter": reflect.TypeOf((*TypeOsPathGetter)(nil)).Elem(),
-	"TypeReadFile": reflect.TypeOf((*TypeReadFile)(nil)).Elem(),
-	"TypeWriteFile": reflect.TypeOf((*TypeWriteFile)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
@@ -36,9 +32,7 @@ var Functions = map[string]reflect.Value{
 	"ReflectByteArray": reflect.ValueOf(ReflectByteArray),
 	"ReflectError": reflect.ValueOf(ReflectError),
 	"ReflectExecCommand": reflect.ValueOf(ReflectExecCommand),
-	"ReflectFileMode": reflect.ValueOf(ReflectFileMode),
 	"ReflectInt": reflect.ValueOf(ReflectInt),
-	"ReflectPath": reflect.ValueOf(ReflectPath),
 	"ReflectString": reflect.ValueOf(ReflectString),
 	"ReflectStrings": reflect.ValueOf(ReflectStrings),
 }

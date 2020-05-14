@@ -1,4 +1,4 @@
-package helperSystem
+package helperFile
 
 import (
 	"errors"
@@ -35,7 +35,7 @@ func HelperRsync(src interface{}, dest interface{}, options interface{}, exclude
 			ret.Error = errors.New("rsync source empty")
 			break
 		}
-		ret.SourcePath = FileToAbs(*s) + "/"	// Always add a "/" postfix
+		ret.SourcePath = _FileToAbs(*s) + "/"	// Always add a "/" postfix
 		if ret.SourcePath == "" {
 			ret.Error = errors.New("rsync source empty")
 			break
