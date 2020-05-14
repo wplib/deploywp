@@ -3,23 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="56b4b170-76f7-4ada-8cff-27bcfeafc366" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/git.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/git.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/git_exec.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/git_exec.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/git_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/git_repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/exec.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/exec.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/file.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/funcs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/pkgreflect.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/pkgreflect.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/rsync.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/system.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/system.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/error.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/error.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/exec.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/exec.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/file.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/pkgreflect.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/pkgreflect.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/reflects.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/reflects.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperUx/ux.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperUx/ux.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ux/state.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/state.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ux/ux.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/ux.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/dir.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/file.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/funcs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/helpers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/init.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/pkgreflect.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/rsync.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/stat.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/struct.go" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,22 +82,22 @@
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="931" y="363" width="470" height="483" key="#com.intellij.tools.ToolEditorDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589190675421" />
-    <state width="1470" height="263" key="GridCell.Tab.0.bottom" timestamp="1589456840196">
+    <state width="1470" height="263" key="GridCell.Tab.0.bottom" timestamp="1589458316359">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="263" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589456840196" />
-    <state width="1470" height="263" key="GridCell.Tab.0.center" timestamp="1589456840195">
+    <state width="1470" height="263" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589458316359" />
+    <state width="1470" height="263" key="GridCell.Tab.0.center" timestamp="1589458316358">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="263" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589456840195" />
-    <state width="1470" height="263" key="GridCell.Tab.0.left" timestamp="1589456840194">
+    <state width="1470" height="263" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589458316358" />
+    <state width="1470" height="263" key="GridCell.Tab.0.left" timestamp="1589458316357">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="263" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589456840194" />
-    <state width="1470" height="263" key="GridCell.Tab.0.right" timestamp="1589456840196">
+    <state width="1470" height="263" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589458316357" />
+    <state width="1470" height="263" key="GridCell.Tab.0.right" timestamp="1589458316359">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state width="1470" height="263" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589456840196" />
+    <state width="1470" height="263" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589458316359" />
     <state width="1470" height="315" key="GridCell.Tab.1.bottom" timestamp="1589415628965">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>

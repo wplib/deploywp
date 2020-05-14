@@ -17,7 +17,7 @@ type TypeRsync struct {
 	DestinationPath string
 	ExcludeFiles []string
 	//IncludeFiles []string
-	Options []string
+	RsyncOptions []string
 
 	Valid bool
 	Error error

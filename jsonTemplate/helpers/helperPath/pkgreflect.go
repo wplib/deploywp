@@ -5,25 +5,24 @@ package helperFile
 import "reflect"
 
 var Types = map[string]reflect.Type{
+	"HelperOsPath": reflect.TypeOf((*HelperOsPath)(nil)).Elem(),
 	"OsPathGetter": reflect.TypeOf((*OsPathGetter)(nil)).Elem(),
+	"State": reflect.TypeOf((*State)(nil)).Elem(),
 	"TypeOsPath": reflect.TypeOf((*TypeOsPath)(nil)).Elem(),
 	"TypeRsync": reflect.TypeOf((*TypeRsync)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
-	"FileToAbs": reflect.ValueOf(FileToAbs),
 	"HelperChdir": reflect.ValueOf(HelperChdir),
 	"HelperChmod": reflect.ValueOf(HelperChmod),
 	"HelperCopyFiles": reflect.ValueOf(HelperCopyFiles),
-	"HelperGetwd": reflect.ValueOf(HelperGetwd),
+	"HelperGetCwd": reflect.ValueOf(HelperGetCwd),
 	"HelperReadFile": reflect.ValueOf(HelperReadFile),
 	"HelperRsync": reflect.ValueOf(HelperRsync),
 	"HelperWriteFile": reflect.ValueOf(HelperWriteFile),
 	"NewOsPath": reflect.ValueOf(NewOsPath),
 	"ReflectFileMode": reflect.ValueOf(ReflectFileMode),
 	"ReflectPath": reflect.ValueOf(ReflectPath),
-	"ResolveAbsPath": reflect.ValueOf(ResolveAbsPath),
-	"ResolvePath": reflect.ValueOf(ResolvePath),
 }
 
 var Variables = map[string]reflect.Value{

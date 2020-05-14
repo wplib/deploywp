@@ -63,7 +63,7 @@ func (p *TypeOsPath) GetCwd() *State {
 		}
 
 		p._Path = cwd
-		p.State.SetOk("chdir OK")
+		p.State.SetOk("CWD OK")
 	}
 
 	return (*State)(p.State)
