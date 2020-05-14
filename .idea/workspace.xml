@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="56b4b170-76f7-4ada-8cff-27bcfeafc366" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/dir.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/file.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/funcs.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/helpers.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/init.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/pkgreflect.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/rsync.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/stat.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperFile/struct.go" beforeDir="false" />
-    </list>
+    <list default="true" id="56b4b170-76f7-4ada-8cff-27bcfeafc366" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
