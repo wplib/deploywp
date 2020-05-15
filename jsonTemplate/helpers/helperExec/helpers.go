@@ -1,16 +1,12 @@
-package helperSystem
+package helperExec
 
 import (
 	"fmt"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
-	"os"
 	"strings"
 )
-
-var _ helperTypes.TypeExecCommandGetter = (*TypeExecCommand)(nil)
-type TypeExecCommand helperTypes.TypeExecCommand
 
 
 // Usage:
@@ -19,11 +15,11 @@ func HelperExecCommand(cmd ...interface{}) *TypeExecCommand {
 	var ret *TypeExecCommand
 
 	for range only.Once {
-		ec := helperTypes.ReflectExecCommand(cmd...)
+		ec := ReflectExecCommand(cmd...)
 		if ec == nil {
 			break
 		}
-		ecp := TypeExecCommand(*ec)
+		ecp := *ec
 
 		ret = ExecCommand(&ecp)
 	}
@@ -48,22 +44,7 @@ func (me *TypeExecCommand) IsNil() bool {
 //		{{ $cmd := ExecCommand "ps %s" "-eaf" ... }}
 //		{{ $cmd.PrintError }}
 func (me *TypeExecCommand) PrintError() string {
-	var ret string
-
-	for range only.Once {
-		ev := ""
-		if me.ErrorValue != nil {
-			ev = fmt.Sprintf("'%s'", me.ErrorValue)
-		}
-		switch {
-			case me.Exit != 0:
-				ret = ux.SprintfError("ERROR: Exit(%d) %v\n%s", me.Exit, ev, me.Output)
-			case me.ErrorValue != nil:
-				ret = ux.SprintfError("ERROR: %v\n%s", ev, me.Output)
-		}
-	}
-
-	return ret
+	return me.State.SprintError()
 }
 
 
@@ -71,24 +52,7 @@ func (me *TypeExecCommand) PrintError() string {
 //		{{ $cmd := ExecCommand "ps %s" "-eaf" ... }}
 //		{{ $cmd.PrintResponse }}
 func (me *TypeExecCommand) PrintResponse() string {
-	var ret string
-
-	for range only.Once {
-		ev := ""
-		if me.ErrorValue != nil {
-			ev = fmt.Sprintf("'%s'", me.ErrorValue)
-		}
-		switch {
-			case me.Exit != 0:
-				ret = ux.SprintfError("ERROR: Exit(%d) %v\n%s", me.Exit, ev, me.Output)
-			case me.ErrorValue != nil:
-				ret = ux.SprintfError("ERROR: %v\n%s", ev, me.Output)
-			default:
-				ret = ux.SprintfOk("%s", me.Output)
-		}
-	}
-
-	return ret
+	return me.State.Sprint()
 }
 
 
@@ -113,7 +77,7 @@ func (me *TypeExecCommand) ParseOutput(search interface{}, args ...interface{}) 
 
 
 // Usage:
-//		{{ HelperGrep .This.String "uid=%s" "mick" ... }}
+//		{{ HelperGrep .This.Output "uid=%s" "mick" ... }}
 func (me *TypeExecCommand) GrepArray(format interface{}, a ...interface{}) []string {
 	var ret []string
 
@@ -129,7 +93,7 @@ func (me *TypeExecCommand) GrepArray(format interface{}, a ...interface{}) []str
 
 
 // Usage:
-//		{{ HelperGrep .This.String "uid=%s" "mick" ... }}
+//		{{ HelperGrep .This.Output "uid=%s" "mick" ... }}
 func (me *TypeExecCommand) Grep(format interface{}, a ...interface{}) string {
 	var ret string
 
@@ -147,29 +111,25 @@ func (me *TypeExecCommand) Grep(format interface{}, a ...interface{}) string {
 // Usage:
 //		{{ $cmd.ExitOnError }}
 func (me *TypeExecCommand) ExitOnError() string {
-	var ret string
+	me.State.ExitOnError()
+	return ""
+}
 
-	switch {
-		case me.ErrorValue != nil:
-			fallthrough
-		case me.Exit > 0:
-			_, _ = fmt.Fprintf(os.Stderr,"%s", me.PrintError())
-			os.Exit(me.Exit)
-	}
 
-	return ret
+// Usage:
+//		{{ $cmd.ExitOnWarning }}
+func (me *TypeExecCommand) ExitOnWarning() string {
+	me.State.ExitOnWarning()
+	return ""
 }
 
 
 // Usage:
 //		{{ OsExit 1 }}
-func HelperOsExit(e ...interface{}) bool {
-	var ret bool
-
+func HelperOsExit(e ...interface{}) string {
 	for range only.Once {
 		value := helperTypes.ReflectInt(e)
-		os.Exit(int(*value))
+		ux.Exit(*value)
 	}
-
-	return ret
+	return ""
 }

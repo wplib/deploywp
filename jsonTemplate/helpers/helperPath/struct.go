@@ -1,36 +1,141 @@
-package helperFile
+package helperPath
 
 import (
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 	"os"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
 
-func (p *TypeOsPath) SetPath(path ...string) {
+type OsPathGetter interface {
+}
+
+
+type TypeOsPath struct {
+	State     *ux.State
+
+	_Path     string
+	_Filename string
+	_Dirname  string
+	_IsDir    bool
+	_IsFile   bool
+	_Exists   bool
+	_ModTime  time.Time
+	_Name     string
+	_Mode     os.FileMode
+	_Size     int64
+
+	_String    string
+	_Array     []string
+	_Separator string
+	_Valid     bool
+	_Overwrite bool
+	_Remote    bool
+}
+
+
+type State ux.State
+func (p *State) Reflect() *ux.State {
+	return (*ux.State)(p)
+}
+
+
+func NewOsPath() *TypeOsPath {
+	return &TypeOsPath{
+		State:     ux.New(),
+		_Path:     "",
+		_Filename: "",
+		_Dirname:  "",
+		_IsDir:    false,
+		_IsFile:   false,
+		_Exists:   false,
+		_ModTime:  time.Time{},
+		_Mode:     0,
+		_Size:     0,
+		_String:   "",
+		_Array:    nil,
+		_Separator: DefaultSeparator,
+		_Valid:     false,
+		_Overwrite: false,
+	}
+}
+
+
+func (p *TypeOsPath) SetPath(path ...string) bool {
+	var ok bool
+
 	for range only.Once {
-		p._Path = _GetAbsPath(path...)
-		if p._Path == "" {
+		if p._IsRemotePath(path...) {
+			ok = p._SetRemotePath(path...)
 			break
 		}
+
+		ok = p._SetLocalPath(path...)
 	}
+
+	return ok
 }
 func (p *TypeOsPath) GetPath() string {
 	return p._Path
 }
+func (p *TypeOsPath) _SetLocalPath(path ...string) bool {
+	for range only.Once {
+		p._Valid = false
+		p._Path = _GetAbsPath(path...)
+		if p._Path == "" {
+			break
+		}
+		p._Valid = true
+		p._Remote = false
+	}
 
-
-func (p *TypeOsPath) SetFilename(filename string) {
-	p._Filename = filename
+	return p._Valid
 }
+func (p *TypeOsPath) _SetRemotePath(path ...string) bool {
+	for range only.Once {
+		p._Valid = false
+		// @TODO - May have to change this logic to:
+		// @TODO - p._Path = strings.Join(path, "")
+		p._Path = filepath.Join(path...)
+		if p._Path == "" {
+			break
+		}
+		p._Valid = true
+		p._Remote = true
+	}
+
+	return p._Valid
+}
+func (p *TypeOsPath) _IsRemotePath(path ...string) bool {
+	return strings.ContainsAny(strings.Join(path, ""), ":@")
+}
+
+
+//func (p *TypeOsPath) SetRemote() {
+//	// @TODO - Add in extra logic to convert filename to path.
+//	p._Remote = true
+//}
+func (p *TypeOsPath) IsRemote() bool {
+	return p._Remote
+}
+
+
+//func (p *TypeOsPath) SetFilename(filename string) {
+//	// @TODO - Add in extra logic to convert filename to path.
+//	p._Filename = filename
+//}
 func (p *TypeOsPath) GetFilename() string {
 	return p._Filename
 }
 
 
-func (p *TypeOsPath) SetDirname(dir string) {
-	p._Dirname = dir
-}
+//func (p *TypeOsPath) SetDirname(dirname string) {
+//	// @TODO - Add in extra logic to convert dirname to path.
+//	p._Dirname = dirname
+//}
 func (p *TypeOsPath) GetDirname() string {
 	return p._Dirname
 }
@@ -67,7 +172,7 @@ func (p *TypeOsPath) Exists() bool {
 	var ok bool
 
 	for range only.Once {
-		if !p._IsValid() {
+		if !p.IsValid() {
 			break
 		}
 		if !p._Exists {
@@ -84,7 +189,7 @@ func (p *TypeOsPath) FileExists() bool {
 	var ok bool
 
 	for range only.Once {
-		if !p._IsValid() {
+		if !p.IsValid() {
 			break
 		}
 		if !p._Exists {
@@ -105,7 +210,7 @@ func (p *TypeOsPath) DirExists() bool {
 	var ok bool
 
 	for range only.Once {
-		if !p._IsValid() {
+		if !p.IsValid() {
 			break
 		}
 		if !p._Exists {
@@ -144,7 +249,13 @@ func (p *TypeOsPath) IsADir() bool {
 }
 
 
-func (p *TypeOsPath) _IsValid() bool {
+func (p *TypeOsPath) _SetValid() {
+	p._Valid = true
+}
+func (p *TypeOsPath) _SetInvalid() {
+	p._Valid = false
+}
+func (p *TypeOsPath) IsValid() bool {
 	var ok bool
 
 	for range only.Once {
@@ -160,4 +271,7 @@ func (p *TypeOsPath) _IsValid() bool {
 	}
 
 	return ok
+}
+func (p *TypeOsPath) IsInvalid() bool {
+	return !p.IsValid()
 }

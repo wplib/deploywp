@@ -5,10 +5,6 @@ package helperTypes
 import "reflect"
 
 var Types = map[string]reflect.Type{
-	"TypeError": reflect.TypeOf((*TypeError)(nil)).Elem(),
-	"TypeErrorGetter": reflect.TypeOf((*TypeErrorGetter)(nil)).Elem(),
-	"TypeExecCommand": reflect.TypeOf((*TypeExecCommand)(nil)).Elem(),
-	"TypeExecCommandGetter": reflect.TypeOf((*TypeExecCommandGetter)(nil)).Elem(),
 	"TypeGenericString": reflect.TypeOf((*TypeGenericString)(nil)).Elem(),
 	"TypeGenericStringArray": reflect.TypeOf((*TypeGenericStringArray)(nil)).Elem(),
 }
@@ -30,8 +26,6 @@ var Functions = map[string]reflect.Value{
 	"ReflectBool": reflect.ValueOf(ReflectBool),
 	"ReflectBoolArg": reflect.ValueOf(ReflectBoolArg),
 	"ReflectByteArray": reflect.ValueOf(ReflectByteArray),
-	"ReflectError": reflect.ValueOf(ReflectError),
-	"ReflectExecCommand": reflect.ValueOf(ReflectExecCommand),
 	"ReflectInt": reflect.ValueOf(ReflectInt),
 	"ReflectString": reflect.ValueOf(ReflectString),
 	"ReflectStrings": reflect.ValueOf(ReflectStrings),

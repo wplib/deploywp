@@ -10,18 +10,13 @@ import (
 // Usage:
 //		{{- $cmd := $git.ChangedFiles }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) ChangedFiles() *helperTypes.TypeExecCommand {
+func (me *HelperGit) ChangedFiles() *State {
 	for range only.Once {
-		me.Cmd = me.IsNil()
-		if me.Cmd.IsError() {
-			break
-		}
-		me.Cmd = me.IsNilRepository()
-		if me.Cmd.IsError() {
+		if (*TypeGit)(me).IsNotOk() {
 			break
 		}
 
-		me.Cmd = me.Exec("status", "--porcelain")
+		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec("status", "--porcelain"))
 		if me.Cmd.IsError() {
 			break
 		}
@@ -39,25 +34,20 @@ func (me *TypeGit) ChangedFiles() *helperTypes.TypeExecCommand {
 		me.Cmd.Data = fps
 	}
 
-	return me.Cmd
+	return ReflectState(me.State)
 }
 
 
 // Usage:
 //		{{- $cmd := $git.AddFiles }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) AddFiles() *helperTypes.TypeExecCommand {
+func (me *HelperGit) AddFiles() *State {
 	for range only.Once {
-		me.Cmd = me.IsNil()
-		if me.Cmd.IsError() {
-			break
-		}
-		me.Cmd = me.IsNilRepository()
-		if me.Cmd.IsError() {
+		if (*TypeGit)(me).IsNotOk() {
 			break
 		}
 
-		me.Cmd = me.Exec("add", "--porcelain")
+		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec("add", "--porcelain"))
 		if me.Cmd.IsError() {
 			break
 		}
@@ -75,5 +65,5 @@ func (me *TypeGit) AddFiles() *helperTypes.TypeExecCommand {
 		me.Cmd.Data = fps
 	}
 
-	return me.Cmd
+	return ReflectState(me.State)
 }

@@ -6,16 +6,10 @@ import "reflect"
 
 var Types = map[string]reflect.Type{
 	"Environment": reflect.TypeOf((*Environment)(nil)).Elem(),
-	"TypeError": reflect.TypeOf((*TypeError)(nil)).Elem(),
-	"TypeExecCommand": reflect.TypeOf((*TypeExecCommand)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
-	"ExecCommand": reflect.ValueOf(ExecCommand),
 	"GetEnv": reflect.ValueOf(GetEnv),
-	"HelperExec": reflect.ValueOf(HelperExec),
-	"HelperExecCommand": reflect.ValueOf(HelperExecCommand),
-	"HelperOsExit": reflect.ValueOf(HelperOsExit),
 	"HelperUserPrompt": reflect.ValueOf(HelperUserPrompt),
 	"HelperUserPromptHidden": reflect.ValueOf(HelperUserPromptHidden),
 	"PrintEnv": reflect.ValueOf(PrintEnv),

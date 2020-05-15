@@ -1,4 +1,4 @@
-package helperFile
+package helperPath
 
 import (
 	"github.com/wplib/deploywp/only"
@@ -9,7 +9,9 @@ import (
 
 func (p *TypeOsPath) Chdir() *State {
 	for range only.Once {
-		if !p._IsValid() {
+		p.State.Clear()
+
+		if !p.IsValid() {
 			break
 		}
 
@@ -50,21 +52,42 @@ func (p *TypeOsPath) Chdir() *State {
 }
 
 
-func (p *TypeOsPath) GetCwd() *State {
+func (p *TypeOsPath) GetCwd() (string, *State) {
+	var cwd string
+
 	for range only.Once {
-		if !p._IsValid() {
+		p.State.Clear()
+
+		if !p.IsValid() {
 			break
 		}
 
-		var cwd string
 		cwd, p.State.Error = os.Getwd()
 		if p.State.IsError() {
 			break
 		}
 
-		p._Path = cwd
-		p.State.SetOk("CWD OK")
+		//p.State.Output = cwd
+		p.State.Clear()
 	}
 
-	return (*State)(p.State)
+	return cwd, (*State)(p.State)
+}
+
+
+func (p *TypeOsPath) IsCwd() bool {
+	var ok bool
+
+	for range only.Once {
+		cwd, state := p.GetCwd()
+		if (*ux.State)(state).IsError() {
+			break
+		}
+
+		if cwd != p._Path {
+			break
+		}
+	}
+
+	return ok
 }

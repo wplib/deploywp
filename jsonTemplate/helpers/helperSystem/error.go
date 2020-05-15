@@ -1,13 +1,9 @@
 package helperSystem
 
-import (
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
-)
-
-var _ helperTypes.TypeErrorGetter = (*TypeError)(nil)
-type TypeError helperTypes.TypeError
-
-
+//var _ helperTypes.TypeErrorGetter = (*TypeError)(nil)
+//type TypeError helperTypes.TypeError
+//
+//
 //// Usage:
 ////		{{ SetError "This %s happened" .Json.Error }}
 //func (me *TypeExecCommand) SetError(format interface{}, a ...interface{}) {

@@ -1,9 +1,9 @@
 package helperGit
 
 import (
-	"fmt"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 	"gopkg.in/src-d/go-git.v4"
 	"strings"
 )
@@ -12,37 +12,27 @@ import (
 // Usage:
 //		{{- $cmd := $git.GetBranch }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GetBranch() *helperTypes.TypeExecCommand {
+func (me *HelperGit) GetBranch() *State {
 	for range only.Once {
-		me.Cmd = me.IsNil()
-		if me.Cmd.IsError() {
-			break
-		}
-		me.Cmd = me.IsNilRepository()
-		if me.Cmd.IsError() {
+		if me.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = me.Exec("symbolic-ref", "--short", "HEAD")
+		me.State = me.Exec("symbolic-ref", "--short", "HEAD").Reflect()
 		me.Cmd.Output = strings.TrimSpace(me.Cmd.Output)
 		me.Cmd.Data = me.Cmd.Output
 	}
 
-	return me.Cmd
+	return ReflectState(me.State)
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GetTags }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GetTags() *helperTypes.TypeExecCommand {
+func (me *HelperGit) GetTags() *State {
 	for range only.Once {
-		me.Cmd = me.IsNil()
-		if me.Cmd.IsError() {
-			break
-		}
-		me.Cmd = me.IsNilRepository()
-		if me.Cmd.IsError() {
+		if me.Reflect().IsNotOk() {
 			break
 		}
 
@@ -55,8 +45,8 @@ func (me *TypeGit) GetTags() *helperTypes.TypeExecCommand {
 		//		return nil
 		//	})
 
-		me.Cmd = me.Exec("log", "-1", "--decorate=short", "--pretty=format:%D")
-		if me.Cmd.IsError() {
+		me.State = me.Exec("log", "-1", "--decorate=short", "--pretty=format:%D").Reflect()
+		if me.State.IsError() {
 			break
 		}
 
@@ -72,96 +62,81 @@ func (me *TypeGit) GetTags() *helperTypes.TypeExecCommand {
 		me.Cmd.Data = tags
 	}
 
-	return me.Cmd
+	return ReflectState(me.State)
 }
 
 
 // Usage:
 //		{{- $cmd := $git.CreateTag "1.0" }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) CreateTag(tag interface{}) *helperTypes.TypeExecCommand {
+func (me *HelperGit) CreateTag(tag interface{}) *State {
 	for range only.Once {
-		me.Cmd = me.IsNil()
-		if me.Cmd.IsError() {
-			break
-		}
-		me.Cmd = me.IsNilRepository()
-		if me.Cmd.IsError() {
+		if me.Reflect().IsNotOk() {
 			break
 		}
 
 		t := helperTypes.ReflectString(tag)
 		if t == nil {
-			me.Cmd.SetError("tag is nil")
+			me.State.SetError("tag is nil")
 			break
 		}
 
-		me.Cmd = me.Exec("tag", *t)
-		if me.Cmd.IsError() {
+		me.State = me.Exec("tag", *t).Reflect()
+		if me.State.IsError() {
 			break
 		}
 
 		me.Cmd.Data = *t
 	}
 
-	return me.Cmd
+	return ReflectState(me.State)
 }
 
 
 // Usage:
 //		{{- $cmd := $git.RemoveTag "1.0" }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) RemoveTag(tag interface{}) *helperTypes.TypeExecCommand {
+func (me *HelperGit) RemoveTag(tag interface{}) *State {
 	for range only.Once {
-		me.Cmd = me.IsNil()
-		if me.Cmd.IsError() {
-			break
-		}
-		me.Cmd = me.IsNilRepository()
-		if me.Cmd.IsError() {
+		if me.Reflect().IsNotOk() {
 			break
 		}
 
 		t := helperTypes.ReflectString(tag)
 		if t == nil {
-			me.Cmd.SetError("tag is nil")
+			me.State.SetError("tag is nil")
 			break
 		}
 
-		me.Cmd = me.Exec("tag", "-d", *t)
-		if me.Cmd.IsError() {
+		me.State = me.Exec("tag", "-d", *t).Reflect()
+		if me.State.IsError() {
 			break
 		}
 
 		me.Cmd.Data = *t
 	}
 
-	return me.Cmd
+	return ReflectState(me.State)
 }
 
 
 // Usage:
 //		{{- $cmd := $git.TagExists "1.0" }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) TagExists(tag interface{}) *helperTypes.TypeExecCommand {
+func (me *HelperGit) TagExists(tag interface{}) *State {
 	for range only.Once {
-		me.Cmd = me.IsNil()
-		if me.Cmd.IsError() {
-			break
-		}
-		me.Cmd = me.IsNilRepository()
-		if me.Cmd.IsError() {
+		if me.Reflect().IsNotOk() {
 			break
 		}
 
 		t := helperTypes.ReflectString(tag)
 		if t == nil {
-			me.Cmd.SetError("tag is nil")
+			me.State.SetError("tag is nil")
 			break
 		}
 
-		me.Cmd = me.Exec("tag", "-l", *t)
-		if me.Cmd.IsError() {
+		me.State = me.Exec("tag", "-l", *t).Reflect()
+		if me.State.IsError() {
 			break
 		}
 
@@ -170,16 +145,15 @@ func (me *TypeGit) TagExists(tag interface{}) *helperTypes.TypeExecCommand {
 		}
 	}
 
-	return me.Cmd
+	return ReflectState(me.State)
 }
 
 
-func (me *TypeGit) getHandle() (*git.Repository, error) {
+func (me *HelperGit) getHandle() (*git.Repository, error) {
 	var err error
 
 	for range only.Once {
-		if me.repository == nil {
-			err = fmt.Errorf("repository handle is nil")
+		if me.Reflect().IsNotOk() {
 			break
 		}
 	}
@@ -191,14 +165,9 @@ func (me *TypeGit) getHandle() (*git.Repository, error) {
 // Usage:
 //		{{- $cmd := $git.GetTagObject "1.0" }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) GetTagObject(tag interface{}) *helperTypes.TypeExecCommand {
+func (me *HelperGit) GetTagObject(tag interface{}) *State {
 	for range only.Once {
-		me.Cmd = me.IsNil()
-		if me.Cmd.IsError() {
-			break
-		}
-		me.Cmd = me.IsNilRepository()
-		if me.Cmd.IsError() {
+		if me.Reflect().IsNotOk() {
 			break
 		}
 
@@ -233,5 +202,5 @@ func (me *TypeGit) GetTagObject(tag interface{}) *helperTypes.TypeExecCommand {
 		me.Cmd.SetError("unable to access tag object '%v''; %s", tag, me.Cmd.ErrorValue)
 	}
 
-	return me.Cmd
+	return ReflectState(me.State)
 }

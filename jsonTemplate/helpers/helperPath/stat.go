@@ -1,4 +1,4 @@
-package helperFile
+package helperPath
 
 import (
 	"github.com/wplib/deploywp/only"
@@ -9,11 +9,19 @@ import (
 
 
 func (p *TypeOsPath) StatPath() *State {
-	var ret *ux.State
-
 	for range only.Once {
+		p.State.Clear()
+
 		if p._Path == "" {
 			p.State.SetError("path is empty")
+			break
+		}
+
+		if p._Remote {
+			// @TODO - Maybe add in some remote checks?
+			p._Valid = true
+			p._Exists = true
+			p.State.SetOk("path is remote")
 			break
 		}
 
@@ -51,13 +59,15 @@ func (p *TypeOsPath) StatPath() *State {
 		p.State.SetOk("stat OK")
 	}
 
-	return (*State)(ret)
+	return (*State)(p.State)
 }
 
 
 func (p *TypeOsPath) Chmod(m os.FileMode) *State {
 	for range only.Once {
-		if !p._IsValid() {
+		p.State.Clear()
+
+		if !p.IsValid() {
 			break
 		}
 

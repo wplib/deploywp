@@ -123,6 +123,8 @@ github.com/wplib/deploywp v0.0.0-20200506004903-e26a876beb4b/go.mod h1:cg0/t5kVr
 github.com/xanzy/ssh-agent v0.2.1 h1:TCbipTQL2JiiCprBWx9frJ2eJlCYT00NmctrHxVAr70=
 github.com/xanzy/ssh-agent v0.2.1/go.mod h1:mLlQY/MoOhWBj+gOGMQkOeiEvkx+8pJSI+0Bx9h2kr4=
 github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77/go.mod h1:aYKd//L2LvnjZzWKhF00oedf4jCCReLcmhLdhm1A27Q=
+github.com/zloylos/grsync v0.0.0-20200204095520-71a00a7141be h1:rT0BZrziodlFZ6tCEoqfL6HJdEiikZQRuNU2BDjItl0=
+github.com/zloylos/grsync v0.0.0-20200204095520-71a00a7141be/go.mod h1:2utuy8p4VcWXfB5p9wTL+VCberFM+MwTDjDf1nr8s78=
 golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20190219172222-a4c6cb3142f2/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=

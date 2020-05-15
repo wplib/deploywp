@@ -1,4 +1,5 @@
-package helperFile
+// High level helper functions available within templates - general file related.
+package helperPath
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
@@ -98,8 +99,25 @@ func HelperGetCwd() *HelperOsPath {
 	ret := NewOsPath()
 
 	for range only.Once {
-		ret.State = (*ux.State)(ret.GetCwd())
-		if ret.State.IsError() {
+		cwd, state := ret.GetCwd()
+		if (*ux.State)(state).IsError() {
+			break
+		}
+		ret.SetPath(cwd)
+	}
+
+	return (*HelperOsPath)(ret)
+}
+
+
+// Usage:
+//		{{ $ret := GetCwd }}
+//		{{ if $ret.IsOk }}Current directory is {{ $ret.Dir }}{{ end }}
+func HelperIsCwd() *HelperOsPath {
+	ret := NewOsPath()
+
+	for range only.Once {
+		if ret.IsCwd() {
 			break
 		}
 	}
@@ -135,25 +153,3 @@ func HelperChmod(mode interface{}, name ...interface{}) *HelperOsPath {
 
 	return (*HelperOsPath)(ret)
 }
-
-
-//func (me *HelperOsPath) _IsValid() bool {
-//	var ok bool
-//
-//	for range only.Once {
-//		if !me._Valid {
-//			me.State.SetError("path not valid")
-//			break
-//		}
-//
-//		if me._Path == "" {
-//			me.State.SetError("path not set")
-//			break
-//		}
-//	}
-//
-//	return ok
-//}
-//func (me *HelperOsPath) _IsNotValid() bool {
-//	return !me._IsValid()
-//}

@@ -24,7 +24,7 @@ func HelperGitHubGetOrganization(i interface{}) []string {
 		}
 
 		var orgs []*github.Organization
-		//orgs, err = fetchOrganizations(v.String())
+		//orgs, err = fetchOrganizations(v.Output())
 		orgs, err = fetchOrganizations("")
 		if err != nil {
 			break
@@ -93,7 +93,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 			Password: strings.TrimSpace(passwordString),
 		}
 
-		//fmt.Printf("username: %s\tpassword: %s\t 2fa: %s\n", u.String(), p.String(), f.String())
+		//fmt.Printf("username: %s\tpassword: %s\t 2fa: %s\n", u.Output(), p.Output(), f.Output())
 
 		auth.Client = github.NewClient(tp.Client())
 		ctx := context.Background()
@@ -161,7 +161,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //		}
 //
 //		ret.Valid = true
-//		//fmt.Printf("\n>%s\n", ret.Reference.String())
+//		//fmt.Printf("\n>%s\n", ret.Reference.Output())
 //	}
 //
 //	return ret
@@ -319,7 +319,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //		var currentBranchName string
 //		err = branchRefs.ForEach(func(branchRef *plumbing.Reference) error {
 //			if branchRef.Hash() == headRef.Hash() {
-//				ret.Data = branchRef.Name().String()
+//				ret.Data = branchRef.Name().Output()
 //
 //				return nil
 //			}
@@ -343,7 +343,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //			break
 //		}
 //
-//		ret.Data = headRef.Hash().String()
+//		ret.Data = headRef.Hash().Output()
 //	}
 //
 //	return ret
@@ -360,7 +360,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //
 //		var latestTagCommit *object.Commit
 //		err = tagRefs.ForEach(func(tagRef *plumbing.Reference) error {
-//			revision := plumbing.Revision(tagRef.Name().String())
+//			revision := plumbing.Revision(tagRef.Name().Output())
 //			tagCommitHash, ret.Error = repository.ResolveRevision(revision)
 //			if ret.Error != nil {
 //				return err
@@ -373,12 +373,12 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //
 //			if latestTagCommit == nil {
 //				latestTagCommit = commit
-//				ret.Data = tagRef.Name().String()
+//				ret.Data = tagRef.Name().Output()
 //			}
 //
 //			if commit.Committer.When.After(latestTagCommit.Committer.When) {
 //				latestTagCommit = commit
-//				ret.Data = tagRef.Name().String()
+//				ret.Data = tagRef.Name().Output()
 //			}
 //
 //			return nil

@@ -1,4 +1,4 @@
-package helperFile
+package helperPath
 
 import (
 	"github.com/wplib/deploywp/only"
@@ -6,6 +6,9 @@ import (
 	"io/ioutil"
 	"strings"
 )
+
+
+const DefaultSeparator = "\n"
 
 
 func (p *TypeOsPath) LoadContents(data ...interface{}) {
@@ -25,8 +28,8 @@ func (p *TypeOsPath) AppendContents(data ...interface{}) {
 		for _, d := range data {
 			//value := reflect.ValueOf(d)
 			//switch value.Kind() {
-			//	case reflect.String:
-			//		p._Array = append(p._Array, value.String())
+			//	case reflect.Output:
+			//		p._Array = append(p._Array, value.Output())
 			//	case reflect.Array:
 			//		p._Array = append(p._Array, d.([]string)...)
 			//	case reflect.Slice:
@@ -35,12 +38,12 @@ func (p *TypeOsPath) AppendContents(data ...interface{}) {
 
 			var sa []string
 			switch d.(type) {
-			case []string:
-				for _, s := range d.([]string) {
-					sa = append(sa, strings.Split(s, p._Separator)...)
-				}
-			case string:
-				sa = append(sa, strings.Split(d.(string), p._Separator)...)
+				case []string:
+					for _, s := range d.([]string) {
+						sa = append(sa, strings.Split(s, p._Separator)...)
+					}
+				case string:
+					sa = append(sa, strings.Split(d.(string), p._Separator)...)
 			}
 
 			p._Array = append(p._Array, sa...)
@@ -78,7 +81,9 @@ func (p *TypeOsPath) GetSeparator() string {
 
 func (p *TypeOsPath) ReadFile() *State {
 	for range only.Once {
-		if !p._IsValid() {
+		p.State.Clear()
+
+		if !p.IsValid() {
 			break
 		}
 
@@ -111,9 +116,10 @@ func (p *TypeOsPath) ReadFile() *State {
 
 
 func (p *TypeOsPath) WriteFile() *State {
-
 	for range only.Once {
-		if !p._IsValid() {
+		p.State.Clear()
+
+		if !p.IsValid() {
 			break
 		}
 

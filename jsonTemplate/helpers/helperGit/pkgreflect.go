@@ -10,10 +10,12 @@ var Types = map[string]reflect.Type{
 	"Dir": reflect.TypeOf((*Dir)(nil)).Elem(),
 	"Filepath": reflect.TypeOf((*Filepath)(nil)).Elem(),
 	"Filepaths": reflect.TypeOf((*Filepaths)(nil)).Elem(),
+	"HelperGit": reflect.TypeOf((*HelperGit)(nil)).Elem(),
 	"LogOptions": reflect.TypeOf((*LogOptions)(nil)).Elem(),
 	"PullOptions": reflect.TypeOf((*PullOptions)(nil)).Elem(),
 	"ReadableName": reflect.TypeOf((*ReadableName)(nil)).Elem(),
 	"Reference": reflect.TypeOf((*Reference)(nil)).Elem(),
+	"State": reflect.TypeOf((*State)(nil)).Elem(),
 	"Status": reflect.TypeOf((*Status)(nil)).Elem(),
 	"Tag": reflect.TypeOf((*Tag)(nil)).Elem(),
 	"Tagname": reflect.TypeOf((*Tagname)(nil)).Elem(),
@@ -23,7 +25,9 @@ var Types = map[string]reflect.Type{
 }
 
 var Functions = map[string]reflect.Value{
-	"HelperGitLogin": reflect.ValueOf(HelperGitLogin),
+	"HelperNewGit": reflect.ValueOf(HelperNewGit),
+	"ReflectHelperGit": reflect.ValueOf(ReflectHelperGit),
+	"ReflectState": reflect.ValueOf(ReflectState),
 }
 
 var Variables = map[string]reflect.Value{

@@ -1,10 +1,11 @@
-package helperFile
+package helperCopy
 
 import (
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"os"
 )
+
 
 func (p *TypeOsPath) Copy() *State {
 	for range only.Once {

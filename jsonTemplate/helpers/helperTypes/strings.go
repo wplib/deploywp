@@ -116,7 +116,7 @@ func HelperSprintf(format interface{}, a ...interface{}) string {
 
 
 // Usage:
-//		{{ Grep .This.String "uid=%s" "mick" ... }}
+//		{{ Grep .This.Output "uid=%s" "mick" ... }}
 func HelperGrepArray(str interface{}, format interface{}, a ...interface{}) []string {
 	var ret []string
 
@@ -147,7 +147,7 @@ func HelperGrepArray(str interface{}, format interface{}, a ...interface{}) []st
 
 
 // Usage:
-//		{{ Grep .This.String "uid=%s" "mick" ... }}
+//		{{ Grep .This.Output "uid=%s" "mick" ... }}
 func HelperGrep(str interface{}, format interface{}, a ...interface{}) string {
 	var ret string
 

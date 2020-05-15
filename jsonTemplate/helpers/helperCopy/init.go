@@ -1,4 +1,4 @@
-package helperPath
+package helperCopy
 
 import (
 	"strings"

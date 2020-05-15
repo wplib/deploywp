@@ -7,7 +7,7 @@ import (
 )
 
 
-type DeployWp struct {
+type TypeDeployWp struct {
 	Hosts Hosts `json:"hosts"`
 	Source Source `json:"source"`
 	Target Target `json:"target"`
@@ -20,8 +20,9 @@ type DeployWp struct {
 type RuntimeMeta struct {
 }
 
-func _NewJsonFile() *DeployWp {
-	var jf DeployWp
+
+func _NewJsonFile() *TypeDeployWp {
+	var jf TypeDeployWp
 
 	jf.Hosts.New()
 	jf.Source.New()
@@ -30,8 +31,8 @@ func _NewJsonFile() *DeployWp {
 	return &jf
 }
 
-func HelperLoadDeployWp(str interface{}) *DeployWp {
-	var j DeployWp
+func HelperLoadDeployWp(str interface{}) *TypeDeployWp {
+	var j TypeDeployWp
 
 	for range only.Once {
 		j.Error = mapstructure.Decode(str, &j)
@@ -61,7 +62,7 @@ func HelperLoadDeployWp(str interface{}) *DeployWp {
 }
 
 
-func (me *DeployWp) IsNil() bool {
+func (me *TypeDeployWp) IsNil() bool {
 	var ok bool
 
 	for range only.Once {
@@ -79,14 +80,14 @@ func (me *DeployWp) IsNil() bool {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source
-func (me *DeployWp) GetSource() *Source {
+func (me *TypeDeployWp) GetSource() *Source {
 	return &me.Source
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source.Paths
-func (me *DeployWp) GetSourcePaths() *Paths {
+func (me *TypeDeployWp) GetSourcePaths() *Paths {
 	var ret *Paths
 
 	for range only.Once {
@@ -99,7 +100,7 @@ func (me *DeployWp) GetSourcePaths() *Paths {
 
 	return ret
 }
-//func (me *DeployWp) GetSourcePaths(abs ...interface{}) *Paths {
+//func (me *TypeDeployWp) GetSourcePaths(abs ...interface{}) *Paths {
 //	var ret *Paths
 //
 //	for range only.Once {
@@ -120,7 +121,7 @@ func (me *DeployWp) GetSourcePaths() *Paths {
 //
 //	return ret
 //}
-func (me *DeployWp) GetSourceAbsPaths() *Paths {
+func (me *TypeDeployWp) GetSourceAbsPaths() *Paths {
 	var ret *Paths
 
 	for range only.Once {
@@ -137,7 +138,7 @@ func (me *DeployWp) GetSourceAbsPaths() *Paths {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source.Repository
-func (me *DeployWp) GetSourceRepositoryProvider() string {
+func (me *TypeDeployWp) GetSourceRepositoryProvider() string {
 	var ret string
 
 	for range only.Once {
@@ -150,7 +151,7 @@ func (me *DeployWp) GetSourceRepositoryProvider() string {
 
 	return ret
 }
-func (me *DeployWp) GetSourceRepositoryUrl() URL {
+func (me *TypeDeployWp) GetSourceRepositoryUrl() URL {
 	var ret URL
 
 	for range only.Once {
@@ -167,7 +168,7 @@ func (me *DeployWp) GetSourceRepositoryUrl() URL {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source.Revision
-func (me *DeployWp) GetSourceRevisionType() string {
+func (me *TypeDeployWp) GetSourceRevisionType() string {
 	var ret string
 
 	for range only.Once {
@@ -180,7 +181,7 @@ func (me *DeployWp) GetSourceRevisionType() string {
 
 	return ret
 }
-func (me *DeployWp) GetSourceRevisionName() string {
+func (me *TypeDeployWp) GetSourceRevisionName() string {
 	var ret string
 
 	for range only.Once {
@@ -197,7 +198,7 @@ func (me *DeployWp) GetSourceRevisionName() string {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source.Build
-func (me *DeployWp) GetSourceBuild() bool {
+func (me *TypeDeployWp) GetSourceBuild() bool {
 	var ret bool
 
 	for range only.Once {
@@ -214,14 +215,14 @@ func (me *DeployWp) GetSourceBuild() bool {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target
-func (me *DeployWp) GetTarget() *Target {
+func (me *TypeDeployWp) GetTarget() *Target {
 	return &me.Target
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target.Files
-func (me *DeployWp) GetTargetFiles(ftype interface{}) *FilesArray {
+func (me *TypeDeployWp) GetTargetFiles(ftype interface{}) *FilesArray {
 	var ret *FilesArray
 
 	for range only.Once {
@@ -238,7 +239,7 @@ func (me *DeployWp) GetTargetFiles(ftype interface{}) *FilesArray {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target.Paths
-func (me *DeployWp) GetTargetPaths() *Paths {
+func (me *TypeDeployWp) GetTargetPaths() *Paths {
 	var ret *Paths
 
 	for range only.Once {
@@ -251,7 +252,7 @@ func (me *DeployWp) GetTargetPaths() *Paths {
 
 	return ret
 }
-func (me *DeployWp) GetTargetAbsPaths() *Paths {
+func (me *TypeDeployWp) GetTargetAbsPaths() *Paths {
 	var ret *Paths
 
 	for range only.Once {
@@ -268,7 +269,7 @@ func (me *DeployWp) GetTargetAbsPaths() *Paths {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target.Revisions
-func (me *DeployWp) GetTargetRevision(host interface{}) *TargetRevision {
+func (me *TypeDeployWp) GetTargetRevision(host interface{}) *TargetRevision {
 	var ret *TargetRevision
 
 	for range only.Once {
@@ -285,7 +286,7 @@ func (me *DeployWp) GetTargetRevision(host interface{}) *TargetRevision {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target.Providers
-func (me *DeployWp) GetTargetProvider(provider interface{}) *Provider {
+func (me *TypeDeployWp) GetTargetProvider(provider interface{}) *Provider {
 	var ret *Provider
 
 	for range only.Once {
@@ -302,11 +303,11 @@ func (me *DeployWp) GetTargetProvider(provider interface{}) *Provider {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Hosts
-func (me *DeployWp) GetHosts() *Hosts {
+func (me *TypeDeployWp) GetHosts() *Hosts {
 	return &me.Hosts
 }
 
-func (me *DeployWp) GetHost(host interface{}) *Host {
+func (me *TypeDeployWp) GetHost(host interface{}) *Host {
 	var ret *Host
 
 	for range only.Once {

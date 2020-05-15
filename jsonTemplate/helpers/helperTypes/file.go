@@ -28,7 +28,7 @@ package helperTypes
 //
 ////type TypeReadFile struct {
 ////	*TypeOsPath
-////	String string
+////	Output string
 ////	Array  []string
 ////}
 ////
@@ -104,8 +104,8 @@ package helperTypes
 //		for _, d := range data {
 //			//value := reflect.ValueOf(d)
 //			//switch value.Kind() {
-//			//	case reflect.String:
-//			//		me._Array = append(me._Array, value.String())
+//			//	case reflect.Output:
+//			//		me._Array = append(me._Array, value.Output())
 //			//	case reflect.Array:
 //			//		me._Array = append(me._Array, d.([]string)...)
 //			//	case reflect.Slice:
@@ -288,7 +288,7 @@ package helperTypes
 //			break
 //		}
 //
-//		rf.String = string(d)
+//		rf.Output = string(d)
 //		rf.Array = strings.Split(string(d), "\n")
 //	}
 //

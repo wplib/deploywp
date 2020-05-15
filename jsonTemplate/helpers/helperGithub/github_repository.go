@@ -99,7 +99,7 @@ func (me *TypeGetRepository) GetHeadBranch() helperTypes.TypeGenericString {
 	//	var currentBranchName string
 	//	ret.Error = branchRefs.ForEach(func(branchRef *plumbing.Reference) error {
 	//		if branchRef.Hash() == headRef.Hash() {
-	//			ret.Data = branchRef.Name().String()
+	//			ret.Data = branchRef.Name().Output()
 	//
 	//			return nil
 	//		}
@@ -124,7 +124,7 @@ func (me *TypeGetRepository) GetCurrentCommitFromRepository() helperTypes.TypeGe
 	//		break
 	//	}
 	//
-	//	ret.Data = headRef.Hash().String()
+	//	ret.Data = headRef.Hash().Output()
 	//}
 
 	return ret
@@ -141,7 +141,7 @@ func (me *TypeGetRepository) GetLatestTagFromRepository() helperTypes.TypeGeneri
 	//
 	//	var latestTagCommit *object.Commit
 	//	err = tagRefs.ForEach(func(tagRef *plumbing.Reference) error {
-	//		revision := plumbing.Revision(tagRef.Name().String())
+	//		revision := plumbing.Revision(tagRef.Name().Output())
 	//		tagCommitHash, ret.Error = repository.ResolveRevision(revision)
 	//		if ret.Error != nil {
 	//			return err
@@ -154,12 +154,12 @@ func (me *TypeGetRepository) GetLatestTagFromRepository() helperTypes.TypeGeneri
 	//
 	//		if latestTagCommit == nil {
 	//			latestTagCommit = commit
-	//			ret.Data = tagRef.Name().String()
+	//			ret.Data = tagRef.Name().Output()
 	//		}
 	//
 	//		if commit.Committer.When.After(latestTagCommit.Committer.When) {
 	//			latestTagCommit = commit
-	//			ret.Data = tagRef.Name().String()
+	//			ret.Data = tagRef.Name().Output()
 	//		}
 	//
 	//		return nil

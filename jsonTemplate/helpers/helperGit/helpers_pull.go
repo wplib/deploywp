@@ -6,17 +6,12 @@ import (
 )
 
 
-// Usage:FOO
+// Usage:
 //		{{- $cmd := $git.Open }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *TypeGit) Pull(opts ...*PullOptions) (err error) {
+func (me *HelperGit) Pull(opts ...*PullOptions) *State {
 	for range only.Once {
-		me.Cmd = me.IsNil()
-		if me.Cmd.IsError() {
-			break
-		}
-		me.Cmd = me.IsNilRepository()
-		if me.Cmd.IsError() {
+		if (*TypeGit)(me).IsNotOk() {
 			break
 		}
 
@@ -38,5 +33,5 @@ func (me *TypeGit) Pull(opts ...*PullOptions) (err error) {
 		}
 	}
 
-	return err
+	return ReflectState(me.State)
 }
