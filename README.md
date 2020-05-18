@@ -12,8 +12,12 @@ Each helper directory is divided into `frontend` and `backend` methods/functions
 
 
 ### Frontend
-Front end functions/methods are to be used within Templates, (although not exclusively), and have a copy of the backend Type structures. Since they are used within templates, they are more "vague" with determining specific types and reflection helpers are used extensively to aide both error correction and recovery.
+Front end functions/methods are to be used within Templates, (although not exclusively), and have a copy of the backend Type structures. They are all contained with the files with a `helpers` prefix.
+
+Since they are used within templates, they are more "vague" with determining specific types and reflection helpers are used extensively to aide both error correction and recovery.
+
 Front end functions begin with the name "Helper" and will be exported and made available within templates. Any other function will be ignored within templates.
+
 Methods coming from these functions, (of course), are available as normal and will ALWAYS return a `ux.State` structure.
 
 For example:
