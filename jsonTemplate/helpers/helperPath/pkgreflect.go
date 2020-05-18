@@ -14,13 +14,18 @@ var Types = map[string]reflect.Type{
 var Functions = map[string]reflect.Value{
 	"HelperChdir": reflect.ValueOf(HelperChdir),
 	"HelperChmod": reflect.ValueOf(HelperChmod),
+	"HelperCreateDir": reflect.ValueOf(HelperCreateDir),
 	"HelperGetCwd": reflect.ValueOf(HelperGetCwd),
 	"HelperIsCwd": reflect.ValueOf(HelperIsCwd),
+	"HelperNewPath": reflect.ValueOf(HelperNewPath),
 	"HelperReadFile": reflect.ValueOf(HelperReadFile),
+	"HelperRemoveDir": reflect.ValueOf(HelperRemoveDir),
+	"HelperRemoveFile": reflect.ValueOf(HelperRemoveFile),
 	"HelperWriteFile": reflect.ValueOf(HelperWriteFile),
 	"NewOsPath": reflect.ValueOf(NewOsPath),
 	"ReflectAbsPath": reflect.ValueOf(ReflectAbsPath),
 	"ReflectFileMode": reflect.ValueOf(ReflectFileMode),
+	"ReflectHelperOsPath": reflect.ValueOf(ReflectHelperOsPath),
 	"ReflectPath": reflect.ValueOf(ReflectPath),
 }
 

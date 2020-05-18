@@ -4,7 +4,6 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
-	"github.com/zloylos/grsync"
 )
 
 
@@ -19,6 +18,7 @@ import (
 type OsCopyGetter interface {
 }
 
+type TypeOsPath helperPath.TypeOsPath
 
 type TypeOsCopy struct {
 	State        *ux.State
@@ -29,11 +29,11 @@ type TypeOsCopy struct {
 	Exclude PathArray
 	Include PathArray
 
-	RsyncOptions []string
-	TarOptions   []string
-	CpioOptions  []string
-	CpOptions    []string
-	SftpOptions  []string
+	//RsyncOptions []string
+	//TarOptions   []string
+	//CpioOptions  []string
+	//CpOptions    []string
+	//SftpOptions  []string
 
 	_Valid       bool
 	Method      *TypeCopyMethods
@@ -44,11 +44,17 @@ type State ux.State
 func (p *State) Reflect() *ux.State {
 	return (*ux.State)(p)
 }
+//func ReflectState(p *ux.State) *ux.State {
+//	return (*State)(p)
+//}
+func ReflectHelperOsCopy(p *TypeOsCopy) *HelperOsCopy {
+	return (*HelperOsCopy)(p)
+}
 
 
 func NewOsCopy() *TypeOsCopy {
-	return &TypeOsCopy{
-		State:        ux.New(),
+	c := &TypeOsCopy{
+		State:        ux.NewState(),
 
 		Source:       helperPath.NewOsPath(),
 		Destination:  helperPath.NewOsPath(),
@@ -56,14 +62,17 @@ func NewOsCopy() *TypeOsCopy {
 		Exclude: PathArray{},
 		Include: PathArray{},
 
-		//RsyncOptions: []string{"-HvaxP", "-n"},
-		//TarOptions:   []string{},
-		//CpioOptions:  []string{},
-		//SftpOptions:  []string{"-rf"},
-		//CpOptions:    []string{},
-
 		_Valid:       false,
 		Method:      NewCopyMethod(),
+	}
+	c.State.SetPackage("")
+	c.State.SetFunctionCaller()
+
+	return c
+}
+func (me *TypeOsCopy) EnsureNotNil() {
+	if me == nil {
+		me = NewOsCopy()
 	}
 }
 
@@ -137,28 +146,19 @@ func (p *TypeOsCopy) GetIncludePaths() *PathArray {
 
 
 func (p *TypeOsCopy) SetMethodRsync() bool {
-	var ok bool
-
-	for range only.Once {
-		if !p.Method.SelectMethod(ConstMethodRsync) {
-			break
-		}
-
-		//task := grsync.NewTask(
-		//	"username@server.com:/source/folder",
-		//	"/home/user/destination",
-		//	grsync.RsyncOptions{},
-		//)
-		task := grsync.NewTask(
-			p.Source.GetPath(),
-			p.Destination.GetPath(),
-			p.Method.Selected.Options.(grsync.RsyncOptions),
-		)
-
-		ok = true
-	}
-
-	return ok
+	return p.Method.SelectMethod(ConstMethodRsync)
+}
+func (p *TypeOsCopy) SetMethodTar() bool {
+	return p.Method.SelectMethod(ConstMethodTar)
+}
+func (p *TypeOsCopy) SetMethodCpio() bool {
+	return p.Method.SelectMethod(ConstMethodCpio)
+}
+func (p *TypeOsCopy) SetMethodSftp() bool {
+	return p.Method.SelectMethod(ConstMethodSftp)
+}
+func (p *TypeOsCopy) SetMethodCp() bool {
+	return p.Method.SelectMethod(ConstMethodCp)
 }
 
 

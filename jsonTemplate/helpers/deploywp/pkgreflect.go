@@ -35,6 +35,7 @@ var Types = map[string]reflect.Type{
 
 var Functions = map[string]reflect.Value{
 	"HelperLoadDeployWp": reflect.ValueOf(HelperLoadDeployWp),
+	"NewJsonFile": reflect.ValueOf(NewJsonFile),
 }
 
 var Variables = map[string]reflect.Value{

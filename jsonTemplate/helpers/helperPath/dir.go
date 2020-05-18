@@ -7,15 +7,16 @@ import (
 )
 
 
-func (p *TypeOsPath) Chdir() *State {
+func (p *TypeOsPath) Chdir() *ux.State {
 	for range only.Once {
+		p.State.SetFunction("")
 		p.State.Clear()
 
 		if !p.IsValid() {
 			break
 		}
 
-		p.State = (*ux.State)(p.StatPath())
+		p.State.SetState(p.StatPath())
 		if p.State.IsError() {
 			break
 		}
@@ -29,49 +30,55 @@ func (p *TypeOsPath) Chdir() *State {
 		}
 
 
-		p.State.Error = os.Chdir(p._Path)
+		var err error
+		err = os.Chdir(p._Path)
+		p.State.SetError(err)
 		if p.State.IsError() {
 			break
 		}
 
-
-		var cwd string
-		cwd, p.State.Error = os.Getwd()
-		if p.State.IsError() {
-			break
-		}
-		if cwd != p._Path {
-			p.State.SetError("destination directory doesn't match")
-			break
-		}
+		//var cwd string
+		//cwd, err = os.Getwd()
+		//p.State.SetError(err)
+		//if p.State.IsError() {
+		//	break
+		//}
+		//if cwd != p._Path {
+		//	p.State.SetError("destination directory doesn't match")
+		//	break
+		//}
 
 		p.State.SetOk("chdir OK")
 	}
 
-	return (*State)(p.State)
+	return p.State
 }
 
 
-func (p *TypeOsPath) GetCwd() (string, *State) {
-	var cwd string
-
+func (p *TypeOsPath) GetCwd() *ux.State {
 	for range only.Once {
+		p.State.SetFunction("")
 		p.State.Clear()
 
 		if !p.IsValid() {
 			break
 		}
 
-		cwd, p.State.Error = os.Getwd()
+
+		p.State.Response = ""
+		var cwd string
+		var err error
+		cwd, err = os.Getwd()
+		p.State.SetError(err)
 		if p.State.IsError() {
 			break
 		}
 
-		//p.State.Output = cwd
+		p.State.Response = cwd
 		p.State.Clear()
 	}
 
-	return cwd, (*State)(p.State)
+	return p.State
 }
 
 
@@ -79,15 +86,48 @@ func (p *TypeOsPath) IsCwd() bool {
 	var ok bool
 
 	for range only.Once {
-		cwd, state := p.GetCwd()
-		if (*ux.State)(state).IsError() {
+		p.State.SetFunction("")
+
+		state := p.GetCwd()
+		if state.IsError() {
 			break
 		}
 
-		if cwd != p._Path {
+		if state.Response != p._Path {
 			break
 		}
 	}
 
 	return ok
+}
+
+
+func (p *TypeOsPath) Mkdir() *ux.State {
+	for range only.Once {
+		p.State.SetFunction("")
+		p.State.Clear()
+
+		if !p.IsValid() {
+			break
+		}
+
+
+		if p._Mode == 0 {
+			p._Mode = 0644
+		}
+
+		p.State.Response = false
+		var err error
+		err = os.Mkdir(p._Path, p._Mode)
+		p.State.SetError(err)
+		if p.State.IsError() {
+			break
+		}
+
+		p.State.Response = true
+		p.State.Clear()
+		p.State.SetOk("mkdir OK")
+	}
+
+	return p.State
 }

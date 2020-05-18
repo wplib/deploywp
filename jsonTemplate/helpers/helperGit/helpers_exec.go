@@ -1,406 +1,448 @@
 package helperGit
 
 import (
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 )
 
 
 // Usage:
 //		{{- $cmd := $git.GitClone }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-// func (me *HelperGit) GitClone(args ...interface{}) *State {
-func (me *HelperGit) GitClone(args ...string) *State {
+// func (me *HelperGit) GitClone(args ...interface{}) *ux.State {
+func (g *HelperGit) GitClone(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandStatus, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandClone, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitInit }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitInit(args ...string) *State {
+func (g *HelperGit) GitInit(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandInit, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandInit, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitAdd }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitAdd(args ...string) *State {
+func (g *HelperGit) GitAdd(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandAdd, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandAdd, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitMv }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitMv(args ...string) *State {
+func (g *HelperGit) GitMv(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandMv, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandMv, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitReset }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitReset(args ...string) *State {
+func (g *HelperGit) GitReset(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandReset, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandReset, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitRm }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitRm(args ...string) *State {
+func (g *HelperGit) GitRm(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandRm, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandRm, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitBisect }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitBisect(args ...string) *State {
+func (g *HelperGit) GitBisect(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandBisect, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandBisect, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitGrep }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitGrep(args ...string) *State {
+func (g *HelperGit) GitGrep(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandGrep, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandGrep, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitLog }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitLog(args ...string) *State {
+func (g *HelperGit) GitLog(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandLog, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandLog, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitShow }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitShow(args ...string) *State {
+func (g *HelperGit) GitShow(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandShow, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandShow, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitStatus }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitStatus(args ...string) *State {
+func (g *HelperGit) GitStatus(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandStatus, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandStatus, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitBranch }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitBranch(args ...string) *State {
+func (g *HelperGit) GitBranch(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandBranch, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandBranch, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitCheckout }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitCheckout(args ...string) *State {
+func (g *HelperGit) GitCheckout(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandCheckout, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandCheckout, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitCommit }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitCommit(args ...string) *State {
+func (g *HelperGit) GitCommit(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandCommit, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandCommit, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitDiff }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitDiff(args ...string) *State {
+func (g *HelperGit) GitDiff(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandDiff, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandDiff, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitMerge }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitMerge(args ...string) *State {
+func (g *HelperGit) GitMerge(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandMerge, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandMerge, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitRebase }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitRebase(args ...string) *State {
+func (g *HelperGit) GitRebase(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandRebase, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandRebase, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitTag }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitTag(args ...string) *State {
+func (g *HelperGit) GitTag(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandTag, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandTag, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitFetch }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitFetch(args ...string) *State {
+func (g *HelperGit) GitFetch(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = me.Exec(gitCommandFetch, args...)
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandFetch, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitPull }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitPull(args ...string) *State {
+func (g *HelperGit) GitPull(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandPull, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandPull, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GitPush }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GitPush(args ...string) *State {
+func (g *HelperGit) GitPush(args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandPush, args...))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandPush, args...))
+		if g.State.IsError() {
 			break
 		}
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }

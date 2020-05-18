@@ -2,6 +2,7 @@
 package helperCopy
 
 import (
+	"fmt"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
@@ -30,57 +31,11 @@ func HelperCopyFiles() *HelperOsCopy {
 
 
 // Usage:
-//		{{ $return := WriteFile "filename.txt" .Data.Source 0644 }}
-func (me *HelperOsCopy) Run() *State {
-	var ret State
-
-	for range only.Once {
-		me.State = (*ux.State)(me.Source.StatPath())
-		if me.State.IsError() {
-			break
-		}
-
-		opts := []string{}
-		opts = append(opts, me.RsyncOptions...)
-		opts = append(opts, me.SourcePath)
-		opts = append(opts, me.DestinationPath)
-
-		c := exec.Command("rsync", opts...)
-
-		out, err := c.CombinedOutput()
-		ret.Output = string(out)
-		ret.SetError(err)
-
-		if ret.IsError() {
-			if exitError, ok := err.(*exec.ExitError); ok {
-				waitStatus := exitError.Sys().(syscall.WaitStatus)
-				ret.Exit = waitStatus.ExitStatus()
-			}
-
-			//fmt.Printf("%s\n", ret.PrintError())
-			break
-		}
-
-		waitStatus := c.ProcessState.Sys().(syscall.WaitStatus)
-		ret.Exit = waitStatus.ExitStatus()
-
-		if ret.IsError() {
-			//ret.PrintError()
-			break
-		}
-
-		fmt.Printf("\nrsync %s\n", strings.Join(opts, " "))
-		ret.Output = ux.SprintfGreen("%s\n", ret.Output)
-	}
-
-	return &ret
-}
-
-
-// Usage:
 //		{{ $copy := CopyFiles }}
 //		{{ $state := SetSourcePath "filename.txt" }}
-func (c *HelperOsCopy) SetSourcePath(src ...interface{}) *State {
+func (c *HelperOsCopy) SetSourcePath(src ...interface{}) *ux.State {
+	c.State.SetFunction("")
+
 	for range only.Once {
 		p := helperTypes.ReflectStrings(src...)
 		if p == nil {
@@ -94,9 +49,9 @@ func (c *HelperOsCopy) SetSourcePath(src ...interface{}) *State {
 		c.State.Clear()
 	}
 
-	return (*State)(c.State)
+	return c.State
 }
-func (c *HelperOsCopy) SetSource(dest ...interface{}) *State {
+func (c *HelperOsCopy) SetSource(dest ...interface{}) *ux.State {
 	return c.SetSourcePath(dest...)
 }
 
@@ -104,7 +59,9 @@ func (c *HelperOsCopy) SetSource(dest ...interface{}) *State {
 // Usage:
 //		{{ $copy := CopyFiles }}
 //		{{ $state := SetDestinationPath "filename.txt" }}
-func (c *HelperOsCopy) SetDestinationPath(dest ...interface{}) *State {
+func (c *HelperOsCopy) SetDestinationPath(dest ...interface{}) *ux.State {
+	c.State.SetFunction("")
+
 	for range only.Once {
 		p := helperTypes.ReflectStrings(dest...)
 		if p == nil {
@@ -118,9 +75,9 @@ func (c *HelperOsCopy) SetDestinationPath(dest ...interface{}) *State {
 		c.State.Clear()
 	}
 
-	return (*State)(c.State)
+	return c.State
 }
-func (c *HelperOsCopy) SetTarget(dest ...interface{}) *State {
+func (c *HelperOsCopy) SetTarget(dest ...interface{}) *ux.State {
 	return c.SetDestinationPath(dest...)
 }
 
@@ -128,7 +85,9 @@ func (c *HelperOsCopy) SetTarget(dest ...interface{}) *State {
 // Usage:
 //		{{ $copy := CopyFiles }}
 //		{{ $state := SetSourcePath "filename.txt" }}
-func (c *HelperOsCopy) SetExcludePaths(exclude ...interface{}) *State {
+func (c *HelperOsCopy) SetExcludePaths(exclude ...interface{}) *ux.State {
+	c.State.SetFunction("")
+
 	for range only.Once {
 		e := helperTypes.ReflectStrings(exclude...)
 		if e == nil {
@@ -140,14 +99,16 @@ func (c *HelperOsCopy) SetExcludePaths(exclude ...interface{}) *State {
 		c.State.Clear()
 	}
 
-	return (*State)(c.State)
+	return c.State
 }
 
 
 // Usage:
 //		{{ $copy := CopyFiles }}
 //		{{ $state := SetSourcePath "filename.txt" }}
-func (c *HelperOsCopy) SetIncludePaths(include ...interface{}) *State {
+func (c *HelperOsCopy) SetIncludePaths(include ...interface{}) *ux.State {
+	c.State.SetFunction("")
+
 	for range only.Once {
 		i := helperTypes.ReflectStrings(include...)
 		if i == nil {
@@ -159,14 +120,57 @@ func (c *HelperOsCopy) SetIncludePaths(include ...interface{}) *State {
 		c.State.Clear()
 	}
 
-	return (*State)(c.State)
+	return c.State
+}
+
+
+// Usage:
+//		{{ $return := WriteFile "filename.txt" .Data.Source 0644 }}
+func (c *HelperOsCopy) Run() *ux.State {
+	c.State.SetFunction("")
+
+	for range only.Once {
+		c.State.SetState(c.Source.StatPath())
+		if c.State.IsError() {
+			break
+		}
+
+		opts := []string{}
+		//opts = append(opts, c.RsyncOptions...)
+		opts = append(opts, c.Source.GetPath())
+		opts = append(opts, c.Destination.GetPath())
+
+		cmd := exec.Command("rsync", opts...)
+
+		out, err := cmd.CombinedOutput()
+		c.State.SetOutput(out)
+		c.State.SetError(err)
+
+		if c.State.IsError() {
+			if exitError, ok := err.(*exec.ExitError); ok {
+				waitStatus := exitError.Sys().(syscall.WaitStatus)
+				c.State.ExitCode = waitStatus.ExitStatus()
+			}
+
+			//fmt.Printf("%s\n", ret.PrintError())
+			break
+		}
+
+		waitStatus := cmd.ProcessState.Sys().(syscall.WaitStatus)
+		c.State.ExitCode = waitStatus.ExitStatus()
+
+		fmt.Printf("\nrsync %s\n", strings.Join(opts, " "))
+		c.State.SetOk("%s", c.State.Output)
+	}
+
+	return c.State
 }
 
 
 //// Usage:
 ////		{{ $copy := CopyFiles }}
 ////		{{ $state := SetSourcePath "filename.txt" }}
-//func (c *HelperOsCopy) SetOptions(src interface{}) *State {
+//func (c *HelperOsCopy) SetOptions(src interface{}) *ux.State {
 //	for range only.Once {
 //		e := helperTypes.ReflectStrings(exclude...)
 //		if e == nil {
@@ -181,55 +185,4 @@ func (c *HelperOsCopy) SetIncludePaths(include ...interface{}) *State {
 //
 //	return (*State)(c.State)
 //}
-
-
-
-// Usage:
-//		{{ $return := WriteFile "filename.txt" .Data.Source 0644 }}
-//func HelperRsync(src interface{}, dest interface{}, options interface{}, exclude ...interface{}) *HelperOsCopy {
-//	ret := NewOsCopy()
 //
-//	for range only.Once {
-//		s := helperTypes.ReflectString(src)
-//		if s == nil {
-//			ret.State.SetError("rsync source empty")
-//			break
-//		}
-//		if ret.Source.SetPath(*s) {
-//			ret.State.SetError("rsync source empty")
-//		}
-//
-//
-//		d := helperTypes.ReflectString(dest)
-//		if d == nil {
-//			ret.State.SetError("rsync destination empty")
-//			break
-//		}
-//		if ret.Source.SetPath(*s) {
-//			ret.State.SetError("rsync destination empty")
-//		}
-//
-//
-//		o := helperTypes.ReflectString(options)
-//		switch {
-//			case o == nil:
-//				fallthrough
-//			case *o == "":
-//				ret.RsyncOptions = []string{"-HvaxPn"}
-//			default:
-//				ret.RsyncOptions = []string{*o}
-//		}
-//
-//		e := helperTypes.ReflectStrings(exclude...)
-//		if e == nil {
-//			break
-//		}
-//		ret.ExcludeFiles = *e
-//
-//		for _, es := range ret.ExcludeFiles {
-//			ret.RsyncOptions = append(ret.RsyncOptions, fmt.Sprintf("--exclude='%s'", es))
-//		}
-//	}
-//
-//	return (*HelperOsCopy)(ret)
-//}

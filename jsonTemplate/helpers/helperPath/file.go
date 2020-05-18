@@ -1,6 +1,7 @@
 package helperPath
 
 import (
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"io/ioutil"
@@ -14,6 +15,8 @@ const DefaultSeparator = "\n"
 func (p *TypeOsPath) LoadContents(data ...interface{}) {
 	for range only.Once {
 		p._String = ""
+		p._Array = []string{}
+
 		p.AppendContents(data...)
 	}
 }
@@ -38,6 +41,8 @@ func (p *TypeOsPath) AppendContents(data ...interface{}) {
 
 			var sa []string
 			switch d.(type) {
+				case []byte:
+					sa = append(sa, string(d.([]byte)))
 				case []string:
 					for _, s := range d.([]string) {
 						sa = append(sa, strings.Split(s, p._Separator)...)
@@ -48,6 +53,7 @@ func (p *TypeOsPath) AppendContents(data ...interface{}) {
 
 			p._Array = append(p._Array, sa...)
 		}
+		p._String = strings.Join(p._Array, p._Separator)
 	}
 }
 
@@ -79,24 +85,25 @@ func (p *TypeOsPath) GetSeparator() string {
 }
 
 
-func (p *TypeOsPath) ReadFile() *State {
+func (p *TypeOsPath) ReadFile() *ux.State {
 	for range only.Once {
+		p.State.SetFunction("")
 		p.State.Clear()
 
 		if !p.IsValid() {
 			break
 		}
 
-		p.State = (*ux.State)(p.StatPath())
+		p.StatPath()
 		if p.State.IsError() {
 			break
 		}
 		if !p._Exists {
-			p.State.SetError("filename not found")
+			p.State.SetError("file '%s' not found", p._Path)
 			break
 		}
 		if p._IsDir {
-			p.State.SetError("filename is a directory")
+			p.State.SetError("path '%s' is a directory", p._Path)
 			break
 		}
 
@@ -109,14 +116,16 @@ func (p *TypeOsPath) ReadFile() *State {
 		}
 
 		p.LoadContents(d)
+		p.State.SetOk("file '%s' read OK", p._Path)
 	}
 
-	return (*State)(p.State)
+	return p.State
 }
 
 
-func (p *TypeOsPath) WriteFile() *State {
+func (p *TypeOsPath) WriteFile() *ux.State {
 	for range only.Once {
+		p.State.SetFunction("")
 		p.State.Clear()
 
 		if !p.IsValid() {
@@ -128,15 +137,30 @@ func (p *TypeOsPath) WriteFile() *State {
 			break
 		}
 
-		p.StatPath()
-		if p._IsDir {
-			p.State.SetError("file is a directory")
+		for range only.Once {
+			p.StatPath()
+			if p._IsDir {
+				p.State.SetError("path '%s' is a directory", p._Path)
+				break
+			}
+			if p.NotExists() {
+				p.State.Clear()
+				break
+			}
+			if p._CanOverwrite {
+				break
+			}
+
+			if !helperSystem.HelperUserPromptBool("Overwrite file '%s'? (Y|N) ", p._Path) {
+				p.State.SetWarning("not overwriting file '%s'", p._Path)
+				break
+			}
+			p.State.Clear()
+		}
+		if p.State.IsNotOk() {
 			break
 		}
-		if p._Exists && p._Overwrite {
-			p.State.SetError("file exists, not overwriting")
-			break
-		}
+
 
 		if p._Mode == 0 {
 			p._Mode = 0644
@@ -147,7 +171,9 @@ func (p *TypeOsPath) WriteFile() *State {
 			p.State.SetError(err)
 			break
 		}
+
+		p.State.SetOk("file '%s' written OK", p._Path)
 	}
 
-	return (*State)(p.State)
+	return p.State
 }

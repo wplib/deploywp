@@ -26,8 +26,8 @@ var Types = map[string]reflect.Type{
 
 var Functions = map[string]reflect.Value{
 	"HelperNewGit": reflect.ValueOf(HelperNewGit),
+	"NewGit": reflect.ValueOf(NewGit),
 	"ReflectHelperGit": reflect.ValueOf(ReflectHelperGit),
-	"ReflectState": reflect.ValueOf(ReflectState),
 }
 
 var Variables = map[string]reflect.Value{

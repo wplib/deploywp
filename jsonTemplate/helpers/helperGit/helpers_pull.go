@@ -2,6 +2,7 @@ package helperGit
 
 import (
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 	"gopkg.in/src-d/go-git.v4"
 )
 
@@ -9,9 +10,11 @@ import (
 // Usage:
 //		{{- $cmd := $git.Open }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) Pull(opts ...*PullOptions) *State {
+func (g *HelperGit) Pull(opts ...*PullOptions) *ux.State {
 	for range only.Once {
-		if (*TypeGit)(me).IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
@@ -19,19 +22,23 @@ func (me *HelperGit) Pull(opts ...*PullOptions) *State {
 			opts = []*PullOptions{}
 		}
 
-		for range only.Once {
-			var h *git.Repository
-			h, err = me.getHandle()
-			if err != nil {
-				break
-			}
-			wt, err := h.Worktree()
-			if err != nil {
-				break
-			}
-			err = wt.Pull(opts[0])
+		var wt *git.Worktree
+		var err error
+		wt, err = g.repository.Worktree()
+		g.State.SetError(err)
+		if g.State.IsError() {
+			break
+		}
+
+		err = wt.Pull(opts[0])
+		g.State.SetError(err)
+		if g.State.IsError() {
+			break
 		}
 	}
 
-	return ReflectState(me.State)
+	if g.State.IsError() {
+		g.State.SetError("Pull() - %s", g.State.GetError())
+	}
+	return g.State
 }

@@ -33,13 +33,32 @@ type TypeGit struct {
 }
 
 
+func NewGit() *TypeGit {
+	p := TypeGit{
+		State:        ux.NewState(),
+		Url:          "",
+		Base:         helperPath.NewOsPath(),
+		GitConfig:    nil,
+		GitOptions:   nil,
+		skipDirCheck: false,
+		client:       nil,
+		repository:   nil,
+		Cmd:          nil,
+	}
+	p.State.SetPackage("")
+	p.State.SetFunctionCaller()
+
+	return &p
+}
+
+
 type State ux.State
 func (p *State) Reflect() *ux.State {
 	return (*ux.State)(p)
 }
-func ReflectState(p *ux.State) *State {
-	return (*State)(p)
-}
+//func ReflectState(p *ux.State) *ux.State {
+//	return (*State)(p)
+//}
 func ReflectHelperGit(p *TypeGit) *HelperGit {
 	return (*HelperGit)(p)
 }
@@ -52,7 +71,7 @@ func (me *TypeGit) IsOk() bool {
 		if me.IsNil() {
 			break
 		}
-		if me.IsAvailable() {
+		if !me.IsAvailable() {
 			break
 		}
 		if me.IsNilRepository() {
@@ -69,15 +88,15 @@ func (me *TypeGit) IsNotOk() bool {
 }
 
 func (me *TypeGit) IsNil() bool {
-	var ok bool
+	ok := true
 
 	for range only.Once {
 		if me == nil {
-			me.Cmd.SetError("`git` client is not configured")
+			me.State.SetError("`git` client is not configured")
 			break
 		}
 		me.State.Clear()
-		ok = true
+		ok = false
 	}
 
 	return ok
@@ -85,18 +104,18 @@ func (me *TypeGit) IsNil() bool {
 
 
 func (me *TypeGit) IsNilRepository() bool {
-	var ok bool
+	ok := true
 
 	for range only.Once {
 		if me.IsNil() {
 			break
 		}
 		if me.repository == nil {
-			me.Cmd.SetError("repository not open")
+			me.State.SetError("repository not open")
 			break
 		}
 		me.State.Clear()
-		ok = true
+		ok = false
 	}
 
 	return ok
@@ -104,15 +123,15 @@ func (me *TypeGit) IsNilRepository() bool {
 
 
 func (me *TypeGit) IsAvailable() bool {
-	var ok bool
+	ok := false
 
 	for range only.Once {
 		if me.IsNil() {
 			break
 		}
-		me.Cmd.ErrorValue = me.client.CanExec()
-		if me.Cmd.IsError() {
-			me.Cmd.SetError("`git` does not exist or its command file is not executable: %s", me.Cmd.ErrorValue)
+		me.State.SetError(me.client.CanExec())
+		if me.State.IsError() {
+			me.State.SetError("`git` does not exist or its command file is not executable: %s", me.State.GetError())
 			break
 		}
 		me.State.Clear()

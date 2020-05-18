@@ -15,25 +15,27 @@ type OsPathGetter interface {
 
 
 type TypeOsPath struct {
-	State     *ux.State
+	State         *ux.State
 
-	_Path     string
-	_Filename string
-	_Dirname  string
-	_IsDir    bool
-	_IsFile   bool
-	_Exists   bool
-	_ModTime  time.Time
-	_Name     string
-	_Mode     os.FileMode
-	_Size     int64
+	_Path         string
+	_Filename     string
+	_Dirname      string
+	_IsDir        bool
+	_IsFile       bool
+	_Exists       bool
+	_ModTime      time.Time
+	_Name         string
+	_Mode         os.FileMode
+	_Size         int64
 
-	_String    string
-	_Array     []string
-	_Separator string
-	_Valid     bool
-	_Overwrite bool
-	_Remote    bool
+	_String       string
+	_Array        []string
+	_Separator    string
+
+	_Valid        bool
+	_CanOverwrite bool
+	_CanRemove    bool
+	_Remote       bool
 }
 
 
@@ -41,66 +43,91 @@ type State ux.State
 func (p *State) Reflect() *ux.State {
 	return (*ux.State)(p)
 }
-
-
-func NewOsPath() *TypeOsPath {
-	return &TypeOsPath{
-		State:     ux.New(),
-		_Path:     "",
-		_Filename: "",
-		_Dirname:  "",
-		_IsDir:    false,
-		_IsFile:   false,
-		_Exists:   false,
-		_ModTime:  time.Time{},
-		_Mode:     0,
-		_Size:     0,
-		_String:   "",
-		_Array:    nil,
-		_Separator: DefaultSeparator,
-		_Valid:     false,
-		_Overwrite: false,
-	}
+func ReflectHelperOsPath(p *TypeOsPath) *HelperOsPath {
+	return (*HelperOsPath)(p)
 }
 
 
+func NewOsPath() *TypeOsPath {
+	p := &TypeOsPath{
+		State:         ux.NewState(),
+		_Path:         "",
+		_Filename:     "",
+		_Dirname:      "",
+		_IsDir:        false,
+		_IsFile:       false,
+		_Exists:       false,
+		_ModTime:      time.Time{},
+		_Mode:         0,
+		_Size:         0,
+		_String:       "",
+		_Array:        nil,
+		_Separator:    DefaultSeparator,
+		_Valid:        false,
+		_CanRemove:    false,
+		_CanOverwrite: false,
+	}
+	p.State.SetPackage("")
+	p.State.SetFunctionCaller()
+
+	return p
+}
+
+
+func (p *TypeOsPath) GetPath() string {
+	return p._Path
+}
 func (p *TypeOsPath) SetPath(path ...string) bool {
+	p._Path = ""
+	return p.AppendPath(path...)
+}
+func (p *TypeOsPath) AppendPath(path ...string) bool {
 	var ok bool
 
 	for range only.Once {
+		if p._IsRemotePath(p._Path) {
+			ok = p._AppendRemotePath(path...)
+			break
+		}
 		if p._IsRemotePath(path...) {
-			ok = p._SetRemotePath(path...)
+			ok = p._AppendRemotePath(path...)
 			break
 		}
 
-		ok = p._SetLocalPath(path...)
+		ok = p._AppendLocalPath(path...)
 	}
 
 	return ok
 }
-func (p *TypeOsPath) GetPath() string {
-	return p._Path
-}
-func (p *TypeOsPath) _SetLocalPath(path ...string) bool {
+func (p *TypeOsPath) _AppendLocalPath(path ...string) bool {
 	for range only.Once {
 		p._Valid = false
 		p._Path = _GetAbsPath(path...)
 		if p._Path == "" {
+			p.State.SetError("src path empty")
 			break
 		}
 		p._Valid = true
 		p._Remote = false
+
+		// Reset these until a later StatPath()
+		p._Dirname = ""
+		p._Filename = ""
+		p._IsDir = false
+		p._IsFile = false
+		p._Exists = false
 	}
 
 	return p._Valid
 }
-func (p *TypeOsPath) _SetRemotePath(path ...string) bool {
+func (p *TypeOsPath) _AppendRemotePath(path ...string) bool {
 	for range only.Once {
 		p._Valid = false
 		// @TODO - May have to change this logic to:
 		// @TODO - p._Path = strings.Join(path, "")
 		p._Path = filepath.Join(path...)
 		if p._Path == "" {
+			p.State.SetError("src path empty")
 			break
 		}
 		p._Valid = true
@@ -185,6 +212,9 @@ func (p *TypeOsPath) Exists() bool {
 
 	return ok
 }
+func (p *TypeOsPath) NotExists() bool {
+	return !p.Exists()
+}
 func (p *TypeOsPath) FileExists() bool {
 	var ok bool
 
@@ -256,8 +286,6 @@ func (p *TypeOsPath) _SetInvalid() {
 	p._Valid = false
 }
 func (p *TypeOsPath) IsValid() bool {
-	var ok bool
-
 	for range only.Once {
 		if !p._Valid {
 			p.State.SetError("path not valid")
@@ -268,10 +296,34 @@ func (p *TypeOsPath) IsValid() bool {
 			p.State.SetError("path not set")
 			break
 		}
+
+		p._Valid = true
 	}
 
-	return ok
+	return p._Valid
 }
 func (p *TypeOsPath) IsInvalid() bool {
 	return !p.IsValid()
+}
+
+
+func (p *TypeOsPath) SetOverwriteable() {
+	p._CanOverwrite = true
+}
+func (p *TypeOsPath) CanOverwrite() bool {
+	return p._CanOverwrite
+}
+func (p *TypeOsPath) IsOverwriteable() bool {
+	return p._CanOverwrite
+}
+
+
+func (p *TypeOsPath) SetRemoveable() {
+	p._CanRemove = true
+}
+func (p *TypeOsPath) CanRemove() bool {
+	return p._CanRemove
+}
+func (p *TypeOsPath) IsRemoveable() bool {
+	return p._CanRemove
 }

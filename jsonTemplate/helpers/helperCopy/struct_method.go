@@ -35,30 +35,44 @@ func _CopyMethodDefault() *TypeCopyMethod {
 }
 func _CopyMethodRsync() *TypeCopyMethod {
 	path, ok := _ExecExists(ConstMethodRsync)
-	opts := grsync.RsyncOptions{
+
+	opts := grsync.RsyncOptions {
 		HardLinks:         true,
 		Verbose:           true,
 		Archive:           true,
 		OneFileSystem:     true,
 		Progress:          true,
-		RsyncProgramm:     path,
+		//RsyncProgramm:     path,
 	}
+
 	return &TypeCopyMethod { Name: ConstMethodRsync, Path: path, Available: ok, Options: opts, AllowRemote: true }
 }
 func _CopyMethodTar() *TypeCopyMethod {
 	path, ok := _ExecExists(ConstMethodTar)
+
+	opts := []string{""}
+
 	return &TypeCopyMethod { Name: ConstMethodTar, Path: path, Available: ok, Options: opts, AllowRemote: true }
 }
 func _CopyMethodCpio() *TypeCopyMethod {
 	path, ok := _ExecExists(ConstMethodCpio)
+
+	opts := []string{""}
+
 	return &TypeCopyMethod { Name: ConstMethodCpio, Path: path, Available: ok, Options: opts, AllowRemote: true }
 }
 func _CopyMethodSftp() *TypeCopyMethod {
 	path, ok := _ExecExists(ConstMethodSftp)
+
+	opts := []string{"-rf"}
+
 	return &TypeCopyMethod { Name: ConstMethodSftp, Path: path, Available: ok, Options: opts, AllowRemote: true }
 }
 func _CopyMethodCp() *TypeCopyMethod {
 	path, ok := _ExecExists(ConstMethodCp)
+
+	opts := []string{"-rip"}
+
 	return &TypeCopyMethod { Name: ConstMethodCp, Path: path, Available: ok, Options: opts, AllowRemote: false }
 }
 

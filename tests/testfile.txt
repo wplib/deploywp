@@ -1,0 +1,1 @@
+{"build":{},"paths":{"base_path":"src","webroot_path":"www","wordpress":{"content_path":"/content","core_path":"/wp","root_path":"/","vendor_path":"/vendor"}},"repository":{"provider":"github","url":"https://github.com/gearboxworks/deploywptest.git"},"revision":{"ref_name":"master","ref_type":"branch"}}

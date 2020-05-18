@@ -1,8 +1,8 @@
 package helperGit
 
 import (
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 	"strings"
 )
 
@@ -10,60 +10,62 @@ import (
 // Usage:
 //		{{- $cmd := $git.ChangedFiles }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) ChangedFiles() *State {
+func (g *HelperGit) ChangedFiles() *ux.State {
 	for range only.Once {
-		if (*TypeGit)(me).IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec("status", "--porcelain"))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandStatus, "--porcelain"))
+		if g.State.IsError() {
 			break
 		}
 
 		var fps Filepaths
-		sts := strings.Split(strings.TrimSpace(me.Cmd.Output), "\n")
-		fps = make(Filepaths, len(sts))
-		for i, fp := range sts {
+		fps = make(Filepaths, len(g.State.OutputArray))
+		for i, fp := range g.State.OutputArray {
 			s := strings.Fields(fp)
 			if len(s) > 1 {
 				fps[i] = s[1]
 			}
 		}
 
-		me.Cmd.Data = fps
+		g.State.Response = fps
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.AddFiles }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) AddFiles() *State {
+func (g *HelperGit) AddFiles() *ux.State {
 	for range only.Once {
-		if (*TypeGit)(me).IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec("add", "--porcelain"))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec(gitCommandAdd, "--porcelain"))
+		if g.State.IsError() {
 			break
 		}
 
 		var fps Filepaths
-		sts := strings.Split(strings.TrimSpace(me.Cmd.Output), "\n")
-		fps = make(Filepaths, len(sts))
-		for i, fp := range sts {
+		fps = make(Filepaths, len(g.State.OutputArray))
+		for i, fp := range g.State.OutputArray {
 			s := strings.Fields(fp)
 			if len(s) > 1 {
 				fps[i] = s[1]
 			}
 		}
 
-		me.Cmd.Data = fps
+		g.State.Response = fps
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }

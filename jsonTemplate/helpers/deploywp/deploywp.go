@@ -21,7 +21,7 @@ type RuntimeMeta struct {
 }
 
 
-func _NewJsonFile() *TypeDeployWp {
+func NewJsonFile() *TypeDeployWp {
 	var jf TypeDeployWp
 
 	jf.Hosts.New()
@@ -32,7 +32,7 @@ func _NewJsonFile() *TypeDeployWp {
 }
 
 func HelperLoadDeployWp(str interface{}) *TypeDeployWp {
-	var j TypeDeployWp
+	j := NewJsonFile()
 
 	for range only.Once {
 		j.Error = mapstructure.Decode(str, &j)
@@ -58,7 +58,7 @@ func HelperLoadDeployWp(str interface{}) *TypeDeployWp {
 		j.Valid = true
 	}
 
-	return &j
+	return j
 }
 
 

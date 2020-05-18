@@ -20,6 +20,18 @@ var Functions = map[string]reflect.Value{
 	"HelperPrintfWarning": reflect.ValueOf(HelperPrintfWarning),
 	"HelperPrintfWhite": reflect.ValueOf(HelperPrintfWhite),
 	"HelperPrintfYellow": reflect.ValueOf(HelperPrintfYellow),
+	"HelperPrintfln": reflect.ValueOf(HelperPrintfln),
+	"HelperPrintflnBlue": reflect.ValueOf(HelperPrintflnBlue),
+	"HelperPrintflnCyan": reflect.ValueOf(HelperPrintflnCyan),
+	"HelperPrintflnError": reflect.ValueOf(HelperPrintflnError),
+	"HelperPrintflnGreen": reflect.ValueOf(HelperPrintflnGreen),
+	"HelperPrintflnMagenta": reflect.ValueOf(HelperPrintflnMagenta),
+	"HelperPrintflnOk": reflect.ValueOf(HelperPrintflnOk),
+	"HelperPrintflnRed": reflect.ValueOf(HelperPrintflnRed),
+	"HelperPrintflnWarning": reflect.ValueOf(HelperPrintflnWarning),
+	"HelperPrintflnWhite": reflect.ValueOf(HelperPrintflnWhite),
+	"HelperPrintflnYellow": reflect.ValueOf(HelperPrintflnYellow),
+	"HelperPrintln": reflect.ValueOf(HelperPrintln),
 }
 
 var Variables = map[string]reflect.Value{

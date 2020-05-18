@@ -165,6 +165,56 @@ func HelperPrintfError(format string, args ...interface{}) string {
 	return ux.SprintfError(format, args...)
 }
 
+func HelperPrintln() string {
+	return ux.SprintfNormal("\n")
+}
+
+
+func HelperPrintflnWhite(format string, args ...interface{}) string {
+	return ux.SprintfWhite(format, args...) + "\n"
+}
+
+func HelperPrintflnCyan(format string, args ...interface{}) string {
+	return ux.SprintfCyan(format, args...) + "\n"
+}
+
+func HelperPrintflnYellow(format string, args ...interface{}) string {
+	return ux.SprintfYellow(format, args...) + "\n"
+}
+
+func HelperPrintflnRed(format string, args ...interface{}) string {
+	return ux.SprintfRed(format, args...) + "\n"
+}
+
+func HelperPrintflnGreen(format string, args ...interface{}) string {
+	return ux.SprintfGreen(format, args...) + "\n"
+}
+
+func HelperPrintflnBlue(format string, args ...interface{}) string {
+	return ux.SprintfBlue(format, args...) + "\n"
+}
+
+func HelperPrintflnMagenta(format string, args ...interface{}) string {
+	return ux.SprintfMagenta(format, args...) + "\n"
+}
+
+func HelperPrintfln(format string, args ...interface{}) string {
+	return ux.Sprintf(format, args...) + "\n"
+}
+
+func HelperPrintflnOk(format string, args ...interface{}) string {
+	return ux.SprintfOk(format, args...) + "\n"
+}
+
+func HelperPrintflnWarning(format string, args ...interface{}) string {
+	return ux.SprintfWarning(format, args...) + "\n"
+}
+
+func HelperPrintflnError(format string, args ...interface{}) string {
+	return ux.SprintfError(format, args...) + "\n"
+}
+
+
 func HelperPrintError(err error) string {
 	return ux.SprintError(err)
 }

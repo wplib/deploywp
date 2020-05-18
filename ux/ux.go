@@ -119,6 +119,9 @@ func PrintfMagenta(format string, args ...interface{}) {
 }
 
 
+func SprintfNormal(format string, args ...interface{}) string {
+	return fmt.Sprintf(format, args...)
+}
 func SprintfWhite(format string, args ...interface{}) string {
 	inline := fmt.Sprintf(format, args...)
 	return fmt.Sprintf("%s%s", aurora.BrightWhite(inline), aurora.Reset(""))

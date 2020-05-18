@@ -12,12 +12,15 @@ var Types = map[string]reflect.Type{
 	"TypeCopyMethod": reflect.TypeOf((*TypeCopyMethod)(nil)).Elem(),
 	"TypeCopyMethods": reflect.TypeOf((*TypeCopyMethods)(nil)).Elem(),
 	"TypeOsCopy": reflect.TypeOf((*TypeOsCopy)(nil)).Elem(),
+	"TypeOsPath": reflect.TypeOf((*TypeOsPath)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
 	"HelperCopyFiles": reflect.ValueOf(HelperCopyFiles),
+	"HelperCopyRsync": reflect.ValueOf(HelperCopyRsync),
 	"NewCopyMethod": reflect.ValueOf(NewCopyMethod),
 	"NewOsCopy": reflect.ValueOf(NewOsCopy),
+	"ReflectHelperOsCopy": reflect.ValueOf(ReflectHelperOsCopy),
 }
 
 var Variables = map[string]reflect.Value{

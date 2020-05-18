@@ -15,6 +15,10 @@ endif
 	@pkgreflect jsonTemplate/helpers
 
 
+test:
+	@./bin/deploywp release --chdir --json tests/deploywp.json
+
+
 build:
 	@make pkgreflect
 	@goreleaser --snapshot --skip-publish --rm-dist

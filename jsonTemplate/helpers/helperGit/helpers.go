@@ -9,8 +9,8 @@ import (
 )
 
 type HelperGit TypeGit
-func (me *HelperGit) Reflect() *TypeGit {
-	return (*TypeGit)(me)
+func (g *HelperGit) Reflect() *TypeGit {
+	return (*TypeGit)(g)
 }
 func (me *TypeGit) Reflect() *HelperGit {
 	return (*HelperGit)(me)
@@ -20,7 +20,7 @@ func (me *TypeGit) Reflect() *HelperGit {
 // Usage:
 //		{{ $git := NewGit }}
 func HelperNewGit(path ...interface{}) *HelperGit {
-	var ret TypeGit
+	ret := NewGit()
 
 	for range only.Once {
 		p := helperPath.ReflectAbsPath(path...)
@@ -28,7 +28,8 @@ func HelperNewGit(path ...interface{}) *HelperGit {
 			break
 		}
 		if ret.Base.SetPath(*p) {
-			ret.State = ret.Base.StatPath().Reflect()
+			state := ret.Base.StatPath()
+			ret.State.SetState(state)
 			if ret.Base.Exists() {
 
 			}
@@ -53,22 +54,22 @@ func HelperNewGit(path ...interface{}) *HelperGit {
 		}
 	}
 
-	return ReflectHelperGit(&ret)
+	return ReflectHelperGit(ret)
 }
 
 
 // Usage:
 //		{{ $cmd := $git.Chdir .Some.Directory }}
 //		{{ if $git.IsOk }}Changed to directory {{ $git.Dir }}{{ end }}
-func (me *HelperGit) Chdir(dir ...interface{}) *helperPath.HelperOsPath {
-	return helperPath.HelperChdir(dir...)
+func (g *HelperGit) Chdir() *ux.State {
+	return helperPath.HelperChdir(g.Base.GetPath()).State
 }
 
 
 // Usage:
 //		{{ $git.SetDryRun }}
-func (me *HelperGit) SetDryRun() bool {
-	me.GitOptions = append(me.GitOptions, "-n")
+func (g *HelperGit) SetDryRun() bool {
+	g.GitOptions = append(g.GitOptions, "-n")
 	return true
 }
 
@@ -76,10 +77,10 @@ func (me *HelperGit) SetDryRun() bool {
 // Usage:
 //		{{ $cmd := $git.Exec "tag" "-l" }}
 //		{{ if $git.IsOk }}OK{{ end }}
-// func (me *HelperGit) Exec(cmd interface{}, args ...interface{}) *State {
-func (me *HelperGit) Exec(cmd string, args ...string) *State {
+// func (me *HelperGit) Exec(cmd interface{}, args ...interface{}) *ux.State {
+func (g *HelperGit) Exec(cmd string, args ...string) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsAvailable() {
+		if g.Reflect().IsNotAvailable() {
 			break
 		}
 
@@ -87,30 +88,30 @@ func (me *HelperGit) Exec(cmd string, args ...string) *State {
 		//if c == nil {
 		//	break
 		//}
-		//me.Cmd.Exe = *c
+		//g.Cmd.Exe = *c
 		//
 		//a := helperTypes.ReflectStrings(args...)
 		//if a == nil {
 		//	break
 		//}
 		//
-		//me.Cmd.Args = []string{}
-		//me.Cmd.Args = append(me.Cmd.Args, me.GitOptions...)
-		//me.Cmd.Args = append(me.Cmd.Args, *a...)
+		//g.Cmd.Args = []string{}
+		//g.Cmd.Args = append(g.Cmd.Args, g.GitOptions...)
+		//g.Cmd.Args = append(g.Cmd.Args, *a...)
 
-		me.Cmd.Exe = cmd
-		me.Cmd.Args = []string{}
-		me.Cmd.Args = append(me.Cmd.Args, me.GitOptions...)
-		me.Cmd.Args = append(me.Cmd.Args, args...)
+		g.Cmd.Exe = cmd
+		g.Cmd.Args = []string{}
+		g.Cmd.Args = append(g.Cmd.Args, g.GitOptions...)
+		g.Cmd.Args = append(g.Cmd.Args, args...)
 
 		for range only.Once {
-			if me.skipDirCheck {
+			if g.skipDirCheck {
 				break
 			}
-			if me.Base.IsCwd() {
+			if g.Base.IsCwd() {
 				break
 			}
-			path := me.Base.GetPath()
+			path := g.Base.GetPath()
 			cd := helperPath.HelperChdir(path)
 			if cd.State.IsError() {
 				ux.PrintfError("Cannot change directory to '%s'", path)
@@ -118,70 +119,71 @@ func (me *HelperGit) Exec(cmd string, args ...string) *State {
 			}
 		}
 
-		var err error
-		me.Cmd.Output, err = me.client.Exec(me.Cmd.Exe, me.Cmd.Args...)
-		if err != nil {
-			me.State.SetError(err)
-			me.Cmd.Exit = 1	// Fake an exit code.
+		out, err := g.client.Exec(g.Cmd.Exe, g.Cmd.Args...)
+		g.State.SetOutput(out)
+		g.State.OutputTrim()
+		g.State.SetError(err)
+		if g.State.IsError() {
+			g.Cmd.Exit = 1 // Fake an exit code.
 			break
 		}
 
-		me.State.SetOk("")
+		g.State.SetOk("")
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
-// Usage:
-//		{{- $cmd := $git.IsExec }}
-//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) IsAvailable() *State {
-	for range only.Once {
-		if me.Reflect().IsAvailable() {
-			break
-		}
-	}
-
-	//foo := &State{}
-	//foo = (*State)(me.State)
-	//foo = (*State)(me.Reflect().State)
-	//foo = ReflectState(me.State)
-
-	return ReflectState(me.State)
-}
-
-
-// Usage:
-//		{{ if $ret.IsError }}{{ $cmd.PrintError }}{{ end }}
-func (me *HelperGit) SetError(error ...interface{}) {
-	me.State.SetError(error...)
-}
-
-
-// Usage:
-//		{{ if $ret.IsError }}{{ $cmd.PrintError }}{{ end }}
-func (me *HelperGit) IsError() bool {
-	return me.State.IsError()
-}
-
-
-// Usage:
-//		{{ if $ret.IsOk }}OK{{ end }}
-func (me *HelperGit) IsOk() bool {
-	return me.State.IsOk()
-}
-
-
-// Usage:
-//		{{ if $ret.IsOk }}OK{{ end }}
-func (me *HelperGit) PrintError() string {
-	return me.Cmd.PrintError()
-}
-
-
-// Usage:
-//		{{ if $ret.IsOk }}OK{{ end }}
-func (me *HelperGit) ExitOnError() string {
-	return me.Cmd.ExitOnError()
-}
+//// Usage:
+////		{{- $cmd := $git.IsExec }}
+////		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
+//func (g *HelperGit) IsAvailable() *ux.State {
+//	for range only.Once {
+//		if g.Reflect().IsNotAvailable() {
+//			break
+//		}
+//	}
+//
+//	//foo := &State{}
+//	//foo = (*State)(g.State)
+//	//foo = (*State)(g.Reflect().State)
+//	//foo = ReflectState(g.State)
+//
+//	return g.State
+//}
+//
+//
+//// Usage:
+////		{{ if $ret.IsError }}{{ $cmd.PrintError }}{{ end }}
+//func (g *HelperGit) SetError(error ...interface{}) {
+//	g.State.SetError(error...)
+//}
+//
+//
+//// Usage:
+////		{{ if $ret.IsError }}{{ $cmd.PrintError }}{{ end }}
+//func (g *HelperGit) IsError() bool {
+//	return g.State.IsError()
+//}
+//
+//
+//// Usage:
+////		{{ if $ret.IsOk }}OK{{ end }}
+//func (g *HelperGit) IsOk() bool {
+//	return g.State.IsOk()
+//}
+//
+//
+//// Usage:
+////		{{ if $ret.IsOk }}OK{{ end }}
+//func (g *HelperGit) PrintError() string {
+//	return g.Cmd.PrintError()
+//}
+//
+//
+//// Usage:
+////		{{ if $ret.IsOk }}OK{{ end }}
+//func (g *HelperGit) ExitOnError() string {
+//	return g.State.ExitOnError()
+//}

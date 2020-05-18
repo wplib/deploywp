@@ -2,24 +2,33 @@ package helperTypes
 
 import (
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 	"reflect"
+	"strings"
 )
 
 
 func ReflectString(ref interface{}) *string {
-	var s *string
+	var s string
 
 	for range only.Once {
-		value := reflect.ValueOf(ref)
-		if value.Kind() != reflect.String {
-			break
+		switch ref.(type) {
+			case []byte:
+				s = ref.(string)
+			case string:
+				s = ref.(string)
+			case []string:
+				s = strings.Join(ref.([]string), ux.DefaultSeparator)
 		}
-
-		st := value.String()
-		s = &st
+		//value := reflect.ValueOf(ref)
+		//if value.Kind() == reflect.String {
+		//	st := value.String()
+		//	s = &st
+		//	break
+		//}
 	}
 
-	return s
+	return &s
 }
 
 func ReflectStrings(ref ...interface{}) *[]string {
@@ -35,19 +44,26 @@ func ReflectStrings(ref ...interface{}) *[]string {
 }
 
 func ReflectByteArray(ref interface{}) *[]byte {
-	var s *[]byte
+	var s []byte
 
 	for range only.Once {
-		value := reflect.ValueOf(ref)
-		if value.Kind() != reflect.String {
-			break
+		switch ref.(type) {
+			case []byte:
+				s = ref.([]byte)
+			case string:
+				s = ref.([]byte)
+			case []string:
+				s = []byte((strings.Join(ref.([]string), ux.DefaultSeparator)))
 		}
-
-		sa := []byte(value.String())
-		s = &sa
+		//value := reflect.ValueOf(ref)
+		//if value.Kind() != reflect.String {
+		//	break
+		//}
+		//sa := []byte(value.String())
+		//s = &sa
 	}
 
-	return s
+	return &s
 }
 
 func ReflectBool(ref interface{}) *bool {

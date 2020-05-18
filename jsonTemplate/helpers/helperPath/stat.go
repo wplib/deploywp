@@ -1,6 +1,7 @@
 package helperPath
 
 import (
+	"fmt"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"os"
@@ -8,8 +9,9 @@ import (
 )
 
 
-func (p *TypeOsPath) StatPath() *State {
+func (p *TypeOsPath) StatPath() *ux.State {
 	for range only.Once {
+		p.State.SetFunction("")
 		p.State.Clear()
 
 		if p._Path == "" {
@@ -26,13 +28,15 @@ func (p *TypeOsPath) StatPath() *State {
 		}
 
 		var stat os.FileInfo
-		stat, p.State.Error = os.Stat(p._Path)
-		if os.IsNotExist(p.State.Error) {
-			p.State.SetError("path does not exist - %s", p.State.Error)
+		var err error
+		stat, err = os.Stat(p._Path)
+		if os.IsNotExist(err) {
+			p.State.SetError("path does not exist - %s", err)
 			p._Exists = false
 			break
 		}
-		if p.State.Error != nil {
+		p.State.SetError(err)
+		if p.State.IsError() {
 			break
 		}
 
@@ -46,42 +50,46 @@ func (p *TypeOsPath) StatPath() *State {
 		if stat.IsDir() {
 			p._IsDir = true
 			p._IsFile = false
-			p._Dirname = p._Path
+			p._Dirname = fmt.Sprintf("%s%c", p._Path, filepath.Separator)
+			p._Path = p._Dirname
 			p._Filename = ""
 
 		} else {
 			p._IsDir = false
 			p._IsFile = true
-			p._Dirname = filepath.Dir(p._Path)
+			p._Dirname = fmt.Sprintf("%s%c", filepath.Dir(p._Path), filepath.Separator)
 			p._Filename = filepath.Base(p._Path)
 		}
 
 		p.State.SetOk("stat OK")
 	}
 
-	return (*State)(p.State)
+	return p.State
 }
 
 
-func (p *TypeOsPath) Chmod(m os.FileMode) *State {
+func (p *TypeOsPath) Chmod(m os.FileMode) *ux.State {
 	for range only.Once {
+		p.State.SetFunction("")
 		p.State.Clear()
 
 		if !p.IsValid() {
 			break
 		}
 
-		p.State = (*ux.State)(p.StatPath())
+		p.State.SetState(p.StatPath())
 		if p.State.IsError() {
 			break
 		}
 
-		p.State.Error = os.Chmod(p._Path, m)
+		var err error
+		err = os.Chmod(p._Path, m)
+		p.State.SetError(err)
 		if p.State.IsError() {
 			break
 		}
 
-		p.State = (*ux.State)(p.StatPath())
+		p.State.SetState(p.StatPath())
 		if p.State.IsError() {
 			break
 		}
@@ -89,6 +97,5 @@ func (p *TypeOsPath) Chmod(m os.FileMode) *State {
 		p.State.SetOk("chmod OK")
 	}
 
-	return (*State)(p.State)
+	return p.State
 }
-

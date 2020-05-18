@@ -1,0 +1,253 @@
+#!/bin/JsonToConfig
+
+################################################################################
+{{ PrintfBlue "# PrintHelpers" }}
+{{- $ignore := PrintHelpers }}
+
+{{ PrintfCyan .Exec.CmdFile }} v{{ PrintfBlue .Exec.CmdVersion }} :
+	- {{ PrintfCyan .Exec.Cmd }} {{ PrintfGreen .Exec.Args.ToString }}
+
+
+################################################################################
+{{ PrintfBlue "# Check args" }}
+{{- $cmd := index .Exec.Args 0 }}
+{{- if eq $cmd "release" }}
+{{ PrintfBlue "Processing release directory: %s" .TemplateFile.Dir }}
+{{- end }}
+
+
+################################################################################
+{{ PrintfBlue "# Run command and check output" }}
+{{- $cmd := ExecCommand "ps" "-eaf" }}
+{{- if $cmd.OutputParse "%s" "deploywp" }}
+{{- $str := Grep $cmd.Output "deploywp" }}
+{{ PrintfBlue "Found string in output" }}
+{{ PrintfGreen "%s" $str }}
+{{- else }}
+{{ PrintfWarning "Didn't find string in command output." }}
+{{- end }}
+
+{{ PrintfBlue "# Run commands with error" }}
+{{- $g := ExecCommand "git" "config" "--get" "remote.origin.url" }}
+{{ $g.PrintResponse }}
+
+{{- $cmd := ExecCommand "git" "FAILED" }}
+{{- if $cmd.ExitCode }}
+{{ $cmd.PrintError }}
+{{- end }}
+
+
+################################################################################
+{{ PrintfBlue "# LoadDeployWp" }}
+{{- $dwp := LoadDeployWp .Json }}
+
+{{ PrintfOk "$dwp.Hosts == %s" $dwp.Hosts }}
+
+{{ PrintfOk "$dwp.GetHost == %s" ($dwp.GetHost "prod") }}
+
+# SOURCE PATHS
+{{- $src := $dwp.GetSourcePaths }}
+{{- $srcAbs := $dwp.GetSourceAbsPaths }}
+{{ PrintfOk "$src.GetBasePath == %s (%s)" $src.GetBasePath $srcAbs.GetBasePath }}
+{{ PrintfOk "$src.GetWebRootPath == %s" $src.GetWebRootPath }}
+{{ PrintfOk "$src.GetContentPath == %s" $src.GetContentPath }}
+{{ PrintfOk "$src.GetCorePath == %s" $src.GetCorePath }}
+{{ PrintfOk "$src.GetRootPath == %s" $src.GetRootPath }}
+{{ PrintfOk "$src.GetVendorPath == %s" $src.GetVendorPath }}
+
+# TARGET PATHS
+{{- $target := $dwp.GetTargetPaths }}
+{{- $targetAbs := $dwp.GetTargetAbsPaths }}
+{{ PrintfOk "$target.GetBasePath == %s (%s)" $target.GetBasePath $targetAbs.GetBasePath }}
+{{ PrintfOk "$target.GetWebRootPath == %s" $target.GetWebRootPath }}
+{{ PrintfOk "$target.GetContentPath == %s" $target.GetContentPath }}
+{{ PrintfOk "$target.GetCorePath == %s" $target.GetCorePath }}
+{{ PrintfOk "$target.GetRootPath == %s" $target.GetRootPath }}
+{{ PrintfOk "$target.GetVendorPath == %s" $target.GetVendorPath }}
+
+
+################################################################################
+{{ PrintfBlue "# File I/O" }}
+
+{{ if UserPromptBool "# Set auto-remove of files? " }}
+{{ PrintfOk "Currently not implemented" }}
+{{- end }}
+
+{{- $file := "testfile.txt" }}
+
+{{ PrintflnBlue "# Remove file '%s' ..." $file }}
+{{- $fh := RemoveFile $file }}
+{{- $fh.State.ExitOnError }}
+
+{{- $str := ToString .Json.source }}
+{{- $err := $fh.StatPath }}
+{{- if $fh.Exists }}
+{{ PrintflnBlue "# Write to file '%s' with string '%s' - expecting a warning" $file $str }}
+{{- else }}
+{{ PrintflnBlue "# Write to file '%s' with string '%s' - expecting a pass" $file $str }}
+{{- end }}
+
+
+{{- $err := (WriteFile $str 0 $file).State.GetError }}
+{{- if $err }}
+{{ PrintfError "ERROR: File '%s' failed to write - %s" $file $err }}
+{{- end }}
+
+{{ PrintfBlue "Contents of file '%s' as string:" $file }}
+{{ PrintfGreen "%s" (ReadFile $file).GetContentString }}
+
+{{ PrintfBlue "Contents of file '%s' as array:" $file }}
+{{ PrintfGreen "%s" (ReadFile $file).GetContentArray }}
+
+{{ PrintflnBlue "# Write to file '%s' with string '%s' - expecting a failure" $file $str }}
+{{ $fh := (WriteFile $str 0 $file).State }}
+{{- if $fh.IsError }}
+{{ PrintflnError "ERROR: File '%s' failed to write - %s" $file $err }}
+{{- end }}
+
+{{ PrintflnBlue "# Remove file '%s' ..." $file }}
+{{- $err := RemoveFile $file }}
+{{ $err.State.ExitOnError }}
+
+
+################################################################################
+{{ PrintfBlue "# Clone GIT repo" }}
+{{- $git := NewGit }}
+{{- if $git.State.IsOk }}
+{{ PrintfOk "NewGit instance created OK" }}
+{{- end }}
+
+{{ PrintfBlue "# Set Git path to %s/" $srcAbs.GetBasePath }}
+{{- $cmd := $git.SetPath $srcAbs.GetBasePath }}
+{{ $cmd.ExitOnNotOk }}
+
+{{- $cmd := $git.SetUrl "https://github.com/gearboxworks/deploywptest.git" }}
+{{ $cmd.ExitOnNotOk }}
+
+{{- $cmd := $git.Clone }}
+{{- if $cmd.IsOk }}
+{{ PrintfOk "Git repo '%s' cloned into directory '%s'" $git.Url $srcAbs.GetBasePath }}
+{{- else }}
+{{ PrintfError "Git repo '%s' can not be cloned into directory '%s'" $git.Url $srcAbs.GetBasePath }}
+{{- end }}
+
+
+################################################################################
+{{ PrintfBlue "# Change directory" }}
+{{ PrintfOk "Changing to directory: %s" $target.GetWebRootPath }}
+{{- if Chdir $target.GetWebRootPath }}
+{{ PrintfOk "Directory is now: %s" GetCwd.GetPath }}
+{{- end }}
+
+
+################################################################################
+{{ PrintfBlue "# rsync test" }}
+
+{{ PrintfBlue "# '%s' => '%s'" $srcAbs.GetContentPath $targetAbs.GetContentPath }}
+{{- $rsync := CopyRsync $srcAbs.GetContentPath $targetAbs.GetContentPath }}
+{{ $rsync.ExitOnNotOk }}
+# Files copied OK
+{{ PrintfGreen "%s" (Grep $rsync.PrintResponse "^(sent|total)") }}
+{{ PrintfGreen "%s" ($rsync.OutputGrep "^(sent|total)") }}
+{{ PrintfGreen "%s" ($rsync.OutputArrayGrep "^(sent|total)") }}
+
+
+################################################################################
+{{ PrintflnBlue "# Run Git commands" }}
+{{- $git := NewGit }}
+{{- if $git.State.IsError }}
+{{ $git.State.PrintError }}
+{{- OsExit $git.State.ExitCode }}
+{{- end }}
+{{ PrintfOk "OK - Git exe found" }}
+
+{{ PrintflnBlue "# Git command - Open()" }}
+{{- $cmd := $git.SetPath $srcAbs.GetBasePath }}
+{{- $cmd := $git.Open }}
+{{ PrintfOk "OK - Git repo opened at directory '%s'" $srcAbs.GetBasePath }}
+{{ $cmd.Output }}
+
+{{ PrintflnBlue "# Git command - GetUrl()" }}
+{{- $cmd := $git.GetUrl }}
+{{ PrintfOk "Repo URL is: %s" $cmd.Response }}
+{{- $cmd.ExitOnNotOk }}
+
+{{ PrintflnBlue "# Git command - GetBranch()" }}
+{{- $cmd := $git.GetBranch }}
+{{ PrintfOk "Current Branch: '%s'" $cmd.Response }}
+
+{{ PrintflnBlue "# Git command - GetTags()" }}
+{{- $tags := $git.GetTags }}
+{{- $tags.ExitOnNotOk }}
+{{ PrintfOk "Tags: %s" $tags.Response }}
+
+{{ PrintflnBlue "# Git command - TagExists()" }}
+{{- $tag := $git.TagExists "test" }}
+{{- $tag.ExitOnNotOk }}
+{{- if $tag.Response }}
+{{- PrintfOk "Tag 'test' exists, will remove..." }}
+{{- $tag := $git.RemoveTag "test" }}
+{{- $tag.ExitOnNotOk }}
+{{ PrintfOk "Removed tag: test" }}
+{{- end }}
+
+{{ PrintflnBlue "# Git command - CreateTag()" }}
+{{- $tag := $git.CreateTag "test" }}
+{{- $tag.ExitOnNotOk }}
+{{ PrintfOk "Created tag: test" }}
+
+{{ PrintflnBlue "# Git command - TagExists()" }}
+{{- $tag := $git.TagExists "test" }}
+{{- $tag.ExitOnNotOk }}
+{{ if $tag.Response }}{{ PrintfOk "Tag 'test' exists" }}{{ end }}
+
+{{ PrintflnBlue "# Git command - GetTags()" }}
+{{- $tags := $git.GetTags }}
+{{- $tags.ExitOnNotOk }}
+{{ PrintfOk "Tags: %s" $tags.Response }}
+
+{{ PrintflnBlue "# Git command - RemoveTag()" }}
+{{- $tag := $git.RemoveTag "test" }}
+{{- $tag.ExitOnNotOk }}
+{{ PrintfOk "Removed tag: test" }}
+
+{{ PrintflnBlue "# Git command - Open()" }}
+{{- $ch := $git.ChangedFiles }}
+{{- if $ch.IsError }}{{ $ch.PrintError }}{{- OsExit 1 }}{{- end }}
+{{ PrintfOk "File changes: %s" $ch.Response }}
+
+
+{{- OsExit 1 }}
+################################################################################
+{{ PrintfBlue "# Old style JSON call" }}
+.Json.source.paths.webroot_path == {{ .Json.source.paths.webroot_path }}
+
+
+{{- OsExit 1 }}
+################################################################################
+{{ PrintfBlue "# GitHubLogin" }}
+{{ $git := GitHubLogin "MickMake" "" "" }}
+
+{{ $git }}
+
+
+################################################################################
+{{ PrintfBlue "# GitHubLogin.GetRepository" }}
+{{ $repo := $git.GetRepository "gearboxworks" "docker-template" }}
+REPO
+{{ $repo }}
+BRANCH
+{{ $repo.GetHeadBranch }}
+
+{{ if $git.Valid }}
+YES - {{ $git.User.Login }}
+YES - {{ $git.GetBranch "gearboxworks" "docker-template" "" }}
+{{ else }}
+NO
+{{ end }}
+
+
+################################################################################
+{{ PrintfBlue "# GitHubGetOrganization" }}
+{{ GitHubGetOrganization "gearboxworks" }}
+

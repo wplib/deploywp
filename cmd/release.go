@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/wplib/deploywp/jsonTemplate"
 	"github.com/wplib/deploywp/only"
@@ -27,7 +28,7 @@ func Release(cmd *cobra.Command, args []string) {
 
 		tmpl, state = ProcessArgs(cmd, args)
 		if !state.IsOk() {
-			state.Print()
+			fmt.Printf(state.PrintResponse())
 			break
 		}
 
@@ -35,7 +36,7 @@ func Release(cmd *cobra.Command, args []string) {
 
 		state = tmpl.ProcessTemplate()
 		if !state.IsOk() {
-			state.Print()
+			fmt.Printf(state.PrintResponse())
 			break
 		}
 	}

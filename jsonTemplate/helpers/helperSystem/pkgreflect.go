@@ -11,6 +11,7 @@ var Types = map[string]reflect.Type{
 var Functions = map[string]reflect.Value{
 	"GetEnv": reflect.ValueOf(GetEnv),
 	"HelperUserPrompt": reflect.ValueOf(HelperUserPrompt),
+	"HelperUserPromptBool": reflect.ValueOf(HelperUserPromptBool),
 	"HelperUserPromptHidden": reflect.ValueOf(HelperUserPromptHidden),
 	"PrintEnv": reflect.ValueOf(PrintEnv),
 }

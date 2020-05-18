@@ -3,48 +3,34 @@ package helperCopy
 import (
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
-	"os"
 )
 
 
-func (p *TypeOsPath) Copy() *State {
+func (p *TypeOsCopy) Copy() *ux.State {
 	for range only.Once {
-		if !p._IsValid() {
+		if !p.Source.Exists() {
+			p.State.SetError("src path not found")
 			break
 		}
 
-		p.State = (*ux.State)(p.StatPath())
-		if p.State.IsError() {
-			break
-		}
-		if !p._Exists {
-			p.State.SetError("directory not found")
-			break
-		}
-		if p._IsFile {
-			p.State.SetError("directory is a file")
-			break
+		for range only.Once {
+			if p.Destination.NotExists() {
+				break
+			}
+			if p.Destination.CanOverwrite() {
+				break
+			}
+			p.State.SetError("cannot overwrite destination")
 		}
 
-
-		p.State.Error = os.Chdir(p._Path)
 		if p.State.IsError() {
 			break
 		}
 
-
-		var cwd string
-		cwd, p.State.Error = os.Getwd()
-		if p.State.IsError() {
-			break
-		}
-		if cwd != p._Path {
-			p.State.SetError("destination directory doesn't match")
-			break
-		}
+		// @TODO - do copying of files here
 
 		p.State.SetOk("chdir OK")
 	}
 
-	return (*State)(p.State)
+	return p.State
 }

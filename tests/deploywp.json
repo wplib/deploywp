@@ -1,0 +1,132 @@
+{
+	"source": {
+		"paths": {
+			"base_path": "src",
+			"webroot_path": "www",
+			"wordpress": {
+				"content_path": "/content",
+				"core_path": "/wp",
+				"root_path": "/",
+				"vendor_path": "/vendor"
+			}
+		},
+
+		"repository": {
+			"provider": "github",
+			"url": "https://github.com/gearboxworks/deploywptest.git"
+		},
+
+		"revision": {
+			"ref_type": "branch",
+			"ref_name": "master"
+		},
+
+		"build": {
+		}
+	},
+
+	"target": {
+		"paths": {
+			"base_path": "target",
+			"webroot_path": "",
+			"wordpress": {
+				"content_path": "/wp-content",
+				"core_path": "/",
+				"root_path": "/",
+				"vendor_path": "/vendor"
+			}
+		},
+
+		"files": {
+			"copy": [
+				"{webroot_path}/pantheon.yml"
+			],
+			"delete": [
+				"{webroot_path}/readme.html",
+				"{webroot_path}/README.md",
+				"{webroot_path}/xmlrpc.php",
+				"{webroot_path}/wp-trackback.php",
+				"{webroot_path}/wp-signup.php",
+				"{webroot_path}/license.txt",
+				"{webroot_path}/wp-config-sample.php",
+				"{wordpress.content_path}/plugins/hello.php",
+				"{wordpress.content_path}/themes/twentyseventeen/*",
+				"{wordpress.content_path}/themes/twentyseventeen"
+			],
+			"exclude": [
+				"{webroot_path}/index.php",
+				"{webroot_path}/wp-config.php",
+				"{webroot_path}/wp-config-atlpba.local.php",
+				"composer.json"
+			],
+			"keep": [
+				"{wordpress.content_path}/mu-plugins/pantheon.php",
+				"{wordpress.content_path}/mu-plugins/pantheon",
+				"{wordpress.content_path}/mu-plugins/index.php",
+				"{wordpress.content_path}/plugins/index.php",
+				"{wordpress.content_path}/themes/index.php",
+				"{wordpress.content_path}/index.php"
+			]
+		},
+
+		"revisions": [
+			{
+				"ref_name": "master",
+				"host_name": "prod"
+			},
+			{
+				"ref_name": "stage-api",
+				"host_name": "stage"
+			},
+			{
+				"ref_name": "test-api",
+				"host_name": "test"
+			},
+			{
+				"ref_name": "dev-api",
+				"host_name": "dev"
+			}
+		],
+
+		"providers": [
+			{
+				"name": "pantheon",
+				"meta": {
+					"site_id": "cb4d2936-0c85-4e42-8d42-da03acae270f",
+					"site_name": "mickmake"
+				},
+				"defaults": {
+					"repository": {
+						"url": "git clone ssh://codeserver.dev.{site_id}@codeserver.dev.{site_id}.drush.in:2222/~/repository.git"
+						},
+					"paths": {
+						"webroot_dir": "/code"
+					}
+				}
+			}
+		]
+	},
+
+	"hosts": [
+		{
+			"host_name": "prod",
+			"label": "Production (Pantheon's 'master' branch)",
+			"provider": "pantheon"
+		},
+		{
+			"host_name": "stage",
+			"label": "Staging (Pantheon's 'stage-api')",
+			"provider": "pantheon"
+		},
+		{
+			"host_name": "test",
+			"label": "Testing (Pantheon's 'test-api')",
+			"provider": "pantheon"
+		},
+		{
+			"host_name": "dev",
+			"label": "Development (Pantheon's 'dev-api')",
+			"provider": "pantheon"
+		}
+	]
+}

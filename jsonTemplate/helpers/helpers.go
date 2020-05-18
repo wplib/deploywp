@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"github.com/Masterminds/sprig"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/deploywp"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperCopy"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperExec"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGit"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGitHub"
+	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperUx"
@@ -29,11 +32,19 @@ func DiscoverHelpers() (template.FuncMap, error) {
 		// Define additional template functions.
 		tfm = sprig.TxtFuncMap()
 
-		for name, fn := range helperUx.GetHelpers {
+		for name, fn := range deploywp.GetHelpers {
 			tfm[name] = fn
 		}
 
-		for name, fn := range deploywp.GetHelpers {
+		for name, fn := range helperCopy.GetHelpers {
+			tfm[name] = fn
+		}
+
+		for name, fn := range helperExec.GetHelpers {
+			tfm[name] = fn
+		}
+
+		for name, fn := range helperGit.GetHelpers {
 			tfm[name] = fn
 		}
 
@@ -41,7 +52,7 @@ func DiscoverHelpers() (template.FuncMap, error) {
 			tfm[name] = fn
 		}
 
-		for name, fn := range helperGit.GetHelpers {
+		for name, fn := range helperPath.GetHelpers {
 			tfm[name] = fn
 		}
 
@@ -50,6 +61,10 @@ func DiscoverHelpers() (template.FuncMap, error) {
 		}
 
 		for name, fn := range helperTypes.GetHelpers {
+			tfm[name] = fn
+		}
+
+		for name, fn := range helperUx.GetHelpers {
 			tfm[name] = fn
 		}
 	}
@@ -64,33 +79,7 @@ func PrintHelpers() string {
 	var ret string
 
 	for range only.Once {
-		var tfm template.FuncMap
-		// Define additional template functions.
-		tfm = sprig.TxtFuncMap()
-
-		for name, fn := range helperUx.GetHelpers {
-			tfm[name] = fn
-		}
-
-		for name, fn := range deploywp.GetHelpers {
-			tfm[name] = fn
-		}
-
-		for name, fn := range helperGitHub.GetHelpers {
-			tfm[name] = fn
-		}
-
-		for name, fn := range helperGit.GetHelpers {
-			tfm[name] = fn
-		}
-
-		for name, fn := range helperSystem.GetHelpers {
-			tfm[name] = fn
-		}
-
-		for name, fn := range helperTypes.GetHelpers {
-			tfm[name] = fn
-		}
+		tfm, _ := DiscoverHelpers()
 
 		ret += ux.SprintfCyan("List of defined template functions:\n")
 

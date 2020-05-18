@@ -1,180 +1,231 @@
 package helperGit
 
 import (
-	"fmt"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
-	"strings"
 )
-
-
-//type Repository struct {
-//	Dir    Dir
-//	Url    Url
-//	Handle *git.Repository
-//}
 
 
 // Usage:
 //		{{- $cmd := $git.Clone }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-// func (me *HelperGit) Clone(url interface{}, dir ...interface{}) *TypeExecCommand {
-func (me *HelperGit) Clone(url string, dir ...interface{}) *State {
+// func (me *HelperGit) Clone(url string, dir ...interface{}) *TypeExecCommand {
+func (g *HelperGit) Clone() *ux.State {
 	for range only.Once {
-		if me._IsNil() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNil() {
+			break
+		}
+		if g.Reflect().IsNotAvailable() {
 			break
 		}
 
-		u := helperTypes.ReflectString(url)
-		if u == nil {
-			me.Cmd.SetError("URL is nil")
-			break
-		}
-		me.SetUrl(*u)
-
-
-		d := helperPath.ReflectAbsPath(dir...)
-		if d == nil {
-			me.Cmd.SetError("dir is nil")
+		if g.Url == "" {
+			g.State.SetError("Git repo URL is empty")
 			break
 		}
 
-		if !me.Base.SetPath(*d) {
-			me.Cmd.SetError("error setting path to %s", me.Base.GetPath())
-			break
-		}
-
-		me.Base.StatPath()
-		if me.Base.Exists() {
-			me.Cmd.SetError("cannot clone as path %s already exists", me.Base.GetPath())
-			me.Cmd.Exit = 1
+		g.Base.StatPath()
+		if g.Base.Exists() {
+			g.State.SetError("cannot clone as path %s already exists", g.Base.GetPath())
+			g.Cmd.Exit = 1
 			break
 		}
 
 
-		ux.PrintfWhite("Cloning %s into %s\n", me.Url, me.Base.GetPath())
-		me.skipDirCheck = true
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandClone, me.Url, me.Base.GetPath()))
-		me.skipDirCheck = false
+		ux.PrintfWhite("Cloning %s into %s\n", g.Url, g.Base.GetPath())
+		g.skipDirCheck = true
+		g.State.SetState(g.Exec(gitCommandClone, g.Url, g.Base.GetPath()))
+		g.skipDirCheck = false
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
+//func (g *HelperGit) Clone() *ux.State {
+//	for range only.Once {
+//		if g.Reflect().IsNotOk() {
+//			break
+//		}
+//
+//		if url == "" {
+//			g.State.SetError("URL is nil")
+//			break
+//		}
+//		g.SetUrl(url)
+//
+//
+//		d := helperPath.ReflectAbsPath(dir...)
+//		if d == nil {
+//			g.State.SetError("dir is nil")
+//			break
+//		}
+//
+//		if !g.Base.SetPath(*d) {
+//			g.State.SetError("error setting path to %s", g.Base.GetPath())
+//			break
+//		}
+//
+//		g.Base.StatPath()
+//		if g.Base.Exists() {
+//			g.State.SetError("cannot clone as path %s already exists", g.Base.GetPath())
+//			g.Cmd.Exit = 1
+//			break
+//		}
+//
+//
+//		ux.PrintfWhite("Cloning %s into %s\n", g.Url, g.Base.GetPath())
+//		g.skipDirCheck = true
+//		g.State.SetState(g.Exec(gitCommandClone, g.Url, g.Base.GetPath()))
+//		g.skipDirCheck = false
+//	}
+//
+//	if g.State.IsError() {
+//		g.State.SetError("Clone() - %s", g.State.Error)
+//	}
+//	return g.State
+//}
 
 
 // Usage:
 //		{{- $cmd := $git.Open }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) Open() *State {
+func (g *HelperGit) Open() *ux.State {
 	for range only.Once {
-		if me._IsNil() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNil() {
+			break
+		}
+		if g.Reflect().IsNotAvailable() {
 			break
 		}
 
-		me.Cmd = (*TypeExecCommand)(me.Exec("rev-parse", "--is-inside-work-tree"))
-		if me.Cmd.Output != "true" {
-			if me.Cmd.IsError() {
-				me.Cmd.SetError("current directory does not contain a valid .Git repository: %s", me.Cmd.ErrorValue)
+		g.State.SetState(g.Exec("rev-parse", "--is-inside-work-tree"))
+		if !g.State.OutputEquals("true") {
+			if g.State.IsError() {
+				g.State.SetError("current directory does not contain a valid .Git repository: %s", g.State.GetError())
 				break
 			}
 
-			me.Cmd.SetError("current directory does not contain a valid Git repository")
+			g.State.SetError("current directory does not contain a valid Git repository")
 			break
 		}
 
 		var err error
-		me.repository, err = git.PlainOpen(me.Base.GetPath())
+		g.repository, err = git.PlainOpen(g.Base.GetPath())
 		if err != nil {
-			me.Cmd.SetError(err)
+			g.State.SetError(err)
 			break
 		}
 
-		c, _ := me.repository.Config()
-		me.Url = c.Remotes["origin"].URLs[0]
+		c, _ := g.repository.Config()
+		g.Url = c.Remotes["origin"].URLs[0]
 
-		me.Cmd.Output = fmt.Sprintf("Opened directory %s.\nRemote origin is set to %s\n", me.Base.GetPath(), me.Url)
-		me.Cmd.Data = true
+		g.State.SetOk("Opened directory %s.\nRemote origin is set to %s\n", g.Base.GetPath(), g.Url)
+		g.State.Response = true
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.SetPath }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) SetPath(path ...interface{}) *State {
+func (g *HelperGit) SetPath(path ...interface{}) *ux.State {
 	for range only.Once {
-		if me._IsNil() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNil() {
+			break
+		}
+		if g.Reflect().IsNotAvailable() {
 			break
 		}
 
-		p := helperPath.ReflectPath(path...)
+		p := helperPath.ReflectAbsPath(path...)
 		if p == nil {
-			me.Cmd.SetError("path repo is nil")
+			g.State.SetError("path repo is nil")
+			break
+		}
+		if *p == "" {
+			g.State.SetError("path repo is nil")
 			break
 		}
 
-		ps := helperPath.ResolveAbsPath(*p)
-		if ps.IsError() {
-			me.Cmd.ErrorValue = ps.ErrorValue
+
+		if !g.Base.SetPath(*p) {
+			g.State.SetError("path repo '%s' cannot be set", *p)
 			break
 		}
-		//if !ps.Exists {
-		//	me.Exe.SetError("path not found")
+
+		g.State.SetState(g.Base.StatPath())
+		//if state.IsError() {
+		//	g.State.SetState(state)
 		//	break
 		//}
-		if ps.IsFile {
-			me.Cmd.SetError("path is not a directory")
+
+		if g.Base.NotExists() {
+			g.State.Clear()
 			break
 		}
-
-		me.Base = ps
+		if g.Base.IsAFile() {
+			g.State.SetError("path repo '%s' exists and is a file", *p)
+			break
+		}
+		g.State.SetState(g.Chdir())
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GetUrl }}
 //		{{- if $cmd.IsOk }}{{ $cmd.Data }}{{- end }}
-func (me *HelperGit) GetUrl() *State {
+func (g *HelperGit) GetUrl() *ux.State {
 	for range only.Once {
-		if me._IsNil() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec("config", "--get", "remote.origin.url"))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec("config", "--get", "remote.origin.url"))
+		if g.State.IsError() {
 			break
 		}
 
-		me.Url = strings.TrimSpace(me.Cmd.Output)
-		me.Cmd.Data = me.Url
+		g.Url = g.State.Output
+		g.State.Response = g.State.Output
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.SetUrl }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) SetUrl(u Url) *State {
+func (g *HelperGit) SetUrl(u Url) *ux.State {
 	for range only.Once {
-		if me._IsNil() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNil() {
+			break
+		}
+		if g.Reflect().IsNotAvailable() {
 			break
 		}
 
-		me.Url = u
+		g.Url = u
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
@@ -182,89 +233,99 @@ func (me *HelperGit) SetUrl(u Url) *State {
 //		{{- $cmd := $git.Clone }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 // func (me *HelperGit) Clone(url interface{}, dir ...interface{}) *TypeExecCommand {
-func (me *HelperGit) Remove() *State {
+func (g *HelperGit) Remove() *ux.State {
 	for range only.Once {
-		if (*TypeGit)(me).IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.State = me.Base.StatPath().Reflect()
-		if me.State.IsError() {
+		g.State.SetState(g.Base.StatPath())
+		if g.State.IsError() {
 			break
 		}
 
 		// @TODO - TO BE IMPLEMENTED
 
-		//me.Base.Exists
+		//g.Base.Exists
 		//ps := helperSystem.ResolveAbsPath(*d)
 		//if ps.IsFile {
 		//	break
 		//}
 		//if ps.IsDir {
 		//	if ps.Exists {
-		//		me.Cmd.SetError("Repository exists for directory '%s'", ps.Path)
-		//		me.Cmd.Exit = 1
+		//		g.State.SetError("Repository exists for directory '%s'", ps.Path)
+		//		g.Cmd.Exit = 1
 		//		break
 		//	}
 		//}
 		//
-		//me.SetUrl(*u)
-		//me.Base = ps
-		//ux.PrintfWhite("Cloning %s into %s\n", me.Url, me.Base.Path)
+		//g.SetUrl(*u)
+		//g.Base = ps
+		//ux.PrintfWhite("Cloning %s into %s\n", g.Url, g.Base.Path)
 		//
-		//me.skipDirCheck = true
-		//me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec(gitCommandClone, me.Url, me.Base.Path))
-		//me.skipDirCheck = false
+		//g.skipDirCheck = true
+		//g.Cmd = (*helperTypes.TypeExecCommand)(g.Exec(gitCommandClone, g.Url, g.Base.Path))
+		//g.skipDirCheck = false
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.Lock }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) Lock() *State {
+func (g *HelperGit) Lock() *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = me.GetTagObject(LockTag)
-		if me.Cmd.IsError() {
+		g.State = g.GetTagObject(LockTag)
+		if g.State.IsError() {
 			break
 		}
 
 		var to *object.Tag
-		to = me.Cmd.Data.(*object.Tag)
+		to = g.State.Response.(*object.Tag)
 
-		_ = to.ID()
+		g.State.Response = to.ID()
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
 
 
 // Usage:
 //		{{- $cmd := $git.GetStatus }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) GetStatus() (sts Status, err error) {
+func (g *HelperGit) GetStatus() (sts Status, err error) {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
 		var wt *git.Worktree
-		wt, me.Cmd.ErrorValue = me.repository.Worktree()
-		if me.Cmd.IsError() {
+		var err error
+		wt, err = g.repository.Worktree()
+		g.State.SetError(err)
+		if g.State.IsError() {
 			break
 		}
 
-		sts, me.Cmd.ErrorValue = wt.Status()
-		if me.Cmd.IsError() {
+		sts, err = wt.Status()
+		g.State.SetError(err)
+		if g.State.IsError() {
 			break
 		}
 	}
 
+	//return g.State
 	return sts, err
 }

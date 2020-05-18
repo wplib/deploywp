@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"github.com/wplib/deploywp/only"
 	"os"
+	"path/filepath"
 	"reflect"
+	"runtime"
 	"strings"
 )
 
@@ -31,287 +33,446 @@ type StateGetter interface {
 }
 
 type State struct {
-	Prefix   string
+	prefix      string
+	prefixArray []string
+	_Package    string
+	_Function   string
 
-	Error    error
-	Warning  error
-	Ok       error
-	Output   string
-	ExitCode int
-	Response interface{}
+	_Error       error
+	_Warning     error
+	_Ok          error
+	ExitCode    int
+
+	Output      string
+	_Separator  string
+	OutputArray []string
+	Response    interface{}
 }
 
+const DefaultSeparator = "\n"
 
-func New() *State {
+func NewState() *State {
 	me := State{}
 	me.Clear()
 	return &me
 }
 
 
-func (me *State) Clear() {
-	me.Error = nil
-	me.Warning = nil
-	me.Ok = errors.New("")
+func (p *State) Clear() {
+	p._Error = nil
+	p._Warning = nil
+	p._Ok = errors.New("")
+	p.ExitCode = 0
 
-	me.ExitCode = 0
-	me.Output = ""
-	me.Response = nil
+	p.Output = ""
+	p._Separator = DefaultSeparator
+	p.OutputArray = []string{}
+	p.Response = nil
 }
 
 
-// Ability to set State from an arbitrary interface type.
-//func (me *State) SetState(state interface{}) *State {
-//	for range only.Once {
-//
-//		me
-//		switch {
-//		case me.Error != nil:
-//			PrintfError("%s", me.Error)
-//		case me.Warning != nil:
-//			PrintfWarning("%s", me.Warning)
-//		case me.Ok != nil:
-//			PrintfOk("%s", me.Ok)
-//		}
-//	}
-//}
+func (p *State) GetPrefix() string {
+	return p.prefix
+}
+func (p *State) GetPackage() string {
+	return p._Package
+}
+func (p *State) GetFunction() string {
+	return p._Function
+}
+func (p *State) SetPackage(s string) {
+	if s == "" {
+		// Discover package name.
+		//pc, file, no, ok := runtime.Caller(1)
+		pc, _, _, ok := runtime.Caller(1)
+		if ok {
+			//s = file + ":" + string(no)
+			details := runtime.FuncForPC(pc)
+			s = filepath.Base(details.Name())
+			sa := strings.Split(s, ".")
+			if len(sa) > 0 {
+				s = sa[0]
+			}
+		}
+	}
+
+	p._Package = s
+	if p._Function == "" {
+		p.prefix = p._Package
+	} else {
+		p.prefix = p._Package + "." + p._Function + "()"
+		p.prefixArray = append(p.prefixArray, p.prefix)
+	}
+}
+func (p *State) SetFunction(s string) {
+	if s == "" {
+		// Discover function name.
+		//pc, file, no, ok := runtime.Caller(1)
+		pc, _, _, ok := runtime.Caller(1)
+		if ok {
+			//s = file + ":" + string(no)
+			details := runtime.FuncForPC(pc)
+			foo := details.Name()
+			s = filepath.Base(foo)
+			sa := strings.Split(s, ".")
+			switch {
+				case len(sa) > 2:
+					s = sa[2]
+				case len(sa) > 1:
+					s = sa[1]
+				case len(sa) > 0:
+					s = sa[0]
+			}
+		}
+	}
+
+	p._Function = s
+	if p._Package == "" {
+		p.prefix = p._Function + "()"
+	} else {
+		p.prefix = p._Package + "." + p._Function + "()"
+	}
+
+	p.prefixArray = append(p.prefixArray, p.prefix)
+}
+func (p *State) SetFunctionCaller() {
+	var s string
+	// Discover function name.
+	pc, _, _, ok := runtime.Caller(2)
+	if ok {
+		//s = file + ":" + string(no)
+		details := runtime.FuncForPC(pc)
+		s = filepath.Base(details.Name())
+		sa := strings.Split(s, ".")
+		if len(sa) > 0 {
+			s = sa[1]
+		}
+	}
+
+	p.SetFunction(s)
+}
 
 
-func (me *State) Sprint() string {
+func (p *State) GetState() *bool {
+	var b bool
+	//s := &State{
+	//	_Error:      p._Error,
+	//	_Warning:    p._Warning,
+	//	_Ok:         p._Ok,
+	//	ExitCode:    p.ExitCode,
+	//	Output:      p.Output,
+	//	OutputArray: p.OutputArray,
+	//	Response:    p.Response,
+	//}
+	return &b
+}
+func (s *State) SetState(p *State) {
+	s._Error =      p._Error
+	s._Warning =    p._Warning
+	s._Ok =         p._Ok
+	s.ExitCode =    p.ExitCode
+	s.Output =      p.Output
+	s.OutputArray = p.OutputArray
+	s.Response =    p.Response
+}
+
+
+func (p *State) Sprint() string {
 	var ret string
 
 	e := ""
-	if me.ExitCode != 0 {
-		e = fmt.Sprintf("Exit(%d) - ", me.ExitCode)
+	if p.ExitCode != 0 {
+		e = fmt.Sprintf("Exit(%d) - ", p.ExitCode)
+	}
+
+	pa := ""
+	if len(p.prefixArray) > 0 {
+		pa = fmt.Sprintf("[%s] - ", p.prefixArray[0])
 	}
 
 	switch {
-		case me.Error != nil:
-			ret = SprintfError("ERROR: %s%s", e, me.Error)
-		case me.Warning != nil:
-			ret = SprintfWarning("WARNING: %s%s", e, me.Warning)
-		case me.Ok != nil:
-			ret = SprintfOk("%s", me.Ok)
+		case p._Error != nil:
+			ret = SprintfError("ERROR: %s%s%s", pa, e, p._Error)
+		case p._Warning != nil:
+			ret = SprintfWarning("WARNING: %s%s%s", pa, e, p._Warning)
+		case p._Ok != nil:
+			ret = SprintfOk("%s", p._Ok)
 	}
 
-	if me.Output != "" {
-		ret += SprintfOk("\n%s ", me.Output)
+	if p.Output != "" {
+		ret += SprintfOk("\n%s ", p.Output)
 	}
 
 	return ret
 }
-func (me *State) SprintError() string {
+func (p *State) PrintResponse() string {
+	return p.Sprint()
+}
+func (p *State) SprintError() string {
 	var ret string
 
 	for range only.Once {
-		if me.Ok != nil {
+		if p._Ok != nil {
 			// If we have an OK response.
 			break
 		}
 
-		ret = me.Sprint()
+		ret = p.Sprint()
 	}
 
 	return ret
 }
 
 
-func (me *State) IsError() bool {
+func (p *State) IsError() bool {
 	var ok bool
 
-	if me.Error != nil {
+	if p._Error != nil {
 		ok = true
 	}
 
 	return ok
 }
 
-func (me *State) IsWarning() bool {
+func (p *State) IsWarning() bool {
 	var ok bool
 
-	if me.Warning != nil {
+	if p._Warning != nil {
 		ok = true
 	}
 
 	return ok
 }
 
-func (me *State) IsOk() bool {
+func (p *State) IsOk() bool {
 	var ok bool
 
-	if me.Ok != nil {
+	if p._Ok != nil {
 		ok = true
 	}
 
 	return ok
 }
+func (p *State) IsNotOk() bool {
+	ok := true
 
-
-func (me *State) SetExitCode(e int) {
-	me.ExitCode = 0
-}
-func (me *State) GetExitCode() int {
-	return me.ExitCode
-}
-
-
-func (me *State) SetError(error ...interface{}) {
 	for range only.Once {
-		me.Ok = nil
-		me.Warning = nil
+		if p._Warning != nil {
+			break
+		}
+		if p._Error != nil {
+			break
+		}
+		ok = false
+	}
+
+	return ok
+}
+
+func (p *State) SetExitCode(e int) {
+	p.ExitCode = e
+}
+func (p *State) GetExitCode() int {
+	return p.ExitCode
+}
+
+
+func (p *State) SetError(error ...interface{}) {
+	for range only.Once {
+		if p == nil {
+			//p._Error = errors.New("ERROR State is nil")
+			break
+		}
+
+		p._Ok = nil
+		p._Warning = nil
 
 		if len(error) == 0 {
-			me.Error = errors.New("ERROR")
+			//p._Error = errors.New(p.prefix + "ERROR")
+			p._Error = errors.New("ERROR")
 			break
 		}
 
-		me.Error = errors.New(_Sprintf(error...))
+		if error[0] == nil {
+			p._Error = nil
+			break
+		}
+
+		//p._Error = errors.New(p.prefix + _Sprintf(error...))
+		p._Error = errors.New(_Sprintf(error...))
 	}
 }
-func (me *State) GetError() error {
-	return me.Error
+func (p *State) GetError() error {
+	return p._Error
 }
 
 
-func (me *State) SetWarning(warning ...interface{}) {
-//func (me *State) SetWarning(format string, args ...interface{}) {
-//	me.Ok = nil
-//	me.Warning = errors.New(fmt.Sprintf(format, args...))
-//	me.Error = nil
+func (p *State) SetWarning(warning ...interface{}) {
+//func (p *State) SetWarning(format string, args ...interface{}) {
+//	p._Ok = nil
+//	p._Warning = errors.New(fmt.Sprintf(format, args...))
+//	p._Error = nil
 
 	for range only.Once {
-		me.Ok = nil
-		me.Error = nil
+		if p == nil {
+			//p._Error = errors.New("ERROR State is nil")
+			break
+		}
+
+		p._Ok = nil
+		p._Error = nil
 
 		if len(warning) == 0 {
-			me.Warning = errors.New("WARNING")
+			//p._Warning = errors.New(p.prefix + "WARNING")
+			p._Warning = errors.New("WARNING")
 			break
 		}
 
-		me.Warning = errors.New(_Sprintf(warning...))
+		if warning[0] == nil {
+			p._Error = nil
+			break
+		}
+
+		//p._Warning = errors.New(p.prefix + _Sprintf(warning...))
+		p._Warning = errors.New(_Sprintf(warning...))
 	}
 }
-func (me *State) GetWarning() error {
-	return me.Warning
+func (p *State) GetWarning() error {
+	return p._Warning
 }
 
 
-func (me *State) SetOk(msg ...interface{}) {
-// func (me *State) SetOk(format string, args ...interface{}) {
-//	me.Ok = errors.New(fmt.Sprintf(format, args...))
-//	me.Warning = nil
-//	me.Error = nil
+func (p *State) SetOk(msg ...interface{}) {
+// func (p *State) SetOk(format string, args ...interface{}) {
+//	p._Ok = errors.New(fmt.Sprintf(format, args...))
+//	p._Warning = nil
+//	p._Error = nil
 
 	for range only.Once {
-		me.Error = nil
-		me.Warning = nil
-		me.ExitCode = 0
-
-		if len(msg) == 0 {
-			me.Ok = errors.New("")
+		if p == nil {
+			//p._Error = errors.New("ERROR State is nil")
 			break
 		}
 
-		me.Ok = errors.New(_Sprintf(msg...))
+		p._Error = nil
+		p._Warning = nil
+		p.ExitCode = 0
+
+		if len(msg) == 0 {
+			p._Ok = errors.New("")
+			break
+		}
+
+		if msg[0] == nil {
+			p._Error = nil
+			break
+		}
+
+		//p._Ok = errors.New(p.prefix + _Sprintf(msg...))
+		p._Ok = errors.New(_Sprintf(msg...))
 	}
 }
-func (me *State) GetOk() error {
-	return me.Ok
+func (p *State) GetOk() error {
+	return p._Ok
 }
 
 
-func (me *State) ClearError() {
-	me.Error = nil
+func (p *State) ClearError() {
+	p._Error = nil
 }
 
 
-func (me *State) IsRunning() bool {
+func (p *State) IsRunning() bool {
 	var ok bool
-	if me.Output == StateRunning {
+	if p.Output == StateRunning {
 		ok = true
 	}
 	return ok
 }
 
-func (me *State) IsPaused() bool {
+func (p *State) IsPaused() bool {
 	var ok bool
-	if me.Output == StatePaused {
+	if p.Output == StatePaused {
 		ok = true
 	}
 	return ok
 }
 
-func (me *State) IsCreated() bool {
+func (p *State) IsCreated() bool {
 	var ok bool
-	if me.Output == StateCreated {
+	if p.Output == StateCreated {
 		ok = true
 	}
 	return ok
 }
 
-func (me *State) IsRestarting() bool {
+func (p *State) IsRestarting() bool {
 	var ok bool
-	if me.Output == StateRestarting {
+	if p.Output == StateRestarting {
 		ok = true
 	}
 	return ok
 }
 
-func (me *State) IsRemoving() bool {
+func (p *State) IsRemoving() bool {
 	var ok bool
-	if me.Output == StateRemoving {
+	if p.Output == StateRemoving {
 		ok = true
 	}
 	return ok
 }
 
-func (me *State) IsExited() bool {
+func (p *State) IsExited() bool {
 	var ok bool
-	if me.Output == StateExited {
+	if p.Output == StateExited {
 		ok = true
 	}
 	return ok
 }
 
-func (me *State) IsDead() bool {
+func (p *State) IsDead() bool {
 	var ok bool
-	if me.Output == StateDead {
+	if p.Output == StateDead {
 		ok = true
 	}
 	return ok
 }
 
 
-// "created", "running", "paused", "restarting", "removing", "exited", or "dead"
-func (me *State) SetString(s string) {
-	me.Output = s
-}
-func (me *State) GetString() string {
-	return me.Output
-}
-
-
-func (me *State) ExitOnError() string {
-	if me.IsError() {
-		_, _ = fmt.Fprintf(os.Stderr, me.Sprint())
-		os.Exit(me.ExitCode)
+func (p *State) ExitOnNotOk() string {
+	if p.IsNotOk() {
+		_, _ = fmt.Fprintf(os.Stderr, p.Sprint())
+		os.Exit(p.ExitCode)
 	}
 	return ""
 }
 
 
-func (me *State) ExitOnWarning() string {
-	if me.IsWarning() {
-		_, _ = fmt.Fprintf(os.Stderr, me.Sprint())
-		os.Exit(me.ExitCode)
+func (p *State) ExitOnError() string {
+	if p.IsWarning() {
+		_, _ = fmt.Fprintf(os.Stderr, p.Sprint())
+	}
+	if p.IsError() {
+		_, _ = fmt.Fprintf(os.Stderr, p.Sprint())
+		os.Exit(p.ExitCode)
 	}
 	return ""
 }
 
 
-func (me *State) Exit(e int) string {
-	_, _ = fmt.Fprintf(os.Stdout, me.Sprint())
-	os.Exit(me.ExitCode)
+func (p *State) ExitOnWarning() string {
+	if p.IsWarning() {
+		_, _ = fmt.Fprintf(os.Stderr, p.Sprint())
+		os.Exit(p.ExitCode)
+	}
+	return ""
+}
+
+
+func (p *State) Exit(e int) string {
+	p.ExitCode = e
+	_, _ = fmt.Fprintf(os.Stdout, p.Sprint())
+	os.Exit(p.ExitCode)
 	return ""
 }
 

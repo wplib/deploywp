@@ -1,8 +1,8 @@
 package helperGit
 
 import (
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 )
 
 type Commit struct {
@@ -20,19 +20,21 @@ func _NewCommit(hash string) *Commit {
 // Usage:
 //		{{- $cmd := $git.Commit }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (me *HelperGit) Commit(format interface{}, a ...interface{}) *State {
+func (g *HelperGit) Commit(format interface{}, a ...interface{}) *ux.State {
 	for range only.Once {
-		if me.Reflect().IsNotOk() {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
 			break
 		}
 
-		me.Cmd = (*helperTypes.TypeExecCommand)(me.Exec("rev-parse", "--verify", "HEAD"))
-		if me.Cmd.IsError() {
+		g.State.SetState(g.Exec("rev-parse", "--verify", "HEAD"))
+		if g.State.IsError() {
 			break
 		}
 
-		me.Cmd.Data = _NewCommit(me.Cmd.Output)
+		g.State.Response = _NewCommit(g.State.Output)
 	}
 
-	return ReflectState(me.State)
+	return g.State
 }
