@@ -34,3 +34,9 @@ Back end functions/methods perform the low level work of a specific helper. Ther
 All backend functions/methods that start with an `Is` will ALWAYS return a bool type. There are also always a matching `IsNot` to all `Is` functions/methods.
 
 
+### Makefile
+
+- `make build`
+- `make test`
+- `make release`
+
