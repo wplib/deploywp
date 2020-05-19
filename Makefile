@@ -27,7 +27,7 @@ endif
 
 
 test:
-	@./bin/deploywp run --chdir --json tests/deploywp.json
+	@./bin/deploywp run --chdir --json tests/deploywp.json prod
 
 
 docker:

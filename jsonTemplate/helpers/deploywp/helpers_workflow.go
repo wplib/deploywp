@@ -121,8 +121,8 @@ func (e *TypeDeployWp) Run() *ux.State {
 		ux.PrintfWhite("#############################\n")
 		ux.PrintfWhite("# Opening source repository #\n")
 		ux.PrintfWhite("#############################\n")
-		e.State = e.OpenSourceRepo()
-		if e.State.IsError() {
+		srcGitRef := e.OpenSourceRepo()
+		if srcGitRef.State.IsError() {
 			break
 		}
 		ux.PrintfWhite("\n\n")
@@ -131,6 +131,13 @@ func (e *TypeDeployWp) Run() *ux.State {
 		ux.PrintfWhite("#############################\n")
 		ux.PrintfWhite("# Opening target repository #\n")
 		ux.PrintfWhite("#############################\n")
+		srcGitRef.State = e.CheckoutSourceRepo(srcGitRef)
+		if e.State.IsError() {
+			break
+		}
+		ux.PrintfWhite("\n\n")
+
+
 	}
 
 	return e.State

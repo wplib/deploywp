@@ -48,7 +48,9 @@ func (e *TypeDeployWp) PrintPaths() *ux.State {
 // Usage:
 //		{{ $cmd := OpenSourceRepo }}
 //		{{ $cmd.ExitOnWarning }}
-func (e *TypeDeployWp) OpenSourceRepo() *ux.State {
+func (e *TypeDeployWp) OpenSourceRepo() *helperGit.HelperGit {
+	gitRef := helperGit.NewGit().Reflect()
+
 	for range only.Once {
 		if e.IsNil() {
 			e.State.SetError("deploywp JSON is nil")
@@ -85,7 +87,7 @@ func (e *TypeDeployWp) OpenSourceRepo() *ux.State {
 			break
 		}
 
-		gitRef := helperGit.HelperNewGit()
+		gitRef = helperGit.HelperNewGit()
 		if gitRef.State.IsError() {
 			e.State = gitRef.State
 			break
@@ -128,6 +130,60 @@ func (e *TypeDeployWp) OpenSourceRepo() *ux.State {
 		e.State.Clear()
 	}
 
+	gitRef.State = e.State
+	return gitRef
+}
+
+
+// Usage:
+//		{{ $cmd := CheckoutSourceRepo }}
+//		{{ $cmd.ExitOnWarning }}
+func (e *TypeDeployWp) CheckoutSourceRepo(gitRef *helperGit.HelperGit) *ux.State {
+	for range only.Once {
+		if e.IsNil() {
+			e.State.SetError("deploywp JSON is nil")
+			break
+		}
+
+		if gitRef.IsNotExisting() {
+			e.State.SetError("deploywp JSON is nil")
+			break
+		}
+
+		ux.PrintfBlue("# Checkout branch/tag from repository.\n")
+		refType := e.Source.GetRevisionType()
+		if refType == "" {
+			e.State.SetError(".source.revision.ref_type is nil")
+			break
+		}
+
+		refName := e.Source.GetRevisionName()
+		if refName == "" {
+			e.State.SetError(".source.revision.ref_name is nil")
+			break
+		}
+
+		ux.PrintfBlue("# Source repository checkout.\n")
+		ux.PrintfOk("Type: '%s'\n", refType)
+		ux.PrintfOk("Name: '%s'\n", refName)
+
+		ux.PrintfBlue("# Checking if %s exists.\n", refType)
+		e.State = gitRef.TagExists(refName)
+		if e.State.IsError() {
+			break
+		}
+
+		ux.PrintfBlue("# Checking out %s:%s.\n", refType, refName)
+		e.State = gitRef.TagExists(refName)
+		if e.State.IsError() {
+			break
+		}
+
+		ux.PrintfOk("# Source repository opened OK.\n")
+		e.State.Clear()
+	}
+
+	gitRef.State = e.State
 	return e.State
 }
 

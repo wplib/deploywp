@@ -133,7 +133,9 @@ func (g *HelperGit) IsExisting() bool {
 
 	return ok
 }
-
+func (g *HelperGit) IsNotExisting() bool {
+	return !g.IsExisting()
+}
 
 // Usage:
 //		{{- $cmd := $git.Open }}
