@@ -7,9 +7,18 @@ import (
 )
 
 
+type HelperExecCommand TypeExecCommand
+func (g *HelperExecCommand) Reflect() *TypeExecCommand {
+	return (*TypeExecCommand)(g)
+}
+func (g *TypeExecCommand) Reflect() *HelperExecCommand {
+	return (*HelperExecCommand)(g)
+}
+
+
 // Usage:
 //		{{ $output := ExecCommand "ps %s" "-eaf" ... }}
-func HelperExecCommand(cmd ...interface{}) *ux.State {
+func HelperExecCmd(cmd ...interface{}) *ux.State {
 	ret := NewExecCommand()
 
 	for range only.Once {
@@ -27,15 +36,7 @@ func HelperExecCommand(cmd ...interface{}) *ux.State {
 }
 // Alias of ExecCommand
 func HelperExec(cmd ...interface{}) *ux.State {
-	return HelperExecCommand(cmd...)
-}
-
-
-func (e *TypeExecCommand) IsNil() bool {
-	if e == nil {
-		return true
-	}
-	return false
+	return HelperExecCmd(cmd...)
 }
 
 

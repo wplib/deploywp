@@ -83,6 +83,7 @@
 				"host_name": "test"
 			},
 			{
+				"auto_deploy": true,
 				"ref_name": "dev-api",
 				"host_name": "dev"
 			}

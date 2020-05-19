@@ -12,8 +12,8 @@ type HelperGit TypeGit
 func (g *HelperGit) Reflect() *TypeGit {
 	return (*TypeGit)(g)
 }
-func (me *TypeGit) Reflect() *HelperGit {
-	return (*HelperGit)(me)
+func (g *TypeGit) Reflect() *HelperGit {
+	return (*HelperGit)(g)
 }
 
 
@@ -124,7 +124,7 @@ func (g *HelperGit) Exec(cmd string, args ...string) *ux.State {
 		g.State.OutputTrim()
 		g.State.SetError(err)
 		if g.State.IsError() {
-			g.Cmd.Exit = 1 // Fake an exit code.
+			g.State.SetExitCode(1) // Fake an exit code.
 			break
 		}
 

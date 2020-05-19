@@ -42,6 +42,9 @@ func (p *State) OutputAppend(data ...interface{}) {
 					}
 				case string:
 					sa = append(sa, strings.Split(d.(string), p._Separator)...)
+				case []byte:
+					ts := d.([]byte)
+					sa = append(sa, strings.Split(string(ts), p._Separator)...)
 			}
 
 			p.OutputArray = append(p.OutputArray, sa...)

@@ -26,13 +26,13 @@ func ExecCommand(ec *TypeExecCommand) *TypeExecCommand {
 		if ec.State.IsError() {
 			if exitError, ok := err.(*exec.ExitError); ok {
 				waitStatus := exitError.Sys().(syscall.WaitStatus)
-				ec.Exit = waitStatus.ExitStatus()
+				ec.State.SetExitCode(waitStatus.ExitStatus())
 			}
 			break
 		}
 
 		waitStatus := c.ProcessState.Sys().(syscall.WaitStatus)
-		ec.Exit = waitStatus.ExitStatus()
+		ec.State.SetExitCode(waitStatus.ExitStatus())
 	}
 
 	return ec

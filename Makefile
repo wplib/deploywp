@@ -1,4 +1,5 @@
 PKGREFLECT := $(shell which pkgreflect)
+GODOCMD := $(shell which godocdown)
 
 all:
 	@cat Makefile
@@ -12,7 +13,17 @@ ifeq ($(PKGREFLECT),)
 else
 	@echo "pkgreflect - already installed here $(PKGREFLECT)"
 endif
-	@pkgreflect jsonTemplate/helpers
+	@$(PKGREFLECT) -notests jsonTemplate/helpers
+
+
+doc:
+ifeq ($(GODOCMD),)
+	@echo "godocdown - Installing"
+	@go install github.com/robertkrimen/godocdown/godocdown
+else
+	@echo "godocdown - already installed here $(GODOCMD)"
+endif
+	@$(GODOCMD) 
 
 
 test:

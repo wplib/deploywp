@@ -32,7 +32,7 @@ func (g *HelperGit) Clone() *ux.State {
 		g.Base.StatPath()
 		if g.Base.Exists() {
 			g.State.SetError("cannot clone as path %s already exists", g.Base.GetPath())
-			g.Cmd.Exit = 1
+			g.State.SetExitCode(1) // Fake an exit code.
 			break
 		}
 

@@ -8,8 +8,9 @@ import (
 
 
 type TargetRevision struct {
-	HostName string `json:"host_name" mapstructure:"host_name"`
-	RefName  string `json:"ref_name" mapstructure:"ref_name"`
+	AutoDeploy string `json:"auto_deploy" mapstructure:"auto_deploy"`
+	HostName   string `json:"host_name" mapstructure:"host_name"`
+	RefName    string `json:"ref_name" mapstructure:"ref_name"`
 
 	Valid bool
 	Error error

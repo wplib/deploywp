@@ -18,7 +18,7 @@
 
 ################################################################################
 {{ PrintfBlue "# Run command and check output" }}
-{{- $cmd := ExecCommand "ps" "-eaf" }}
+{{- $cmd := ExecCmd "ps" "-eaf" }}
 {{- if $cmd.OutputParse "%s" "deploywp" }}
 {{- $str := Grep $cmd.Output "deploywp" }}
 {{ PrintfBlue "Found string in output" }}
@@ -28,10 +28,16 @@
 {{- end }}
 
 {{ PrintfBlue "# Run commands with error" }}
-{{- $g := ExecCommand "git" "config" "--get" "remote.origin.url" }}
+{{- $g := ExecCmd "/usr/bin/false" "arg1" "arg2" }}
 {{ $g.PrintResponse }}
 
-{{- $cmd := ExecCommand "git" "FAILED" }}
+{{ PrintfBlue "# Run commands with error" }}
+{{- $g := ExecBash "if [ -f testfile.txt ]; then echo 'YES'; fi;" "ps -eaf | grep bash" }}
+{{ $g.PrintResponse }}
+{{- $g := ExecBash "if [ -f testfile.txt ]; then echo 'YES'; fi;" "ps -eaf | grep bash" }}
+{{ $g.PrintResponse }}
+
+{{- $cmd := ExecCmd "git" "FAILED" }}
 {{- if $cmd.ExitCode }}
 {{ $cmd.PrintError }}
 {{- end }}
