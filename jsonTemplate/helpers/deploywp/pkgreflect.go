@@ -21,6 +21,7 @@ var Types = map[string]reflect.Type{
 	"Providers": reflect.TypeOf((*Providers)(nil)).Elem(),
 	"Repository": reflect.TypeOf((*Repository)(nil)).Elem(),
 	"Revision": reflect.TypeOf((*Revision)(nil)).Elem(),
+	"Runtime": reflect.TypeOf((*Runtime)(nil)).Elem(),
 	"Source": reflect.TypeOf((*Source)(nil)).Elem(),
 	"State": reflect.TypeOf((*State)(nil)).Elem(),
 	"String": reflect.TypeOf((*String)(nil)).Elem(),
@@ -34,7 +35,9 @@ var Types = map[string]reflect.Type{
 
 var Functions = map[string]reflect.Value{
 	"HelperLoadDeployWp": reflect.ValueOf(HelperLoadDeployWp),
+	"NewHost": reflect.ValueOf(NewHost),
 	"NewJsonFile": reflect.ValueOf(NewJsonFile),
+	"ReflectDeployWp": reflect.ValueOf(ReflectDeployWp),
 }
 
 var Variables = map[string]reflect.Value{

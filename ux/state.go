@@ -229,10 +229,9 @@ func (p *State) IsError() bool {
 	var ok bool
 
 	if p == nil {
-		fmt.Printf("DUH\n")
-		return ok
-	}
-	if p._Error != nil {
+		//fmt.Printf("DUH\n")
+		ok = true
+	} else if p._Error != nil {
 		ok = true
 	}
 

@@ -35,8 +35,12 @@ test-template:
 	@./tests/deploywp.tmpl prod
 
 
-docker:
-	@docker build -f docker/Dockerfile .
+test-docker:
+	@launch -q -p tests -m tests shell deploywp:0.9 deploywp run
+
+
+build-docker:
+	@make -C docker
 
 
 build:
