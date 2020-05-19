@@ -7,6 +7,7 @@ import (
 	"github.com/wplib/deploywp/ux"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 
@@ -19,8 +20,9 @@ func ProcessArgs(cmd *cobra.Command, args []string) (*jsonTemplate.Template, ux.
 		var s string
 		var b bool
 
-		_ = tmpl.SetArgs(cmd.Use)
-		_ = tmpl.AddArgs(args...)
+		_ = tmpl.SetFullArgs(cmd.Use)
+		_ = tmpl.AddFullArgs(args...)
+		_ = tmpl.SetArgs(tmpl.GetFullArgs()[1:]...)
 
 		fl := cmd.Flags()
 
@@ -47,14 +49,24 @@ func ProcessArgs(cmd *cobra.Command, args []string) (*jsonTemplate.Template, ux.
 		}
 
 
-		s, err = fl.GetString(argTemplateFile)
-		if err != nil {
-			s = defaultTemplateFile
-		}
-		err = tmpl.SetTemplateFile(s)
-		if err != nil {
-			state.SetError("ERROR: %s", err)
-			break
+		for range only.Once {
+			s, err = fl.GetString(argTemplateFile)
+			if err != nil {
+				s = defaultTemplateFile
+			}
+
+			err = tmpl.SetTemplateFile(s)
+			if err == nil {
+				break
+			}
+
+			// Try again based on the json file.
+			s = strings.TrimSuffix(tmpl.GetJsonFile(), defaultJsonFileSuffix) + defaultTemplateFileSuffix
+			err = tmpl.SetTemplateFile(s)
+			if err != nil {
+				state.SetError("ERROR: %s", err)
+				break
+			}
 		}
 
 

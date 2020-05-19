@@ -9,6 +9,9 @@ const (
 	argConfigFile = "config"
 	argChdir = "chdir"
 
+	defaultTemplateFileSuffix = ".tmpl"
+	defaultJsonFileSuffix = ".json"
+
 	defaultTemplateFile = "deploywp.tmpl"
 	defaultJsonFile = "deploywp.json"
 )

@@ -14,6 +14,7 @@ var Functions = map[string]reflect.Value{
 	"ExecCommand": reflect.ValueOf(ExecCommand),
 	"HelperExec": reflect.ValueOf(HelperExec),
 	"HelperExecBash": reflect.ValueOf(HelperExecBash),
+	"HelperExecCmd": reflect.ValueOf(HelperExecCmd),
 	"HelperNewBash": reflect.ValueOf(HelperNewBash),
 	"HelperOsExit": reflect.ValueOf(HelperOsExit),
 	"NewExecCommand": reflect.ValueOf(NewExecCommand),

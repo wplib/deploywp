@@ -51,6 +51,7 @@ type State struct {
 
 const DefaultSeparator = "\n"
 
+
 func NewState() *State {
 	me := State{}
 	me.Clear()
@@ -441,7 +442,7 @@ func (p *State) IsDead() bool {
 
 func (p *State) ExitOnNotOk() string {
 	if p.IsNotOk() {
-		_, _ = fmt.Fprintf(os.Stderr, p.Sprint())
+		_, _ = fmt.Fprintf(os.Stderr, p.Sprint() + "\n")
 		os.Exit(p.ExitCode)
 	}
 	return ""
@@ -450,10 +451,10 @@ func (p *State) ExitOnNotOk() string {
 
 func (p *State) ExitOnError() string {
 	if p.IsWarning() {
-		_, _ = fmt.Fprintf(os.Stderr, p.Sprint())
+		_, _ = fmt.Fprintf(os.Stderr, p.Sprint() + "\n")
 	}
 	if p.IsError() {
-		_, _ = fmt.Fprintf(os.Stderr, p.Sprint())
+		_, _ = fmt.Fprintf(os.Stderr, p.Sprint() + "\n")
 		os.Exit(p.ExitCode)
 	}
 	return ""
@@ -462,7 +463,7 @@ func (p *State) ExitOnError() string {
 
 func (p *State) ExitOnWarning() string {
 	if p.IsWarning() {
-		_, _ = fmt.Fprintf(os.Stderr, p.Sprint())
+		_, _ = fmt.Fprintf(os.Stderr, p.Sprint() + "\n")
 		os.Exit(p.ExitCode)
 	}
 	return ""

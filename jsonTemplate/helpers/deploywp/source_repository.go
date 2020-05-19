@@ -2,6 +2,7 @@ package deploywp
 
 import (
 	"github.com/wplib/deploywp/only"
+	"strings"
 )
 
 
@@ -12,6 +13,7 @@ type Repository struct {
 	Valid bool
 	Error error
 }
+
 
 type URL string
 func (me *URL) ToString() string {
@@ -67,6 +69,7 @@ func (me *Repository) GetProvider() string {
 	return ret
 }
 
+
 func (me *Repository) GetUrl() URL {
 	var ret URL
 
@@ -79,4 +82,28 @@ func (me *Repository) GetUrl() URL {
 	}
 
 	return ret
+}
+
+
+func (me *Repository) IsGitProvider() bool {
+	var ok bool
+
+	for range only.Once {
+		if me.IsNil() {
+			break
+		}
+
+		switch strings.ToLower(me.Provider) {
+			case "git":
+				fallthrough
+			case "github":
+				fallthrough
+			case "gitlab":
+				fallthrough
+			case "gitlabs":
+				ok = true
+		}
+	}
+
+	return ok
 }

@@ -3,6 +3,7 @@ package jsonTemplate
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/wplib/deploywp/cmd/runtime"
 	"github.com/wplib/deploywp/jsonTemplate/helpers"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/only"
@@ -17,22 +18,22 @@ import (
 )
 
 type Template struct {
-	//version string
-	exec Exec
+	exec           runtime.Exec
 
-	jsonFile string
-	jsonString string
+	jsonFile       string
+	jsonString     string
 
-	createFlag string
-	templateFile string
-	outFile string
-
+	templateFile   string
 	templateString string
-	removeFiles bool
-	overWrite bool
-	execShell bool
 
-	valid bool
+	createFlag     string
+	outFile        string
+	removeFiles    bool
+	overWrite      bool
+	execShell      bool
+
+	JsonStruct     *jsonStruct
+	valid          bool
 }
 
 
@@ -59,26 +60,26 @@ func (me *Template) CreateTemplate() (*template.Template, ux.State) {
 }
 
 
-func (me *Template) ProcessTemplate() ux.State {
-	var state ux.State
+func (me *Template) LoadJson() *ux.State {
+	state := ux.NewState()
 	var err error
 
 	for range only.Once {
-		var jsonStr jsonStruct
-		//jsonStr.ExecName, err = os.Executable()
-		//jsonStr.DirPath = path.Dir(jsonStr.ExecName)
-		//jsonStr.ExecVersion = me.version
-		//jsonStr.ExecArgs = me.args
-		jsonStr.Exec.Cmd, err = os.Executable()
-		jsonStr.Exec.CmdDir = path.Dir(jsonStr.Exec.Cmd)
-		jsonStr.Exec.CmdFile = path.Base(jsonStr.Exec.Cmd)
-		jsonStr.Exec.CmdVersion = me.exec.CmdVersion
-		jsonStr.Exec.Args = me.exec.Args
+		if me.JsonStruct == nil {
+			me.JsonStruct = &jsonStruct{}
+		}
+
+		me.JsonStruct.Exec.Cmd, err = os.Executable()
+		me.JsonStruct.Exec.CmdDir = path.Dir(me.JsonStruct.Exec.Cmd)
+		me.JsonStruct.Exec.CmdFile = path.Base(me.JsonStruct.Exec.Cmd)
+		me.JsonStruct.Exec.CmdVersion = me.exec.CmdVersion
+		me.JsonStruct.Exec.FullArgs = me.exec.FullArgs
+		me.JsonStruct.Exec.Args = me.exec.Args
 
 		now := time.Now()
-		jsonStr.CreationEpoch = now.Unix()
-		jsonStr.CreationDate = now.Format("2006-01-02T15:04:05-0700")
-		jsonStr.Env, _ = helperSystem.GetEnv()
+		me.JsonStruct.CreationEpoch = now.Unix()
+		me.JsonStruct.CreationDate = now.Format("2006-01-02T15:04:05-0700")
+		me.JsonStruct.Env, _ = helperSystem.GetEnv()
 
 
 		// Pull in JSON data.
@@ -89,24 +90,84 @@ func (me *Template) ProcessTemplate() ux.State {
 				state.SetError("Processing error: %s", err)
 				break
 			}
-			jsonStr.JsonString = strings.ReplaceAll(string(js), "\n", "")
-			jsonStr.JsonString = strings.ReplaceAll(jsonStr.JsonString, "\t", "")
+			me.JsonStruct.JsonString = strings.ReplaceAll(string(js), "\n", "")
+			me.JsonStruct.JsonString = strings.ReplaceAll(me.JsonStruct.JsonString, "\t", "")
 
-			jsonStr.Json = make(map[string]interface{})
-			err = json.Unmarshal(js, &jsonStr.Json)
+			me.JsonStruct.Json = make(map[string]interface{})
+			err = json.Unmarshal(js, &me.JsonStruct.Json)
 			if err != nil {
 				state.SetError("Processing error: %s", err)
 				break
 			}
 
-			err = jsonStr.JsonFile.getPaths(me.jsonFile)
+			err = me.JsonStruct.JsonFile.getPaths(me.jsonFile)
+			if err != nil {
+				state.SetError("Processing error: %s", err)
+				break
+			}
+
+		} else {
+			state.SetError("no json file or string")
+			break
+		}
+
+		me.JsonStruct.CreationInfo = fmt.Sprintf("Created on %s, using template:%s and json:%s", me.JsonStruct.CreationDate, me.JsonStruct.TemplateFile.Name, me.JsonStruct.JsonFile.Name)
+		me.JsonStruct.CreationWarning = "WARNING: This file has been auto-generated. DO NOT EDIT: WARNING"
+	}
+
+	return state
+}
+
+
+func (me *Template) ProcessTemplate() ux.State {
+	var state ux.State
+	var err error
+
+	for range only.Once {
+		//var jsonStr jsonStruct
+		//me.JsonStruct.ExecName, err = os.Executable()
+		//me.JsonStruct.DirPath = path.Dir(me.JsonStruct.ExecName)
+		//me.JsonStruct.ExecVersion = me.version
+		//me.JsonStruct.ExecArgs = me.args
+		me.JsonStruct.Exec.Cmd, err = os.Executable()
+		me.JsonStruct.Exec.CmdDir = path.Dir(me.JsonStruct.Exec.Cmd)
+		me.JsonStruct.Exec.CmdFile = path.Base(me.JsonStruct.Exec.Cmd)
+		me.JsonStruct.Exec.CmdVersion = me.exec.CmdVersion
+		me.JsonStruct.Exec.FullArgs = me.exec.FullArgs
+		me.JsonStruct.Exec.Args = me.exec.Args
+
+		now := time.Now()
+		me.JsonStruct.CreationEpoch = now.Unix()
+		me.JsonStruct.CreationDate = now.Format("2006-01-02T15:04:05-0700")
+		me.JsonStruct.Env, _ = helperSystem.GetEnv()
+
+
+		// Pull in JSON data.
+		var js []byte
+		if me.jsonFile != "" {
+			js, err = fileToString(me.jsonFile)
+			if err != nil {
+				state.SetError("Processing error: %s", err)
+				break
+			}
+			me.JsonStruct.JsonString = strings.ReplaceAll(string(js), "\n", "")
+			me.JsonStruct.JsonString = strings.ReplaceAll(me.JsonStruct.JsonString, "\t", "")
+
+			me.JsonStruct.Json = make(map[string]interface{})
+			err = json.Unmarshal(js, &me.JsonStruct.Json)
+			if err != nil {
+				state.SetError("Processing error: %s", err)
+				break
+			}
+
+			err = me.JsonStruct.JsonFile.getPaths(me.jsonFile)
 			if err != nil {
 				state.SetError("Processing error: %s", err)
 				break
 			}
 
 		} else if me.jsonString != "" {
-			jsonStr.JsonFile = FileInfo{
+			me.JsonStruct.JsonFile = FileInfo{
 				Dir:           "",
 				Name:          "",
 				CreationEpoch: 0,
@@ -122,7 +183,7 @@ func (me *Template) ProcessTemplate() ux.State {
 
 		// Pull in template file.
 		if me.templateFile != "" {
-			err = jsonStr.TemplateFile.getPaths(me.templateFile)
+			err = me.JsonStruct.TemplateFile.getPaths(me.templateFile)
 			if err != nil {
 				state.SetError("Processing error: %s", err)
 				break
@@ -137,7 +198,7 @@ func (me *Template) ProcessTemplate() ux.State {
 			me.templateString = string(ts)
 
 		} else if me.templateString != "" {
-			jsonStr.TemplateFile = FileInfo{
+			me.JsonStruct.TemplateFile = FileInfo{
 				Dir:           "",
 				Name:          "",
 				CreationEpoch: 0,
@@ -152,13 +213,13 @@ func (me *Template) ProcessTemplate() ux.State {
 
 		// Check on output file.
 		if me.outFile != "" {
-			err = jsonStr.OutFile.getPaths(me.outFile)
+			err = me.JsonStruct.OutFile.getPaths(me.outFile)
 			if err != nil {
 				// break - IGNORE as it shouldn't be there.
 			}
 
 		} else {
-			jsonStr.OutFile = FileInfo{
+			me.JsonStruct.OutFile = FileInfo{
 				Dir:           "",
 				Name:          "",
 				CreationEpoch: 0,
@@ -167,8 +228,8 @@ func (me *Template) ProcessTemplate() ux.State {
 		}
 
 
-		jsonStr.CreationInfo = fmt.Sprintf("Created on %s, using template:%s and json:%s", jsonStr.CreationDate, jsonStr.TemplateFile.Name, jsonStr.JsonFile.Name)
-		jsonStr.CreationWarning = "WARNING: This file has been auto-generated. DO NOT EDIT: WARNING"
+		me.JsonStruct.CreationInfo = fmt.Sprintf("Created on %s, using template:%s and json:%s", me.JsonStruct.CreationDate, me.JsonStruct.TemplateFile.Name, me.JsonStruct.JsonFile.Name)
+		me.JsonStruct.CreationWarning = "WARNING: This file has been auto-generated. DO NOT EDIT: WARNING"
 
 
 		if me.overWrite {
@@ -192,7 +253,7 @@ func (me *Template) ProcessTemplate() ux.State {
 		tt.Option("missingkey=error")
 
 		if me.outFile == "" {
-			err = tt.Execute(os.Stdout, &jsonStr)
+			err = tt.Execute(os.Stdout, &me.JsonStruct)
 			if err != nil {
 				state.SetError("Processing error: %s", err)
 				break
@@ -207,7 +268,7 @@ func (me *Template) ProcessTemplate() ux.State {
 				break
 			}
 
-			err = tt.Execute(f, &jsonStr)
+			err = tt.Execute(f, &me.JsonStruct)
 			if err != nil {
 				state.SetError("Processing error: %s", err)
 				break
@@ -219,8 +280,8 @@ func (me *Template) ProcessTemplate() ux.State {
 
 		// Are we treating this as a shell script?
 		if me.execShell {
-			fn := _FileToAbs(jsonStr.OutFile.Dir, jsonStr.OutFile.Name)
-			//fn := fmt.Sprintf("%s/%s", jsonStr.OutFile.Dir, jsonStr.OutFile.Name)
+			fn := _FileToAbs(me.JsonStruct.OutFile.Dir, me.JsonStruct.OutFile.Name)
+			//fn := fmt.Sprintf("%s/%s", me.JsonStruct.OutFile.Dir, me.JsonStruct.OutFile.Name)
 
 			err = os.Chmod(fn, 0755)
 			if err != nil {
@@ -246,8 +307,8 @@ func (me *Template) ProcessTemplate() ux.State {
 		}
 
 		if me.removeFiles {
-			fn := _FileToAbs(jsonStr.TemplateFile.Dir, jsonStr.TemplateFile.Name)
-			//fn := fmt.Sprintf("%s/%s", jsonStr.TemplateFile.Dir, jsonStr.TemplateFile.Name)
+			fn := _FileToAbs(me.JsonStruct.TemplateFile.Dir, me.JsonStruct.TemplateFile.Name)
+			//fn := fmt.Sprintf("%s/%s", me.JsonStruct.TemplateFile.Dir, me.JsonStruct.TemplateFile.Name)
 
 			err = os.Remove(fn)
 			if err != nil {
@@ -282,11 +343,37 @@ func (me *Template) SetArgs(a ...string) error {
 
 	return err
 }
+func (me *Template) GetArgs() []string {
+	return me.exec.Args
+}
 func (me *Template) AddArgs(a ...string) error {
 	var err error
 
 	for range only.Once {
 		me.exec.Args = append(me.exec.Args, a...)
+	}
+
+	return err
+}
+
+
+func (me *Template) SetFullArgs(a ...string) error {
+	var err error
+
+	for range only.Once {
+		me.exec.FullArgs = a
+	}
+
+	return err
+}
+func (me *Template) GetFullArgs() []string {
+	return me.exec.FullArgs
+}
+func (me *Template) AddFullArgs(a ...string) error {
+	var err error
+
+	for range only.Once {
+		me.exec.FullArgs = append(me.exec.FullArgs, a...)
 	}
 
 	return err

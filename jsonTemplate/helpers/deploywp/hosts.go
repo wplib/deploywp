@@ -24,6 +24,7 @@ func (me *Host) New() Host {
 			HostName: "",
 			Label:    "",
 			Provider: "",
+			Valid: true,
 		}
 	}
 	return *me

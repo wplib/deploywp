@@ -1,77 +1,59 @@
-#!/bin/JsonToConfig
+#!/usr/bin/env deploywp load
 
 ################################################################################
 {{ PrintfBlue "# PrintHelpers" }}
 {{- $ignore := PrintHelpers }}
 
 {{ PrintfCyan .Exec.CmdFile }} v{{ PrintfBlue .Exec.CmdVersion }} :
-	- {{ PrintfCyan .Exec.Cmd }} {{ PrintfGreen .Exec.Args.ToString }}
-
-
-################################################################################
-{{ PrintfBlue "# Check args" }}
-{{- $cmd := index .Exec.Args 0 }}
-{{- if eq $cmd "release" }}
-{{ PrintfBlue "Processing release directory: %s" .TemplateFile.Dir }}
-{{- end }}
-
+	- {{ PrintfCyan .Exec.Cmd }}
+	- FullArgs: {{ PrintfGreen "%s" .Exec.GetFullArgs }}
+	- Args: {{ PrintfGreen "%s" .Exec.GetArgs }}
 
 ################################################################################
-{{ PrintfBlue "# Run command and check output" }}
-{{- $cmd := ExecCmd "ps" "-eaf" }}
-{{- if $cmd.OutputParse "%s" "deploywp" }}
-{{- $str := Grep $cmd.Output "deploywp" }}
-{{ PrintfBlue "Found string in output" }}
-{{ PrintfGreen "%s" $str }}
-{{- else }}
-{{ PrintfWarning "Didn't find string in command output." }}
-{{- end }}
-
-{{ PrintfBlue "# Run commands with error" }}
-{{- $g := ExecCmd "/usr/bin/false" "arg1" "arg2" }}
-{{ $g.PrintResponse }}
-
-{{ PrintfBlue "# Run commands with error" }}
-{{- $g := ExecBash "if [ -f testfile.txt ]; then echo 'YES'; fi;" "ps -eaf | grep bash" }}
-{{ $g.PrintResponse }}
-{{- $g := ExecBash "if [ -f testfile.txt ]; then echo 'YES'; fi;" "ps -eaf | grep bash" }}
-{{ $g.PrintResponse }}
-
-{{- $cmd := ExecCmd "git" "FAILED" }}
-{{- if $cmd.ExitCode }}
-{{ $cmd.PrintError }}
-{{- end }}
-
-
-################################################################################
-{{ PrintfBlue "# LoadDeployWp" }}
+{{ PrintflnBlue "# LoadDeployWp" }}
 {{- $dwp := LoadDeployWp .Json }}
+{{- $dwp.ExitOnError }}
 
-{{ PrintfOk "$dwp.Hosts == %s" $dwp.Hosts }}
+{{- $host := .Exec.GetArg 0 }}
+{{- if eq $host "" }}
+{{ $host := UserPrompt "# Enter host: " }}
+{{- if eq $host "" }}
+{{ PrintfError "Empty host" }}
+{{ OsExit 1 }}
+{{- end }}
+{{- end }}
+{{ PrintflnBlue "# Checking host '%s'" $host }}
+{{- $href := $dwp.GetHost "prod" }}
+{{- if $href.Valid }}
+{{- PrintflnOk "HostName '%s'" $href.HostName }}
+{{- PrintflnOk "Label '%s'" $href.Label }}
+{{- PrintflnOk "Provider '%s'" $href.Provider }}
+{{- else }}
+{{ PrintflnError "Cannot find host defintion for '%s'" $host }}
+{{- end }}
 
-{{ PrintfOk "$dwp.GetHost == %s" ($dwp.GetHost "prod") }}
-
-# SOURCE PATHS
+{{ PrintfBlue "# SOURCE PATHS" }}
 {{- $src := $dwp.GetSourcePaths }}
 {{- $srcAbs := $dwp.GetSourceAbsPaths }}
-{{ PrintfOk "$src.GetBasePath == %s (%s)" $src.GetBasePath $srcAbs.GetBasePath }}
-{{ PrintfOk "$src.GetWebRootPath == %s" $src.GetWebRootPath }}
-{{ PrintfOk "$src.GetContentPath == %s" $src.GetContentPath }}
-{{ PrintfOk "$src.GetCorePath == %s" $src.GetCorePath }}
-{{ PrintfOk "$src.GetRootPath == %s" $src.GetRootPath }}
-{{ PrintfOk "$src.GetVendorPath == %s" $src.GetVendorPath }}
+{{ PrintfOk "BasePath:    %s (%s)" $src.GetBasePath $srcAbs.GetBasePath }}
+{{ PrintfOk "WebRootPath: %s" $src.GetWebRootPath }}
+{{ PrintfOk "ContentPath: %s" $src.GetContentPath }}
+{{ PrintfOk "CorePath:    %s" $src.GetCorePath }}
+{{ PrintfOk "RootPath:    %s" $src.GetRootPath }}
+{{ PrintfOk "VendorPath:  %s" $src.GetVendorPath }}
 
-# TARGET PATHS
+{{ PrintfBlue "# TARGET PATHS" }}
 {{- $target := $dwp.GetTargetPaths }}
 {{- $targetAbs := $dwp.GetTargetAbsPaths }}
-{{ PrintfOk "$target.GetBasePath == %s (%s)" $target.GetBasePath $targetAbs.GetBasePath }}
-{{ PrintfOk "$target.GetWebRootPath == %s" $target.GetWebRootPath }}
-{{ PrintfOk "$target.GetContentPath == %s" $target.GetContentPath }}
-{{ PrintfOk "$target.GetCorePath == %s" $target.GetCorePath }}
-{{ PrintfOk "$target.GetRootPath == %s" $target.GetRootPath }}
-{{ PrintfOk "$target.GetVendorPath == %s" $target.GetVendorPath }}
+{{ PrintfOk "BasePath:    %s (%s)" $target.GetBasePath $targetAbs.GetBasePath }}
+{{ PrintfOk "WebRootPath: %s" $target.GetWebRootPath }}
+{{ PrintfOk "ContentPath: %s" $target.GetContentPath }}
+{{ PrintfOk "CorePath:    %s" $target.GetCorePath }}
+{{ PrintfOk "RootPath:    %s" $target.GetRootPath }}
+{{ PrintfOk "VendorPath:  %s" $target.GetVendorPath }}
 
 
+{{ OsExit 1 }}
 ################################################################################
 {{ PrintfBlue "# File I/O" }}
 

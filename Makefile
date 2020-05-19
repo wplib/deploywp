@@ -27,7 +27,11 @@ endif
 
 
 test:
-	@./bin/deploywp release --chdir --json tests/deploywp.json
+	@./bin/deploywp run --chdir --json tests/deploywp.json
+
+
+docker:
+	@docker build -f docker/Dockerfile .
 
 
 build:

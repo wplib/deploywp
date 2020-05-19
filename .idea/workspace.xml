@@ -2,21 +2,33 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56b4b170-76f7-4ada-8cff-27bcfeafc366" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/deploywp-code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploywp-code.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/const.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/const.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/funcs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/release.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/deploywp.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/deploywp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/hosts.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/hosts.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/pkgreflect.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/pkgreflect.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_revisions.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_revisions.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/funcs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/helpers_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/helpers_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/pkgreflect.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/pkgreflect.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/struct.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/deploywp.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/deploywp.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/prompt.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/prompt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/error.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/error.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/file.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/structs.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/structs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/types.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/types.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/structs.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/structs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/template.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/template.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perlit.pl" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/deploywp.tmpl" beforeDir="false" afterPath="$PROJECT_DIR$/tests/deploywp.tmpl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ux/state_output.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/state_output.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ux/state.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/state.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,6 +50,7 @@
     <option name="indexEntireGoPath" value="false" />
   </component>
   <component name="ProjectId" id="1bjupLsPGMRP5zquh2gshymWOmz" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -51,15 +64,21 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
+    <property name="go.vendoring.notification.had.been.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="restartRequiresConfirmation" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/cmd/cmdExec" />
+    </key>
   </component>
   <component name="RunManager" selected="Go Build.deploywp">
     <configuration name="deploywp" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="deploywp-code" />
       <working_directory value="$PROJECT_DIR$" />
       <go_parameters value="-i" />
-      <parameters value="release --chdir --json tests/deploywp.json" />
+      <parameters value="run --json tests/deploywp.json prod" />
       <kind value="DIRECTORY" />
       <filePath value="$PROJECT_DIR$/" />
       <package value="github.com/wplib/deploywp" />
@@ -94,54 +113,58 @@
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="964" y="367" key="#Go_Modules/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589158017843" />
-    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589853558612">
+    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1589887358684">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589853558612" />
+    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589887358684" />
     <state x="931" y="363" width="470" height="483" key="#com.intellij.tools.ToolEditorDialog" timestamp="1589190675421">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="931" y="363" width="470" height="483" key="#com.intellij.tools.ToolEditorDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589190675421" />
-    <state width="1701" height="401" key="GridCell.Tab.0.bottom" timestamp="1589859641078">
+    <state x="746" y="84" key="#docker/Dockerfile" timestamp="1589870918807">
+      <screen x="0" y="23" width="1920" height="1008" />
+    </state>
+    <state x="746" y="84" key="#docker/Dockerfile/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589870918807" />
+    <state width="1701" height="289" key="GridCell.Tab.0.bottom" timestamp="1589887375982">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="401" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589859641078" />
-    <state width="1701" height="401" key="GridCell.Tab.0.center" timestamp="1589859641076">
+    <state width="1701" height="289" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589887375982" />
+    <state width="1701" height="289" key="GridCell.Tab.0.center" timestamp="1589887375981">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179263" />
-    <state width="1701" height="401" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589859641076" />
-    <state width="1701" height="401" key="GridCell.Tab.0.left" timestamp="1589859641075">
+    <state width="1701" height="289" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589887375981" />
+    <state width="1701" height="289" key="GridCell.Tab.0.left" timestamp="1589887375980">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179263" />
-    <state width="1701" height="401" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589859641075" />
-    <state width="1701" height="401" key="GridCell.Tab.0.right" timestamp="1589859641077">
+    <state width="1701" height="289" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589887375980" />
+    <state width="1701" height="289" key="GridCell.Tab.0.right" timestamp="1589887375981">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="401" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589859641077" />
-    <state width="1701" height="401" key="GridCell.Tab.1.bottom" timestamp="1589859641079">
+    <state width="1701" height="289" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589887375981" />
+    <state width="1701" height="289" key="GridCell.Tab.1.bottom" timestamp="1589887375983">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179265" />
-    <state width="1701" height="401" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589859641079" />
-    <state width="1701" height="401" key="GridCell.Tab.1.center" timestamp="1589859641079">
+    <state width="1701" height="289" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589887375983" />
+    <state width="1701" height="289" key="GridCell.Tab.1.center" timestamp="1589887375982">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="401" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589859641079" />
-    <state width="1701" height="401" key="GridCell.Tab.1.left" timestamp="1589859641078">
+    <state width="1701" height="289" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589887375982" />
+    <state width="1701" height="289" key="GridCell.Tab.1.left" timestamp="1589887375982">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="401" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589859641078" />
-    <state width="1701" height="401" key="GridCell.Tab.1.right" timestamp="1589859641079">
+    <state width="1701" height="289" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589887375982" />
+    <state width="1701" height="289" key="GridCell.Tab.1.right" timestamp="1589887375982">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179265" />
-    <state width="1701" height="401" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589859641079" />
+    <state width="1701" height="289" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589887375982" />
     <state width="756" height="503" key="XDebugger.FullValuePopup" timestamp="1589855554822">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
@@ -150,32 +173,27 @@
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="1054" y="268" key="com.intellij.tools.ToolSelectDialog.dimensionServiceKey/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589190676301" />
-    <state x="829" y="245" width="670" height="676" key="search.everywhere.popup" timestamp="1589255717356">
+    <state x="829" y="245" width="670" height="676" key="search.everywhere.popup" timestamp="1589867322165">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state x="829" y="245" width="670" height="676" key="search.everywhere.popup/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589255717355" />
+    <state x="829" y="245" width="670" height="676" key="search.everywhere.popup/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589867322165" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/struct.go</url>
-          <line>82</line>
+          <line>73</line>
           <option name="timeStamp" value="240" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/struct.go</url>
-          <line>105</line>
+          <line>96</line>
           <option name="timeStamp" value="241" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/ux/state.go</url>
-          <line>455</line>
-          <option name="timeStamp" value="374" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/ux/state.go</url>
-          <line>464</line>
+          <line>465</line>
           <option name="timeStamp" value="375" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
@@ -205,7 +223,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_repository.go</url>
-          <line>237</line>
+          <line>243</line>
           <option name="timeStamp" value="404" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
@@ -219,16 +237,34 @@
           <option name="timeStamp" value="406" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperExec/funcs.go</url>
-          <line>37</line>
-          <option name="timeStamp" value="411" />
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_repository.go</url>
+          <line>154</line>
+          <option name="timeStamp" value="421" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperExec/funcs.go</url>
-          <line>25</line>
-          <option name="timeStamp" value="420" />
+          <url>file://$PROJECT_DIR$/cmd/load.go</url>
+          <line>43</line>
+          <option name="timeStamp" value="430" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/cmd/load.go</url>
+          <line>44</line>
+          <option name="timeStamp" value="432" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/cmd/load.go</url>
+          <line>34</line>
+          <option name="timeStamp" value="437" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers_workflow.go</url>
+          <line>109</line>
+          <option name="timeStamp" value="460" />
         </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="DlvErrorBreakpoint" />
+      </default-breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="GoApplicationRunConfiguration">

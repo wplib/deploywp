@@ -8,7 +8,7 @@ import (
 
 
 type TargetRevision struct {
-	AutoDeploy string `json:"auto_deploy" mapstructure:"auto_deploy"`
+	AutoDeploy bool   `json:"auto_deploy" mapstructure:"auto_deploy"`
 	HostName   string `json:"host_name" mapstructure:"host_name"`
 	RefName    string `json:"ref_name" mapstructure:"ref_name"`
 

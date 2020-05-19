@@ -59,6 +59,11 @@ func (me *Target) Process() error {
 		}
 
 		me.Error = me.Files.Process(me.Paths)
+		if me.Error != nil {
+			break
+		}
+
+		me.Valid = true
 	}
 
 	return me.Error

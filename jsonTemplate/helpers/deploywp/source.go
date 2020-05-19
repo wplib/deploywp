@@ -35,6 +35,11 @@ func (me *Source) Process() error {
 
 		me.AbsPaths = me.Paths
 		me.Error = me.AbsPaths.ExpandPaths()
+		if me.Error != nil {
+			break
+		}
+
+		me.Valid = true
 	}
 
 	return me.Error
@@ -76,113 +81,6 @@ func (me *Source) GetPaths(abs ...interface{}) *Paths {
 
 	return ret
 }
-//func (me *Source) GetBasePath(abs ...interface{}) string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if helperTypes.ReflectBoolArg(abs) {
-//			ret = me.AbsPaths.GetBasePath()
-//			break
-//		}
-//
-//		ret = me.Paths.GetBasePath()
-//	}
-//
-//	return ret
-//}
-//func (me *Source) GetWebRootPath(abs ...interface{}) string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if helperTypes.ReflectBoolArg(abs) {
-//			ret = me.AbsPaths.GetWebRootPath()
-//			break
-//		}
-//
-//		ret = me.Paths.GetWebRootPath()
-//	}
-//
-//	return ret
-//}
-//func (me *Source) GetContentPath(abs ...interface{}) string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if helperTypes.ReflectBoolArg(abs) {
-//			ret = me.AbsPaths.GetContentPath()
-//			break
-//		}
-//		ret = me.Paths.GetContentPath()
-//	}
-//
-//	return ret
-//}
-//func (me *Source) GetCorePath(abs ...interface{}) string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if helperTypes.ReflectBoolArg(abs) {
-//			ret = me.AbsPaths.GetCorePath()
-//			break
-//		}
-//
-//		ret = me.Paths.GetCorePath()
-//	}
-//
-//	return ret
-//}
-//func (me *Source) GetRootPath(abs ...interface{}) string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if helperTypes.ReflectBoolArg(abs) {
-//			ret = me.AbsPaths.GetRootPath()
-//			break
-//		}
-//
-//		ret = me.Paths.GetRootPath()
-//	}
-//
-//	return ret
-//}
-//func (me *Source) GetVendorPath(abs ...interface{}) string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if helperTypes.ReflectBoolArg(abs) {
-//			ret = me.AbsPaths.GetVendorPath()
-//			break
-//		}
-//
-//		ret = me.Paths.GetVendorPath()
-//	}
-//
-//	return ret
-//}
 
 
 // ////////////////////////////////////////////////////////////////////////////////

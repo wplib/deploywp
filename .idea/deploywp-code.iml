@@ -4,6 +4,9 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/_save" />
+      <excludeFolder url="file://$MODULE_DIR$/docker" />
+      <excludeFolder url="file://$MODULE_DIR$/jsonTemplateBACKUP" />
+      <excludeFolder url="file://$MODULE_DIR$/tests" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

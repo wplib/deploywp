@@ -25,7 +25,7 @@ func TestHelperExecCommand(t *testing.T) {
 			Response:    nil,
 		}},
 	} {
-		returned := HelperExecCommand(c.cmd)
+		returned := HelperExecCmd(c.cmd)
 		if returned.ExitCode != c.expected.ExitCode {
 			t.Errorf("%s(%q) == %q, want %q", t.Name(), c.cmd, returned.ExitCode, c.expected.ExitCode)
 			spew.Dump(c.expected)

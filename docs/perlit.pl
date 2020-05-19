@@ -1,4 +1,4 @@
-#!/usr/bin/perl -p
+#!/usr/bin/perl -p -i
 
 BEGIN {
 $p='/*
@@ -21,19 +21,18 @@ Intent:
 
 Arguments:
 
-@TODO - This has yet to be written.
 %%ARGS%%
 
 Helper examples:
 
-- This has yet to be written.
-	{{ %%FUNC%% %%FUNCARGS%% }}
+- Default call
+	`{{ %%FUNC%% %%FUNCARGS%% }}`
 */
 ';
 }
 
 if (/^package/) {
-	s/^(package)/$s$p/;
+	s/^(package)/$p$1/;
 
 } elsif (/^func (\w+)\((.*?)\)\s+(.*?)({| )/) {
 	$fn = $1;
@@ -44,11 +43,17 @@ if (/^package/) {
 	$fant = "";
 	foreach $z (split(",", $fa)) {
 		@zz = split(" ", $z);
-		$fat .= sprintf("        %s - (type '%s') - .\n", $zz[0], $zz[1]);
+		$fat .= sprintf("- \x60%s\x60 - Type: \x60%s\x60 - @TODO\n", $zz[0], $zz[1]);
 		$fant .= sprintf(" <%s>", $zz[0]);
 	}
 	$fp =~ s/%%ARGS%%/$fat/;
 	$fp =~ s/%%FUNCARGS%%/$fant/;
+	if ($fr =~ /State/) {
+		$fr = 'state';
+	} else {
+		$fr =~ s/\*//;
+		$fr =~ s/^Helper//;
+	}
 
 	if ($fn =~ /^Helper/) {
 		$fp =~ s/%%FUNC%%/\$$fr := $fn/g;
@@ -68,11 +73,14 @@ if (/^package/) {
 	$fant = "";
 	foreach $z (split(",", $fa)) {
 		@zz = split(" ", $z);
-		$fat .= sprintf("        %s - (type '%s') - .\n", $z[0], $zz[1]);
+		$fat .= sprintf("- \x60%s\x60 - Type: \x60%s\x60 - @TODO\n", $zz[0], $zz[1]);
 		$fant .= sprintf(" <%s>", $zz[0]);
 	}
 	$fp =~ s/%%ARGS%%/$fat/;
 	$fp =~ s/%%FUNCARGS%%/$fant/;
+	if ($fr =~ /State/) {
+		$fr = 'state';
+	}
 
 	if ($fn =~ /^Helper/) {
 		$fp =~ s/%%FUNC%%/\$$fr := $fn/g;

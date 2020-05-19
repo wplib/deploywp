@@ -21,7 +21,6 @@ var Types = map[string]reflect.Type{
 	"Providers": reflect.TypeOf((*Providers)(nil)).Elem(),
 	"Repository": reflect.TypeOf((*Repository)(nil)).Elem(),
 	"Revision": reflect.TypeOf((*Revision)(nil)).Elem(),
-	"RuntimeMeta": reflect.TypeOf((*RuntimeMeta)(nil)).Elem(),
 	"Source": reflect.TypeOf((*Source)(nil)).Elem(),
 	"State": reflect.TypeOf((*State)(nil)).Elem(),
 	"String": reflect.TypeOf((*String)(nil)).Elem(),

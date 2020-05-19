@@ -6,25 +6,40 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
+	"strings"
 )
 
 
 // releaseCmd represents the release command
-var releaseCmd = &cobra.Command{
-	Use:   "release",
-	Short: ux.SprintfBlue("Process and release a template file"),
+var loadCmd = &cobra.Command{
+	Use:   "load",
+	Short: ux.SprintfBlue("Load and execute a template file."),
 	Long: ux.SprintfBlue(`...`),
-	Run: Release,
+	Run: LoadTemplate,
 }
 
 func init() {
-	rootCmd.AddCommand(releaseCmd)
+	rootCmd.AddCommand(loadCmd)
 }
 
-func Release(cmd *cobra.Command, args []string) {
+func LoadTemplate(cmd *cobra.Command, args []string) {
 	for range only.Once {
 		var state ux.State
 		var tmpl *jsonTemplate.Template
+
+		/*
+		Allow this to be used as a UNIX script.
+		The following should be placed on the first line.
+		#!/usr/bin/env deploywp load
+		*/
+		if len(args) > 0 {
+			t := args[0]
+			args = args[1:]
+			_ = cmd.Flags().Set(argTemplateFile, t)
+
+			t = strings.TrimSuffix(t, "tmpl") + "json"
+			_ = cmd.Flags().Set(argJsonFile, t)
+		}
 
 		tmpl, state = ProcessArgs(cmd, args)
 		if !state.IsOk() {

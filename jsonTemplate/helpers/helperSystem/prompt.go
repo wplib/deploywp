@@ -27,6 +27,8 @@ func HelperUserPrompt(prompt string, args ...interface{}) string {
 		if err != nil {
 			break
 		}
+
+		ret = strings.TrimSuffix(ret, "\n")
 	}
 
 	return ret
@@ -41,12 +43,13 @@ func HelperUserPromptHidden(prompt string, args ...interface{}) string {
 	for range only.Once {
 		fmt.Printf(prompt, args...)
 
-		hidden, err := terminal.ReadPassword(int(syscall.Stdin))
+		hidden, err := terminal.ReadPassword(syscall.Stdin)
 		fmt.Printf("\n")
 		if err != nil {
 			break
 		}
-		ret = string(hidden)
+
+		ret = strings.TrimSuffix(string(hidden), "\n")
 	}
 
 	return ret
