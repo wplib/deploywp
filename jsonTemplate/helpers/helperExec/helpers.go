@@ -1,7 +1,6 @@
 package helperExec
 
 import (
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
@@ -68,7 +67,7 @@ func (e *TypeExecCommand) ExitOnWarning() string {
 //		{{ OsExit 1 }}
 func HelperOsExit(e ...interface{}) string {
 	for range only.Once {
-		value := helperTypes.ReflectInt(e)
+		value := ux.ReflectInt(e)
 		ux.Exit(*value)
 	}
 	return ""

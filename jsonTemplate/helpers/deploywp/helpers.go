@@ -26,20 +26,17 @@ func HelperLoadDeployWp(str interface{}, args ...string) *TypeDeployWp {
 			break
 		}
 
-		err = j.Source.Process()
-		j.State.SetError(err)
+		j.State = j.Source.Process()
 		if j.State.IsError() {
 			break
 		}
 
-		err = j.Target.Process()
-		j.State.SetError(err)
+		j.State = j.Target.Process()
 		if j.State.IsError() {
 			break
 		}
 
-		err = j.Hosts.Process()
-		j.State.SetError(err)
+		j.State = j.Hosts.Process()
 		if j.State.IsError() {
 			break
 		}

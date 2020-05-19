@@ -26,7 +26,6 @@ var Functions = map[string]reflect.Value{
 	"ReflectBool": reflect.ValueOf(ReflectBool),
 	"ReflectBoolArg": reflect.ValueOf(ReflectBoolArg),
 	"ReflectByteArray": reflect.ValueOf(ReflectByteArray),
-	"ReflectInt": reflect.ValueOf(ReflectInt),
 	"ReflectString": reflect.ValueOf(ReflectString),
 	"ReflectStrings": reflect.ValueOf(ReflectStrings),
 }

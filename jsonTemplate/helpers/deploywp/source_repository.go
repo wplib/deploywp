@@ -2,6 +2,7 @@ package deploywp
 
 import (
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 	"strings"
 )
 
@@ -11,7 +12,7 @@ type Repository struct {
 	URL      URL `json:"url"`
 
 	Valid bool
-	Error error
+	State *ux.State
 }
 
 
@@ -27,14 +28,11 @@ func (me *String) ToString() string {
 
 
 func (me *Repository) New() Repository {
-
-	if me == nil {
-		me = &Repository{
-			Provider: "",
-			URL:      "",
-		}
+	me = &Repository{
+		Provider: "",
+		URL:      "",
+		State: ux.NewState(),
 	}
-
 	return *me
 }
 

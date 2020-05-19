@@ -7,11 +7,18 @@ import (
 
 
 type HelperOsPath TypeOsPath
+func (g *HelperOsPath) Reflect() *TypeOsPath {
+	return (*TypeOsPath)(g)
+}
+func (g *TypeOsPath) Reflect() *HelperOsPath {
+	return (*HelperOsPath)(g)
+}
 
 
 // Usage:
 //		{{ $str := ReadFile "filename.txt" }}
-func HelperNewPath(file ...interface{}) *HelperOsPath {
+//func HelperNewPath(file ...interface{}) *HelperOsPath {
+func HelperNewPath(file ...interface{}) *TypeOsPath {
 	ret := NewOsPath()
 
 	for range only.Once {
@@ -34,7 +41,8 @@ func HelperNewPath(file ...interface{}) *HelperOsPath {
 		}
 	}
 
-	return ReflectHelperOsPath(ret)
+	//return ReflectHelperOsPath(ret)
+	return ret
 }
 
 

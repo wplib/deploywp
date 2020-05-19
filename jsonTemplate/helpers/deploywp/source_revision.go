@@ -2,6 +2,7 @@ package deploywp
 
 import (
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 )
 
 
@@ -10,18 +11,16 @@ type Revision struct {
 	RefType string `json:"ref_type" mapstructure:"ref_type"`
 
 	Valid bool
-	Error error
+	State *ux.State
 }
 
 
 func (me *Revision) New() Revision {
-	if me == nil {
-		me = &Revision {
-			RefName: "",
-			RefType: "",
-		}
+	me = &Revision {
+		RefName: "",
+		RefType: "",
+		State: ux.NewState(),
 	}
-
 	return *me
 }
 

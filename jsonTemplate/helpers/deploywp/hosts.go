@@ -1,9 +1,9 @@
 package deploywp
 
 import (
-	"errors"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 )
 
 
@@ -13,21 +13,31 @@ type Host struct {
 	Provider string `json:"provider"`
 
 	Valid bool
-	Error error
+	State *ux.State
 }
 type Hosts []Host
 
 
-func (me *Host) New() Host {
-	if me == nil {
-		me = &Host{
-			HostName: "",
-			Label:    "",
-			Provider: "",
-			Valid: true,
-		}
+func NewHost() *Host {
+	me := &Host{
+		HostName: "",
+		Label:    "",
+		Provider: "",
+		Valid: false,
+		State: ux.NewState(),
 	}
-	return *me
+	return me
+}
+
+func (me *Host) New() *Host {
+	me = &Host{
+		HostName: "",
+		Label:    "",
+		Provider: "",
+		Valid: true,
+		State: ux.NewState(),
+	}
+	return me
 }
 
 func (me *Hosts) New() Hosts {
@@ -42,16 +52,21 @@ func (me *Hosts) Count() int {
 	return len(*me)
 }
 
-func (me *Hosts) Process() error {
-	var err error
+func (me *Hosts) Process() *ux.State {
+	state := ux.NewState()
 
 	for range only.Once {
 		if me.IsNil() {
 			break
 		}
+
+		for h, _ := range *me {
+			(*me)[h].State = ux.NewState()
+			(*me)[h].Valid = true
+		}
 	}
 
-	return err
+	return state
 }
 
 func (me *Hosts) IsNil() bool {
@@ -71,7 +86,7 @@ func (me *Hosts) IsNil() bool {
 
 
 func (me *Hosts) GetHost(host interface{}) *Host {
-	var ret Host
+	ret := NewHost()
 
 	for range only.Once {
 		if me.IsNil() {
@@ -80,23 +95,22 @@ func (me *Hosts) GetHost(host interface{}) *Host {
 
 		value := helperTypes.ReflectString(host)
 		if value == nil {
-			ret.Error = errors.New("GetHost arg not a string")
+			ret.State.SetError("GetHost arg not a string")
 			break
 		}
 
 		for _, v := range *me {
 			if v.HostName == *value {
-				ret = v
-				ret.Valid = true
+				ret = &v
 				break
 			}
 		}
 
 		if !ret.Valid {
-			ret.Error = errors.New("GetHost hostname not found")
+			ret.State.SetError("GetHost hostname not found")
 			break
 		}
 	}
 
-	return &ret
+	return ret
 }

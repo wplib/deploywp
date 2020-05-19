@@ -5,13 +5,15 @@ import (
 	"github.com/google/go-github/v31/github"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 )
 
 
 type TypeGetRepository struct {
-	Valid bool
-	Error error
 	Data *github.Repository
+
+	Valid bool
+	State *ux.State
 }
 
 // Usage:
@@ -31,10 +33,12 @@ func (me *TypeLogin) GetRepository(owner interface{}, repo interface{}) *TypeGet
 			break
 		}
 
+		var err error
 		ctx := context.Background()
-		ret.Data, _, ret.Error = me.Client.Repositories.Get(ctx, *op, *rp)
+		ret.Data, _, err = me.Client.Repositories.Get(ctx, *op, *rp)
 
-		if ret.Error != nil {
+		ret.State.SetError(err)
+		if ret.State.IsError() {
 			break
 		}
 

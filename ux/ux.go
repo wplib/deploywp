@@ -89,6 +89,9 @@ func Close() {
 }
 
 
+func PrintfNormal(format string, args ...interface{}) {
+	_, _ = fmt.Fprintf(os.Stderr, fmt.Sprintf(format, args...))
+}
 func PrintfWhite(format string, args ...interface{}) {
 	inline := fmt.Sprintf(format, args...)
 	_, _ = fmt.Fprintf(os.Stderr, "%s%s", aurora.BrightWhite(inline), aurora.Reset(""))

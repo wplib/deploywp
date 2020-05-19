@@ -1,9 +1,9 @@
 package deploywp
 
 import (
-	"errors"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 )
 
 
@@ -13,7 +13,7 @@ type Provider struct {
 	Defaults Defaults `json:"defaults"`
 
 	Valid bool
-	Error error
+	State *ux.State
 }
 type Providers []Provider
 
@@ -23,6 +23,7 @@ func (me *Provider) New() Provider {
 			Name:     "",
 			Meta:     me.Meta.New(),
 			Defaults: me.Defaults.New(),
+			State: ux.NewState(),
 		}
 	}
 
@@ -116,7 +117,7 @@ func (me *Providers) GetProvider(provider interface{}) *Provider {
 
 		value := helperTypes.ReflectString(provider)
 		if value == nil {
-			ret.Error = errors.New("GetProvider arg not a string")
+			ret.State.SetError("GetProvider arg not a string")
 			break
 		}
 
@@ -129,7 +130,7 @@ func (me *Providers) GetProvider(provider interface{}) *Provider {
 		}
 
 		if !ret.Valid {
-			ret.Error = errors.New("GetProvider hostname not found")
+			ret.State.SetError("GetProvider hostname not found")
 			break
 		}
 	}

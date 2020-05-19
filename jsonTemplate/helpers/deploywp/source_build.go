@@ -2,6 +2,7 @@ package deploywp
 
 import (
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 )
 
 
@@ -9,18 +10,16 @@ type Build struct {
 	Empty bool
 
 	Valid bool
-	Error error
+	State *ux.State
 }
 
 //var _ deploywp.BuildGetter = (*Build)(nil)
 
 func (me *Build) New() Build {
-	if me == nil {
-		me = &Build {
-			Empty: false,
-		}
+	me = &Build {
+		Empty: false,
+		State: ux.NewState(),
 	}
-
 	return *me
 }
 

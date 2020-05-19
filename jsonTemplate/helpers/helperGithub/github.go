@@ -6,6 +6,7 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 	"reflect"
 	"strings"
 )
@@ -48,10 +49,11 @@ func fetchOrganizations(username string) ([]*github.Organization, error) {
 
 // Usage: {{ $user := GitHubLogin "username" "password" "" }}
 type TypeLogin struct {
-	Valid bool
-	Error error
 	User *github.User
 	Client *github.Client
+
+	Valid bool
+	State *ux.State
 }
 
 func HelperGitHubLogin(username interface{}, password interface{}, twofactor interface{}) *TypeLogin {
@@ -98,18 +100,20 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 		auth.Client = github.NewClient(tp.Client())
 		ctx := context.Background()
 
-		auth.User, _, auth.Error = auth.Client.Users.Get(ctx, "")
-		if _, ok := auth.Error.(*github.TwoFactorAuthError); ok {
+		var err error
+		auth.User, _, err = auth.Client.Users.Get(ctx, "")
+		if _, ok := err.(*github.TwoFactorAuthError); ok {
 			// Is this a two-factor auth error? If so, prompt for OTP and try again.
 			if twofactorString == "" {
 				twofactorString = helperSystem.HelperUserPrompt("GitHub 2FA password: ")
 			}
 
 			tp.OTP = strings.TrimSpace(twofactorString)
-			auth.User, _, auth.Error = auth.Client.Users.Get(ctx, "")
+			auth.User, _, err = auth.Client.Users.Get(ctx, "")
 		}
 
-		if auth.Error != nil {
+		auth.State.SetError(err)
+		if auth.State.IsError() {
 			break
 		}
 

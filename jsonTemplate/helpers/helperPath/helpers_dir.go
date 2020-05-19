@@ -95,7 +95,7 @@ func HelperCreateDir(path ...interface{}) *TypeOsPath {
 // Usage:
 //		{{ $ret := Chmod 0644 "/root" ... }}
 //		{{ if $ret.IsOk }}Changed perms of file {{ $ret.Dir }}{{ end }}
-func HelperRemoveDir(force bool, path ...interface{}) *TypeOsPath {
+func HelperRemoveDir(path ...interface{}) *TypeOsPath {
 	ret := NewOsPath()
 
 	for range only.Once {
@@ -108,9 +108,9 @@ func HelperRemoveDir(force bool, path ...interface{}) *TypeOsPath {
 		}
 		ret.SetPath(*f)
 
-		if force {
-			ret.SetRemoveable()
-		}
+		//if force {
+		//	ret.SetRemoveable()
+		//}
 		ret.State.SetState(ret.RemoveDir())
 		if ret.State.IsError() {
 			break

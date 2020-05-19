@@ -3,6 +3,7 @@ package deploywp
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 	"strings"
 )
 
@@ -14,25 +15,21 @@ type Files struct {
 	Keep    FilesArray `json:"keep"`
 
 	Valid bool
-	Error error
+	State *ux.State
 }
 type FilesArray []string
 
 
 func (me *Files) New() Files {
-	if me == nil {
-		me = &Files{
-			Copy:    FilesArray{},
-			Delete:  FilesArray{},
-			Exclude: FilesArray{},
-			Keep:    FilesArray{},
-		}
-	}
-
+	me.Copy =    FilesArray{}
+	me.Delete =  FilesArray{}
+	me.Exclude = FilesArray{}
+	me.Keep =    FilesArray{}
+	me.State = ux.NewState()
 	return *me
 }
 
-func (me *Files) Process(paths Paths) error {
+func (me *Files) Process(paths Paths) *ux.State {
 	for range only.Once {
 		if me.IsNil() {
 			break
@@ -78,7 +75,7 @@ func (me *Files) Process(paths Paths) error {
 		//fmt.Printf("EXPANDPATHS Files.Process()\n", bp)
 	}
 
-	return me.Error
+	return me.State
 }
 
 func (me *Files) IsNil() bool {

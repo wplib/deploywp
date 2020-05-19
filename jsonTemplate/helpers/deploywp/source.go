@@ -3,6 +3,7 @@ package deploywp
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 )
 
 
@@ -14,7 +15,7 @@ type Source struct {
 
 	AbsPaths   Paths
 	Valid bool
-	Error error
+	State *ux.State
 }
 
 
@@ -24,25 +25,28 @@ func (me *Source) New() Source {
 	me.Repository.New()
 	me.Revision.New()
 
+	me.AbsPaths.New()
+	me.State = ux.NewState()
+
 	return *me
 }
 
-func (me *Source) Process() error {
+func (me *Source) Process() *ux.State {
 	for range only.Once {
 		if me.IsNil() {
 			break
 		}
 
 		me.AbsPaths = me.Paths
-		me.Error = me.AbsPaths.ExpandPaths()
-		if me.Error != nil {
+		me.State = me.AbsPaths.ExpandPaths()
+		if me.State.IsError() {
 			break
 		}
 
 		me.Valid = true
 	}
 
-	return me.Error
+	return me.State
 }
 
 func (me *Source) IsNil() bool {
@@ -85,6 +89,9 @@ func (me *Source) GetPaths(abs ...interface{}) *Paths {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Repository
+func (me *Source) GetRepository() *Repository {
+	return &me.Repository
+}
 func (me *Source) GetRepositoryProvider() string {
 	var ret string
 
@@ -115,6 +122,9 @@ func (me *Source) GetRepositoryUrl() URL {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Revision
+func (me *Source) GetRevision() *Revision {
+	return &me.Revision
+}
 func (me *Source) GetRevisionType() string {
 	var ret string
 

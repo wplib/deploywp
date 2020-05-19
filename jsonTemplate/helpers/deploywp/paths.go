@@ -2,6 +2,7 @@ package deploywp
 
 import (
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 	"path/filepath"
 )
 
@@ -14,7 +15,7 @@ type Paths struct {
 	//BaseAbsPath string
 
 	Valid bool
-	Error error
+	State *ux.State
 }
 
 type Wordpress struct {
@@ -24,31 +25,27 @@ type Wordpress struct {
 	VendorPath  string `json:"vendor_path" mapstructure:"vendor_path"`
 
 	Valid bool
-	Error error
+	State *ux.State
 }
 
 
 func (me *Paths) New() Paths {
-	if me == nil {
-		me = &Paths {
-			WebrootPath: "",
-			Wordpress:   me.Wordpress.New(),
-		}
+	me = &Paths {
+		WebrootPath: "",
+		Wordpress:   me.Wordpress.New(),
+		State: ux.NewState(),
 	}
-
 	return *me
 }
 
 func (me *Wordpress) New() Wordpress {
-	if me == nil {
-		me = &Wordpress {
-			ContentPath: "",
-			CorePath:    "",
-			RootPath:    "",
-			VendorPath:  "",
-		}
+	me = &Wordpress {
+		ContentPath: "",
+		CorePath:    "",
+		RootPath:    "",
+		VendorPath:  "",
+		State: ux.NewState(),
 	}
-
 	return *me
 }
 
@@ -88,18 +85,17 @@ func _FileToAbs(f ...string) string {
 	return ret
 }
 
-func (me *Paths) ExpandPaths() error {
-	var err error
-
+func (me *Paths) ExpandPaths() *ux.State {
 	for range only.Once {
 		if me.IsNil() {
 			break
 		}
 
 		me.BasePath = _FileToAbs(me.BasePath)
+		me.State = ux.NewState()
 	}
 
-	return err
+	return me.State
 }
 
 

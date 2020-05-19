@@ -1,9 +1,9 @@
 package deploywp
 
 import (
-	"errors"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 )
 
 
@@ -13,7 +13,7 @@ type TargetRevision struct {
 	RefName    string `json:"ref_name" mapstructure:"ref_name"`
 
 	Valid bool
-	Error error
+	State *ux.State
 }
 type TargetRevisions []TargetRevision
 
@@ -22,6 +22,7 @@ func (me *TargetRevision) New() TargetRevision {
 		me = &TargetRevision {
 			HostName:     "",
 			RefName:     "",
+			State: ux.NewState(),
 		}
 	}
 
@@ -30,7 +31,7 @@ func (me *TargetRevision) New() TargetRevision {
 
 func (me *TargetRevisions) New() TargetRevisions {
 	if me == nil {
-		me = &TargetRevisions {}
+		me = &TargetRevisions{}
 	}
 
 	return *me
@@ -62,7 +63,7 @@ func (me *TargetRevisions) GetRevision(host interface{}) *TargetRevision {
 
 		value := helperTypes.ReflectString(host)
 		if value == nil {
-			ret.Error = errors.New("GetRevision arg not a string")
+			ret.State.SetError("GetRevision arg not a string")
 			break
 		}
 
@@ -75,7 +76,7 @@ func (me *TargetRevisions) GetRevision(host interface{}) *TargetRevision {
 		}
 
 		if !ret.Valid {
-			ret.Error = errors.New("GetRevision host_name not found")
+			ret.State.SetError("GetRevision host_name not found")
 			break
 		}
 	}

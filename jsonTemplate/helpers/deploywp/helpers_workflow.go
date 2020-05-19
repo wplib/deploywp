@@ -105,11 +105,32 @@ func (e *TypeDeployWp) Run() *ux.State {
 
 		ux.PrintfBlue("%s v%s\n", e.Exec.CmdFile, e.Exec.CmdVersion)
 		ux.PrintfGreen("Args: %s\n", e.Exec.GetArgs())
+		ux.PrintfWhite("\n\n")
 
-		e.State = e.ObtainHost()
+
+		ux.PrintfWhite("##########################\n")
+		ux.PrintfWhite("# Print path information #\n")
+		ux.PrintfWhite("##########################\n")
+		e.State = e.PrintPaths()
 		if e.State.IsError() {
 			break
 		}
+		ux.PrintfWhite("\n\n")
+
+
+		ux.PrintfWhite("#############################\n")
+		ux.PrintfWhite("# Opening source repository #\n")
+		ux.PrintfWhite("#############################\n")
+		e.State = e.OpenSourceRepo()
+		if e.State.IsError() {
+			break
+		}
+		ux.PrintfWhite("\n\n")
+
+
+		ux.PrintfWhite("#############################\n")
+		ux.PrintfWhite("# Opening target repository #\n")
+		ux.PrintfWhite("#############################\n")
 	}
 
 	return e.State

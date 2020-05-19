@@ -1,50 +1,42 @@
 package helperTypes
 
 import (
-	"fmt"
-	"os"
-	"reflect"
-	"runtime"
+	"github.com/wplib/deploywp/ux"
 	"strings"
 )
 
-func foo() {
-	fmt.Printf("Go runs OK!\n")
-	fmt.Printf("PPID: %d -> PID:%d\n", os.Getppid(), os.Getpid())
-	fmt.Printf("Compiler: %s v%s\n", runtime.Compiler, runtime.Version())
-	fmt.Printf("Architecture: %s v%s\n", runtime.GOARCH, runtime.GOOS)
-	fmt.Printf("GOROOT: %s\n", runtime.GOROOT())
-}
-
 
 func HelperIsSlice(i interface{}) bool {
-	v := reflect.ValueOf(i)
-	switch v.Kind() {
-		case reflect.Slice:
-			return true
-		default:
-			return false
-	}
+	return ux.IsReflectSlice(i)
+	//v := reflect.ValueOf(i)
+	//switch v.Kind() {
+	//	case reflect.Slice:
+	//		return true
+	//	default:
+	//		return false
+	//}
 }
 
 func HelperIsArray(i interface{}) bool {
-	v := reflect.ValueOf(i)
-	switch v.Kind() {
-		case reflect.Array:
-			return true
-		default:
-			return false
-	}
+	return ux.IsReflectArray(i)
+	//v := reflect.ValueOf(i)
+	//switch v.Kind() {
+	//	case reflect.Array:
+	//		return true
+	//	default:
+	//		return false
+	//}
 }
 
 func HelperIsMap(i interface{}) bool {
-	v := reflect.ValueOf(i)
-	switch v.Kind() {
-		case reflect.Map:
-			return true
-		default:
-			return false
-	}
+	return ux.IsReflectMap(i)
+	//v := reflect.ValueOf(i)
+	//switch v.Kind() {
+	//	case reflect.Map:
+	//		return true
+	//	default:
+	//		return false
+	//}
 }
 
 // FindInMap function.

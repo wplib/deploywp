@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/wplib/deploywp/only"
-	"reflect"
+	"github.com/wplib/deploywp/ux"
 	"regexp"
 	"strings"
 )
@@ -25,39 +25,42 @@ type TypeGenericStringArray struct {
 // Usage:
 //		{{ if IsString $output }}YES{{ end }}
 func HelperIsString(i interface{}) bool {
-	v := reflect.ValueOf(i)
-	switch v.Kind() {
-		case reflect.String:
-			return true
-		default:
-			return false
-	}
+	return ux.IsReflectString(i)
+	//v := reflect.ValueOf(i)
+	//switch v.Kind() {
+	//	case reflect.String:
+	//		return true
+	//	default:
+	//		return false
+	//}
 }
 
 
 // Usage:
 //		{{ $str := ToUpper "lowercase" }}
 func HelperToUpper(i interface{}) string {
-	v := reflect.ValueOf(i)
-	switch v.Kind() {
-		case reflect.String:
-			return strings.ToUpper(i.(string))
-		default:
-			return ""
-	}
+	return strings.ToUpper(*ux.ReflectString(i))
+	//v := reflect.ValueOf(i)
+	//switch v.Kind() {
+	//	case reflect.String:
+	//		return strings.ToUpper(i.(string))
+	//	default:
+	//		return ""
+	//}
 }
 
 
 // Usage:
 //		{{ $str := ToLower "UPPERCASE" }}
 func HelperToLower(i interface{}) string {
-	v := reflect.ValueOf(i)
-	switch v.Kind() {
-		case reflect.String:
-			return strings.ToLower(i.(string))
-		default:
-			return ""
-	}
+	return strings.ToLower(*ux.ReflectString(i))
+	//v := reflect.ValueOf(i)
+	//switch v.Kind() {
+	//	case reflect.String:
+	//		return strings.ToLower(i.(string))
+	//	default:
+	//		return ""
+	//}
 }
 
 
