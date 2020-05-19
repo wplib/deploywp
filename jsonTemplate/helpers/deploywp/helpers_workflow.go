@@ -3,6 +3,7 @@ package deploywp
 import (
 	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
+	"time"
 )
 
 /*
@@ -128,9 +129,9 @@ func (e *TypeDeployWp) Run() *ux.State {
 		ux.PrintfWhite("\n\n")
 
 
-		ux.PrintfWhite("#############################\n")
-		ux.PrintfWhite("# Opening target repository #\n")
-		ux.PrintfWhite("#############################\n")
+		ux.PrintfWhite("##############################\n")
+		ux.PrintfWhite("# Checkout source repository #\n")
+		ux.PrintfWhite("##############################\n")
 		srcGitRef.State = e.CheckoutSourceRepo(srcGitRef)
 		if e.State.IsError() {
 			break
@@ -138,6 +139,80 @@ func (e *TypeDeployWp) Run() *ux.State {
 		ux.PrintfWhite("\n\n")
 
 
+		ux.PrintfWhite("#############################\n")
+		ux.PrintfWhite("# Opening target repository #\n")
+		ux.PrintfWhite("#############################\n")
+		srcGitRef.State = e.OpenTargetRepo()
+		if e.State.IsError() {
+			break
+		}
+		ux.PrintfWhite("\n\n")
+
+
+		ux.PrintfWhite("##############################\n")
+		ux.PrintfWhite("# Cleaning target repository #\n")
+		ux.PrintfWhite("##############################\n")
+		//srcGitRef.State = e.OpenTargetRepo()
+		time.Sleep(time.Second * 2)	// Simulate
+		if e.State.IsError() {
+			break
+		}
+		ux.PrintfWhite("\n\n")
+
+
+		ux.PrintfWhite("#############################\n")
+		ux.PrintfWhite("# Syncing target repository #\n")
+		ux.PrintfWhite("#############################\n")
+		//srcGitRef.State = e.OpenTargetRepo()
+		time.Sleep(time.Second * 2)	// Simulate
+		if e.State.IsError() {
+			break
+		}
+		ux.PrintfWhite("\n\n")
+
+
+		ux.PrintfWhite("#########################################\n")
+		ux.PrintfWhite("# Running composer on target repository #\n")
+		ux.PrintfWhite("#########################################\n")
+		//srcGitRef.State = e.OpenTargetRepo()
+		time.Sleep(time.Second * 2)	// Simulate
+		if e.State.IsError() {
+			break
+		}
+		ux.PrintfWhite("\n\n")
+
+
+		ux.PrintfWhite("############################################\n")
+		ux.PrintfWhite("# Increment BUILD within target repository #\n")
+		ux.PrintfWhite("############################################\n")
+		//srcGitRef.State = e.OpenTargetRepo()
+		time.Sleep(time.Second * 2)	// Simulate
+		if e.State.IsError() {
+			break
+		}
+		ux.PrintfWhite("\n\n")
+
+
+		ux.PrintfWhite("########################################\n")
+		ux.PrintfWhite("# Commit target repository to Pantheon #\n")
+		ux.PrintfWhite("########################################\n")
+		//srcGitRef.State = e.OpenTargetRepo()
+		time.Sleep(time.Second * 2)	// Simulate
+		if e.State.IsError() {
+			break
+		}
+		ux.PrintfWhite("\n\n")
+
+
+		ux.PrintfWhite("############################\n")
+		ux.PrintfWhite("# Commit source repository #\n")
+		ux.PrintfWhite("############################\n")
+		//srcGitRef.State = e.OpenTargetRepo()
+		time.Sleep(time.Second * 2)	// Simulate
+		if e.State.IsError() {
+			break
+		}
+		ux.PrintfWhite("\n\n")
 	}
 
 	return e.State

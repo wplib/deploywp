@@ -26,8 +26,13 @@ endif
 	@$(GODOCMD) 
 
 
-test:
+test-run:
 	@./bin/deploywp run --chdir --json tests/deploywp.json prod
+
+
+test-template:
+	#@./bin/deploywp load tests/deploywp.json prod
+	@./tests/deploywp.tmpl prod
 
 
 docker:

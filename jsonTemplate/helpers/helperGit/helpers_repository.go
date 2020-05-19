@@ -106,29 +106,7 @@ func (g *HelperGit) IsExisting() bool {
 			break
 		}
 
-		//g.State.SetState(g.Exec("rev-parse", "--is-inside-work-tree"))
-		//if !g.State.OutputEquals("true") {
-		//	if g.State.IsError() {
-		//		g.State.SetError("current directory does not contain a valid .Git repository: %s", g.State.GetError())
-		//		break
-		//	}
-		//
-		//	g.State.SetError("current directory does not contain a valid Git repository")
-		//	break
-		//}
-		//
-		//var err error
-		//g.repository, err = git.PlainOpen(g.Base.GetPath())
-		//if err != nil {
-		//	g.State.SetError(err)
-		//	break
-		//}
-		//
-		//c, _ := g.repository.Config()
-		//g.Url = c.Remotes["origin"].URLs[0]
-		//
-		//g.State.SetOk("Opened directory %s.\nRemote origin is set to %s\n", g.Base.GetPath(), g.Url)
-		//g.State.Response = true
+		ok = true
 	}
 
 	return ok

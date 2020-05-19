@@ -26,6 +26,36 @@ func (g *HelperGit) GetBranch() *ux.State {
 
 
 // Usage:
+//		{{- $cmd := $git.GetBranch }}
+//		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
+func (g *HelperGit) BranchExists(branch interface{}) *ux.State {
+	for range only.Once {
+		g.State.SetFunction("")
+
+		if g.Reflect().IsNotOk() {
+			break
+		}
+
+		t := helperTypes.ReflectString(branch)
+		if t == nil {
+			g.State.SetError("branch is nil")
+			break
+		}
+
+		g.State.SetState(g.Exec("branch", "--list", *t))
+		if g.State.IsError() {
+			break
+		}
+
+		if g.State.Output == *t {
+			g.State.Response = true
+		}
+	}
+	return g.State
+}
+
+
+// Usage:
 //		{{- $cmd := $git.GetTags }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GetTags() *ux.State {

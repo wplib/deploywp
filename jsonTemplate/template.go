@@ -124,6 +124,10 @@ func (me *Template) ProcessTemplate() ux.State {
 	var err error
 
 	for range only.Once {
+		if me.JsonStruct == nil {
+			me.JsonStruct = &jsonStruct{}
+		}
+
 		//var jsonStr jsonStruct
 		//me.JsonStruct.ExecName, err = os.Executable()
 		//me.JsonStruct.DirPath = path.Dir(me.JsonStruct.ExecName)

@@ -3,6 +3,7 @@
 ################################################################################
 {{ PrintfBlue "# PrintHelpers" }}
 {{- $ignore := PrintHelpers }}
+{{- Chdir "tests" }}
 
 {{ PrintfCyan .Exec.CmdFile }} v{{ PrintfBlue .Exec.CmdVersion }} :
 	- {{ PrintfCyan .Exec.Cmd }}
@@ -13,24 +14,6 @@
 {{ PrintflnBlue "# LoadDeployWp" }}
 {{- $dwp := LoadDeployWp .Json }}
 {{- $dwp.ExitOnError }}
-
-{{- $host := .Exec.GetArg 0 }}
-{{- if eq $host "" }}
-{{ $host := UserPrompt "# Enter host: " }}
-{{- if eq $host "" }}
-{{ PrintfError "Empty host" }}
-{{ OsExit 1 }}
-{{- end }}
-{{- end }}
-{{ PrintflnBlue "# Checking host '%s'" $host }}
-{{- $href := $dwp.GetHost "prod" }}
-{{- if $href.Valid }}
-{{- PrintflnOk "HostName '%s'" $href.HostName }}
-{{- PrintflnOk "Label '%s'" $href.Label }}
-{{- PrintflnOk "Provider '%s'" $href.Provider }}
-{{- else }}
-{{ PrintflnError "Cannot find host defintion for '%s'" $host }}
-{{- end }}
 
 {{ PrintfBlue "# SOURCE PATHS" }}
 {{- $src := $dwp.GetSourcePaths }}
@@ -52,8 +35,25 @@
 {{ PrintfOk "RootPath:    %s" $target.GetRootPath }}
 {{ PrintfOk "VendorPath:  %s" $target.GetVendorPath }}
 
-
+{{- $host := .Exec.GetArg 0 }}
+{{- if eq $host "" }}
+{{ $host := UserPrompt "# Enter host: " }}
+{{- if eq $host "" }}
+{{ PrintfError "Empty host" }}
 {{ OsExit 1 }}
+{{- end }}
+{{- end }}
+{{ PrintflnBlue "# Checking host '%s'" $host }}
+{{- $href := $dwp.GetHost "prod" }}
+{{- if $href.Valid }}
+{{- PrintflnOk "HostName '%s'" $href.HostName }}
+{{- PrintflnOk "Label '%s'" $href.Label }}
+{{- PrintflnOk "Provider '%s'" $href.Provider }}
+{{- else }}
+{{ PrintflnError "Cannot find host defintion for '%s'" $host }}
+{{- end }}
+
+
 ################################################################################
 {{ PrintfBlue "# File I/O" }}
 

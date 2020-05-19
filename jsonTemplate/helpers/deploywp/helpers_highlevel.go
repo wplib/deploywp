@@ -146,7 +146,7 @@ func (e *TypeDeployWp) CheckoutSourceRepo(gitRef *helperGit.HelperGit) *ux.State
 		}
 
 		if gitRef.IsNotExisting() {
-			e.State.SetError("deploywp JSON is nil")
+			e.State.SetError("source repository not open")
 			break
 		}
 
@@ -167,19 +167,26 @@ func (e *TypeDeployWp) CheckoutSourceRepo(gitRef *helperGit.HelperGit) *ux.State
 		ux.PrintfOk("Type: '%s'\n", refType)
 		ux.PrintfOk("Name: '%s'\n", refName)
 
-		ux.PrintfBlue("# Checking if %s exists.\n", refType)
-		e.State = gitRef.TagExists(refName)
+		ux.PrintfBlue("# Checking if %s '%s' exists.\n", refType, refName)
+		if refType == "branch" {
+			e.State = gitRef.BranchExists(refName)
+			if e.State.IsError() {
+				break
+			}
+		} else {
+			e.State = gitRef.TagExists(refName)
+			if e.State.IsError() {
+				break
+			}
+		}
+
+		ux.PrintfBlue("# Checking out %s '%s'.\n", refType, refName)
+		e.State = gitRef.GitCheckout(refName)
 		if e.State.IsError() {
 			break
 		}
 
-		ux.PrintfBlue("# Checking out %s:%s.\n", refType, refName)
-		e.State = gitRef.TagExists(refName)
-		if e.State.IsError() {
-			break
-		}
-
-		ux.PrintfOk("# Source repository opened OK.\n")
+		ux.PrintfOk("# %s '%s' checked out OK.\n", refType, refName)
 		e.State.Clear()
 	}
 
