@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56b4b170-76f7-4ada-8cff-27bcfeafc366" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ux/const.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/const.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ux/state.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/state.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ux/state_output.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/state_output.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ux/state_reflect.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/state_reflect.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ux/ux.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/ux.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -173,7 +169,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/ux/state.go</url>
-          <line>467</line>
+          <line>562</line>
           <option name="timeStamp" value="375" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
@@ -243,7 +239,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/ux/state.go</url>
-          <line>230</line>
+          <line>313</line>
           <option name="timeStamp" value="505" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">

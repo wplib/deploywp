@@ -7,6 +7,27 @@ import (
 )
 
 
+func (p *State) SetRunState(rs string) {
+	p.RunState = rs
+}
+func (p *State) GetRunState() string {
+	return p.RunState
+}
+
+func (p *State) RunStateEquals(format string, args ...interface{}) bool {
+	var ret bool
+
+	for range OnlyOnce {
+		s := fmt.Sprintf(format, args...)
+		if strings.Compare(p.RunState, s) == 0 {
+			ret = true
+		}
+	}
+
+	return ret
+}
+
+
 func (p *State) SetOutput(data ...interface{}) {
 	for range OnlyOnce {
 		p.Output = ""
