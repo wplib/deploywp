@@ -2,7 +2,6 @@ package ux
 
 import (
 	"fmt"
-	"github.com/wplib/deploywp/only"
 	"os"
 	"reflect"
 	"runtime"
@@ -193,7 +192,7 @@ func (p *State) ResponseToFloat() *float64 {
 //		case reflect.UnsafePointer:
 //	}
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if IsReflectString(ref) {
 //
 //		}
@@ -215,7 +214,7 @@ func (p *State) ResponseToFloat() *float64 {
 func ReflectString(ref interface{}) *string {
 	var s string
 
-	for range only.Once {
+	for range OnlyOnce {
 		//value := reflect.ValueOf(ref)
 		//if value.Kind() == reflect.String {
 		//	st := value.String()
@@ -254,7 +253,7 @@ func IsReflectString(i interface{}) bool {
 func ReflectStringArray(ref ...interface{}) *[]string {
 	var sa []string
 
-	for range only.Once {
+	for range OnlyOnce {
 		for _, r := range ref {
 			sa = append(sa, *ReflectString(r))
 		}
@@ -267,7 +266,7 @@ func ReflectStringArray(ref ...interface{}) *[]string {
 func ReflectByteArray(ref interface{}) *[]byte {
 	var s []byte
 
-	for range only.Once {
+	for range OnlyOnce {
 		//value := reflect.ValueOf(ref)
 		//if value.Kind() != reflect.String {
 		//	break
@@ -299,7 +298,7 @@ func IsReflectByteArray(i interface{}) bool {
 func ReflectBool(ref interface{}) *bool {
 	var b *bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		value := reflect.ValueOf(ref)
 		if value.Kind() != reflect.Bool {
 			break
@@ -330,7 +329,7 @@ func IsReflectBool(i interface{}) bool {
 func ReflectBoolArg(ref interface{}) bool {
 	var s bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		value := reflect.ValueOf(ref)
 		switch value.Kind() {
 			case reflect.Bool:
@@ -359,7 +358,7 @@ func ReflectBoolArg(ref interface{}) bool {
 func ReflectInt(ref interface{}) *int64 {
 	var s int64
 
-	for range only.Once {
+	for range OnlyOnce {
 		value := reflect.ValueOf(ref)
 		switch value.Kind() {
 			case reflect.Int, reflect.Int8, reflect.Int32, reflect.Int64, reflect.Uint, reflect.Uint8, reflect.Uint32, reflect.Uint64, reflect.Float32, reflect.Float64:
@@ -421,7 +420,7 @@ func IsReflectUint(i interface{}) bool {
 func ReflectFloat(ref interface{}) *float64 {
 	var s float64
 
-	for range only.Once {
+	for range OnlyOnce {
 		value := reflect.ValueOf(ref)
 		switch value.Kind() {
 			case reflect.Float32, reflect.Float64:

@@ -3,7 +3,6 @@ package ux
 import (
 	"errors"
 	"fmt"
-	"github.com/wplib/deploywp/only"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -212,7 +211,7 @@ func (p *State) PrintResponse() string {
 func (p *State) SprintError() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if p._Ok != nil {
 			// If we have an OK response.
 			break
@@ -260,7 +259,7 @@ func (p *State) IsOk() bool {
 func (p *State) IsNotOk() bool {
 	ok := true
 
-	for range only.Once {
+	for range OnlyOnce {
 		if p._Warning != nil {
 			break
 		}
@@ -282,7 +281,7 @@ func (p *State) GetExitCode() int {
 
 
 func (p *State) SetError(error ...interface{}) {
-	for range only.Once {
+	for range OnlyOnce {
 		if p == nil {
 			//p._Error = errors.New("ERROR State is nil")
 			break
@@ -317,7 +316,7 @@ func (p *State) SetWarning(warning ...interface{}) {
 //	p._Warning = errors.New(fmt.Sprintf(format, args...))
 //	p._Error = nil
 
-	for range only.Once {
+	for range OnlyOnce {
 		if p == nil {
 			//p._Error = errors.New("ERROR State is nil")
 			break
@@ -352,7 +351,7 @@ func (p *State) SetOk(msg ...interface{}) {
 //	p._Warning = nil
 //	p._Error = nil
 
-	for range only.Once {
+	for range OnlyOnce {
 		if p == nil {
 			//p._Error = errors.New("ERROR State is nil")
 			break
@@ -496,7 +495,7 @@ func Exit(e int64, msg ...interface{}) string {
 func _Sprintf(msg ...interface{}) string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if len(msg) == 0 {
 			break
 		}

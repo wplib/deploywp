@@ -2,14 +2,13 @@ package ux
 
 import (
 	"fmt"
-	"github.com/wplib/deploywp/only"
 	"regexp"
 	"strings"
 )
 
 
 func (p *State) SetOutput(data ...interface{}) {
-	for range only.Once {
+	for range OnlyOnce {
 		p.Output = ""
 		p.OutputArray = []string{}
 
@@ -18,7 +17,7 @@ func (p *State) SetOutput(data ...interface{}) {
 }
 
 func (p *State) OutputAppend(data ...interface{}) {
-	for range only.Once {
+	for range OnlyOnce {
 		if p._Separator == "" {
 			p._Separator = DefaultSeparator
 		}
@@ -66,7 +65,7 @@ func (p *State) GetOutputArray() []string {
 }
 
 func (p *State) SetSeparator(separator string) {
-	for range only.Once {
+	for range OnlyOnce {
 		p._Separator = separator
 		p.OutputArray = strings.Split(p.Output, p._Separator)
 	}
@@ -77,14 +76,14 @@ func (p *State) GetSeparator() string {
 }
 
 func (p *State) OutputTrim() {
-	for range only.Once {
+	for range OnlyOnce {
 		p.Output = strings.TrimSpace(p.Output)
 		p.OutputArray = strings.Split(p.Output, p._Separator)
 	}
 }
 
 func (p *State) OutputArrayTrim() {
-	for range only.Once {
+	for range OnlyOnce {
 		for _, s := range p.OutputArray {
 			p.OutputArray = append(p.OutputArray, strings.Split(s, p._Separator)...)
 		}
@@ -95,7 +94,7 @@ func (p *State) OutputArrayTrim() {
 func (p *State) OutputEquals(format string, args ...interface{}) bool {
 	var ret bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		s := fmt.Sprintf(format, args...)
 		if strings.Compare(p.Output, s) == 0 {
 			ret = true
@@ -108,7 +107,7 @@ func (p *State) OutputEquals(format string, args ...interface{}) bool {
 func (p *State) OutputParse(format string, args ...interface{}) bool {
 	var ret bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		s := fmt.Sprintf(format, args...)
 
 		ret = strings.Contains(p.Output, s)
@@ -120,7 +119,7 @@ func (p *State) OutputParse(format string, args ...interface{}) bool {
 func (p *State) OutputArrayGrep(format string, a ...interface{}) []string {
 	var ret []string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if len(p.OutputArray) == 0 {
 			break
 		}
@@ -140,7 +139,7 @@ func (p *State) OutputArrayGrep(format string, a ...interface{}) []string {
 func (p *State) OutputGrep(format string, a ...interface{}) string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if p.Output == "" {
 			break
 		}
