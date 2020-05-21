@@ -14,7 +14,7 @@ package helperSystem
 //func HelperReadFile(file ...interface{}) *helperFile.TypeOsPath {
 //	var rf helperFile.TypeOsPath
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := helperFile.ReflectPath(file...)
 //		if f == nil {
 //			rf.SetError("filename empty")
@@ -59,7 +59,7 @@ package helperSystem
 //func HelperWriteFile(contents interface{}, perms interface{}, file ...interface{}) *helperTypes.TypeWriteFile {
 //	var ret helperTypes.TypeWriteFile
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := helperTypes.ReflectPath(file...)
 //		if f == nil {
 //			ret.SetError("filename is nil")
@@ -109,7 +109,7 @@ package helperSystem
 //// Usage:
 ////		{{  }}
 //func (me *TypeOsPath) SetPath(path ...interface{}) *helperFile.TypeOsPath {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := helperTypes.ReflectPath(path...)
 //		if f == nil {
 //			me.SetError("filename is nil")
@@ -144,7 +144,7 @@ package helperSystem
 //// Usage:
 ////		{{  }}
 //func (me *TypeOsPath) SetDir(path ...interface{}) *helperFile.TypeOsPath {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := helperTypes.ReflectPath(file...)
 //		if f == nil {
 //			me.SetError("filename is nil")
@@ -194,7 +194,7 @@ package helperSystem
 //// Usage:
 ////		{{  }}
 //func (me *TypeOsPath) SetFile(path ...interface{}) *helperFile.TypeOsPath {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := helperTypes.ReflectPath(file...)
 //		if f == nil {
 //			me.SetError("filename is nil")
@@ -244,7 +244,7 @@ package helperSystem
 //// Usage:
 ////		{{  }}
 //func (me *TypeOsPath) IsDir(path ...interface{}) *helperFile.TypeOsPath {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := helperTypes.ReflectPath(file...)
 //		if f == nil {
 //			me.SetError("filename is nil")
@@ -294,7 +294,7 @@ package helperSystem
 //// Usage:
 ////		{{  }}
 //func (me *TypeOsPath) IsFile(path ...interface{}) *helperFile.TypeOsPath {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := helperTypes.ReflectPath(file...)
 //		if f == nil {
 //			me.SetError("filename is nil")
@@ -344,7 +344,7 @@ package helperSystem
 //// Usage:
 ////		{{  }}
 //func (me *TypeOsPath) Exists(path ...interface{}) *helperFile.TypeOsPath {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := helperTypes.ReflectPath(file...)
 //		if f == nil {
 //			me.SetError("filename is nil")
@@ -394,7 +394,7 @@ package helperSystem
 //// Usage:
 ////		{{  }}
 //func (me *TypeOsPath) ModTime(path ...interface{}) *helperFile.TypeOsPath {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := helperTypes.ReflectPath(file...)
 //		if f == nil {
 //			me.SetError("filename is nil")
@@ -444,7 +444,7 @@ package helperSystem
 //// Usage:
 ////		{{  }}
 //func (me *TypeOsPath) Mode(path ...interface{}) *helperFile.TypeOsPath {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := helperTypes.ReflectPath(file...)
 //		if f == nil {
 //			me.SetError("filename is nil")
@@ -494,7 +494,7 @@ package helperSystem
 //// Usage:
 ////		{{  }}
 //func (me *TypeOsPath) Size(path ...interface{}) *helperFile.TypeOsPath {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := helperTypes.ReflectPath(file...)
 //		if f == nil {
 //			me.SetError("filename is nil")
@@ -544,7 +544,7 @@ package helperSystem
 //func _GetAbsPath(f ...string) string {
 //	var ret string
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		ret = filepath.Join(f...)
 //
 //		if filepath.IsAbs(ret) {
@@ -566,7 +566,7 @@ package helperSystem
 //func FileToAbs(f ...string) string {
 //	var ret string
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		ret = filepath.Join(f...)
 //
 //		if filepath.IsAbs(ret) {
@@ -589,7 +589,7 @@ package helperSystem
 //func ResolvePath(path ...string) *helperFile.TypeOsPath {
 //	var ret TypeOsPath
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		ret.Path = FileToAbs(path...)
 //
 //		var stat os.FileInfo

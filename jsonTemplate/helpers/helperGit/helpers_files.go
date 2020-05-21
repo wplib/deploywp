@@ -1,7 +1,6 @@
 package helperGit
 
 import (
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"strings"
 )
@@ -11,13 +10,12 @@ import (
 //		{{- $cmd := $git.ChangedFiles }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) ChangedFiles() *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		g.State.SetState(g.Exec(gitCommandStatus, "--porcelain"))
 		if g.State.IsError() {
 			break
@@ -43,13 +41,12 @@ func (g *HelperGit) ChangedFiles() *ux.State {
 //		{{- $cmd := $git.AddFiles }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) AddFiles() *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		g.State.SetState(g.Exec(gitCommandAdd, "--porcelain"))
 		if g.State.IsError() {
 			break

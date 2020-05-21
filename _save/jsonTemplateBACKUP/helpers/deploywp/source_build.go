@@ -27,7 +27,7 @@ func (me *Build) New() Build {
 func (me *Build) IsNil() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me == nil {
 			ok = true
 		}
@@ -43,7 +43,7 @@ func (me *Build) IsNil() bool {
 func (me *Build) GetBuild() bool {
 	var ret bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}

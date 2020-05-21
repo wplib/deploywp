@@ -40,7 +40,7 @@ func (me *Providers) New() Providers {
 func (me *Providers) IsNil() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me == nil {
 			ok = true
 		}
@@ -71,7 +71,7 @@ func (me *Meta) New() Meta {
 func (me *Meta) IsNil() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me == nil {
 			ok = true
 		}
@@ -109,7 +109,7 @@ func (me *Defaults) New() Defaults {
 func (me *Providers) GetProvider(provider interface{}) *Provider {
 	var ret Provider
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}

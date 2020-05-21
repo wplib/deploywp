@@ -4,7 +4,6 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGit"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -12,12 +11,11 @@ import (
 // Usage:
 //		{{ $cmd := ShowPaths }}
 func (e *TypeDeployWp) PrintPaths() *ux.State {
-	for range only.Once {
-		if e.IsNil() {
-			e.State.SetError("deploywp JSON is nil")
-			break
-		}
+	if state := e.IsNil(); state.IsError() {
+		return state
+	}
 
+	for range OnlyOnce {
 		src := e.GetSourcePaths()
 		srcAbs := e.GetSourceAbsPaths()
 		ux.PrintfBlue("# SOURCE PATHS:\n")
@@ -50,13 +48,11 @@ func (e *TypeDeployWp) PrintPaths() *ux.State {
 //		{{ $cmd.ExitOnWarning }}
 func (e *TypeDeployWp) OpenSourceRepo() *helperGit.HelperGit {
 	gitRef := helperGit.NewGit().Reflect()
+	if state := e.IsNil(); state.IsError() {
+		return &helperGit.HelperGit{}
+	}
 
-	for range only.Once {
-		if e.IsNil() {
-			e.State.SetError("deploywp JSON is nil")
-			break
-		}
-
+	for range OnlyOnce {
 		ux.PrintfBlue("# Checking source repository.\n")
 		repo := e.Source.GetRepository()
 		provider := repo.GetProvider()
@@ -139,12 +135,11 @@ func (e *TypeDeployWp) OpenSourceRepo() *helperGit.HelperGit {
 //		{{ $cmd := CheckoutSourceRepo }}
 //		{{ $cmd.ExitOnWarning }}
 func (e *TypeDeployWp) CheckoutSourceRepo(gitRef *helperGit.HelperGit) *ux.State {
-	for range only.Once {
-		if e.IsNil() {
-			e.State.SetError("deploywp JSON is nil")
-			break
-		}
+	if state := e.IsNil(); state.IsError() {
+		return state
+	}
 
+	for range OnlyOnce {
 		if gitRef.IsNotExisting() {
 			e.State.SetError("source repository not open")
 			break
@@ -199,12 +194,11 @@ func (e *TypeDeployWp) CheckoutSourceRepo(gitRef *helperGit.HelperGit) *ux.State
 //		{{ $cmd := OpenTargetRepo }}
 //		{{ $cmd.ExitOnWarning }}
 func (e *TypeDeployWp) OpenTargetRepo() *ux.State {
-	for range only.Once {
-		if e.IsNil() {
-			e.State.SetError("deploywp JSON is nil")
-			break
-		}
+	if state := e.IsNil(); state.IsError() {
+		return state
+	}
 
+	for range OnlyOnce {
 		ux.PrintfBlue("# Obtain source repository details.\n")
 		e.State = e.ObtainHost()
 		if e.State.IsError() {
@@ -230,14 +224,13 @@ func (e *TypeDeployWp) OpenTargetRepo() *ux.State {
 //		{{ $state := ObtainHost }}
 //		{{ $state.ExitOnWarning }}
 func (e *TypeDeployWp) ObtainHost() *ux.State {
-	for range only.Once {
-		if e.IsNil() {
-			e.State.SetError("deploywp JSON is nil")
-			break
-		}
+	if state := e.IsNil(); state.IsError() {
+		return state
+	}
 
+	for range OnlyOnce {
 		var host string
-		for range only.Once {
+		for range OnlyOnce {
 			e.State.Clear()
 
 			host = e.Exec.GetArg(0)

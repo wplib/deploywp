@@ -21,7 +21,7 @@ func _NewCommit(hash string) *Commit {
 //		{{- $cmd := $git.Commit }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) Commit(format interface{}, a ...interface{}) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {

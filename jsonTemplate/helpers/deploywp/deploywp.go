@@ -1,63 +1,5 @@
 package deploywp
 
-import (
-	"github.com/wplib/deploywp/cmd/runtime"
-	"github.com/wplib/deploywp/ux"
-	//"github.com/davecgh/go-spew/spew"
-	"github.com/wplib/deploywp/only"
-)
-
-
-type TypeDeployWp struct {
-	Hosts  Hosts  `json:"hosts"`
-	Source Source `json:"source"`
-	Target Target `json:"target"`
-
-	Runtime
-
-	Valid  bool
-	State  *ux.State
-}
-
-type Runtime struct {
-	Exec runtime.Exec
-}
-
-
-func ReflectDeployWp(ref interface{}) *TypeDeployWp {
-	return ref.(*TypeDeployWp)
-}
-
-
-func NewJsonFile() *TypeDeployWp {
-	var jf TypeDeployWp
-
-	jf.State = ux.NewState()
-	jf.Runtime = Runtime{}
-
-	jf.Hosts.New()
-	jf.Source.New()
-	jf.Target.New()
-
-	return &jf
-}
-
-
-func (me *TypeDeployWp) IsNil() bool {
-	var ok bool
-
-	for range only.Once {
-		if me == nil {
-			ok = true
-		}
-		// @TODO - perform other validity checks here.
-
-		ok = false
-	}
-
-	return ok
-}
-
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source
@@ -69,128 +11,58 @@ func (me *TypeDeployWp) GetSource() *Source {
 // ////////////////////////////////////////////////////////////////////////////////
 // Source.Paths
 func (me *TypeDeployWp) GetSourcePaths() *Paths {
-	var ret *Paths
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = &me.Source.Paths
+	if state := me.IsNil(); state.IsError() {
+		return &Paths{}
 	}
-
-	return ret
+	return &me.Source.Paths
 }
-//func (me *TypeDeployWp) GetSourcePaths(abs ...interface{}) *Paths {
-//	var ret *Paths
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if len(abs) > 0 {
-//			ok := helperTypes.ReflectBoolArg(abs[0])
-//			if ok {
-//				ret = &me.Source.AbsPaths
-//				break
-//			}
-//		}
-//
-//		ret = &me.Source.Paths
-//	}
-//
-//	return ret
-//}
 func (me *TypeDeployWp) GetSourceAbsPaths() *Paths {
-	var ret *Paths
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = &me.Source.AbsPaths
+	if state := me.IsNil(); state.IsError() {
+		return &Paths{}
 	}
-
-	return ret
+	return &me.Source.AbsPaths
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source.Repository
 func (me *TypeDeployWp) GetSourceRepositoryProvider() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Source.GetRepositoryProvider()
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return me.Source.GetRepositoryProvider()
 }
 func (me *TypeDeployWp) GetSourceRepositoryUrl() URL {
-	var ret URL
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Source.GetRepositoryUrl()
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return me.Source.GetRepositoryUrl()
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source.Revision
 func (me *TypeDeployWp) GetSourceRevisionType() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Source.GetRevisionType()
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return me.Source.GetRevisionType()
 }
 func (me *TypeDeployWp) GetSourceRevisionName() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Source.GetRevisionName()
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return me.Source.GetRevisionName()
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source.Build
 func (me *TypeDeployWp) GetSourceBuild() bool {
-	var ret bool
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Source.GetBuild()
+	if state := me.IsNil(); state.IsError() {
+		return false
 	}
-
-	return ret
+	return me.Source.GetBuild()
 }
 
 
@@ -204,81 +76,46 @@ func (me *TypeDeployWp) GetTarget() *Target {
 // ////////////////////////////////////////////////////////////////////////////////
 // Target.Files
 func (me *TypeDeployWp) GetTargetFiles(ftype interface{}) *FilesArray {
-	var ret *FilesArray
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Target.GetFiles(ftype)
+	if state := me.IsNil(); state.IsError() {
+		return &FilesArray{}
 	}
-
-	return ret
+	return me.Target.GetFiles(ftype)
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target.Paths
 func (me *TypeDeployWp) GetTargetPaths() *Paths {
-	var ret *Paths
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = &me.Target.Paths
+	if state := me.IsNil(); state.IsError() {
+		return &Paths{}
 	}
-
-	return ret
+	return &me.Target.Paths
 }
 func (me *TypeDeployWp) GetTargetAbsPaths() *Paths {
-	var ret *Paths
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = &me.Target.AbsPaths
+	if state := me.IsNil(); state.IsError() {
+		return &Paths{}
 	}
-
-	return ret
+	return &me.Target.AbsPaths
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target.Revisions
 func (me *TypeDeployWp) GetTargetRevision(host interface{}) *TargetRevision {
-	var ret *TargetRevision
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Target.GetRevision(host)
+	if state := me.IsNil(); state.IsError() {
+		return &TargetRevision{}
 	}
-
-	return ret
+	return me.Target.GetRevision(host)
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target.Providers
 func (me *TypeDeployWp) GetTargetProvider(provider interface{}) *Provider {
-	var ret *Provider
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Target.GetProvider(provider)
+	if state := me.IsNil(); state.IsError() {
+		return &Provider{}
 	}
-
-	return ret
+	return me.Target.GetProvider(provider)
 }
 
 
@@ -289,15 +126,8 @@ func (me *TypeDeployWp) GetHosts() *Hosts {
 }
 
 func (me *TypeDeployWp) GetHost(host interface{}) *Host {
-	var ret *Host
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Hosts.GetHost(host)
+	if state := me.IsNil(); state.IsError() {
+		return &Host{}
 	}
-
-	return ret
+	return me.Hosts.GetHost(host)
 }

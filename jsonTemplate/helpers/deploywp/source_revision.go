@@ -1,7 +1,6 @@
 package deploywp
 
 import (
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -19,51 +18,30 @@ func (me *Revision) New() Revision {
 	me = &Revision {
 		RefName: "",
 		RefType: "",
-		State: ux.NewState(),
+		State: ux.NewState(false),
 	}
 	return *me
 }
 
-func (me *Revision) IsNil() bool {
-	var ok bool
-
-	for range only.Once {
-		if me == nil {
-			ok = true
-		}
-		// @TODO - perform other validity checks here.
-
-		ok = false
+func (e *Revision) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(e); state.IsError() {
+		return state
 	}
-
-	return ok
+	e.State = e.State.EnsureNotNil()
+	return e.State
 }
 
 
 func (me *Revision) GetType() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.RefType
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return me.RefType
 }
 
 func (me *Revision) GetName() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.RefName
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return me.RefName
 }

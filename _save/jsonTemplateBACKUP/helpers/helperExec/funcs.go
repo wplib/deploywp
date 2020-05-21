@@ -9,7 +9,7 @@ import (
 
 
 func ExecCommand(ec *TypeExecCommand) *TypeExecCommand {
-	for range only.Once {
+	for range OnlyOnce {
 		if ec.State == nil {
 			ec.State = ux.NewState()
 		}

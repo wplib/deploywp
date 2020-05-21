@@ -2,7 +2,6 @@ package deploywp
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -24,7 +23,7 @@ func NewHost() *Host {
 		Label:    "",
 		Provider: "",
 		Valid: false,
-		State: ux.NewState(),
+		State: ux.NewState(false),
 	}
 	return me
 }
@@ -35,7 +34,7 @@ func (me *Host) New() *Host {
 		Label:    "",
 		Provider: "",
 		Valid: true,
-		State: ux.NewState(),
+		State: ux.NewState(false),
 	}
 	return me
 }
@@ -53,15 +52,11 @@ func (me *Hosts) Count() int {
 }
 
 func (me *Hosts) Process() *ux.State {
-	state := ux.NewState()
+	state := ux.NewState(false)
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		for h, _ := range *me {
-			(*me)[h].State = ux.NewState()
+			(*me)[h].State = ux.NewState(false)
 			(*me)[h].Valid = true
 		}
 	}
@@ -69,30 +64,20 @@ func (me *Hosts) Process() *ux.State {
 	return state
 }
 
-func (me *Hosts) IsNil() bool {
-	var ok bool
 
-	for range only.Once {
-		if me == nil {
-			ok = true
-		}
-		// @TODO - perform other validity checks here.
-
-		ok = false
-	}
-
-	return ok
-}
+//func (e *Hosts) IsNil() *ux.State {
+//	if state := ux.IfNilReturnError(e); state.IsError() {
+//		return state
+//	}
+//	e.State = e.State.EnsureNotNil()
+//	return e.State
+//}
 
 
 func (me *Hosts) GetHost(host interface{}) *Host {
 	ret := NewHost()
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		value := helperTypes.ReflectString(host)
 		if value == nil {
 			ret.State.SetError("GetHost arg not a string")

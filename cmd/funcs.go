@@ -3,7 +3,6 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/wplib/deploywp/jsonTemplate"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"os"
 	"path/filepath"
@@ -15,7 +14,7 @@ func ProcessArgs(cmd *cobra.Command, args []string) (*jsonTemplate.Template, ux.
 	var tmpl jsonTemplate.Template
 	var state ux.State
 
-	for range only.Once {
+	for range OnlyOnce {
 		var err error
 		var s string
 		var b bool
@@ -49,7 +48,7 @@ func ProcessArgs(cmd *cobra.Command, args []string) (*jsonTemplate.Template, ux.
 		}
 
 
-		for range only.Once {
+		for range OnlyOnce {
 			s, err = fl.GetString(argTemplateFile)
 			if err != nil {
 				s = defaultTemplateFile

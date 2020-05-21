@@ -2,7 +2,7 @@
 package helperPath
 
 import (
-	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 )
 
 
@@ -14,14 +14,22 @@ func (g *TypeOsPath) Reflect() *HelperOsPath {
 	return (*HelperOsPath)(g)
 }
 
+func (c *HelperOsPath) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(c); state.IsError() {
+		return state
+	}
+	c.State = c.State.EnsureNotNil()
+	return c.State
+}
+
 
 // Usage:
 //		{{ $str := ReadFile "filename.txt" }}
 //func HelperNewPath(file ...interface{}) *HelperOsPath {
 func HelperNewPath(file ...interface{}) *TypeOsPath {
-	ret := NewOsPath()
+	ret := NewOsPath(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(file...)
@@ -50,9 +58,9 @@ func HelperNewPath(file ...interface{}) *TypeOsPath {
 //		{{ $ret := Chmod 0644 "/root" ... }}
 //		{{ if $ret.IsOk }}Changed perms of file {{ $ret.Dir }}{{ end }}
 func HelperChmod(mode interface{}, path ...interface{}) *TypeOsPath {
-	ret := NewOsPath()
+	ret := NewOsPath(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(path...)

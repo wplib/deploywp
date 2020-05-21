@@ -40,7 +40,7 @@ func (me *Template) CreateTemplate() (*template.Template, ux.State) {
 	var state ux.State
 	var t *template.Template
 
-	for range only.Once {
+	for range OnlyOnce {
 		var tfm template.FuncMap
 		var err error
 
@@ -63,7 +63,7 @@ func (me *Template) ProcessTemplate() ux.State {
 	var state ux.State
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		var jsonStr jsonStruct
 		//jsonStr.ExecName, err = os.Executable()
 		//jsonStr.DirPath = path.Dir(jsonStr.ExecName)
@@ -265,7 +265,7 @@ func (me *Template) ProcessTemplate() ux.State {
 func (me *Template) SetVersion(s string) error {
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		me.exec.CmdVersion = s
 	}
 
@@ -276,7 +276,7 @@ func (me *Template) SetVersion(s string) error {
 func (me *Template) SetArgs(a ...string) error {
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		me.exec.Args = a
 	}
 
@@ -285,7 +285,7 @@ func (me *Template) SetArgs(a ...string) error {
 func (me *Template) AddArgs(a ...string) error {
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		me.exec.Args = append(me.exec.Args, a...)
 	}
 
@@ -296,7 +296,7 @@ func (me *Template) AddArgs(a ...string) error {
 func (me *Template) SetValid() error {
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		me.valid = true
 	}
 
@@ -306,7 +306,7 @@ func (me *Template) SetValid() error {
 func (me *Template) SetInvalid() error {
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		me.valid = false
 	}
 
@@ -317,7 +317,7 @@ func (me *Template) SetInvalid() error {
 func (me *Template) SetJsonFile(s string) error {
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		s, err = filepath.Abs(s)
 		if err != nil {
 			break
@@ -343,7 +343,7 @@ func (me *Template) GetJsonFile() string {
 func (me *Template) SetJsonString(s string) error {
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		me.jsonString = s
 	}
 
@@ -353,7 +353,7 @@ func (me *Template) SetJsonString(s string) error {
 func (me *Template) SetTemplateFile(s string) error {
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		s, err = filepath.Abs(s)
 		if err != nil {
 			break
@@ -379,7 +379,7 @@ func (me *Template) GetTemplateFile() string {
 func (me *Template) SetTemplateString(s string) error {
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		me.templateString = s
 	}
 

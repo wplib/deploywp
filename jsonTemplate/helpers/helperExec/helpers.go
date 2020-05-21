@@ -1,7 +1,6 @@
 package helperExec
 
 import (
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -14,13 +13,21 @@ func (g *TypeExecCommand) Reflect() *HelperExecCommand {
 	return (*HelperExecCommand)(g)
 }
 
+func (c *HelperExecCommand) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(c); state.IsError() {
+		return state
+	}
+	c.State = c.State.EnsureNotNil()
+	return c.State
+}
+
 
 // Usage:
 //		{{ $output := ExecCommand "ps %s" "-eaf" ... }}
 func HelperExecCmd(cmd ...interface{}) *ux.State {
-	ret := NewExecCommand()
+	ret := NewExecCommand(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ec := ReflectExecCommand(cmd...)
 		if ec == nil {
 			break
@@ -66,7 +73,7 @@ func (e *TypeExecCommand) ExitOnWarning() string {
 // Usage:
 //		{{ OsExit 1 }}
 func HelperOsExit(e ...interface{}) string {
-	for range only.Once {
+	for range OnlyOnce {
 		value := ux.ReflectInt(e)
 		ux.Exit(*value)
 	}

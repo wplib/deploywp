@@ -4,7 +4,6 @@ import (
 	"github.com/tsuyoshiwada/go-gitcmd"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperExec"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -16,13 +15,21 @@ func (g *TypeGit) Reflect() *HelperGit {
 	return (*HelperGit)(g)
 }
 
+func (c *HelperGit) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(c); state.IsError() {
+		return state
+	}
+	c.State = c.State.EnsureNotNil()
+	return c.State
+}
+
 
 // Usage:
 //		{{ $git := NewGit }}
 func HelperNewGit(path ...interface{}) *HelperGit {
 	ret := NewGit()
 
-	for range only.Once {
+	for range OnlyOnce {
 		p := helperPath.ReflectAbsPath(path...)
 		if p == nil {
 			break
@@ -42,12 +49,8 @@ func HelperNewGit(path ...interface{}) *HelperGit {
 			//break
 		}
 
-		ret.Cmd = helperExec.NewExecCommand()
+		ret.Cmd = helperExec.NewExecCommand(false)
 		ret.client = gitcmd.New(ret.GitConfig)
-
-		if ret.IsNil() {
-			break
-		}
 
 		if ret.IsNotAvailable() {
 			break
@@ -62,6 +65,10 @@ func HelperNewGit(path ...interface{}) *HelperGit {
 //		{{ $cmd := $git.Chdir .Some.Directory }}
 //		{{ if $git.IsOk }}Changed to directory {{ $git.Dir }}{{ end }}
 func (g *HelperGit) Chdir() *ux.State {
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 	return helperPath.HelperChdir(g.Base.GetPath()).State
 }
 
@@ -79,7 +86,12 @@ func (g *HelperGit) SetDryRun() bool {
 //		{{ if $git.IsOk }}OK{{ end }}
 // func (me *HelperGit) Exec(cmd interface{}, args ...interface{}) *ux.State {
 func (g *HelperGit) Exec(cmd string, args ...string) *ux.State {
-	for range only.Once {
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
+
+	for range OnlyOnce {
 		if g.Reflect().IsNotAvailable() {
 			break
 		}
@@ -104,7 +116,7 @@ func (g *HelperGit) Exec(cmd string, args ...string) *ux.State {
 		g.Cmd.Args = append(g.Cmd.Args, g.GitOptions...)
 		g.Cmd.Args = append(g.Cmd.Args, args...)
 
-		for range only.Once {
+		for range OnlyOnce {
 			if g.skipDirCheck {
 				break
 			}
@@ -139,7 +151,7 @@ func (g *HelperGit) Exec(cmd string, args ...string) *ux.State {
 ////		{{- $cmd := $git.IsExec }}
 ////		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 //func (g *HelperGit) IsAvailable() *ux.State {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if g.Reflect().IsNotAvailable() {
 //			break
 //		}

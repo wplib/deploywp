@@ -39,7 +39,7 @@ func (me *TargetRevisions) New() TargetRevisions {
 func (me *TargetRevisions) IsNil() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me == nil {
 			ok = true
 		}
@@ -55,7 +55,7 @@ func (me *TargetRevisions) IsNil() bool {
 func (me *TargetRevisions) GetRevision(host interface{}) *TargetRevision {
 	var ret TargetRevision
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}

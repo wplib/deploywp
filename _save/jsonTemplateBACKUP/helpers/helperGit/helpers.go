@@ -22,7 +22,7 @@ func (g *TypeGit) Reflect() *HelperGit {
 func HelperNewGit(path ...interface{}) *HelperGit {
 	ret := NewGit()
 
-	for range only.Once {
+	for range OnlyOnce {
 		p := helperPath.ReflectAbsPath(path...)
 		if p == nil {
 			break
@@ -79,7 +79,7 @@ func (g *HelperGit) SetDryRun() bool {
 //		{{ if $git.IsOk }}OK{{ end }}
 // func (me *HelperGit) Exec(cmd interface{}, args ...interface{}) *ux.State {
 func (g *HelperGit) Exec(cmd string, args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		if g.Reflect().IsNotAvailable() {
 			break
 		}
@@ -104,7 +104,7 @@ func (g *HelperGit) Exec(cmd string, args ...string) *ux.State {
 		g.Cmd.Args = append(g.Cmd.Args, g.GitOptions...)
 		g.Cmd.Args = append(g.Cmd.Args, args...)
 
-		for range only.Once {
+		for range OnlyOnce {
 			if g.skipDirCheck {
 				break
 			}
@@ -139,7 +139,7 @@ func (g *HelperGit) Exec(cmd string, args ...string) *ux.State {
 ////		{{- $cmd := $git.IsExec }}
 ////		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 //func (g *HelperGit) IsAvailable() *ux.State {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if g.Reflect().IsNotAvailable() {
 //			break
 //		}

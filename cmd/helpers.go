@@ -3,7 +3,6 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"github.com/wplib/deploywp/jsonTemplate"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -21,7 +20,7 @@ func init() {
 }
 
 func Helpers(cmd *cobra.Command, args []string) {
-	for range only.Once {
+	for range OnlyOnce {
 		var tmpl *jsonTemplate.Template
 
 		tmpl, _ = ProcessArgs(cmd, args)

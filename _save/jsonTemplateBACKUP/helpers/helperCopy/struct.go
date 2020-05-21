@@ -80,7 +80,7 @@ func (me *TypeOsCopy) EnsureNotNil() {
 func (p *TypeOsCopy) SetSourcePath(path ...string) bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		ok = p.Source.SetPath(path...)
 		if !ok {
 			break
@@ -103,7 +103,7 @@ func (p *TypeOsCopy) GetSourcePath() string {
 func (p *TypeOsCopy) SetDestinationPath(path ...string) bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		ok = p.Destination.SetPath(path...)
 		if !ok {
 			break

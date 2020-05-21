@@ -33,7 +33,7 @@ func (me *Files) New() Files {
 }
 
 func (me *Files) Process(paths Paths) error {
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -84,7 +84,7 @@ func (me *Files) Process(paths Paths) error {
 func (me *Files) IsNil() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me == nil {
 			ok = true
 		}
@@ -107,7 +107,7 @@ const (
 func (me *Files) GetFiles(action interface{}) *FilesArray {
 	var ret *FilesArray
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -139,7 +139,7 @@ func (me *Files) GetFiles(action interface{}) *FilesArray {
 func (me *Files) GetCopyFiles() *FilesArray {
 	var ret *FilesArray
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -153,7 +153,7 @@ func (me *Files) GetCopyFiles() *FilesArray {
 func (me *Files) GetDeleteFiles() *FilesArray {
 	var ret *FilesArray
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -167,7 +167,7 @@ func (me *Files) GetDeleteFiles() *FilesArray {
 func (me *Files) GetExcludeFiles() *FilesArray {
 	var ret *FilesArray
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -181,7 +181,7 @@ func (me *Files) GetExcludeFiles() *FilesArray {
 func (me *Files) GetKeepFiles() *FilesArray {
 	var ret *FilesArray
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}

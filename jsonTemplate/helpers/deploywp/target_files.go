@@ -2,7 +2,6 @@ package deploywp
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"strings"
 )
@@ -25,16 +24,16 @@ func (me *Files) New() Files {
 	me.Delete =  FilesArray{}
 	me.Exclude = FilesArray{}
 	me.Keep =    FilesArray{}
-	me.State = ux.NewState()
+	me.State = ux.NewState(false)
 	return *me
 }
 
 func (me *Files) Process(paths Paths) *ux.State {
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
+	if state := me.IsNil(); state.IsError() {
+		return state
+	}
 
+	for range OnlyOnce {
 		for i, p := range me.Copy {
 			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath())
 			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath())
@@ -78,19 +77,13 @@ func (me *Files) Process(paths Paths) *ux.State {
 	return me.State
 }
 
-func (me *Files) IsNil() bool {
-	var ok bool
 
-	for range only.Once {
-		if me == nil {
-			ok = true
-		}
-		// @TODO - perform other validity checks here.
-
-		ok = false
+func (e *Files) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(e); state.IsError() {
+		return state
 	}
-
-	return ok
+	e.State = e.State.EnsureNotNil()
+	return e.State
 }
 
 
@@ -103,12 +96,11 @@ const (
 
 func (me *Files) GetFiles(action interface{}) *FilesArray {
 	var ret *FilesArray
+	if state := me.IsNil(); state.IsError() {
+		return &FilesArray{}
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		value := helperTypes.ReflectString(action)
 		if value == nil {
 			//ret.Error = errors.New("GetTargetFiles arg not a string")
@@ -134,57 +126,29 @@ func (me *Files) GetFiles(action interface{}) *FilesArray {
 }
 
 func (me *Files) GetCopyFiles() *FilesArray {
-	var ret *FilesArray
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = &me.Copy
+	if state := me.IsNil(); state.IsError() {
+		return &FilesArray{}
 	}
-
-	return ret
+	return &me.Copy
 }
 
 func (me *Files) GetDeleteFiles() *FilesArray {
-	var ret *FilesArray
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = &me.Delete
+	if state := me.IsNil(); state.IsError() {
+		return &FilesArray{}
 	}
-
-	return ret
+	return &me.Delete
 }
 
 func (me *Files) GetExcludeFiles() *FilesArray {
-	var ret *FilesArray
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = &me.Exclude
+	if state := me.IsNil(); state.IsError() {
+		return &FilesArray{}
 	}
-
-	return ret
+	return &me.Exclude
 }
 
 func (me *Files) GetKeepFiles() *FilesArray {
-	var ret *FilesArray
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = &me.Keep
+	if state := me.IsNil(); state.IsError() {
+		return &FilesArray{}
 	}
-
-	return ret
+	return &me.Keep
 }

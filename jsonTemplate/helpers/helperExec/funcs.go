@@ -1,7 +1,6 @@
 package helperExec
 
 import (
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"os/exec"
 	"syscall"
@@ -9,9 +8,13 @@ import (
 
 
 func ExecCommand(ec *TypeExecCommand) *TypeExecCommand {
-	for range only.Once {
+	if state := ec.IsNil(); state.IsError() {
+		return nil
+	}
+
+	for range OnlyOnce {
 		if ec.State == nil {
-			ec.State = ux.NewState()
+			ec.State = ux.NewState(false)
 		}
 
 		//c := exec.Command((*cmds)[0], (*cmds)[1:]...)

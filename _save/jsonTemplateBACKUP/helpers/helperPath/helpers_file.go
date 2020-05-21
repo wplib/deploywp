@@ -11,7 +11,7 @@ import (
 func HelperReadFile(file ...interface{}) *TypeOsPath {
 	ret := NewOsPath()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(file...)
@@ -39,7 +39,7 @@ func HelperReadFile(file ...interface{}) *TypeOsPath {
 func HelperWriteFile(contents interface{}, perms interface{}, file ...interface{}) *TypeOsPath {
 	ret := NewOsPath()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(file...)
@@ -79,7 +79,7 @@ func HelperWriteFile(contents interface{}, perms interface{}, file ...interface{
 func HelperRemoveFile(path ...interface{}) *TypeOsPath {
 	ret := NewOsPath()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(path...)

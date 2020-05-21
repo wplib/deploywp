@@ -2,7 +2,6 @@ package helperGit
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -11,12 +10,12 @@ import (
 //		{{- $cmd := $git.GetBranch }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GetBranch() *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
+	for range OnlyOnce {
 		g.State.SetState(g.Exec("symbolic-ref", "--short", "HEAD"))
 		g.State.OutputTrim()
 		g.State.Response = g.State.Output
@@ -29,13 +28,12 @@ func (g *HelperGit) GetBranch() *ux.State {
 //		{{- $cmd := $git.GetBranch }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) BranchExists(branch interface{}) *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		t := helperTypes.ReflectString(branch)
 		if t == nil {
 			g.State.SetError("branch is nil")
@@ -59,13 +57,12 @@ func (g *HelperGit) BranchExists(branch interface{}) *ux.State {
 //		{{- $cmd := $git.GetTags }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GetTags() *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		// git show-ref --tag
 		//
 		// 	tagrefs, err := r.Tags()
@@ -103,13 +100,12 @@ func (g *HelperGit) GetTags() *ux.State {
 //		{{- $cmd := $git.CreateTag "1.0" }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) CreateTag(tag interface{}) *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		t := helperTypes.ReflectString(tag)
 		if t == nil {
 			g.State.SetError("tag is nil")
@@ -130,13 +126,12 @@ func (g *HelperGit) CreateTag(tag interface{}) *ux.State {
 //		{{- $cmd := $git.RemoveTag "1.0" }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) RemoveTag(tag interface{}) *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		t := helperTypes.ReflectString(tag)
 		if t == nil {
 			g.State.SetError("tag is nil")
@@ -157,13 +152,12 @@ func (g *HelperGit) RemoveTag(tag interface{}) *ux.State {
 //		{{- $cmd := $git.TagExists "1.0" }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) TagExists(tag interface{}) *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		t := helperTypes.ReflectString(tag)
 		if t == nil {
 			g.State.SetError("tag is nil")
@@ -188,13 +182,12 @@ func (g *HelperGit) TagExists(tag interface{}) *ux.State {
 //		{{- $cmd := $git.GetTagObject "1.0" }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GetTagObject(tag interface{}) *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		t := helperTypes.ReflectString(tag)
 		if t == nil {
 			g.State.SetError("tag is nil")

@@ -84,7 +84,7 @@ func (p *TypeOsPath) SetPath(path ...string) bool {
 func (p *TypeOsPath) AppendPath(path ...string) bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if p._IsRemotePath(p._Path) {
 			ok = p._AppendRemotePath(path...)
 			break
@@ -100,7 +100,7 @@ func (p *TypeOsPath) AppendPath(path ...string) bool {
 	return ok
 }
 func (p *TypeOsPath) _AppendLocalPath(path ...string) bool {
-	for range only.Once {
+	for range OnlyOnce {
 		p._Valid = false
 		p._Path = _GetAbsPath(path...)
 		if p._Path == "" {
@@ -121,7 +121,7 @@ func (p *TypeOsPath) _AppendLocalPath(path ...string) bool {
 	return p._Valid
 }
 func (p *TypeOsPath) _AppendRemotePath(path ...string) bool {
-	for range only.Once {
+	for range OnlyOnce {
 		p._Valid = false
 		// @TODO - May have to change this logic to:
 		// @TODO - p._Path = strings.Join(path, "")
@@ -198,7 +198,7 @@ func (p *TypeOsPath) GetSize() int64 {
 func (p *TypeOsPath) Exists() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if !p.IsValid() {
 			break
 		}
@@ -218,7 +218,7 @@ func (p *TypeOsPath) NotExists() bool {
 func (p *TypeOsPath) FileExists() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if !p.IsValid() {
 			break
 		}
@@ -239,7 +239,7 @@ func (p *TypeOsPath) FileExists() bool {
 func (p *TypeOsPath) DirExists() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if !p.IsValid() {
 			break
 		}
@@ -286,7 +286,7 @@ func (p *TypeOsPath) _SetInvalid() {
 	p._Valid = false
 }
 func (p *TypeOsPath) IsValid() bool {
-	for range only.Once {
+	for range OnlyOnce {
 		if !p._Valid {
 			p.State.SetError("path not valid")
 			break

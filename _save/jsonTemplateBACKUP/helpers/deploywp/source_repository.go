@@ -40,7 +40,7 @@ func (me *Repository) New() Repository {
 func (me *Repository) IsNil() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me == nil {
 			ok = true
 		}
@@ -56,7 +56,7 @@ func (me *Repository) IsNil() bool {
 func (me *Repository) GetProvider() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -70,7 +70,7 @@ func (me *Repository) GetProvider() string {
 func (me *Repository) GetUrl() URL {
 	var ret URL
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}

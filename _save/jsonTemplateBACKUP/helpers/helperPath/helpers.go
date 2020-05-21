@@ -14,7 +14,7 @@ type HelperOsPath TypeOsPath
 func HelperNewPath(file ...interface{}) *HelperOsPath {
 	ret := NewOsPath()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(file...)
@@ -44,7 +44,7 @@ func HelperNewPath(file ...interface{}) *HelperOsPath {
 func HelperChmod(mode interface{}, path ...interface{}) *TypeOsPath {
 	ret := NewOsPath()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(path...)

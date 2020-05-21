@@ -2,7 +2,6 @@ package helperGit
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
@@ -14,12 +13,12 @@ import (
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 // func (me *HelperGit) Clone(url string, dir ...interface{}) *TypeExecCommand {
 func (g *HelperGit) Clone() *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNil() {
-			break
-		}
+	for range OnlyOnce {
 		if g.Reflect().IsNotAvailable() {
 			break
 		}
@@ -46,7 +45,7 @@ func (g *HelperGit) Clone() *ux.State {
 	return g.State
 }
 //func (g *HelperGit) Clone() *ux.State {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if g.Reflect().IsNotOk() {
 //			break
 //		}
@@ -95,13 +94,12 @@ func (g *HelperGit) Clone() *ux.State {
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) IsExisting() bool {
 	var ok bool
+	if state := g.IsNil(); state.IsError() {
+		return false
+	}
+	g.State.SetFunction("")
 
-	for range only.Once {
-		g.State.SetFunction("")
-
-		if g.Reflect().IsNil() {
-			break
-		}
+	for range OnlyOnce {
 		if g.Reflect().IsNotAvailable() {
 			break
 		}
@@ -119,12 +117,12 @@ func (g *HelperGit) IsNotExisting() bool {
 //		{{- $cmd := $git.Open }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) Open() *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNil() {
-			break
-		}
+	for range OnlyOnce {
 		if g.Reflect().IsNotAvailable() {
 			break
 		}
@@ -162,12 +160,12 @@ func (g *HelperGit) Open() *ux.State {
 //		{{- $cmd := $git.SetPath }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) SetPath(path ...interface{}) *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNil() {
-			break
-		}
+	for range OnlyOnce {
 		if g.Reflect().IsNotAvailable() {
 			break
 		}
@@ -213,13 +211,12 @@ func (g *HelperGit) SetPath(path ...interface{}) *ux.State {
 //		{{- $cmd := $git.GetUrl }}
 //		{{- if $cmd.IsOk }}{{ $cmd.Data }}{{- end }}
 func (g *HelperGit) GetUrl() *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		g.State.SetState(g.Exec("config", "--get", "remote.origin.url"))
 		if g.State.IsError() {
 			break
@@ -237,19 +234,11 @@ func (g *HelperGit) GetUrl() *ux.State {
 //		{{- $cmd := $git.SetUrl }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) SetUrl(u Url) *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
-
-		if g.Reflect().IsNil() {
-			break
-		}
-		if g.Reflect().IsNotAvailable() {
-			break
-		}
-
-		g.Url = u
+	if state := g.IsNil(); state.IsError() {
+		return state
 	}
-
+	g.State.SetFunction("")
+	g.Url = u
 	return g.State
 }
 
@@ -259,13 +248,12 @@ func (g *HelperGit) SetUrl(u Url) *ux.State {
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 // func (me *HelperGit) Clone(url interface{}, dir ...interface{}) *TypeExecCommand {
 func (g *HelperGit) Remove() *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		g.State.SetState(g.Base.StatPath())
 		if g.State.IsError() {
 			break
@@ -303,13 +291,12 @@ func (g *HelperGit) Remove() *ux.State {
 //		{{- $cmd := $git.Lock }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) Lock() *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		g.State = g.GetTagObject(LockTag)
 		if g.State.IsError() {
 			break
@@ -328,14 +315,13 @@ func (g *HelperGit) Lock() *ux.State {
 // Usage:
 //		{{- $cmd := $git.GetStatus }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
-func (g *HelperGit) GetStatus() (sts Status, err error) {
-	for range only.Once {
-		g.State.SetFunction("")
+func (g *HelperGit) GetStatus() *ux.State {
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		var wt *git.Worktree
 		var err error
 		wt, err = g.repository.Worktree()
@@ -344,13 +330,15 @@ func (g *HelperGit) GetStatus() (sts Status, err error) {
 			break
 		}
 
+		var sts git.Status
 		sts, err = wt.Status()
 		g.State.SetError(err)
 		if g.State.IsError() {
 			break
 		}
+
+		g.State.Response = sts
 	}
 
-	//return g.State
-	return sts, err
+	return g.State
 }

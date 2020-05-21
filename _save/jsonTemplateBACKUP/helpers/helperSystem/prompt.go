@@ -16,7 +16,7 @@ import (
 func HelperUserPrompt(prompt string, args ...interface{}) string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		fmt.Printf(prompt, args...)
 
 		r := bufio.NewReader(os.Stdin)
@@ -38,7 +38,7 @@ func HelperUserPrompt(prompt string, args ...interface{}) string {
 func HelperUserPromptHidden(prompt string, args ...interface{}) string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		fmt.Printf(prompt, args...)
 
 		hidden, err := terminal.ReadPassword(int(syscall.Stdin))
@@ -58,7 +58,7 @@ func HelperUserPromptHidden(prompt string, args ...interface{}) string {
 func HelperUserPromptBool(prompt string, args ...interface{}) bool {
 	var ret bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		fmt.Printf(prompt, args...)
 
 		r := bufio.NewReader(os.Stdin)

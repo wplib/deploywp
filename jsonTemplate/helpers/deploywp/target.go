@@ -3,7 +3,6 @@ package deploywp
 import (
 	"github.com/jinzhu/copier"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -30,17 +29,17 @@ func (me *Target) New() Target {
 	me.AbsPaths.New()
 	me.AbsFiles.New()
 
-	me.State = ux.NewState()
+	me.State = ux.NewState(false)
 
 	return *me
 }
 
 func (me *Target) Process() *ux.State {
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
+	if state := me.IsNil(); state.IsError() {
+		return state
+	}
 
+	for range OnlyOnce {
 		err := copier.Copy(&me.AbsPaths, &me.Paths)
 		me.State.SetError(err)
 		if me.State.IsError() {
@@ -74,19 +73,12 @@ func (me *Target) Process() *ux.State {
 	return me.State
 }
 
-func (me *Target) IsNil() bool {
-	var ok bool
-
-	for range only.Once {
-		if me == nil {
-			ok = true
-		}
-		// @TODO - perform other validity checks here.
-
-		ok = false
+func (e *Target) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(e); state.IsError() {
+		return state
 	}
-
-	return ok
+	e.State = e.State.EnsureNotNil()
+	return e.State
 }
 
 
@@ -94,12 +86,11 @@ func (me *Target) IsNil() bool {
 // Files
 func (me *Target) GetFiles(ftype interface{}) *FilesArray {
 	var ret *FilesArray
+	if state := me.IsNil(); state.IsError() {
+		return &FilesArray{}
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		ret = me.Files.GetFiles(ftype)
 	}
 
@@ -111,12 +102,11 @@ func (me *Target) GetFiles(ftype interface{}) *FilesArray {
 // Paths
 func (me *Target) GetPaths(abs ...interface{}) *Paths {
 	var ret *Paths
+	if state := me.IsNil(); state.IsError() {
+		return &Paths{}
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		if helperTypes.ReflectBoolArg(abs) {
 			ret = &me.AbsPaths
 			break
@@ -127,126 +117,17 @@ func (me *Target) GetPaths(abs ...interface{}) *Paths {
 
 	return ret
 }
-//func (me *Target) GetBasePath(abs ...interface{}) string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if helperTypes.ReflectBoolArg(abs) {
-//			ret = me.AbsPaths.GetBasePath()
-//			break
-//		}
-//
-//		ret = me.Paths.GetBasePath()
-//	}
-//
-//	return ret
-//}
-//func (me *Target) GetWebRootPath(abs ...interface{}) string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if helperTypes.ReflectBoolArg(abs) {
-//			ret = me.AbsPaths.GetWebRootPath()
-//			break
-//		}
-//
-//		ret = me.Paths.GetWebRootPath()
-//	}
-//
-//	return ret
-//}
-//func (me *Target) GetContentPath(abs ...interface{}) string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if helperTypes.ReflectBoolArg(abs) {
-//			ret = me.AbsPaths.GetContentPath()
-//			break
-//		}
-//
-//		ret = me.Paths.GetContentPath()
-//	}
-//
-//	return ret
-//}
-//func (me *Target) GetCorePath(abs ...interface{}) string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if helperTypes.ReflectBoolArg(abs) {
-//			ret = me.AbsPaths.GetCorePath()
-//			break
-//		}
-//
-//		ret = me.Paths.GetCorePath()
-//	}
-//
-//	return ret
-//}
-//func (me *Target) GetRootPath(abs ...interface{}) string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if helperTypes.ReflectBoolArg(abs) {
-//			ret = me.AbsPaths.GetRootPath()
-//			break
-//		}
-//
-//		ret = me.Paths.GetRootPath()
-//	}
-//
-//	return ret
-//}
-//func (me *Target) GetVendorPath(abs ...interface{}) string {
-//	var ret string
-//
-//	for range only.Once {
-//		if me.IsNil() {
-//			break
-//		}
-//
-//		if helperTypes.ReflectBoolArg(abs) {
-//			ret = me.AbsPaths.GetVendorPath()
-//			break
-//		}
-//
-//		ret = me.Paths.GetVendorPath()
-//	}
-//
-//	return ret
-//}
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Providers
 func (me *Target) GetProvider(provider interface{}) *Provider {
 	var ret *Provider
+	if state := me.IsNil(); state.IsError() {
+		return &Provider{}
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		ret = me.Providers.GetProvider(provider)
 	}
 
@@ -258,12 +139,11 @@ func (me *Target) GetProvider(provider interface{}) *Provider {
 // Revisions
 func (me *Target) GetRevision(host interface{}) *TargetRevision {
 	var ret *TargetRevision
+	if state := me.IsNil(); state.IsError() {
+		return &TargetRevision{}
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		ret = me.Revisions.GetRevision(host)
 	}
 

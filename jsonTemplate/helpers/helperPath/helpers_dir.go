@@ -1,15 +1,13 @@
 package helperPath
 
-import "github.com/wplib/deploywp/only"
-
 
 // Usage:
 //		{{ $ret := Chdir "/root" }}
 //		{{ if $ret.IsOk }}OK{{ end }}
 func HelperChdir(dir ...interface{}) *TypeOsPath {
-	ret := NewOsPath()
+	ret := NewOsPath(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(dir...)
@@ -30,9 +28,9 @@ func HelperChdir(dir ...interface{}) *TypeOsPath {
 //		{{ $ret := GetCwd }}
 //		{{ if $ret.IsOk }}Current directory is {{ $ret.Dir }}{{ end }}
 func HelperGetCwd() *TypeOsPath {
-	ret := NewOsPath()
+	ret := NewOsPath(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		state := ret.GetCwd()
@@ -50,9 +48,9 @@ func HelperGetCwd() *TypeOsPath {
 //		{{ $ret := GetCwd }}
 //		{{ if $ret.IsOk }}Current directory is {{ $ret.Dir }}{{ end }}
 func HelperIsCwd() *TypeOsPath {
-	ret := NewOsPath()
+	ret := NewOsPath(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		if ret.IsCwd() {
@@ -70,9 +68,9 @@ func HelperIsCwd() *TypeOsPath {
 //		{{ $ret := Chmod 0644 "/root" ... }}
 //		{{ if $ret.IsOk }}Changed perms of file {{ $ret.Dir }}{{ end }}
 func HelperCreateDir(path ...interface{}) *TypeOsPath {
-	ret := NewOsPath()
+	ret := NewOsPath(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(path...)
@@ -96,9 +94,9 @@ func HelperCreateDir(path ...interface{}) *TypeOsPath {
 //		{{ $ret := Chmod 0644 "/root" ... }}
 //		{{ if $ret.IsOk }}Changed perms of file {{ $ret.Dir }}{{ end }}
 func HelperRemoveDir(path ...interface{}) *TypeOsPath {
-	ret := NewOsPath()
+	ret := NewOsPath(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(path...)

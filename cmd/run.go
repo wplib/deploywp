@@ -5,7 +5,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/wplib/deploywp/jsonTemplate"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/deploywp"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -26,13 +25,13 @@ func init() {
 // This is intended to replace functional template driven workflow with pure GoLang.
 // All the same structures and methods are available in both.
 func Run(cmd *cobra.Command, args []string) {
-	for range only.Once {
-		state := ux.NewState()
+	for range OnlyOnce {
+		state := ux.NewState(false)
 		var tmpl *jsonTemplate.Template
 
 		tmpl, *state = ProcessArgs(cmd, args)
 		if state.IsNotOk() {
-			fmt.Printf(state.PrintResponse())
+			state.PrintResponse()
 			break
 		}
 
@@ -40,14 +39,14 @@ func Run(cmd *cobra.Command, args []string) {
 
 		state = tmpl.LoadJson()
 		if state.IsNotOk() {
-			fmt.Printf(state.PrintResponse())
+			state.PrintResponse()
 			break
 		}
 
 		//dwp := deploywp.TypeDeployWp{}
 		dwp := deploywp.HelperLoadDeployWp(tmpl.JsonStruct.Json, tmpl.GetArgs()...)
 		if dwp.State.IsNotOk() {
-			fmt.Printf(dwp.State.PrintResponse())
+			dwp.State.PrintResponse()
 			break
 		}
 
@@ -60,6 +59,6 @@ func Run(cmd *cobra.Command, args []string) {
 			break
 		}
 
-		fmt.Printf("\n%s\nFINISHED\n", state.PrintResponse())
+		fmt.Printf("\n%s\nFINISHED\n", state.SprintResponse())
 	}
 }

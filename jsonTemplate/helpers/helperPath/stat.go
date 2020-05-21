@@ -2,7 +2,6 @@ package helperPath
 
 import (
 	"fmt"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"os"
 	"path/filepath"
@@ -10,7 +9,7 @@ import (
 
 
 func (p *TypeOsPath) StatPath() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		p.State.SetFunction("")
 		p.State.Clear()
 
@@ -69,7 +68,7 @@ func (p *TypeOsPath) StatPath() *ux.State {
 
 
 func (p *TypeOsPath) Chmod(m os.FileMode) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		p.State.SetFunction("")
 		p.State.Clear()
 

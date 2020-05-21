@@ -1,14 +1,13 @@
 package helperPath
 
 import (
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"os"
 )
 
 
 func (p *TypeOsPath) Chdir() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		p.State.SetFunction("")
 		p.State.Clear()
 
@@ -56,7 +55,7 @@ func (p *TypeOsPath) Chdir() *ux.State {
 
 
 func (p *TypeOsPath) GetCwd() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		p.State.SetFunction("")
 		p.State.Clear()
 
@@ -85,7 +84,7 @@ func (p *TypeOsPath) GetCwd() *ux.State {
 func (p *TypeOsPath) IsCwd() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		p.State.SetFunction("")
 
 		state := p.GetCwd()
@@ -103,7 +102,7 @@ func (p *TypeOsPath) IsCwd() bool {
 
 
 func (p *TypeOsPath) Mkdir() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		p.State.SetFunction("")
 		p.State.Clear()
 

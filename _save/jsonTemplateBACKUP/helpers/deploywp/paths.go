@@ -55,7 +55,7 @@ func (me *Wordpress) New() Wordpress {
 func (me *Paths) IsNil() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me == nil {
 			ok = true
 		}
@@ -70,7 +70,7 @@ func (me *Paths) IsNil() bool {
 func _FileToAbs(f ...string) string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret = filepath.Join(f...)
 
 		if filepath.IsAbs(ret) {
@@ -91,7 +91,7 @@ func _FileToAbs(f ...string) string {
 func (me *Paths) ExpandPaths() error {
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -106,7 +106,7 @@ func (me *Paths) ExpandPaths() error {
 func (me *Paths) GetBasePath() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -119,7 +119,7 @@ func (me *Paths) GetBasePath() string {
 func (me *Paths) GetWebRootPath() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -132,7 +132,7 @@ func (me *Paths) GetWebRootPath() string {
 func (me *Paths) GetContentPath() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -145,7 +145,7 @@ func (me *Paths) GetContentPath() string {
 func (me *Paths) GetCorePath() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -158,7 +158,7 @@ func (me *Paths) GetCorePath() string {
 func (me *Paths) GetRootPath() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -171,7 +171,7 @@ func (me *Paths) GetRootPath() string {
 func (me *Paths) GetVendorPath() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}

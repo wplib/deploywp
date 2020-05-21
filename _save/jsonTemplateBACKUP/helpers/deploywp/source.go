@@ -28,7 +28,7 @@ func (me *Source) New() Source {
 }
 
 func (me *Source) Process() error {
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -43,7 +43,7 @@ func (me *Source) Process() error {
 func (me *Source) IsNil() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me == nil {
 			ok = true
 		}
@@ -61,7 +61,7 @@ func (me *Source) IsNil() bool {
 func (me *Source) GetPaths(abs ...interface{}) *Paths {
 	var ret *Paths
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -79,7 +79,7 @@ func (me *Source) GetPaths(abs ...interface{}) *Paths {
 //func (me *Source) GetBasePath(abs ...interface{}) string {
 //	var ret string
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if me.IsNil() {
 //			break
 //		}
@@ -97,7 +97,7 @@ func (me *Source) GetPaths(abs ...interface{}) *Paths {
 //func (me *Source) GetWebRootPath(abs ...interface{}) string {
 //	var ret string
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if me.IsNil() {
 //			break
 //		}
@@ -115,7 +115,7 @@ func (me *Source) GetPaths(abs ...interface{}) *Paths {
 //func (me *Source) GetContentPath(abs ...interface{}) string {
 //	var ret string
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if me.IsNil() {
 //			break
 //		}
@@ -132,7 +132,7 @@ func (me *Source) GetPaths(abs ...interface{}) *Paths {
 //func (me *Source) GetCorePath(abs ...interface{}) string {
 //	var ret string
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if me.IsNil() {
 //			break
 //		}
@@ -150,7 +150,7 @@ func (me *Source) GetPaths(abs ...interface{}) *Paths {
 //func (me *Source) GetRootPath(abs ...interface{}) string {
 //	var ret string
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if me.IsNil() {
 //			break
 //		}
@@ -168,7 +168,7 @@ func (me *Source) GetPaths(abs ...interface{}) *Paths {
 //func (me *Source) GetVendorPath(abs ...interface{}) string {
 //	var ret string
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if me.IsNil() {
 //			break
 //		}
@@ -190,7 +190,7 @@ func (me *Source) GetPaths(abs ...interface{}) *Paths {
 func (me *Source) GetRepositoryProvider() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -203,7 +203,7 @@ func (me *Source) GetRepositoryProvider() string {
 func (me *Source) GetRepositoryUrl() URL {
 	var ret URL
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -220,7 +220,7 @@ func (me *Source) GetRepositoryUrl() URL {
 func (me *Source) GetRevisionType() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -233,7 +233,7 @@ func (me *Source) GetRevisionType() string {
 func (me *Source) GetRevisionName() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -250,7 +250,7 @@ func (me *Source) GetRevisionName() string {
 func (me *Source) GetBuild() bool {
 	var ret bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}

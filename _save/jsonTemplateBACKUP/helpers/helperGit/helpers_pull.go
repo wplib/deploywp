@@ -11,7 +11,7 @@ import (
 //		{{- $cmd := $git.Open }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) Pull(opts ...*PullOptions) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {

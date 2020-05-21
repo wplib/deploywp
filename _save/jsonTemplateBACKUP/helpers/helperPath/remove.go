@@ -9,7 +9,7 @@ import (
 
 
 func (p *TypeOsPath) Remove() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		p.State.SetFunction("")
 		p.State.Clear()
 
@@ -17,7 +17,7 @@ func (p *TypeOsPath) Remove() *ux.State {
 			break
 		}
 
-		for range only.Once {
+		for range OnlyOnce {
 			p.StatPath()
 			if !p._Exists {
 				p.State.SetWarning("path '%s' doesn't exist", p._Path)
@@ -51,7 +51,7 @@ func (p *TypeOsPath) Remove() *ux.State {
 
 
 func (p *TypeOsPath) RemoveFile() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		p.State.SetFunction("")
 		p.State.Clear()
 
@@ -59,7 +59,7 @@ func (p *TypeOsPath) RemoveFile() *ux.State {
 			break
 		}
 
-		for range only.Once {
+		for range OnlyOnce {
 			p.StatPath()
 			if p._IsDir {
 				p.State.SetError("path is a directory")
@@ -97,7 +97,7 @@ func (p *TypeOsPath) RemoveFile() *ux.State {
 
 
 func (p *TypeOsPath) RemoveDir() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		p.State.SetFunction("")
 		p.State.Clear()
 
@@ -105,7 +105,7 @@ func (p *TypeOsPath) RemoveDir() *ux.State {
 			break
 		}
 
-		for range only.Once {
+		for range OnlyOnce {
 			p.StatPath()
 			if p._IsDir {
 				p.State.SetError("path '%s' is a directory", p._Path)

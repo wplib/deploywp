@@ -2,7 +2,6 @@ package helperExec
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"io/ioutil"
 	"log"
@@ -11,9 +10,9 @@ import (
 
 
 func HelperExecBash(cmd ...interface{}) *ux.State {
-	ret := NewExecCommand()
+	ret := NewExecCommand(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.Exe = "bash"
 		ret.Args = []string{"-c"}
 
@@ -28,9 +27,9 @@ func HelperExecBash(cmd ...interface{}) *ux.State {
 
 
 func HelperNewBash(cmd ...interface{}) *HelperExecCommand {
-	ret := NewExecCommand()
+	ret := NewExecCommand(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.Exe = "bash"
 		ret.Args = []string{"-c"}
 
@@ -48,7 +47,12 @@ func HelperNewBash(cmd ...interface{}) *HelperExecCommand {
 //  {{ . }}
 //  fmt.Println("Hello")
 func (e *HelperExecCommand) AppendCommands(cmd ...interface{}) *ux.State {
-	for range only.Once {
+	if state := e.IsNil(); state.IsError() {
+		return state
+	}
+	e.State.SetFunction("")
+
+	for range OnlyOnce {
 		a := helperTypes.ReflectStrings(cmd...)
 		e.Args = append(e.Args, *a...)
 	}
@@ -61,7 +65,12 @@ func (e *HelperExecCommand) Append(cmd ...interface{}) *ux.State {
 
 
 func (e *HelperExecCommand) Run() *ux.State {
-	for range only.Once {
+	if state := e.IsNil(); state.IsError() {
+		return state
+	}
+	e.State.SetFunction("")
+
+	for range OnlyOnce {
 		file, err := ioutil.TempFile("tmp", "deploywp-shell")
 		if err != nil {
 			log.Fatal(err)

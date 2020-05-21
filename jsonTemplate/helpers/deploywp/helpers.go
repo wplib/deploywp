@@ -2,7 +2,7 @@ package deploywp
 
 import (
 	"github.com/mitchellh/mapstructure"
-	"github.com/wplib/deploywp/only"
+	"github.com/wplib/deploywp/ux"
 )
 
 type HelperDeployWp TypeDeployWp
@@ -13,11 +13,19 @@ func (g *TypeDeployWp) Reflect() *HelperDeployWp {
 	return (*HelperDeployWp)(g)
 }
 
+func (c *HelperDeployWp) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(c); state.IsError() {
+		return state
+	}
+	c.State = c.State.EnsureNotNil()
+	return c.State
+}
+
 
 func HelperLoadDeployWp(str interface{}, args ...string) *TypeDeployWp {
 	j := NewJsonFile()
 
-	for range only.Once {
+	for range OnlyOnce {
 		var err error
 
 		err = mapstructure.Decode(str, &j)

@@ -20,7 +20,7 @@ type TypeGetRepository struct {
 func (me *TypeLogin) GetRepository(owner interface{}, repo interface{}) *TypeGetRepository {
 	var ret TypeGetRepository
 
-	for range only.Once {
+	for range OnlyOnce {
 		op := helperTypes.ReflectString(owner)
 		if op == nil {
 			break
@@ -47,7 +47,7 @@ func (me *TypeLogin) GetRepository(owner interface{}, repo interface{}) *TypeGet
 func (me *TypeGetRepository) GetName() helperTypes.TypeGenericStringArray {
 	var ret helperTypes.TypeGenericStringArray
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.Array = append(ret.Array, *me.Data.Name)
 		ret.Valid = true
 	}
@@ -58,7 +58,7 @@ func (me *TypeGetRepository) GetName() helperTypes.TypeGenericStringArray {
 func (me *TypeGetRepository) GetFullName() helperTypes.TypeGenericStringArray {
 	var ret helperTypes.TypeGenericStringArray
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.Array = append(ret.Array, *me.Data.FullName)
 		ret.Valid = true
 	}
@@ -69,7 +69,7 @@ func (me *TypeGetRepository) GetFullName() helperTypes.TypeGenericStringArray {
 func (me *TypeGetRepository) GetUrl() helperTypes.TypeGenericStringArray {
 	var ret helperTypes.TypeGenericStringArray
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.Array = append(ret.Array, *me.Data.URL)
 		ret.Valid = true
 	}
@@ -83,7 +83,7 @@ func (me *TypeGetRepository) GetHeadBranch() helperTypes.TypeGenericString {
 
 	ret.String = me.Data.GetDefaultBranch()
 
-	//for range only.Once {
+	//for range OnlyOnce {
 	//	ret.Data = me.Data.GetDefaultBranch()
 	//
 	//	branchRefs, ret.Error = me.Data.Branches()
@@ -118,7 +118,7 @@ func (me *TypeGetRepository) GetHeadBranch() helperTypes.TypeGenericString {
 func (me *TypeGetRepository) GetCurrentCommitFromRepository() helperTypes.TypeGenericString {
 	var ret helperTypes.TypeGenericString
 
-	//for range only.Once {
+	//for range OnlyOnce {
 	//	headRef, ret.Error = repository.Head()
 	//	if ret.Error != nil {
 	//		break
@@ -133,7 +133,7 @@ func (me *TypeGetRepository) GetCurrentCommitFromRepository() helperTypes.TypeGe
 func (me *TypeGetRepository) GetLatestTagFromRepository() helperTypes.TypeGenericString {
 	var ret helperTypes.TypeGenericString
 
-	//for range only.Once {
+	//for range OnlyOnce {
 	//	tagRefs, ret.Error = repository.Tags()
 	//	if ret.Error != nil {
 	//		break
@@ -188,7 +188,7 @@ type TypeGetRepositories struct {
 func (me *TypeLogin) GetRepositories(owner interface{}) *TypeGetRepositories {
 	var ret TypeGetRepositories
 
-	for range only.Once {
+	for range OnlyOnce {
 		op := helperTypes.ReflectString(owner)
 		if op == nil {
 			break
@@ -215,7 +215,7 @@ func (me *TypeLogin) GetRepositories(owner interface{}) *TypeGetRepositories {
 func (me *TypeGetRepositories) GetNames() helperTypes.TypeGenericStringArray {
 	var ret helperTypes.TypeGenericStringArray
 
-	for range only.Once {
+	for range OnlyOnce {
 		for _, v := range me.Data {
 			ret.Array = append(ret.Array, *v.Name)
 		}
@@ -232,7 +232,7 @@ func (me *TypeGetRepositories) GetNames() helperTypes.TypeGenericStringArray {
 func (me *TypeGetRepositories) GetFullNames() helperTypes.TypeGenericStringArray {
 	var ret helperTypes.TypeGenericStringArray
 
-	for range only.Once {
+	for range OnlyOnce {
 		for _, v := range me.Data {
 			ret.Array = append(ret.Array, *v.FullName)
 		}
@@ -249,7 +249,7 @@ func (me *TypeGetRepositories) GetFullNames() helperTypes.TypeGenericStringArray
 func (me *TypeGetRepositories) GetUrls() helperTypes.TypeGenericStringArray {
 	var ret helperTypes.TypeGenericStringArray
 
-	for range only.Once {
+	for range OnlyOnce {
 		for _, v := range me.Data {
 			ret.Array = append(ret.Array, *v.URL)
 		}

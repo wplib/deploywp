@@ -15,7 +15,7 @@ import (
 func HelperGitHubGetOrganization(i interface{}) []string {
 	var sa []string
 
-	for range only.Once {
+	for range OnlyOnce {
 		var err error
 
 		v := reflect.ValueOf(i)
@@ -57,7 +57,7 @@ type TypeLogin struct {
 func HelperGitHubLogin(username interface{}, password interface{}, twofactor interface{}) *TypeLogin {
 	var auth TypeLogin
 
-	for range only.Once {
+	for range OnlyOnce {
 		usernameString := ""
 		if u := helperTypes.ReflectString(username); u != nil {
 			usernameString = *u
@@ -131,7 +131,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //func (me TypeLogin) GetBranch(owner interface{}, repo interface{}, reference interface{}) TypeGetBranch {
 //	var ret TypeGetBranch
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		op := general.ReflectString(owner)
 //		if op == nil {
 //			break
@@ -178,7 +178,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //func (me TypeLogin) GetRepository(owner interface{}, repo interface{}) TypeGetRepository {
 //	var ret TypeGetRepository
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		op := general.ReflectString(owner)
 //		if op == nil {
 //			break
@@ -204,7 +204,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //func (me TypeGetRepository) GetName() TypeGenericStringArray {
 //	var ret TypeGenericStringArray
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		ret.Data = append(ret.Data, *me.Data.Name)
 //		ret.Valid = true
 //	}
@@ -214,7 +214,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //func (me TypeGetRepository) GetFullName() TypeGenericStringArray {
 //	var ret TypeGenericStringArray
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		ret.Data = append(ret.Data, *me.Data.FullName)
 //		ret.Valid = true
 //	}
@@ -224,7 +224,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //func (me TypeGetRepository) GetUrl() TypeGenericStringArray {
 //	var ret TypeGenericStringArray
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		ret.Data = append(ret.Data, *me.Data.URL)
 //		ret.Valid = true
 //	}
@@ -242,7 +242,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //func (me TypeLogin) GetRepositories(owner interface{}) TypeGetRepositories {
 //	var ret TypeGetRepositories
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		op := general.ReflectString(owner)
 //		if op == nil {
 //			break
@@ -264,7 +264,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //func (me TypeGetRepositories) GetNames() TypeGenericStringArray {
 //	var ret TypeGenericStringArray
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		for _, v := range me.Data {
 //			ret.Data = append(ret.Data, *v.Name)
 //		}
@@ -276,7 +276,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //func (me TypeGetRepositories) GetFullNames() TypeGenericStringArray {
 //	var ret TypeGenericStringArray
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		for _, v := range me.Data {
 //			ret.Data = append(ret.Data, *v.FullName)
 //		}
@@ -288,7 +288,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //func (me TypeGetRepositories) GetUrls() TypeGenericStringArray {
 //	var ret TypeGenericStringArray
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		for _, v := range me.Data {
 //			ret.Data = append(ret.Data, *v.URL)
 //		}
@@ -303,7 +303,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //func (me TypeGetRepository) GetCurrentBranchFromRepository() TypeGenericString {
 //	var ret TypeGenericString
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		repo := ret.Data
 //
 //		branchRefs, ret.Error = repo.Branches()
@@ -337,7 +337,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //func (me TypeGetRepository) GetCurrentCommitFromRepository() TypeGenericString {
 //	var ret TypeGenericString
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		headRef, ret.Error = repository.Head()
 //		if ret.Error != nil {
 //			break
@@ -352,7 +352,7 @@ func HelperGitHubLogin(username interface{}, password interface{}, twofactor int
 //func (me TypeGetRepository) GetLatestTagFromRepository() TypeGenericString {
 //	var ret TypeGenericString
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		tagRefs, ret.Error = repository.Tags()
 //		if ret.Error != nil {
 //			break

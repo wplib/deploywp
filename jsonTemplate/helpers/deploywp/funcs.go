@@ -3,7 +3,7 @@ package deploywp
 //func LoadDeployWp(jstr string, args ...string) *TypeDeployWp {
 //	j := NewJsonFile()
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		var err error
 //
 //		err = json.Unmarshal([]byte(jstr), &j)

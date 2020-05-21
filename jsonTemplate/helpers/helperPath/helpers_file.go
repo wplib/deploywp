@@ -2,16 +2,15 @@ package helperPath
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
-	"github.com/wplib/deploywp/only"
 )
 
 
 // Usage:
 //		{{ $str := ReadFile "filename.txt" }}
 func HelperReadFile(file ...interface{}) *TypeOsPath {
-	ret := NewOsPath()
+	ret := NewOsPath(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(file...)
@@ -37,9 +36,9 @@ func HelperReadFile(file ...interface{}) *TypeOsPath {
 // Usage:
 //		{{ $return := WriteFile .Data.Source 0644 "dir1" "dir2/dir3" "filename.txt" }}
 func HelperWriteFile(contents interface{}, perms interface{}, file ...interface{}) *TypeOsPath {
-	ret := NewOsPath()
+	ret := NewOsPath(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(file...)
@@ -77,9 +76,9 @@ func HelperWriteFile(contents interface{}, perms interface{}, file ...interface{
 //		{{ $ret := Chmod 0644 "/root" ... }}
 //		{{ if $ret.IsOk }}Changed perms of file {{ $ret.Dir }}{{ end }}
 func HelperRemoveFile(path ...interface{}) *TypeOsPath {
-	ret := NewOsPath()
+	ret := NewOsPath(false)
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(path...)

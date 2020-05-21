@@ -11,7 +11,7 @@ import (
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 // func (me *HelperGit) GitClone(args ...interface{}) *ux.State {
 func (g *HelperGit) GitClone(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -32,7 +32,7 @@ func (g *HelperGit) GitClone(args ...string) *ux.State {
 //		{{- $cmd := $git.GitInit }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitInit(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -53,7 +53,7 @@ func (g *HelperGit) GitInit(args ...string) *ux.State {
 //		{{- $cmd := $git.GitAdd }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitAdd(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -74,7 +74,7 @@ func (g *HelperGit) GitAdd(args ...string) *ux.State {
 //		{{- $cmd := $git.GitMv }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitMv(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -95,7 +95,7 @@ func (g *HelperGit) GitMv(args ...string) *ux.State {
 //		{{- $cmd := $git.GitReset }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitReset(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -116,7 +116,7 @@ func (g *HelperGit) GitReset(args ...string) *ux.State {
 //		{{- $cmd := $git.GitRm }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitRm(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -137,7 +137,7 @@ func (g *HelperGit) GitRm(args ...string) *ux.State {
 //		{{- $cmd := $git.GitBisect }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitBisect(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -158,7 +158,7 @@ func (g *HelperGit) GitBisect(args ...string) *ux.State {
 //		{{- $cmd := $git.GitGrep }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitGrep(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -179,7 +179,7 @@ func (g *HelperGit) GitGrep(args ...string) *ux.State {
 //		{{- $cmd := $git.GitLog }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitLog(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -200,7 +200,7 @@ func (g *HelperGit) GitLog(args ...string) *ux.State {
 //		{{- $cmd := $git.GitShow }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitShow(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -221,7 +221,7 @@ func (g *HelperGit) GitShow(args ...string) *ux.State {
 //		{{- $cmd := $git.GitStatus }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitStatus(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -242,7 +242,7 @@ func (g *HelperGit) GitStatus(args ...string) *ux.State {
 //		{{- $cmd := $git.GitBranch }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitBranch(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -263,7 +263,7 @@ func (g *HelperGit) GitBranch(args ...string) *ux.State {
 //		{{- $cmd := $git.GitCheckout }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitCheckout(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -284,7 +284,7 @@ func (g *HelperGit) GitCheckout(args ...string) *ux.State {
 //		{{- $cmd := $git.GitCommit }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitCommit(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -305,7 +305,7 @@ func (g *HelperGit) GitCommit(args ...string) *ux.State {
 //		{{- $cmd := $git.GitDiff }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitDiff(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -326,7 +326,7 @@ func (g *HelperGit) GitDiff(args ...string) *ux.State {
 //		{{- $cmd := $git.GitMerge }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitMerge(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -347,7 +347,7 @@ func (g *HelperGit) GitMerge(args ...string) *ux.State {
 //		{{- $cmd := $git.GitRebase }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitRebase(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -368,7 +368,7 @@ func (g *HelperGit) GitRebase(args ...string) *ux.State {
 //		{{- $cmd := $git.GitTag }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitTag(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -389,7 +389,7 @@ func (g *HelperGit) GitTag(args ...string) *ux.State {
 //		{{- $cmd := $git.GitFetch }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitFetch(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -410,7 +410,7 @@ func (g *HelperGit) GitFetch(args ...string) *ux.State {
 //		{{- $cmd := $git.GitPull }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitPull(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -431,7 +431,7 @@ func (g *HelperGit) GitPull(args ...string) *ux.State {
 //		{{- $cmd := $git.GitPush }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GitPush(args ...string) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {

@@ -2,9 +2,10 @@ package helperCopy
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
+
+const OnlyOnce = "1"
 
 
 // @TODO - Look at several other copy options that provide "cloud" based copies.
@@ -51,13 +52,21 @@ func ReflectHelperOsCopy(p *TypeOsCopy) *HelperOsCopy {
 	return (*HelperOsCopy)(p)
 }
 
+func (c *TypeOsCopy) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(c); state.IsError() {
+		return state
+	}
+	c.State = c.State.EnsureNotNil()
+	return c.State
+}
+
 
 func NewOsCopy() *TypeOsCopy {
 	c := &TypeOsCopy{
-		State:        ux.NewState(),
+		State:        ux.NewState(false),
 
-		Source:       helperPath.NewOsPath(),
-		Destination:  helperPath.NewOsPath(),
+		Source:       helperPath.NewOsPath(false),
+		Destination:  helperPath.NewOsPath(false),
 
 		Exclude: PathArray{},
 		Include: PathArray{},
@@ -80,7 +89,7 @@ func (me *TypeOsCopy) EnsureNotNil() {
 func (p *TypeOsCopy) SetSourcePath(path ...string) bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		ok = p.Source.SetPath(path...)
 		if !ok {
 			break
@@ -103,7 +112,7 @@ func (p *TypeOsCopy) GetSourcePath() string {
 func (p *TypeOsCopy) SetDestinationPath(path ...string) bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		ok = p.Destination.SetPath(path...)
 		if !ok {
 			break

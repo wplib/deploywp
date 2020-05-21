@@ -1,7 +1,6 @@
 package deploywp
 
 import (
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -18,37 +17,24 @@ type Build struct {
 func (me *Build) New() Build {
 	me = &Build {
 		Empty: false,
-		State: ux.NewState(),
+		State: ux.NewState(false),
 	}
 	return *me
 }
 
-func (me *Build) IsNil() bool {
-	var ok bool
 
-	for range only.Once {
-		if me == nil {
-			ok = true
-		}
-		// @TODO - perform other validity checks here.
-
-		ok = false
+func (e *Build) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(e); state.IsError() {
+		return state
 	}
-
-	return ok
+	e.State = e.State.EnsureNotNil()
+	return e.State
 }
 
 
 func (me *Build) GetBuild() bool {
-	var ret bool
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Empty
+	if state := me.IsNil(); state.IsError() {
+		return false
 	}
-
-	return ret
+	return me.Empty
 }

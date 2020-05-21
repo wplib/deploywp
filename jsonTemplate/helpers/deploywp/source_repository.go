@@ -1,7 +1,6 @@
 package deploywp
 
 import (
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"strings"
 )
@@ -31,76 +30,52 @@ func (me *Repository) New() Repository {
 	me = &Repository{
 		Provider: "",
 		URL:      "",
-		State: ux.NewState(),
+		State: ux.NewState(false),
 	}
 	return *me
 }
 
 
-func (me *Repository) IsNil() bool {
-	var ok bool
-
-	for range only.Once {
-		if me == nil {
-			ok = true
-		}
-		// @TODO - perform other validity checks here.
-
-		ok = false
+func (e *Repository) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(e); state.IsError() {
+		return state
 	}
-
-	return ok
+	e.State = e.State.EnsureNotNil()
+	return e.State
 }
 
 
 func (me *Repository) GetProvider() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.Provider
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return me.Provider
 }
 
 
 func (me *Repository) GetUrl() URL {
-	var ret URL
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		ret = me.URL
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return me.URL
 }
 
 
 func (me *Repository) IsGitProvider() bool {
 	var ok bool
+	if state := me.IsNil(); state.IsError() {
+		return false
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		switch strings.ToLower(me.Provider) {
-			case "git":
-				fallthrough
-			case "github":
-				fallthrough
-			case "gitlab":
-				fallthrough
-			case "gitlabs":
-				ok = true
-		}
+	switch strings.ToLower(me.Provider) {
+		case "git":
+			fallthrough
+		case "github":
+			fallthrough
+		case "gitlab":
+			fallthrough
+		case "gitlabs":
+			ok = true
 	}
 
 	return ok

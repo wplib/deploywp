@@ -1,10 +1,8 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/wplib/deploywp/jsonTemplate"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"strings"
 )
@@ -23,7 +21,7 @@ func init() {
 }
 
 func LoadTemplate(cmd *cobra.Command, args []string) {
-	for range only.Once {
+	for range OnlyOnce {
 		var state ux.State
 		var tmpl *jsonTemplate.Template
 
@@ -43,7 +41,7 @@ func LoadTemplate(cmd *cobra.Command, args []string) {
 
 		tmpl, state = ProcessArgs(cmd, args)
 		if !state.IsOk() {
-			fmt.Printf(state.PrintResponse())
+			state.PrintResponse()
 			break
 		}
 
@@ -51,7 +49,7 @@ func LoadTemplate(cmd *cobra.Command, args []string) {
 
 		state = tmpl.ProcessTemplate()
 		if !state.IsOk() {
-			fmt.Printf(state.PrintResponse())
+			state.PrintResponse()
 			break
 		}
 	}

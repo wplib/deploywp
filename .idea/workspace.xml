@@ -2,9 +2,118 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56b4b170-76f7-4ada-8cff-27bcfeafc366" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/ux/state.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/state.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ux/state_output.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/state_output.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ux/ux.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/ux.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/funcs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/deploywp.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/deploywp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/hosts.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/hosts.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/paths.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/paths.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/source.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/source.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/source_build.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/source_build.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/source_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/source_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/source_revision.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/source_revision.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/target.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/target.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/target_files.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/target_files.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/target_providers.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/target_providers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/target_revisions.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/deploywp/target_revisions.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperCopy/copy.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperCopy/copy.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperCopy/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperCopy/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperCopy/helpers_rsync.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperCopy/helpers_rsync.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperCopy/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperCopy/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperCopy/struct_method.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperCopy/struct_method.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperCopy/struct_path.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperCopy/struct_path.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperExec/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperExec/funcs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperExec/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperExec/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperExec/helpers_bash.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperExec/helpers_bash.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperExec/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperExec/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers_branch.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers_branch.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers_commit.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers_commit.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers_exec.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers_exec.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers_files.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers_files.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers_pull.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers_pull.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/helpers_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGit/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGitHub/github.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGitHub/github.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGitHub/github_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperGitHub/github_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/dir.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/dir.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/file.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/funcs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/helpers_dir.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/helpers_dir.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/helpers_file.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/helpers_file.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/remove.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/remove.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/stat.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/stat.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperPath/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperSystem/env.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperSystem/env.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperSystem/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperSystem/file.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperSystem/prompt.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperSystem/prompt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperTypes/error.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperTypes/error.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperTypes/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperTypes/file.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperTypes/numbers.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperTypes/numbers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperTypes/reflects.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperTypes/reflects.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperTypes/strings.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helperTypes/strings.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/helpers/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/template.go" beforeDir="false" afterPath="$PROJECT_DIR$/_save/jsonTemplateBACKUP/template.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/funcs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/load.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/load.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/run.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/runtime/structs.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/runtime/structs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/structs.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/structs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/funcs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/deploywp.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/deploywp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/funcs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers_highlevel.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers_highlevel.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers_workflow.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers_workflow.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/hosts.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/hosts.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/paths.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/paths.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_build.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_build.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_revision.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/source_revision.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_files.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_files.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_providers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_providers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_revisions.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/deploywp/target_revisions.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/copy.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/copy.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/helpers_rsync.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/helpers_rsync.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/struct_method.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/struct_method.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/struct_path.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/struct_path.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/funcs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/helpers_bash.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/helpers_bash.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperExec/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_branch.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_branch.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_commit.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_commit.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_exec.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_exec.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_files.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_files.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_pull.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_pull.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperGit/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/dir.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/dir.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/file.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/funcs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/helpers_dir.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/helpers_dir.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/helpers_file.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/helpers_file.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/remove.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/remove.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/stat.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/stat.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperPath/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/env.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/env.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/file.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/prompt.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/prompt.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/system.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperSystem/system.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/numbers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/numbers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/reflects.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/reflects.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/strings.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperTypes/strings.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helperUx/state.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helperUx/state.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/helpers/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/helpers/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jsonTemplate/template.go" beforeDir="false" afterPath="$PROJECT_DIR$/jsonTemplate/template.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,26 +210,26 @@
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="746" y="84" key="#docker/Dockerfile/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589870918807" />
-    <state width="1701" height="289" key="GridCell.Tab.0.bottom" timestamp="1589940324268">
+    <state width="1701" height="299" key="GridCell.Tab.0.bottom" timestamp="1590077068232">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="289" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589940324268" />
-    <state width="1701" height="289" key="GridCell.Tab.0.center" timestamp="1589940324268">
+    <state width="1701" height="299" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590077068232" />
+    <state width="1701" height="299" key="GridCell.Tab.0.center" timestamp="1590077068231">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179263" />
-    <state width="1701" height="289" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589940324268" />
-    <state width="1701" height="289" key="GridCell.Tab.0.left" timestamp="1589940324267">
+    <state width="1701" height="299" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590077068231" />
+    <state width="1701" height="299" key="GridCell.Tab.0.left" timestamp="1590077068230">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179263" />
-    <state width="1701" height="289" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589940324267" />
-    <state width="1701" height="289" key="GridCell.Tab.0.right" timestamp="1589940324268">
+    <state width="1701" height="299" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590077068230" />
+    <state width="1701" height="299" key="GridCell.Tab.0.right" timestamp="1590077068231">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="289" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589940324268" />
+    <state width="1701" height="299" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590077068231" />
     <state width="1701" height="289" key="GridCell.Tab.1.bottom" timestamp="1589940324269">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
@@ -149,22 +258,22 @@
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="1054" y="268" key="com.intellij.tools.ToolSelectDialog.dimensionServiceKey/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589190676301" />
-    <state x="829" y="245" width="670" height="676" key="search.everywhere.popup" timestamp="1589867322165">
+    <state x="829" y="245" width="670" height="676" key="search.everywhere.popup" timestamp="1590072243091">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
-    <state x="829" y="245" width="670" height="676" key="search.everywhere.popup/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589867322165" />
+    <state x="829" y="245" width="670" height="676" key="search.everywhere.popup/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590072243091" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/struct.go</url>
-          <line>73</line>
+          <line>82</line>
           <option name="timeStamp" value="240" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperCopy/struct.go</url>
-          <line>96</line>
+          <line>95</line>
           <option name="timeStamp" value="241" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
@@ -174,27 +283,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_branch.go</url>
-          <line>106</line>
-          <option name="timeStamp" value="396" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_branch.go</url>
-          <line>62</line>
-          <option name="timeStamp" value="397" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_branch.go</url>
-          <line>133</line>
-          <option name="timeStamp" value="399" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_branch.go</url>
-          <line>83</line>
+          <line>82</line>
           <option name="timeStamp" value="400" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_repository.go</url>
-          <line>268</line>
+          <line>267</line>
           <option name="timeStamp" value="404" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
@@ -204,37 +298,37 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/hosts.go</url>
-          <line>95</line>
+          <line>80</line>
           <option name="timeStamp" value="481" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/hosts.go</url>
-          <line>101</line>
+          <line>86</line>
           <option name="timeStamp" value="482" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers_workflow.go</url>
-          <line>131</line>
+          <line>129</line>
           <option name="timeStamp" value="496" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers_highlevel.go</url>
-          <line>182</line>
+          <line>181</line>
           <option name="timeStamp" value="497" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/helperGit/helpers_branch.go</url>
-          <line>172</line>
+          <line>171</line>
           <option name="timeStamp" value="501" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers_highlevel.go</url>
-          <line>169</line>
+          <line>168</line>
           <option name="timeStamp" value="503" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/helpers/deploywp/helpers_highlevel.go</url>
-          <line>193</line>
+          <line>192</line>
           <option name="timeStamp" value="504" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
@@ -244,17 +338,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/cmd/load.go</url>
-          <line>51</line>
+          <line>49</line>
           <option name="timeStamp" value="506" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/template.go</url>
-          <line>67</line>
+          <line>66</line>
           <option name="timeStamp" value="507" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/template.go</url>
-          <line>126</line>
+          <line>125</line>
           <option name="timeStamp" value="508" />
         </line-breakpoint>
       </breakpoints>

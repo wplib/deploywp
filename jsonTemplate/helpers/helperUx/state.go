@@ -1,5 +1,7 @@
 package helperUx
 
+const OnlyOnce = "1"
+
 //
 //var _ ux.StateGetter = (*State)(nil)
 //type State ux.State

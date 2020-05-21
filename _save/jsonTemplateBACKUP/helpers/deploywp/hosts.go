@@ -44,7 +44,7 @@ func (me *Hosts) Count() int {
 func (me *Hosts) Process() error {
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -56,7 +56,7 @@ func (me *Hosts) Process() error {
 func (me *Hosts) IsNil() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me == nil {
 			ok = true
 		}
@@ -72,7 +72,7 @@ func (me *Hosts) IsNil() bool {
 func (me *Hosts) GetHost(host interface{}) *Host {
 	var ret Host
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}

@@ -1,7 +1,6 @@
 package deploywp
 
 import (
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"path/filepath"
 )
@@ -33,7 +32,7 @@ func (me *Paths) New() Paths {
 	me = &Paths {
 		WebrootPath: "",
 		Wordpress:   me.Wordpress.New(),
-		State: ux.NewState(),
+		State: ux.NewState(false),
 	}
 	return *me
 }
@@ -44,30 +43,31 @@ func (me *Wordpress) New() Wordpress {
 		CorePath:    "",
 		RootPath:    "",
 		VendorPath:  "",
-		State: ux.NewState(),
+		State: ux.NewState(false),
 	}
 	return *me
 }
 
-func (me *Paths) IsNil() bool {
-	var ok bool
-
-	for range only.Once {
-		if me == nil {
-			ok = true
-		}
-		// @TODO - perform other validity checks here.
-
-		ok = false
+func (e *Paths) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(e); state.IsError() {
+		return state
 	}
+	e.State = e.State.EnsureNotNil()
+	return e.State
+}
 
-	return ok
+func (e *Wordpress) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(e); state.IsError() {
+		return state
+	}
+	e.State = e.State.EnsureNotNil()
+	return e.State
 }
 
 func _FileToAbs(f ...string) string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret = filepath.Join(f...)
 
 		if filepath.IsAbs(ret) {
@@ -85,94 +85,54 @@ func _FileToAbs(f ...string) string {
 	return ret
 }
 
+
 func (me *Paths) ExpandPaths() *ux.State {
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
-		me.BasePath = _FileToAbs(me.BasePath)
-		me.State = ux.NewState()
+	if state := me.IsNil(); state.IsError() {
+		return state
 	}
-
+	me.BasePath = _FileToAbs(me.BasePath)
 	return me.State
 }
 
 
 func (me *Paths) GetBasePath() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-		ret = me.BasePath
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return me.BasePath
 }
 
 func (me *Paths) GetWebRootPath() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-		ret = filepath.Join(me.BasePath, me.WebrootPath)
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return filepath.Join(me.BasePath, me.WebrootPath)
 }
 
 func (me *Paths) GetContentPath() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-		ret = filepath.Join(me.BasePath, me.WebrootPath, me.Wordpress.ContentPath)
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return filepath.Join(me.BasePath, me.WebrootPath, me.Wordpress.ContentPath)
 }
 
 func (me *Paths) GetCorePath() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-		ret = filepath.Join(me.BasePath, me.WebrootPath, me.Wordpress.CorePath)
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return filepath.Join(me.BasePath, me.WebrootPath, me.Wordpress.CorePath)
 }
 
 func (me *Paths) GetRootPath() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-		ret = filepath.Join(me.BasePath, me.WebrootPath, me.Wordpress.RootPath)
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return filepath.Join(me.BasePath, me.WebrootPath, me.Wordpress.RootPath)
 }
 
 func (me *Paths) GetVendorPath() string {
-	var ret string
-
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-		ret = filepath.Join(me.BasePath, me.WebrootPath, me.Wordpress.VendorPath)
+	if state := me.IsNil(); state.IsError() {
+		return ""
 	}
-
-	return ret
+	return filepath.Join(me.BasePath, me.WebrootPath, me.Wordpress.VendorPath)
 }

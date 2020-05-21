@@ -28,7 +28,7 @@ func (me *Revision) New() Revision {
 func (me *Revision) IsNil() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me == nil {
 			ok = true
 		}
@@ -44,7 +44,7 @@ func (me *Revision) IsNil() bool {
 func (me *Revision) GetType() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -58,7 +58,7 @@ func (me *Revision) GetType() string {
 func (me *Revision) GetName() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}

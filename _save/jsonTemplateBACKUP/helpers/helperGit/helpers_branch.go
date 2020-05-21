@@ -11,7 +11,7 @@ import (
 //		{{- $cmd := $git.GetBranch }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GetBranch() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -29,7 +29,7 @@ func (g *HelperGit) GetBranch() *ux.State {
 //		{{- $cmd := $git.GetTags }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GetTags() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -73,7 +73,7 @@ func (g *HelperGit) GetTags() *ux.State {
 //		{{- $cmd := $git.CreateTag "1.0" }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) CreateTag(tag interface{}) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -100,7 +100,7 @@ func (g *HelperGit) CreateTag(tag interface{}) *ux.State {
 //		{{- $cmd := $git.RemoveTag "1.0" }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) RemoveTag(tag interface{}) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -127,7 +127,7 @@ func (g *HelperGit) RemoveTag(tag interface{}) *ux.State {
 //		{{- $cmd := $git.TagExists "1.0" }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) TagExists(tag interface{}) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -158,7 +158,7 @@ func (g *HelperGit) TagExists(tag interface{}) *ux.State {
 //		{{- $cmd := $git.GetTagObject "1.0" }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GetTagObject(tag interface{}) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {

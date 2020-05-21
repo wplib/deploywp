@@ -58,7 +58,7 @@ package helperTypes
 //func ReflectFileMode(ref interface{}) *os.FileMode {
 //	var fm os.FileMode
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		value := reflect.ValueOf(ref)
 //		if value.Kind() != reflect.Uint32 {
 //			break
@@ -73,7 +73,7 @@ package helperTypes
 //func ReflectPath(ref ...interface{}) *string {
 //	var fp string
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		var path []string
 //		for _, r := range ref {
 //			// Sometimes we can have dirs within each string slice.
@@ -90,13 +90,13 @@ package helperTypes
 //
 //
 //func (me *TypeOsPath) LoadContents(data ...interface{}) {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		me._String = ""
 //		me.AppendContents(data...)
 //	}
 //}
 //func (me *TypeOsPath) AppendContents(data ...interface{}) {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if me._Separator == "" {
 //			me._Separator = DefaultSeparator
 //		}
@@ -213,7 +213,7 @@ package helperTypes
 //func (me *TypeOsPath) StatFile() *ux.State {
 //	var ret *ux.State
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if me._Path == "" {
 //			me.State.SetError("path is empty")
 //			break
@@ -261,7 +261,7 @@ package helperTypes
 //
 //
 //func (me *TypeOsPath) ReadFile()  {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if !me._Valid {
 //
 //		}
@@ -299,7 +299,7 @@ package helperTypes
 //func (me *TypeOsPath) WriteFile(contents interface{}, perms interface{}, file ...interface{}) {
 //	var ret helperTypes.TypeWriteFile
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := helperTypes.ReflectPath(file...)
 //		if f == nil {
 //			ret.SetError("filename is nil")
@@ -349,7 +349,7 @@ package helperTypes
 //func _GetAbsPath(f ...string) string {
 //	var ret string
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		ret = filepath.Join(f...)
 //
 //		if filepath.IsAbs(ret) {
@@ -371,7 +371,7 @@ package helperTypes
 //func FileToAbs(f ...string) string {
 //	var ret string
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		ret = filepath.Join(f...)
 //
 //		if filepath.IsAbs(ret) {
@@ -394,7 +394,7 @@ package helperTypes
 //func ResolvePath(path ...string) *TypeOsPath {
 //	var ret TypeOsPath
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		ret.Path = FileToAbs(path...)
 //
 //		var stat os.FileInfo

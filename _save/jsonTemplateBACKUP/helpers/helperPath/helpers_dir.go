@@ -9,7 +9,7 @@ import "github.com/wplib/deploywp/only"
 func HelperChdir(dir ...interface{}) *TypeOsPath {
 	ret := NewOsPath()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(dir...)
@@ -32,7 +32,7 @@ func HelperChdir(dir ...interface{}) *TypeOsPath {
 func HelperGetCwd() *TypeOsPath {
 	ret := NewOsPath()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		state := ret.GetCwd()
@@ -52,7 +52,7 @@ func HelperGetCwd() *TypeOsPath {
 func HelperIsCwd() *TypeOsPath {
 	ret := NewOsPath()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		if ret.IsCwd() {
@@ -72,7 +72,7 @@ func HelperIsCwd() *TypeOsPath {
 func HelperCreateDir(path ...interface{}) *TypeOsPath {
 	ret := NewOsPath()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(path...)
@@ -98,7 +98,7 @@ func HelperCreateDir(path ...interface{}) *TypeOsPath {
 func HelperRemoveDir(force bool, path ...interface{}) *TypeOsPath {
 	ret := NewOsPath()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.SetFunction("")
 
 		f := ReflectPath(path...)

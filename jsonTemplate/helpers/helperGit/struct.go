@@ -4,12 +4,13 @@ import (
 	"github.com/tsuyoshiwada/go-gitcmd"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperExec"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"
 )
+
+const OnlyOnce = "1"
 
 var _ helperExec.TypeExecCommandGetter = (*TypeExecCommand)(nil)
 type TypeExecCommand helperExec.TypeExecCommand
@@ -35,9 +36,9 @@ type TypeGit struct {
 
 func NewGit() *TypeGit {
 	p := TypeGit{
-		State:        ux.NewState(),
+		State:        ux.NewState(false),
 		Url:          "",
-		Base:         helperPath.NewOsPath(),
+		Base:         helperPath.NewOsPath(false),
 		GitConfig:    nil,
 		GitOptions:   nil,
 		skipDirCheck: false,
@@ -66,11 +67,11 @@ func ReflectHelperGit(p *TypeGit) *HelperGit {
 
 func (me *TypeGit) IsOk() bool {
 	var ok bool
+	if state := me.IsNil(); state.IsError() {
+		return false
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
+	for range OnlyOnce {
 		if !me.IsAvailable() {
 			break
 		}
@@ -87,29 +88,20 @@ func (me *TypeGit) IsNotOk() bool {
 	return !me.IsOk()
 }
 
-func (me *TypeGit) IsNil() bool {
-	ok := true
 
-	for range only.Once {
-		if me == nil {
-			me.State.SetError("`git` client is not configured")
-			break
-		}
-		me.State.Clear()
-		ok = false
+func (e *TypeGit) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(e); state.IsError() {
+		return state
 	}
-
-	return ok
+	e.State = e.State.EnsureNotNil()
+	return e.State
 }
 
 
 func (me *TypeGit) IsNilRepository() bool {
 	ok := true
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
+	for range OnlyOnce {
 		if me.repository == nil {
 			me.State.SetError("repository not open")
 			break
@@ -125,10 +117,7 @@ func (me *TypeGit) IsNilRepository() bool {
 func (me *TypeGit) IsAvailable() bool {
 	ok := false
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
+	for range OnlyOnce {
 		me.State.SetError(me.client.CanExec())
 		if me.State.IsError() {
 			me.State.SetError("`git` does not exist or its command file is not executable: %s", me.State.GetError())

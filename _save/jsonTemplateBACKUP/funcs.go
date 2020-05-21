@@ -18,7 +18,7 @@ type FileInfo struct {
 func (me *FileInfo) getPaths(f string) error {
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		var abs string
 		abs, err = filepath.Abs(f)
 		if err != nil {
@@ -46,7 +46,7 @@ func fileToString(fileName string) ([]byte, error) {
 	var jsonString []byte
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		_, err = os.Stat(fileName)
 		if os.IsNotExist(err) {
 			break
@@ -64,7 +64,7 @@ func fileToString(fileName string) ([]byte, error) {
 func _FileToAbs(f ...string) string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret = filepath.Join(f...)
 
 		if filepath.IsAbs(ret) {

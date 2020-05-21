@@ -1,7 +1,6 @@
 package helperGit
 
 import (
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"gopkg.in/src-d/go-git.v4"
 )
@@ -11,13 +10,12 @@ import (
 //		{{- $cmd := $git.Open }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) Pull(opts ...*PullOptions) *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		if len(opts) == 0 {
 			opts = []*PullOptions{}
 		}

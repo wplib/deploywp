@@ -14,7 +14,7 @@ import (
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 // func (me *HelperGit) Clone(url string, dir ...interface{}) *TypeExecCommand {
 func (g *HelperGit) Clone() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNil() {
@@ -46,7 +46,7 @@ func (g *HelperGit) Clone() *ux.State {
 	return g.State
 }
 //func (g *HelperGit) Clone() *ux.State {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if g.Reflect().IsNotOk() {
 //			break
 //		}
@@ -94,7 +94,7 @@ func (g *HelperGit) Clone() *ux.State {
 //		{{- $cmd := $git.Open }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) Open() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNil() {
@@ -137,7 +137,7 @@ func (g *HelperGit) Open() *ux.State {
 //		{{- $cmd := $git.SetPath }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) SetPath(path ...interface{}) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNil() {
@@ -188,7 +188,7 @@ func (g *HelperGit) SetPath(path ...interface{}) *ux.State {
 //		{{- $cmd := $git.GetUrl }}
 //		{{- if $cmd.IsOk }}{{ $cmd.Data }}{{- end }}
 func (g *HelperGit) GetUrl() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -212,7 +212,7 @@ func (g *HelperGit) GetUrl() *ux.State {
 //		{{- $cmd := $git.SetUrl }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) SetUrl(u Url) *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNil() {
@@ -234,7 +234,7 @@ func (g *HelperGit) SetUrl(u Url) *ux.State {
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 // func (me *HelperGit) Clone(url interface{}, dir ...interface{}) *TypeExecCommand {
 func (g *HelperGit) Remove() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -278,7 +278,7 @@ func (g *HelperGit) Remove() *ux.State {
 //		{{- $cmd := $git.Lock }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) Lock() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -304,7 +304,7 @@ func (g *HelperGit) Lock() *ux.State {
 //		{{- $cmd := $git.GetStatus }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) GetStatus() (sts Status, err error) {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {

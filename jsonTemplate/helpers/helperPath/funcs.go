@@ -2,7 +2,6 @@ package helperPath
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
-	"github.com/wplib/deploywp/only"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -12,7 +11,7 @@ import (
 func ReflectFileMode(ref interface{}) *os.FileMode {
 	var fm os.FileMode
 
-	for range only.Once {
+	for range OnlyOnce {
 		value := reflect.ValueOf(ref)
 		if value.Kind() != reflect.Uint32 {
 			break
@@ -28,7 +27,7 @@ func ReflectFileMode(ref interface{}) *os.FileMode {
 func ReflectPath(ref ...interface{}) *string {
 	var fp string
 
-	for range only.Once {
+	for range OnlyOnce {
 		var path []string
 		for _, r := range ref {
 			// Sometimes we can have dirs within each string slice.
@@ -48,7 +47,7 @@ func ReflectPath(ref ...interface{}) *string {
 func ReflectAbsPath(ref ...interface{}) *string {
 	var fp string
 
-	for range only.Once {
+	for range OnlyOnce {
 		path := ReflectPath(ref...)
 
 		var err error
@@ -65,7 +64,7 @@ func ReflectAbsPath(ref ...interface{}) *string {
 func _GetAbsPath(p ...string) string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret = filepath.Join(p...)
 
 		if filepath.IsAbs(ret) {

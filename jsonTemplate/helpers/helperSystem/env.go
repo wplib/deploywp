@@ -2,7 +2,6 @@ package helperSystem
 
 import (
 	"fmt"
-	"github.com/wplib/deploywp/only"
 	"os"
 	"strings"
 )
@@ -15,7 +14,7 @@ type Environment map[string]string
 func PrintEnv() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		var env Environment
 		var err error
 		env, err = GetEnv()
@@ -50,7 +49,7 @@ func GetEnv() (Environment, error) {
 	var e Environment
 	var err error
 
-	for range only.Once {
+	for range OnlyOnce {
 		e = make(Environment)
 		for _, item := range os.Environ() {
 			s := strings.SplitN(item, "=", 2)
@@ -64,7 +63,7 @@ func GetEnv() (Environment, error) {
 func (me *Environment) ToString() string {
 	var s string
 
-	for range only.Once {
+	for range OnlyOnce {
 		s = fmt.Sprintf("%s", *me)
 	}
 

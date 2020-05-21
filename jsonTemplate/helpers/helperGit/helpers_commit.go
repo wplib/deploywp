@@ -1,7 +1,6 @@
 package helperGit
 
 import (
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -21,13 +20,12 @@ func _NewCommit(hash string) *Commit {
 //		{{- $cmd := $git.Commit }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) Commit(format interface{}, a ...interface{}) *ux.State {
-	for range only.Once {
-		g.State.SetFunction("")
+	if state := g.IsNil(); state.IsError() {
+		return state
+	}
+	g.State.SetFunction("")
 
-		if g.Reflect().IsNotOk() {
-			break
-		}
-
+	for range OnlyOnce {
 		g.State.SetState(g.Exec("rev-parse", "--verify", "HEAD"))
 		if g.State.IsError() {
 			break

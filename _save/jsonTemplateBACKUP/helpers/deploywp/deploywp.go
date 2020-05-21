@@ -34,7 +34,7 @@ func NewJsonFile() *TypeDeployWp {
 func HelperLoadDeployWp(str interface{}) *TypeDeployWp {
 	j := NewJsonFile()
 
-	for range only.Once {
+	for range OnlyOnce {
 		j.Error = mapstructure.Decode(str, &j)
 		if j.Error != nil {
 			break
@@ -65,7 +65,7 @@ func HelperLoadDeployWp(str interface{}) *TypeDeployWp {
 func (me *TypeDeployWp) IsNil() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me == nil {
 			ok = true
 		}
@@ -90,7 +90,7 @@ func (me *TypeDeployWp) GetSource() *Source {
 func (me *TypeDeployWp) GetSourcePaths() *Paths {
 	var ret *Paths
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -103,7 +103,7 @@ func (me *TypeDeployWp) GetSourcePaths() *Paths {
 //func (me *TypeDeployWp) GetSourcePaths(abs ...interface{}) *Paths {
 //	var ret *Paths
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if me.IsNil() {
 //			break
 //		}
@@ -124,7 +124,7 @@ func (me *TypeDeployWp) GetSourcePaths() *Paths {
 func (me *TypeDeployWp) GetSourceAbsPaths() *Paths {
 	var ret *Paths
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -141,7 +141,7 @@ func (me *TypeDeployWp) GetSourceAbsPaths() *Paths {
 func (me *TypeDeployWp) GetSourceRepositoryProvider() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -154,7 +154,7 @@ func (me *TypeDeployWp) GetSourceRepositoryProvider() string {
 func (me *TypeDeployWp) GetSourceRepositoryUrl() URL {
 	var ret URL
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -171,7 +171,7 @@ func (me *TypeDeployWp) GetSourceRepositoryUrl() URL {
 func (me *TypeDeployWp) GetSourceRevisionType() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -184,7 +184,7 @@ func (me *TypeDeployWp) GetSourceRevisionType() string {
 func (me *TypeDeployWp) GetSourceRevisionName() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -201,7 +201,7 @@ func (me *TypeDeployWp) GetSourceRevisionName() string {
 func (me *TypeDeployWp) GetSourceBuild() bool {
 	var ret bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -225,7 +225,7 @@ func (me *TypeDeployWp) GetTarget() *Target {
 func (me *TypeDeployWp) GetTargetFiles(ftype interface{}) *FilesArray {
 	var ret *FilesArray
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -242,7 +242,7 @@ func (me *TypeDeployWp) GetTargetFiles(ftype interface{}) *FilesArray {
 func (me *TypeDeployWp) GetTargetPaths() *Paths {
 	var ret *Paths
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -255,7 +255,7 @@ func (me *TypeDeployWp) GetTargetPaths() *Paths {
 func (me *TypeDeployWp) GetTargetAbsPaths() *Paths {
 	var ret *Paths
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -272,7 +272,7 @@ func (me *TypeDeployWp) GetTargetAbsPaths() *Paths {
 func (me *TypeDeployWp) GetTargetRevision(host interface{}) *TargetRevision {
 	var ret *TargetRevision
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -289,7 +289,7 @@ func (me *TypeDeployWp) GetTargetRevision(host interface{}) *TargetRevision {
 func (me *TypeDeployWp) GetTargetProvider(provider interface{}) *Provider {
 	var ret *Provider
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -310,7 +310,7 @@ func (me *TypeDeployWp) GetHosts() *Hosts {
 func (me *TypeDeployWp) GetHost(host interface{}) *Host {
 	var ret *Host
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}

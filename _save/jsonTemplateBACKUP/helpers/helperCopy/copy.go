@@ -7,13 +7,13 @@ import (
 
 
 func (p *TypeOsCopy) Copy() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		if !p.Source.Exists() {
 			p.State.SetError("src path not found")
 			break
 		}
 
-		for range only.Once {
+		for range OnlyOnce {
 			if p.Destination.NotExists() {
 				break
 			}

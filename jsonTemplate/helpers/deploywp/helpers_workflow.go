@@ -1,7 +1,6 @@
 package deploywp
 
 import (
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"time"
 )
@@ -98,12 +97,11 @@ import (
 // This is an alternative to running templates.
 // In theory, the code here, should be able to be replicated in a template file without modification.
 func (e *TypeDeployWp) Run() *ux.State {
-	for range only.Once {
-		if e.IsNil() {
-			e.State.SetError("deploywp JSON is nil")
-			break
-		}
+	if state := e.IsNil(); state.IsError() {
+		return state
+	}
 
+	for range OnlyOnce {
 		ux.PrintfBlue("%s v%s\n", e.Exec.CmdFile, e.Exec.CmdVersion)
 		ux.PrintfGreen("Args: %s\n", e.Exec.GetArgs())
 		ux.PrintfWhite("\n\n")

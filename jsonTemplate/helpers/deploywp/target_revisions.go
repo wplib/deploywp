@@ -2,7 +2,6 @@ package deploywp
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -22,7 +21,7 @@ func (me *TargetRevision) New() TargetRevision {
 		me = &TargetRevision {
 			HostName:     "",
 			RefName:     "",
-			State: ux.NewState(),
+			State: ux.NewState(false),
 		}
 	}
 
@@ -37,30 +36,19 @@ func (me *TargetRevisions) New() TargetRevisions {
 	return *me
 }
 
-func (me *TargetRevisions) IsNil() bool {
-	var ok bool
-
-	for range only.Once {
-		if me == nil {
-			ok = true
-		}
-		// @TODO - perform other validity checks here.
-
-		ok = false
-	}
-
-	return ok
-}
+//func (e *TargetRevisions) IsNil() *ux.State {
+//	if state := ux.IfNilReturnError(e); state.IsError() {
+//		return state
+//	}
+//	e.State = e.State.EnsureNotNil()
+//	return e.State
+//}
 
 
 func (me *TargetRevisions) GetRevision(host interface{}) *TargetRevision {
 	var ret TargetRevision
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		value := helperTypes.ReflectString(host)
 		if value == nil {
 			ret.State.SetError("GetRevision arg not a string")

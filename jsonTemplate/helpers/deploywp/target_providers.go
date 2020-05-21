@@ -2,7 +2,6 @@ package deploywp
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -23,7 +22,7 @@ func (me *Provider) New() Provider {
 			Name:     "",
 			Meta:     me.Meta.New(),
 			Defaults: me.Defaults.New(),
-			State: ux.NewState(),
+			State: ux.NewState(false),
 		}
 	}
 
@@ -38,25 +37,21 @@ func (me *Providers) New() Providers {
 	return *me
 }
 
-func (me *Providers) IsNil() bool {
-	var ok bool
 
-	for range only.Once {
-		if me == nil {
-			ok = true
-		}
-		// @TODO - perform other validity checks here.
-
-		ok = false
-	}
-
-	return ok
-}
+//func (e *Providers) IsNil() *ux.State {
+//	if state := ux.IfNilReturnError(e); state.IsError() {
+//		return state
+//	}
+//	e.State = e.State.EnsureNotNil()
+//	return e.State
+//}
 
 
 type Meta struct {
 	SiteID   string `json:"site_id"`
 	SiteName string `json:"site_name"`
+
+	State    *ux.State
 }
 func (me *Meta) New() Meta {
 	if me == nil {
@@ -69,19 +64,13 @@ func (me *Meta) New() Meta {
 	return *me
 }
 
-func (me *Meta) IsNil() bool {
-	var ok bool
 
-	for range only.Once {
-		if me == nil {
-			ok = true
-		}
-		// @TODO - perform other validity checks here.
-
-		ok = false
+func (e *Meta) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(e); state.IsError() {
+		return state
 	}
-
-	return ok
+	e.State = e.State.EnsureNotNil()
+	return e.State
 }
 
 
@@ -110,11 +99,7 @@ func (me *Defaults) New() Defaults {
 func (me *Providers) GetProvider(provider interface{}) *Provider {
 	var ret Provider
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		value := helperTypes.ReflectString(provider)
 		if value == nil {
 			ret.State.SetError("GetProvider arg not a string")

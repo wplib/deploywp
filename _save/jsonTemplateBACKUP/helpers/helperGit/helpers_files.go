@@ -11,7 +11,7 @@ import (
 //		{{- $cmd := $git.ChangedFiles }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) ChangedFiles() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {
@@ -43,7 +43,7 @@ func (g *HelperGit) ChangedFiles() *ux.State {
 //		{{- $cmd := $git.AddFiles }}
 //		{{- if $cmd.IsError }}{{ $cmd.PrintError }}{{- end }}
 func (g *HelperGit) AddFiles() *ux.State {
-	for range only.Once {
+	for range OnlyOnce {
 		g.State.SetFunction("")
 
 		if g.Reflect().IsNotOk() {

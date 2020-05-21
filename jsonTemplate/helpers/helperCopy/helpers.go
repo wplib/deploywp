@@ -4,7 +4,6 @@ package helperCopy
 import (
 	"fmt"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"os/exec"
 	"strings"
@@ -14,6 +13,14 @@ import (
 
 type HelperOsCopy TypeOsCopy
 
+func (c *HelperOsCopy) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(c); state.IsError() {
+		return state
+	}
+	c.State = c.State.EnsureNotNil()
+	return c.State
+}
+
 
 // Alias of Rsync || Tar || whatever - basically determine what tool to use based on availability.
 // @TODO - To be implemented.
@@ -22,7 +29,7 @@ type HelperOsCopy TypeOsCopy
 func HelperCopyFiles() *HelperOsCopy {
 	ret := NewOsCopy()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.Clear()
 	}
 
@@ -34,9 +41,12 @@ func HelperCopyFiles() *HelperOsCopy {
 //		{{ $copy := CopyFiles }}
 //		{{ $state := SetSourcePath "filename.txt" }}
 func (c *HelperOsCopy) SetSourcePath(src ...interface{}) *ux.State {
+	if state := c.IsNil(); state.IsError() {
+		return state
+	}
 	c.State.SetFunction("")
 
-	for range only.Once {
+	for range OnlyOnce {
 		p := helperTypes.ReflectStrings(src...)
 		if p == nil {
 			c.State.SetError("%s source empty", c.Method.GetName())
@@ -52,6 +62,10 @@ func (c *HelperOsCopy) SetSourcePath(src ...interface{}) *ux.State {
 	return c.State
 }
 func (c *HelperOsCopy) SetSource(dest ...interface{}) *ux.State {
+	if state := c.IsNil(); state.IsError() {
+		return state
+	}
+	c.State.SetFunction("")
 	return c.SetSourcePath(dest...)
 }
 
@@ -60,9 +74,12 @@ func (c *HelperOsCopy) SetSource(dest ...interface{}) *ux.State {
 //		{{ $copy := CopyFiles }}
 //		{{ $state := SetDestinationPath "filename.txt" }}
 func (c *HelperOsCopy) SetDestinationPath(dest ...interface{}) *ux.State {
+	if state := c.IsNil(); state.IsError() {
+		return state
+	}
 	c.State.SetFunction("")
 
-	for range only.Once {
+	for range OnlyOnce {
 		p := helperTypes.ReflectStrings(dest...)
 		if p == nil {
 			c.State.SetError("%s destination empty", c.Method.GetName())
@@ -86,9 +103,12 @@ func (c *HelperOsCopy) SetTarget(dest ...interface{}) *ux.State {
 //		{{ $copy := CopyFiles }}
 //		{{ $state := SetSourcePath "filename.txt" }}
 func (c *HelperOsCopy) SetExcludePaths(exclude ...interface{}) *ux.State {
+	if state := c.IsNil(); state.IsError() {
+		return state
+	}
 	c.State.SetFunction("")
 
-	for range only.Once {
+	for range OnlyOnce {
 		e := helperTypes.ReflectStrings(exclude...)
 		if e == nil {
 			break
@@ -107,9 +127,12 @@ func (c *HelperOsCopy) SetExcludePaths(exclude ...interface{}) *ux.State {
 //		{{ $copy := CopyFiles }}
 //		{{ $state := SetSourcePath "filename.txt" }}
 func (c *HelperOsCopy) SetIncludePaths(include ...interface{}) *ux.State {
+	if state := c.IsNil(); state.IsError() {
+		return state
+	}
 	c.State.SetFunction("")
 
-	for range only.Once {
+	for range OnlyOnce {
 		i := helperTypes.ReflectStrings(include...)
 		if i == nil {
 			break
@@ -127,9 +150,12 @@ func (c *HelperOsCopy) SetIncludePaths(include ...interface{}) *ux.State {
 // Usage:
 //		{{ $return := WriteFile "filename.txt" .Data.Source 0644 }}
 func (c *HelperOsCopy) Run() *ux.State {
+	if state := c.IsNil(); state.IsError() {
+		return state
+	}
 	c.State.SetFunction("")
 
-	for range only.Once {
+	for range OnlyOnce {
 		c.State.SetState(c.Source.StatPath())
 		if c.State.IsError() {
 			break
@@ -171,7 +197,7 @@ func (c *HelperOsCopy) Run() *ux.State {
 ////		{{ $copy := CopyFiles }}
 ////		{{ $state := SetSourcePath "filename.txt" }}
 //func (c *HelperOsCopy) SetOptions(src interface{}) *ux.State {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		e := helperTypes.ReflectStrings(exclude...)
 //		if e == nil {
 //			break

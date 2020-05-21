@@ -21,7 +21,7 @@ func (g *TypeExecCommand) Reflect() *HelperExecCommand {
 func HelperExecCmd(cmd ...interface{}) *ux.State {
 	ret := NewExecCommand()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ec := ReflectExecCommand(cmd...)
 		if ec == nil {
 			break
@@ -67,7 +67,7 @@ func (e *TypeExecCommand) ExitOnWarning() string {
 // Usage:
 //		{{ OsExit 1 }}
 func HelperOsExit(e ...interface{}) string {
-	for range only.Once {
+	for range OnlyOnce {
 		value := helperTypes.ReflectInt(e)
 		ux.Exit(*value)
 	}

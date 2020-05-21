@@ -12,7 +12,6 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperUx"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"path/filepath"
 	"reflect"
@@ -21,6 +20,8 @@ import (
 	"text/template"
 )
 
+const OnlyOnce = "1"
+
 
 // This method will auto-import exported helper functions within each helper package.
 // You need to run `pkgreflect jsonTemplate/helpers` after code changes.
@@ -28,7 +29,7 @@ func DiscoverHelpers() (template.FuncMap, error) {
 	var err error
 	var tfm template.FuncMap
 
-	for range only.Once {
+	for range OnlyOnce {
 		// Define additional template functions.
 		tfm = sprig.TxtFuncMap()
 
@@ -78,7 +79,7 @@ func DiscoverHelpers() (template.FuncMap, error) {
 func PrintHelpers() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		tfm, _ := DiscoverHelpers()
 
 		ret += ux.SprintfCyan("List of defined template functions:\n")
@@ -117,7 +118,7 @@ const HelperPrefix = "Helper"
 func _GetFunctionInfo(i interface{}) *Helper {
 	var helper Helper
 
-	for range only.Once {
+	for range OnlyOnce {
 		ptr := reflect.ValueOf(i).Pointer()
 		ptrs := reflect.ValueOf(i).String()
 		ptrn := runtime.FuncForPC(ptr).Name()

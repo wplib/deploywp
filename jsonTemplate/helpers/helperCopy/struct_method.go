@@ -1,7 +1,6 @@
 package helperCopy
 
 import (
-	"github.com/wplib/deploywp/only"
 	"github.com/zloylos/grsync"
 	"os/exec"
 )
@@ -80,7 +79,7 @@ func _ExecExists(e string) (string, bool) {
 	var path string
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		var err error
 		path, err = exec.LookPath(e)
 		if err != nil {
@@ -96,7 +95,7 @@ func _ExecExists(e string) (string, bool) {
 func NewCopyMethod() *TypeCopyMethods {
 	var ret TypeCopyMethods
 
-	for range only.Once {
+	for range OnlyOnce {
 		// Set priority of use.
 		ret.All = append(ret.All, _CopyMethodRsync())
 		ret.All = append(ret.All, _CopyMethodTar())
@@ -136,7 +135,7 @@ func (p *TypeCopyMethods) GetAvailable() bool {
 func (p *TypeCopyMethods) SelectMethod(method string) bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		for _, m := range p.All {
 			if m.Name != method {
 				continue

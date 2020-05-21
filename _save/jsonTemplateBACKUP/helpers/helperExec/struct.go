@@ -36,7 +36,7 @@ func NewExecCommand() *TypeExecCommand {
 func ReflectExecCommand(ref ...interface{}) *TypeExecCommand {
 	var ec TypeExecCommand
 
-	for range only.Once {
+	for range OnlyOnce {
 		for i, r := range ref {
 			s := *helperTypes.ReflectString(r)
 
@@ -61,7 +61,7 @@ func (e *TypeExecCommand) IsNil() bool {
 
 
 func (e *TypeExecCommand) EnsureNotNil() *TypeExecCommand {
-	for range only.Once {
+	for range OnlyOnce {
 		if e != nil {
 			break
 		}

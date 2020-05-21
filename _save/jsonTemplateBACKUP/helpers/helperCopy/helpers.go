@@ -22,7 +22,7 @@ type HelperOsCopy TypeOsCopy
 func HelperCopyFiles() *HelperOsCopy {
 	ret := NewOsCopy()
 
-	for range only.Once {
+	for range OnlyOnce {
 		ret.State.Clear()
 	}
 
@@ -36,7 +36,7 @@ func HelperCopyFiles() *HelperOsCopy {
 func (c *HelperOsCopy) SetSourcePath(src ...interface{}) *ux.State {
 	c.State.SetFunction("")
 
-	for range only.Once {
+	for range OnlyOnce {
 		p := helperTypes.ReflectStrings(src...)
 		if p == nil {
 			c.State.SetError("%s source empty", c.Method.GetName())
@@ -62,7 +62,7 @@ func (c *HelperOsCopy) SetSource(dest ...interface{}) *ux.State {
 func (c *HelperOsCopy) SetDestinationPath(dest ...interface{}) *ux.State {
 	c.State.SetFunction("")
 
-	for range only.Once {
+	for range OnlyOnce {
 		p := helperTypes.ReflectStrings(dest...)
 		if p == nil {
 			c.State.SetError("%s destination empty", c.Method.GetName())
@@ -88,7 +88,7 @@ func (c *HelperOsCopy) SetTarget(dest ...interface{}) *ux.State {
 func (c *HelperOsCopy) SetExcludePaths(exclude ...interface{}) *ux.State {
 	c.State.SetFunction("")
 
-	for range only.Once {
+	for range OnlyOnce {
 		e := helperTypes.ReflectStrings(exclude...)
 		if e == nil {
 			break
@@ -109,7 +109,7 @@ func (c *HelperOsCopy) SetExcludePaths(exclude ...interface{}) *ux.State {
 func (c *HelperOsCopy) SetIncludePaths(include ...interface{}) *ux.State {
 	c.State.SetFunction("")
 
-	for range only.Once {
+	for range OnlyOnce {
 		i := helperTypes.ReflectStrings(include...)
 		if i == nil {
 			break
@@ -129,7 +129,7 @@ func (c *HelperOsCopy) SetIncludePaths(include ...interface{}) *ux.State {
 func (c *HelperOsCopy) Run() *ux.State {
 	c.State.SetFunction("")
 
-	for range only.Once {
+	for range OnlyOnce {
 		c.State.SetState(c.Source.StatPath())
 		if c.State.IsError() {
 			break
@@ -171,7 +171,7 @@ func (c *HelperOsCopy) Run() *ux.State {
 ////		{{ $copy := CopyFiles }}
 ////		{{ $state := SetSourcePath "filename.txt" }}
 //func (c *HelperOsCopy) SetOptions(src interface{}) *ux.State {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		e := helperTypes.ReflectStrings(exclude...)
 //		if e == nil {
 //			break

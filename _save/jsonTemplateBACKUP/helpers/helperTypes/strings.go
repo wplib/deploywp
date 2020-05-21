@@ -80,7 +80,7 @@ func HelperToString(i interface{}) string {
 func HelperContains(s interface{}, substr interface{}) bool {
 	var ret bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		sp := ReflectString(s)
 		if sp == nil {
 			break
@@ -103,7 +103,7 @@ func HelperContains(s interface{}, substr interface{}) bool {
 func HelperSprintf(format interface{}, a ...interface{}) string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		p := ReflectString(format)
 		if p == nil {
 			break
@@ -120,7 +120,7 @@ func HelperSprintf(format interface{}, a ...interface{}) string {
 func HelperGrepArray(str interface{}, format interface{}, a ...interface{}) []string {
 	var ret []string
 
-	for range only.Once {
+	for range OnlyOnce {
 		s := ReflectString(str)
 		if s == nil {
 			break
@@ -151,7 +151,7 @@ func HelperGrepArray(str interface{}, format interface{}, a ...interface{}) []st
 func HelperGrep(str interface{}, format interface{}, a ...interface{}) string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		sa := HelperGrepArray(str, format, a...)
 
 		ret = strings.Join(sa, "\n")

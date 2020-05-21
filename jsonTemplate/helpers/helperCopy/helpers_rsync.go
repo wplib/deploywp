@@ -2,7 +2,6 @@ package helperCopy
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 	"github.com/zloylos/grsync"
 	"time"
@@ -14,7 +13,7 @@ import (
 func HelperCopyRsync(src interface{}, dest interface{}, exclude ...interface{}) *ux.State {
 	c := NewOsCopy()
 
-	for range only.Once {
+	for range OnlyOnce {
 		s := helperPath.ReflectAbsPath(src)
 		if s == nil {
 			break
@@ -38,7 +37,7 @@ func HelperCopyRsync(src interface{}, dest interface{}, exclude ...interface{}) 
 		if !c.Destination.SetPath(*d) {
 			break
 		}
-		for range only.Once {
+		for range OnlyOnce {
 			c.State.SetState(c.Destination.StatPath())
 			if c.Destination.NotExists() {
 				c.State.Clear()
@@ -125,7 +124,7 @@ func HelperCopyRsync(src interface{}, dest interface{}, exclude ...interface{}) 
 //func HelperRsync(src interface{}, dest interface{}, options interface{}, exclude ...interface{}) *HelperOsCopy {
 //	ret := NewOsCopy()
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		s := helperTypes.ReflectString(src)
 //		if s == nil {
 //			ret.State.SetError("rsync source empty")

@@ -28,7 +28,7 @@ func DiscoverHelpers() (template.FuncMap, error) {
 	var err error
 	var tfm template.FuncMap
 
-	for range only.Once {
+	for range OnlyOnce {
 		// Define additional template functions.
 		tfm = sprig.TxtFuncMap()
 
@@ -78,7 +78,7 @@ func DiscoverHelpers() (template.FuncMap, error) {
 func PrintHelpers() string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		tfm, _ := DiscoverHelpers()
 
 		ret += ux.SprintfCyan("List of defined template functions:\n")
@@ -117,7 +117,7 @@ const HelperPrefix = "Helper"
 func _GetFunctionInfo(i interface{}) *Helper {
 	var helper Helper
 
-	for range only.Once {
+	for range OnlyOnce {
 		ptr := reflect.ValueOf(i).Pointer()
 		ptrs := reflect.ValueOf(i).String()
 		ptrn := runtime.FuncForPC(ptr).Name()

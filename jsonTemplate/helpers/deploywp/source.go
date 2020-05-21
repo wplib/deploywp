@@ -2,7 +2,6 @@ package deploywp
 
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
-	"github.com/wplib/deploywp/only"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -26,17 +25,17 @@ func (me *Source) New() Source {
 	me.Revision.New()
 
 	me.AbsPaths.New()
-	me.State = ux.NewState()
+	me.State = ux.NewState(false)
 
 	return *me
 }
 
 func (me *Source) Process() *ux.State {
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
+	if state := me.IsNil(); state.IsError() {
+		return state
+	}
 
+	for range OnlyOnce {
 		me.AbsPaths = me.Paths
 		me.State = me.AbsPaths.ExpandPaths()
 		if me.State.IsError() {
@@ -49,19 +48,12 @@ func (me *Source) Process() *ux.State {
 	return me.State
 }
 
-func (me *Source) IsNil() bool {
-	var ok bool
-
-	for range only.Once {
-		if me == nil {
-			ok = true
-		}
-		// @TODO - perform other validity checks here.
-
-		ok = false
+func (e *Source) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(e); state.IsError() {
+		return state
 	}
-
-	return ok
+	e.State = e.State.EnsureNotNil()
+	return e.State
 }
 
 
@@ -69,12 +61,11 @@ func (me *Source) IsNil() bool {
 // Paths
 func (me *Source) GetPaths(abs ...interface{}) *Paths {
 	var ret *Paths
+	if state := me.IsNil(); state.IsError() {
+		return &Paths{}
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		if helperTypes.ReflectBoolArg(abs) {
 			ret = &me.AbsPaths
 			break
@@ -94,12 +85,11 @@ func (me *Source) GetRepository() *Repository {
 }
 func (me *Source) GetRepositoryProvider() string {
 	var ret string
+	if state := me.IsNil(); state.IsError() {
+		return ""
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		ret = me.Repository.GetProvider()
 	}
 
@@ -107,12 +97,11 @@ func (me *Source) GetRepositoryProvider() string {
 }
 func (me *Source) GetRepositoryUrl() URL {
 	var ret URL
+	if state := me.IsNil(); state.IsError() {
+		return ""
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		ret = me.Repository.GetUrl()
 	}
 
@@ -127,12 +116,11 @@ func (me *Source) GetRevision() *Revision {
 }
 func (me *Source) GetRevisionType() string {
 	var ret string
+	if state := me.IsNil(); state.IsError() {
+		return ""
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		ret = me.Revision.GetType()
 	}
 
@@ -140,12 +128,11 @@ func (me *Source) GetRevisionType() string {
 }
 func (me *Source) GetRevisionName() string {
 	var ret string
+	if state := me.IsNil(); state.IsError() {
+		return ""
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		ret = me.Revision.GetName()
 	}
 
@@ -157,12 +144,11 @@ func (me *Source) GetRevisionName() string {
 // Build
 func (me *Source) GetBuild() bool {
 	var ret bool
+	if state := me.IsNil(); state.IsError() {
+		return false
+	}
 
-	for range only.Once {
-		if me.IsNil() {
-			break
-		}
-
+	for range OnlyOnce {
 		ret = me.Build.GetBuild()
 	}
 

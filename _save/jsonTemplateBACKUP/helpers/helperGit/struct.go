@@ -67,7 +67,7 @@ func ReflectHelperGit(p *TypeGit) *HelperGit {
 func (me *TypeGit) IsOk() bool {
 	var ok bool
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -90,7 +90,7 @@ func (me *TypeGit) IsNotOk() bool {
 func (me *TypeGit) IsNil() bool {
 	ok := true
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me == nil {
 			me.State.SetError("`git` client is not configured")
 			break
@@ -106,7 +106,7 @@ func (me *TypeGit) IsNil() bool {
 func (me *TypeGit) IsNilRepository() bool {
 	ok := true
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}
@@ -125,7 +125,7 @@ func (me *TypeGit) IsNilRepository() bool {
 func (me *TypeGit) IsAvailable() bool {
 	ok := false
 
-	for range only.Once {
+	for range OnlyOnce {
 		if me.IsNil() {
 			break
 		}

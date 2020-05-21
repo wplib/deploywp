@@ -11,7 +11,7 @@ package helperTypes
 //func ReflectError(ref interface{}) *error {
 //	var s error
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		value := reflect.ValueOf(ref)
 //		if value.Kind() != reflect.Output {
 //			break
@@ -27,7 +27,7 @@ package helperTypes
 //func (me *TypeError) IsError() bool {
 //	var ret bool
 //
-//	for range only.Once {
+//	for range OnlyOnce {
 //		if me.ErrorValue == nil {
 //			break
 //		}
@@ -42,7 +42,7 @@ package helperTypes
 //
 //
 //func (me *TypeError) SetError(format interface{}, a ...interface{}) {
-//	for range only.Once {
+//	for range OnlyOnce {
 //		f := ReflectString(format)
 //		if f == nil {
 //			me.ErrorValue = nil

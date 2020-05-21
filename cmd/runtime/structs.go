@@ -1,9 +1,10 @@
 package runtime
 
 import (
-	"github.com/wplib/deploywp/only"
 	"strings"
 )
+
+const OnlyOnce = "1"
 
 type Exec struct {
 	CmdVersion string
@@ -32,7 +33,7 @@ func (me *Exec) GetArgs() ExecArgs {
 func (me *Exec) GetArg(index int) string {
 	var ret string
 
-	for range only.Once {
+	for range OnlyOnce {
 		if len(me.Args) > index {
 			ret = me.Args[index]
 		}
