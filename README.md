@@ -1,5 +1,5 @@
 # deploywp
-A Golang-based app for deploying a WordPress site to Pantheon
+App for deploying a WordPress site to Pantheon
 
 
 ## Basic premise
