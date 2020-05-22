@@ -14,10 +14,13 @@ func (at *ArgTemplate) SetJsonFile(s string) *ux.State {
 	for range OnlyOnce {
 		if at.JsonFile == nil {
 			at.JsonFile = helperPath.HelperNewPath(s)
+			if at.JsonFile.State.IsNotOk() {
+				break
+			}
 		}
-		if at.JsonFile.State.IsNotOk() {
-			break
-		}
+
+		at.JsonFile.SetPath(s)
+
 		if at.OverWrite {
 			at.JsonFile.SetOverwriteable()
 		}
@@ -65,14 +68,14 @@ func (at *ArgTemplate) LoadJsonFile() *ux.State {
 			at.State.SetError("Json file: %s", at.State.GetError())
 			break
 		}
-		at.JsonString = at.State.Output
-		at.JsonStruct.JsonString = at.State.Output
+		at.JsonString = at.JsonFile.GetContentString()
+		at.JsonStruct.JsonString = at.JsonString
 		at.JsonStruct.JsonString = strings.ReplaceAll(at.JsonStruct.JsonString, "\n", "")
 		at.JsonStruct.JsonString = strings.ReplaceAll(at.JsonStruct.JsonString, "\t", "")
 
 
 		// Process JSON string.
-		js := []byte(at.State.Output)
+		js := []byte(at.JsonString)
 		at.JsonStruct.Json = make(map[string]interface{})
 		err := json.Unmarshal(js, &at.JsonStruct.Json)
 		if err != nil {
@@ -90,10 +93,12 @@ func (at *ArgTemplate) SetTemplateFile(s string) *ux.State {
 	for range OnlyOnce {
 		if at.TemplateFile == nil {
 			at.TemplateFile = helperPath.HelperNewPath(s)
+			if at.TemplateFile.State.IsNotOk() {
+				break
+			}
 		}
-		if at.TemplateFile.State.IsNotOk() {
-			break
-		}
+
+		at.TemplateFile.SetPath(s)
 		if at.OverWrite {
 			at.TemplateFile.SetOverwriteable()
 		}
@@ -141,7 +146,7 @@ func (at *ArgTemplate) LoadTemplateFile() *ux.State {
 			at.State.SetError("Json file: %s", at.State.GetError())
 			break
 		}
-		at.TemplateString = at.State.Output
+		at.TemplateString = at.TemplateFile.GetContentString()
 
 
 		// Create template instance.

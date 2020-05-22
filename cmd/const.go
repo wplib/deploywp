@@ -3,7 +3,7 @@ package cmd
 const (
 	defaultJsonFile 		= "deploywp.json"
 	defaultTemplateFile 	= "deploywp.tmpl"
-	defaultOutFile 			= "-"
+	defaultOutFile 			= ""
 
 	defaultJsonFileSuffix 		= ".json"
 	defaultTemplateFileSuffix 	= ".tmpl"

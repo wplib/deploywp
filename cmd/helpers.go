@@ -2,8 +2,6 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/wplib/deploywp/defaults"
-	"github.com/wplib/deploywp/jsonTemplate"
 	"github.com/wplib/deploywp/ux"
 )
 
@@ -22,12 +20,11 @@ var helpersCmd = &cobra.Command{
 func Helpers(cmd *cobra.Command, args []string) {
 	for range OnlyOnce {
 		//Cmd.State = ux.NewState(Cmd.Debug)
-		var tmpl *jsonTemplate.ArgTemplate
+		//var tmpl *jsonTemplate.ArgTemplate
 
-		tmpl = ProcessArgs(cmd, args)
+		tmpl := ProcessArgs(rootCmd, args)
 		// Ignore errors as there's no args.
-		_ = tmpl.SetVersion(defaults.BinaryVersion)
 
-		 tmpl.PrintHelpers()
+		tmpl.PrintHelpers()
 	}
 }

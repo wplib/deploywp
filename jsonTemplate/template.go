@@ -2,7 +2,6 @@ package jsonTemplate
 
 import (
 	"fmt"
-	"github.com/wplib/deploywp/cmd/runtime"
 	"github.com/wplib/deploywp/jsonTemplate/helpers"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperExec"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
@@ -34,28 +33,21 @@ func (at *ArgTemplate) CreateTemplate() (*template.Template, *ux.State) {
 }
 
 
-func (at *ArgTemplate) ProcessTemplate() *ux.State {
+func (at *ArgTemplate) LoadTemplate() *ux.State {
 	if state := at.IsNil(); state.IsError() {
 		return state
 	}
 
 	for range OnlyOnce {
 		if at.JsonStruct == nil {
-			at.JsonStruct = &jsonStruct{}
+			at.JsonStruct = NewJsonStruct()
 		}
 
 
-		//at.JsonStruct.Exec.Cmd, err = os.Executable()
-		//at.JsonStruct.Exec.CmdDir = path.Dir(at.JsonStruct.Exec.Cmd)
-		//at.JsonStruct.Exec.CmdFile = path.Base(at.JsonStruct.Exec.Cmd)
-		//at.JsonStruct.Exec.CmdVersion = at.exec.CmdVersion
-		//at.JsonStruct.Exec.FullArgs = at.exec.FullArgs
-		//at.JsonStruct.Exec.args = at.exec.args
-		e := runtime.NewExec()
-		at.JsonStruct.Exec = e
-		at.JsonStruct.CreationEpoch = e.TimeStampEpoch()
-		at.JsonStruct.CreationDate = e.TimeStampString()
-		at.JsonStruct.Env = e.GetEnvMap()
+		// Historic reasons...
+		at.JsonStruct.CreationEpoch = at.JsonStruct.Exec.TimeStampEpoch()
+		at.JsonStruct.CreationDate = at.JsonStruct.Exec.TimeStampString()
+		at.JsonStruct.Env = at.JsonStruct.Exec.GetEnvMap()
 
 		at.State = at.LoadJsonFile()
 		if at.State.IsNotOk() {
@@ -72,9 +64,21 @@ func (at *ArgTemplate) ProcessTemplate() *ux.State {
 		at.JsonStruct.CreationInfo = fmt.Sprintf("Created on %s, using template:%s and json:%s", at.JsonStruct.CreationDate, at.JsonStruct.TemplateFile.Name, at.JsonStruct.JsonFile.Name)
 		at.JsonStruct.CreationWarning = "WARNING: This file has been auto-generated. DO NOT EDIT: WARNING"
 
+		at.State.Clear()
+	}
 
+	return at.State
+}
+
+
+func (at *ArgTemplate) RunTemplate() *ux.State {
+	if state := at.IsNil(); state.IsError() {
+		return state
+	}
+
+	for range OnlyOnce {
 		if at.OutFile == nil {
-			err := at.TemplateRef.Execute(os.Stdout, &at.JsonStruct)
+			err := at.TemplateRef.Execute(os.Stderr, &at.JsonStruct)
 			if err != nil {
 				at.State.SetError("Processing error: %s", err)
 			}
@@ -164,14 +168,3 @@ func (at *ArgTemplate) ProcessTemplate() *ux.State {
 
 	return at.State
 }
-
-
-//func (at *ArgTemplate) SetVersion(s string) error {
-//	var err error
-//
-//	for range OnlyOnce {
-//		at.Exec.CmdVersion = s
-//	}
-//
-//	return err
-//}

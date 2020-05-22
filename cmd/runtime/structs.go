@@ -64,7 +64,7 @@ func NewExec() *Exec {
 		ret.CmdDir = path.Dir(ret.Cmd)
 		ret.CmdFile = path.Base(ret.Cmd)
 
-		ret.FullArgs = os.Args
+		ret.FullArgs = os.Args[1:]
 		ret.Args = ret.FullArgs
 
 		ret.Env = os.Environ()

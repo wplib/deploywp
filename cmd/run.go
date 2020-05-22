@@ -3,8 +3,6 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/wplib/deploywp/defaults"
-	"github.com/wplib/deploywp/jsonTemplate"
 	"github.com/wplib/deploywp/deploywp"
 	"github.com/wplib/deploywp/ux"
 )
@@ -24,25 +22,23 @@ var runCmd = &cobra.Command{
 func Run(cmd *cobra.Command, args []string) {
 	for range OnlyOnce {
 		//Cmd.State = ux.NewState(Cmd.Debug)
-		var tmpl *jsonTemplate.ArgTemplate
+		//var tmpl *jsonTemplate.ArgTemplate
 
-		tmpl = ProcessArgs(cmd, args)
+		tmpl := ProcessArgs(rootCmd, args)
 		Cmd.State = tmpl.State
 		if Cmd.State.IsNotOk() {
 			Cmd.State.PrintResponse()
 			break
 		}
 
-		_ = tmpl.SetVersion(defaults.BinaryVersion)
-
-		Cmd.State = tmpl.LoadJsonFile()
+		Cmd.State = tmpl.LoadTemplate()
 		if Cmd.State.IsNotOk() {
 			Cmd.State.PrintResponse()
 			break
 		}
 
 		//dwp := deploywp.TypeDeployWp{}
-		dwp := deploywp.HelperLoadDeployWp(tmpl.JsonStruct.Json, tmpl.GetArgs()...)
+		dwp := deploywp.HelperLoadDeployWp(tmpl.JsonStruct.Json, tmpl.Exec.GetArgs()...)
 		if dwp.State.IsNotOk() {
 			dwp.State.PrintResponse()
 			break

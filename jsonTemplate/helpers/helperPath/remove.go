@@ -72,11 +72,11 @@ func (p *TypeOsPath) RemoveFile() *ux.State {
 				break
 			}
 
+			p.State.Clear()
 			if !helperSystem.HelperUserPromptBool("Remove file '%s'? (Y|N) ", p._Path) {
 				p.State.SetWarning("not removing file '%s'", p._Path)
 				break
 			}
-			p.State.Clear()
 		}
 		if p.State.IsNotOk() {
 			break

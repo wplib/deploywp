@@ -12,12 +12,9 @@ func ProcessArgs(cmd *cobra.Command, args []string) *jsonTemplate.ArgTemplate {
 
 	for range OnlyOnce {
 		var err error
-		var s string
-		var b bool
 
-		_ = tmpl.Exec.SetFullArgs(cmd.Use)
-		_ = tmpl.Exec.AddFullArgs(args...)
-		_ = tmpl.Exec.SetArgs(tmpl.Exec.GetFullArgs()[1:]...)
+		_ = tmpl.Exec.SetArgs(cmd.Use)
+		_ = tmpl.Exec.AddArgs(args...)
 
 		fl := cmd.Flags()
 
@@ -26,12 +23,12 @@ func ProcessArgs(cmd *cobra.Command, args []string) *jsonTemplate.ArgTemplate {
 
 
 		// Dry run mode.
-		b, err = fl.GetBool(flagDryRun)
+		Cmd.DryRun, err = fl.GetBool(flagDryRun)
 		if err != nil {
 			tmpl.OverWrite = false
 			tmpl.RemoveFiles = false
 		}
-		if b {
+		if Cmd.DryRun {
 			tmpl.OverWrite = false
 			tmpl.RemoveFiles = false
 		} else {
@@ -41,32 +38,39 @@ func ProcessArgs(cmd *cobra.Command, args []string) *jsonTemplate.ArgTemplate {
 
 
 		// Json file.
-		s, err = fl.GetString(flagJsonFile)
+		Cmd.JsonFile, err = fl.GetString(flagJsonFile)
 		if err != nil {
-			s = defaultJsonFile
+			Cmd.JsonFile = defaultJsonFile
 		}
-		tmpl.State = tmpl.SetJsonFile(s)
+		if Cmd.JsonFile == "" {
+			Cmd.JsonFile = defaultJsonFile
+		}
+		tmpl.State = tmpl.SetJsonFile(Cmd.JsonFile)
 		if tmpl.State.IsNotOk() {
 			tmpl.State.SetError("ERROR: %s", err)
 			break
 		}
+		Cmd.JsonFile = tmpl.JsonFile.GetPath()
 
 
 		// Template file.
 		for range OnlyOnce {
-			s, err = fl.GetString(flagTemplateFile)
+			Cmd.TemplateFile, err = fl.GetString(flagTemplateFile)
 			if err != nil {
-				s = defaultTemplateFile
+				Cmd.TemplateFile = defaultTemplateFile
+			}
+			if Cmd.TemplateFile == "" {
+				Cmd.TemplateFile = defaultTemplateFile
 			}
 
-			tmpl.State = tmpl.SetTemplateFile(s)
+			tmpl.State = tmpl.SetTemplateFile(Cmd.TemplateFile)
 			if tmpl.State.IsOk() {
 				break
 			}
 
 			// Try again based on the json file.
-			s = strings.TrimSuffix(tmpl.JsonFile.GetPath(), defaultJsonFileSuffix) + defaultTemplateFileSuffix
-			tmpl.State = tmpl.SetTemplateFile(s)
+			Cmd.TemplateFile = strings.TrimSuffix(tmpl.JsonFile.GetPath(), defaultJsonFileSuffix) + defaultTemplateFileSuffix
+			tmpl.State = tmpl.SetTemplateFile(Cmd.TemplateFile)
 			if tmpl.State.IsNotOk() {
 				tmpl.State.SetError("ERROR: %s", err)
 				break
@@ -75,14 +79,14 @@ func ProcessArgs(cmd *cobra.Command, args []string) *jsonTemplate.ArgTemplate {
 
 
 		// Output file.
-		s, err = fl.GetString(flagOutputFile)
+		Cmd.OutFile, err = fl.GetString(flagOutputFile)
 		if err != nil {
-			s = ""
+			Cmd.OutFile = ""
 		}
-		if s == "-" {
+		if Cmd.OutFile == defaultOutFile {
 			tmpl.OutFile = nil
 		}
-		tmpl.State = tmpl.SetOutFile(s)
+		tmpl.State = tmpl.SetOutFile(Cmd.OutFile)
 		if tmpl.State.IsNotOk() {
 			tmpl.State.SetError("ERROR: %s", err)
 			break
@@ -90,8 +94,8 @@ func ProcessArgs(cmd *cobra.Command, args []string) *jsonTemplate.ArgTemplate {
 
 
 		// Chdir.
-		b, err = fl.GetBool(flagChdir)
-		if b {
+		Cmd.Chdir, err = fl.GetBool(flagChdir)
+		if Cmd.Chdir {
 			tmpl.State = tmpl.JsonFile.Chdir()
 			if tmpl.State.IsNotOk() {
 				//tmpl.State.SetError("ERROR: %s", err)

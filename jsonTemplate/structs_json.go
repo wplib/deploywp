@@ -27,6 +27,25 @@ type jsonStruct struct {
 }
 
 
+func NewJsonStruct() *jsonStruct {
+	js := jsonStruct {
+		Exec:            runtime.NewExec(),
+		TemplateFile:    FileInfo{},
+		JsonFile:        FileInfo{},
+		OutFile:         FileInfo{},
+		//Env:             nil,
+		JsonString:      "",
+		CreationEpoch:   0,
+		CreationDate:    "",
+		CreationInfo:    "",
+		CreationWarning: "",
+		Json:            nil,
+	}
+
+	return &js
+}
+
+
 type FileInfo struct {
 	Dir           string
 	Name          string

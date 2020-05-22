@@ -24,28 +24,20 @@ func (p *TypeOsPath) Chdir() *ux.State {
 			break
 		}
 		if p._IsFile {
-			p.State.SetError("directory is a file")
+			err := os.Chdir(p._Dirname)
+			p.State.SetError(err)
+			if p.State.IsError() {
+				break
+			}
+			//p.State.SetError("directory is a file")
 			break
 		}
 
-
-		var err error
-		err = os.Chdir(p._Path)
+		err := os.Chdir(p._Path)
 		p.State.SetError(err)
 		if p.State.IsError() {
 			break
 		}
-
-		//var cwd string
-		//cwd, err = os.Getwd()
-		//p.State.SetError(err)
-		//if p.State.IsError() {
-		//	break
-		//}
-		//if cwd != p._Path {
-		//	p.State.SetError("destination directory doesn't match")
-		//	break
-		//}
 
 		p.State.SetOk("chdir OK")
 	}

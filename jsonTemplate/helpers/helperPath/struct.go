@@ -303,10 +303,10 @@ func (p *TypeOsPath) _SetInvalid() {
 }
 func (p *TypeOsPath) IsValid() bool {
 	for range OnlyOnce {
-		if !p._Valid {
-			p.State.SetError("path not valid")
-			break
-		}
+		//if !p._Valid {
+		//	p.State.SetError("path not valid")
+		//	break
+		//}
 
 		if p._Path == "" {
 			p.State.SetError("path not set")
