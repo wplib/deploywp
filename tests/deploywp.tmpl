@@ -135,7 +135,7 @@
 {{- $rsync := CopyRsync $srcAbs.GetContentPath $targetAbs.GetContentPath }}
 {{ $rsync.ExitOnNotOk }}
 # Files copied OK
-{{ PrintfGreen "%s" (Grep $rsync.PrintResponse "^(sent|total)") }}
+{{ PrintfGreen "%s" (Grep $rsync.SprintfResponse "^(sent|total)") }}
 {{ PrintfGreen "%s" ($rsync.OutputGrep "^(sent|total)") }}
 {{ PrintfGreen "%s" ($rsync.OutputArrayGrep "^(sent|total)") }}
 

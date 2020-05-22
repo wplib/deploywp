@@ -7,7 +7,7 @@ import (
 )
 
 
-func ExecCommand(ec *TypeExecCommand) *TypeExecCommand {
+func execCommand(ec *TypeExecCommand) *TypeExecCommand {
 	if state := ec.IsNil(); state.IsError() {
 		return nil
 	}
@@ -18,7 +18,7 @@ func ExecCommand(ec *TypeExecCommand) *TypeExecCommand {
 		}
 
 		//c := exec.Command((*cmds)[0], (*cmds)[1:]...)
-		c := exec.Command(ec.Exe, ec.Args...)
+		c := exec.Command(ec.exe, ec.args...)
 
 		var out []byte
 		var err error

@@ -36,5 +36,6 @@ var Variables = map[string]reflect.Value{
 
 var Consts = map[string]reflect.Value{
 	"HelperPrefix": reflect.ValueOf(HelperPrefix),
+	"OnlyOnce": reflect.ValueOf(OnlyOnce),
 }
 

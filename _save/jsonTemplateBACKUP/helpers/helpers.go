@@ -3,7 +3,7 @@ package helpers
 import (
 	"fmt"
 	"github.com/Masterminds/sprig"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/deploywp"
+	"github.com/wplib/deploywp/deploywp"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperCopy"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperExec"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGit"

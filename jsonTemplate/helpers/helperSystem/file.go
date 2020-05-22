@@ -46,7 +46,7 @@ package helperSystem
 //			break
 //		}
 //
-//		rf.Output = string(d)
+//		rf.output = string(d)
 //		rf.Array = strings.Split(string(d), "\n")
 //	}
 //

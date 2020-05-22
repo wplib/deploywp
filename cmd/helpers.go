@@ -2,30 +2,31 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/wplib/deploywp/defaults"
 	"github.com/wplib/deploywp/jsonTemplate"
 	"github.com/wplib/deploywp/ux"
 )
 
 
-// releaseCmd represents the release command
-var helpersCmd = &cobra.Command{
-	Use:   "helpers",
-	Short: ux.SprintfBlue("Show all built-in template helpers."),
-	Long: ux.SprintfBlue(`...`),
-	Run: Helpers,
-}
-
 func init() {
 	rootCmd.AddCommand(helpersCmd)
 }
 
+
+var helpersCmd = &cobra.Command{
+	Use:   cmdHelpers,
+	Short: ux.SprintfBlue("Show all built-in template helpers."),
+	Long: ux.SprintfBlue(`...`),
+	Run: Helpers,
+}
 func Helpers(cmd *cobra.Command, args []string) {
 	for range OnlyOnce {
-		var tmpl *jsonTemplate.Template
+		//Cmd.State = ux.NewState(Cmd.Debug)
+		var tmpl *jsonTemplate.ArgTemplate
 
-		tmpl, _ = ProcessArgs(cmd, args)
+		tmpl = ProcessArgs(cmd, args)
 		// Ignore errors as there's no args.
-		_ = tmpl.SetVersion(Version)
+		_ = tmpl.SetVersion(defaults.BinaryVersion)
 
 		 tmpl.PrintHelpers()
 	}

@@ -100,21 +100,20 @@ func (g *HelperGit) Exec(cmd string, args ...string) *ux.State {
 		//if c == nil {
 		//	break
 		//}
-		//g.Cmd.Exe = *c
+		//g.Cmd.exe = *c
 		//
 		//a := helperTypes.ReflectStrings(args...)
 		//if a == nil {
 		//	break
 		//}
 		//
-		//g.Cmd.Args = []string{}
-		//g.Cmd.Args = append(g.Cmd.Args, g.GitOptions...)
-		//g.Cmd.Args = append(g.Cmd.Args, *a...)
+		//g.Cmd.args = []string{}
+		//g.Cmd.args = append(g.Cmd.args, g.GitOptions...)
+		//g.Cmd.args = append(g.Cmd.args, *a...)
 
-		g.Cmd.Exe = cmd
-		g.Cmd.Args = []string{}
-		g.Cmd.Args = append(g.Cmd.Args, g.GitOptions...)
-		g.Cmd.Args = append(g.Cmd.Args, args...)
+		g.Cmd.SetPath(cmd)
+		g.Cmd.AddArgs(g.GitOptions...)
+		g.Cmd.SetArgs(args...)
 
 		for range OnlyOnce {
 			if g.skipDirCheck {
@@ -131,7 +130,7 @@ func (g *HelperGit) Exec(cmd string, args ...string) *ux.State {
 			}
 		}
 
-		out, err := g.client.Exec(g.Cmd.Exe, g.Cmd.Args...)
+		out, err := g.client.Exec(g.Cmd.GetExe(), g.Cmd.GetArgs()...)
 		g.State.SetOutput(out)
 		g.State.OutputTrim()
 		g.State.SetError(err)

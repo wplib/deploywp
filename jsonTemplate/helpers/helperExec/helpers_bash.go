@@ -13,13 +13,13 @@ func HelperExecBash(cmd ...interface{}) *ux.State {
 	ret := NewExecCommand(false)
 
 	for range OnlyOnce {
-		ret.Exe = "bash"
-		ret.Args = []string{"-c"}
+		ret.exe = "bash"
+		ret.args = []string{"-c"}
 
 		a := helperTypes.ReflectStrings(cmd...)
-		ret.Args = append(ret.Args, *a...)
+		ret.args = append(ret.args, *a...)
 
-		ret = ExecCommand(ret)
+		ret = execCommand(ret)
 	}
 
 	return ret.State
@@ -30,11 +30,11 @@ func HelperNewBash(cmd ...interface{}) *HelperExecCommand {
 	ret := NewExecCommand(false)
 
 	for range OnlyOnce {
-		ret.Exe = "bash"
-		ret.Args = []string{"-c"}
+		ret.exe = "bash"
+		ret.args = []string{"-c"}
 
 		a := helperTypes.ReflectStrings(cmd...)
-		ret.Args = append(ret.Args, *a...)
+		ret.args = append(ret.args, *a...)
 	}
 
 	return ret.Reflect()
@@ -54,7 +54,7 @@ func (e *HelperExecCommand) AppendCommands(cmd ...interface{}) *ux.State {
 
 	for range OnlyOnce {
 		a := helperTypes.ReflectStrings(cmd...)
-		e.Args = append(e.Args, *a...)
+		e.args = append(e.args, *a...)
 	}
 
 	return e.State
@@ -77,10 +77,10 @@ func (e *HelperExecCommand) Run() *ux.State {
 		}
 		defer os.Remove(file.Name())
 
-		e.Exe = "bash"
-		e.Args = []string{"-c"}
+		e.exe = "bash"
+		e.args = []string{"-c"}
 
-		e = ExecCommand(e.Reflect()).Reflect()
+		e = execCommand(e.Reflect()).Reflect()
 	}
 
 	return e.State

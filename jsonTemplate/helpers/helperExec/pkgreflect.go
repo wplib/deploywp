@@ -11,7 +11,7 @@ var Types = map[string]reflect.Type{
 }
 
 var Functions = map[string]reflect.Value{
-	"ExecCommand": reflect.ValueOf(ExecCommand),
+	"ExecCommand": reflect.ValueOf(execCommand),
 	"HelperExec": reflect.ValueOf(HelperExec),
 	"HelperExecBash": reflect.ValueOf(HelperExecBash),
 	"HelperExecCmd": reflect.ValueOf(HelperExecCmd),
@@ -27,5 +27,6 @@ var Variables = map[string]reflect.Value{
 
 var Consts = map[string]reflect.Value{
 	"HelperPrefix": reflect.ValueOf(HelperPrefix),
+	"OnlyOnce": reflect.ValueOf(OnlyOnce),
 }
 

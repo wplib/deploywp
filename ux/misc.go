@@ -43,7 +43,7 @@ func _Printf2(format string, args ...interface{}) {
 		fmt.Printf("l.Dy: %v\n", l.Dy())
 
 		//foo1 := l.Bounds()
-		//foo2 := l.Output()
+		//foo2 := l.output()
 		//fmt.Printf("l: %v\n", foo1)
 		//fmt.Printf("l: %v\n", foo2)
 

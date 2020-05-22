@@ -103,7 +103,7 @@ func (e *TypeDeployWp) Run() *ux.State {
 
 	for range OnlyOnce {
 		ux.PrintfBlue("%s v%s\n", e.Exec.CmdFile, e.Exec.CmdVersion)
-		ux.PrintfGreen("Args: %s\n", e.Exec.GetArgs())
+		ux.PrintfGreen("args: %s\n", e.Exec.GetArgs())
 		ux.PrintfWhite("\n\n")
 
 

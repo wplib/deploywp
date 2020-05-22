@@ -1,17 +1,27 @@
 package cmd
 
 const (
-	Version = "0.9"
+	defaultJsonFile 		= "deploywp.json"
+	defaultTemplateFile 	= "deploywp.tmpl"
+	defaultOutFile 			= "-"
 
-	argJsonFile = "json"
-	argTemplateFile = "template"
-	argDebug = "debug"
-	argConfigFile = "config"
-	argChdir = "chdir"
+	defaultJsonFileSuffix 		= ".json"
+	defaultTemplateFileSuffix 	= ".tmpl"
 
-	defaultTemplateFileSuffix = ".tmpl"
-	defaultJsonFileSuffix = ".json"
+	cmdVersion 			= "version"
+	cmdLoad 			= "load"
+	cmdRun 				= "run"
+	cmdHelpers 			= "helpers"
 
-	defaultTemplateFile = "deploywp.tmpl"
-	defaultJsonFile = "deploywp.json"
+	flagConfigFile  	= "config"
+
+	flagJsonFile     	= "json"
+	flagTemplateFile	= "template"
+	flagOutputFile	    = "out"
+
+	flagChdir       	= "chdir"
+	flagQuiet 			= "quiet"
+	flagVersion 		= "version"
+	flagDebug 			= "debug"
+	flagDryRun			= "dryrun"
 )

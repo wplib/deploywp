@@ -38,5 +38,6 @@ var Consts = map[string]reflect.Value{
 	"HelperPrefix": reflect.ValueOf(HelperPrefix),
 	"LockMsg": reflect.ValueOf(LockMsg),
 	"LockTag": reflect.ValueOf(LockTag),
+	"OnlyOnce": reflect.ValueOf(OnlyOnce),
 }
 

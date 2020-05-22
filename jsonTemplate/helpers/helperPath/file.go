@@ -4,6 +4,7 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/ux"
 	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -30,8 +31,8 @@ func (p *TypeOsPath) AppendContents(data ...interface{}) {
 		for _, d := range data {
 			//value := reflect.ValueOf(d)
 			//switch value.Kind() {
-			//	case reflect.Output:
-			//		p._Array = append(p._Array, value.Output())
+			//	case reflect.output:
+			//		p._Array = append(p._Array, value.output())
 			//	case reflect.Array:
 			//		p._Array = append(p._Array, d.([]string)...)
 			//	case reflect.Slice:
@@ -90,6 +91,7 @@ func (p *TypeOsPath) ReadFile() *ux.State {
 		p.State.Clear()
 
 		if !p.IsValid() {
+			p.State.SetWarning("path is invalid")
 			break
 		}
 
@@ -128,6 +130,7 @@ func (p *TypeOsPath) WriteFile() *ux.State {
 		p.State.Clear()
 
 		if !p.IsValid() {
+			p.State.SetWarning("path is invalid")
 			break
 		}
 
@@ -172,6 +175,102 @@ func (p *TypeOsPath) WriteFile() *ux.State {
 		}
 
 		p.State.SetOk("file '%s' written OK", p._Path)
+	}
+
+	return p.State
+}
+
+
+func (p *TypeOsPath) OpenFile() *ux.State {
+	for range OnlyOnce {
+		p.State.SetFunction("")
+		p.State.Clear()
+
+		if !p.IsValid() {
+			p.State.SetWarning("path is invalid")
+			break
+		}
+
+		for range OnlyOnce {
+			p.StatPath()
+			if p._IsDir {
+				p.State.SetError("path '%s' is a directory", p._Path)
+				break
+			}
+			if p.NotExists() {
+				p.State.Clear()
+				break
+			}
+			if p._CanOverwrite {
+				break
+			}
+
+			if !helperSystem.HelperUserPromptBool("Overwrite file '%s'? (Y|N) ", p._Path) {
+				p.State.SetWarning("not overwriting file '%s'", p._Path)
+				break
+			}
+			p.State.Clear()
+		}
+		if p.State.IsNotOk() {
+			break
+		}
+
+
+		if p._Mode == 0 {
+			p._Mode = 0644
+		}
+
+
+		var err error
+		p.fileHandle, err = os.Create(p._Path)
+		if err != nil {
+			p.State.SetError("Cannot open file '%s' for writing - %s", p._Path, err)
+			break
+		}
+
+		p.State.Response = p.fileHandle
+
+		p.State.SetOk("File '%s' opened OK", p._Path)
+	}
+
+	return p.State
+}
+
+
+func (p *TypeOsPath) GetFileHandle() (*os.File, *ux.State) {
+	for range OnlyOnce {
+		p.State.SetFunction("")
+		p.State.Clear()
+
+		if !p.IsValid() {
+			p.State.SetWarning("path is invalid")
+			break
+		}
+
+		p.State.Response = p.fileHandle
+	}
+
+	return p.fileHandle, p.State
+}
+
+
+func (p *TypeOsPath) CloseFile() *ux.State {
+	for range OnlyOnce {
+		p.State.SetFunction("")
+		p.State.Clear()
+
+		var err error
+		err = p.fileHandle.Sync()
+		if err != nil {
+			p.State.SetWarning("Error when syncing file '%s' - ", p._Path, err)
+		}
+
+		err = p.fileHandle.Close()
+		if err != nil {
+			p.State.SetWarning("Error when closing file '%s' - ", p._Path, err)
+		}
+
+		p.State.SetOk("File '%s' closed OK", p._Path)
 	}
 
 	return p.State

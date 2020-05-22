@@ -34,7 +34,7 @@ func HelperNewPath(file ...interface{}) *TypeOsPath {
 
 		f := ReflectPath(file...)
 		if f == nil {
-			ret.State.SetError("path empty")
+			ret.State.SetOk("path empty")
 			break
 		}
 

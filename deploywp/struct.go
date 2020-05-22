@@ -23,7 +23,7 @@ type TypeDeployWp struct {
 }
 
 type Runtime struct {
-	Exec runtime.Exec
+	Exec *runtime.Exec
 }
 
 

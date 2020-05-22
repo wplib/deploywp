@@ -3,7 +3,7 @@ package helpers
 import (
 	"fmt"
 	"github.com/Masterminds/sprig"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/deploywp"
+	"github.com/wplib/deploywp/deploywp"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperCopy"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperExec"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGit"
@@ -25,8 +25,8 @@ const OnlyOnce = "1"
 
 // This method will auto-import exported helper functions within each helper package.
 // You need to run `pkgreflect jsonTemplate/helpers` after code changes.
-func DiscoverHelpers() (template.FuncMap, error) {
-	var err error
+func DiscoverHelpers() *ux.State {
+	state := ux.NewState(false)
 	var tfm template.FuncMap
 
 	for range OnlyOnce {
@@ -70,7 +70,8 @@ func DiscoverHelpers() (template.FuncMap, error) {
 		}
 	}
 
-	return tfm, err
+	state.Response = tfm
+	return state
 }
 
 
@@ -80,12 +81,17 @@ func PrintHelpers() string {
 	var ret string
 
 	for range OnlyOnce {
-		tfm, _ := DiscoverHelpers()
-
 		ret += ux.SprintfCyan("List of defined template functions:\n")
 
+		tfm := DiscoverHelpers()
+		if tfm.IsNotOk() {
+			ret += ux.SprintfRed("Error discovering helpers.\n")
+			break
+		}
+
+
 		files := make(Files)
-		for name, fn := range tfm {
+		for name, fn := range tfm.Response.(template.FuncMap) {
 			helper := _GetFunctionInfo(fn)
 
 			if _, ok := files[helper.File]; !ok {
@@ -105,7 +111,7 @@ func PrintHelpers() string {
 					ux.SprintfYellow(hp.Return),
 					)
 
-				// fmt.Printf("%s\n\tArgs: %s\n\tReturn: %s\n", hp.Function, hp.Args, hp.Return)
+				// fmt.Printf("%s\n\targs: %s\n\tReturn: %s\n", hp.Function, hp.args, hp.Return)
 			}
 		}
 	}

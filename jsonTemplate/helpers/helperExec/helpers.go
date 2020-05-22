@@ -32,10 +32,10 @@ func HelperExecCmd(cmd ...interface{}) *ux.State {
 		if ec == nil {
 			break
 		}
-		ret.Exe = ec.Exe
-		ret.Args = ec.Args
+		ret.exe = ec.exe
+		ret.args = ec.args
 
-		ret = ExecCommand(ret)
+		ret = execCommand(ret)
 	}
 
 	return ret.State

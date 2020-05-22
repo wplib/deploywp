@@ -32,6 +32,7 @@ type TypeOsPath struct {
 	_String       string
 	_Array        []string
 	_Separator    string
+	fileHandle    *os.File
 
 	_Valid        bool
 	_CanOverwrite bool
@@ -116,7 +117,7 @@ func (p *TypeOsPath) _AppendLocalPath(path ...string) bool {
 			p.State.SetError("src path empty")
 			break
 		}
-		p._Valid = true
+		//p._Valid = true
 		p._Remote = false
 
 		// Reset these until a later StatPath()
@@ -182,6 +183,12 @@ func (p *TypeOsPath) SetModTime(time time.Time) {
 }
 func (p *TypeOsPath) GetModTime() time.Time {
 	return p._ModTime
+}
+func (p *TypeOsPath) GetModTimeString() string {
+	return p._ModTime.Format("2006-01-02T15:04:05-0700")
+}
+func (p *TypeOsPath) GetModTimeEpoch() int64 {
+	return p._ModTime.Unix()
 }
 
 
@@ -312,6 +319,9 @@ func (p *TypeOsPath) IsValid() bool {
 	return p._Valid
 }
 func (p *TypeOsPath) IsInvalid() bool {
+	return !p.IsValid()
+}
+func (p *TypeOsPath) IsNotValid() bool {
 	return !p.IsValid()
 }
 
