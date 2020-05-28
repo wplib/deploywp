@@ -1,0 +1,19 @@
+FROM composer
+RUN composer global require pantheon-systems/terminus
+ENV PATH="/tmp/vendor/bin:${PATH}"
+ENV TERMINUS_USER_HOME=/tmp
+
+STOPSIGNAL SIGUSR1
+
+RUN apk add --update py-pip mysql-client bash apk-cron util-linux jq && \
+    pip install awscli && \
+    rm -fR /var/cache/apk/*
+
+COPY /files /
+
+RUN chmod 400 /root/.ssh/* && \
+    chmod 700 /root/.ssh
+
+ENTRYPOINT ["/bin/bash", "/app/export-import.sh"]
+
+RUN ls

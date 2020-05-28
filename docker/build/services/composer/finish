@@ -1,0 +1,9 @@
+#!/bin/bash -l
+# WARNING: This file has been auto-generated. DO NOT EDIT: WARNING
+# Created on 2020-04-27T15:46:35+1000, using template:finish.tmpl and json:gearbox.json
+
+# Required to avoid services starting too quickly.
+sleep 5
+
+c_ok "Stopped."
+

@@ -1,0 +1,39 @@
+{
+	"schema": "gear-1",
+	"meta": {
+		"state": "production",
+		"organization": "gearboxworks",
+		"name": "pantheon",
+		"label": "Pantheon",
+		"maintainer": "Gearbox Team <team@gearbox.works>",
+		"class": "admin",
+		"refurl": "https://gearboxworks.io/"
+	},
+	"build": {
+		"ports": {
+			"http": "80"
+		},
+		"run": "",
+		"args": "",
+		"env": {
+			"PANTHEON_USER": "gearbox"
+		},
+		"network": "--network gearboxnet",
+		"volumes": "",
+		"restart": "--restart no"
+	},
+	"run": {
+	},
+	"project": {
+	},
+	"extensions": {
+	},
+	"versions": {
+		"1.0.0": {
+			"majorversion": "1.0",
+			"latest": true,
+			"ref": "php:7.3-alpine3.11",
+			"base": "gearboxworks/gearbox-base:alpine-3.11"
+		}
+	}
+}

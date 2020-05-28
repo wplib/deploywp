@@ -1,0 +1,78 @@
+ARG VERSION=0.9
+
+# 1. First reference the gearbox-base image.
+FROM gearboxworks/gearbox-base:alpine-3.11 as gearbox-base
+
+# 2. Next reference the third party image.
+FROM php:7.3-alpine3.11
+ARG VERSION
+ARG GEARBOX_ENTRYPOINT
+ARG GEARBOX_ENTRYPOINT_ARGS
+USER root
+
+# 3. Copy the build directory over from gearbox-base image.
+COPY --from=gearbox-base /etc/gearbox /etc/gearbox
+
+# 4. Set up env variables.
+MAINTAINER Gearbox Team <team@gearbox.works>
+ENV GEARBOX_CONTAINER_NAME "docker-pantheon"
+ENV GEARBOX_CONTAINER_VERSION ${VERSION}
+ENV GEARBOX_ENTRYPOINT ${GEARBOX_ENTRYPOINT}
+ENV GEARBOX_ENTRYPOINT_ARGS ${GEARBOX_ENTRYPOINT_ARGS}
+LABEL gearbox.json='{"schema": "gear-1","meta": {"state": "production","organization": "gearboxworks","name": "pantheon","label": "Pantheon","maintainer": "Gearbox Team <team@gearbox.works>","class": "admin","refurl": "https://gearboxworks.io/"},"build": {"ports": {"http": "80"},"run": "","args": "","env": {"PANTHEON_USER": "gearbox"},"network": "--network gearboxnet","volumes": "","restart": "--restart no"},"run": {},"project": {},"extensions": {},"versions": {"1.0.0": {"majorversion": "1.0","latest": true,"ref": "php:7.3-alpine3.11","base": "gearboxworks/gearbox-base:alpine-3.11"}}}'
+LABEL gearbox.version='1.0.0'
+ENV GEARBOX_VERSION "1.0.0"
+LABEL container.class="admin"
+ENV GEARBOX_CLASS "admin"
+LABEL container.label="Pantheon"
+ENV GEARBOX_LABEL "Pantheon"
+LABEL container.maintainer="Gearbox Team <team@gearbox.works>"
+ENV GEARBOX_MAINTAINER "Gearbox Team <team@gearbox.works>"
+LABEL container.name="pantheon"
+ENV GEARBOX_NAME "pantheon"
+LABEL container.organization="gearboxworks"
+ENV GEARBOX_ORGANIZATION "gearboxworks"
+LABEL container.refurl="https://gearboxworks.io/"
+ENV GEARBOX_REFURL "https://gearboxworks.io/"
+LABEL container.state="production"
+ENV GEARBOX_STATE "production"
+LABEL container.args=""
+ENV GEARBOX_ARGS ""
+# SKIP env
+LABEL container.network="--network gearboxnet"
+ENV GEARBOX_NETWORK "--network gearboxnet"
+LABEL container.ports="map[http:80]"
+ENV GEARBOX_PORTS "map[http:80]"
+LABEL container.restart="--restart no"
+ENV GEARBOX_RESTART "--restart no"
+LABEL container.run=""
+ENV GEARBOX_RUN ""
+LABEL container.volumes=""
+ENV GEARBOX_VOLUMES ""
+LABEL container.base="gearboxworks/gearbox-base:alpine-3.11"
+ENV GEARBOX_BASE "gearboxworks/gearbox-base:alpine-3.11"
+LABEL container.latest="true"
+ENV GEARBOX_LATEST "true"
+LABEL container.majorversion="1.0"
+ENV GEARBOX_MAJORVERSION "1.0"
+LABEL container.ref="php:7.3-alpine3.11"
+ENV GEARBOX_REF "php:7.3-alpine3.11"
+ENV PANTHEON_USER "gearbox"
+
+# 5. Now copy the local files specific to this container.
+COPY docker/build /etc/gearbox
+
+# 6. Run the base.sh script to set everything up.
+RUN /bin/sh /etc/gearbox/build/base.sh
+
+# 7. Run the pantheon.sh script to set everything up.
+RUN /bin/sh /etc/gearbox/build/pantheon.sh
+
+# 8. Expose ports.
+EXPOSE 22 9970 80 
+WORKDIR /home/gearbox/projects
+
+CMD ["/init"]
+
+# END
+################################################################################

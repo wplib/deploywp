@@ -1,5 +1,4 @@
 .*.swp
-/.misc
-/bin
-/docker
-/dist
+dist/
+bin/
+buildtools/*/*

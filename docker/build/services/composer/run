@@ -1,0 +1,21 @@
+#!/bin/bash -l
+# WARNING: This file has been auto-generated. DO NOT EDIT: WARNING
+# Created on 2020-04-27T15:46:35+1000, using template:run.tmpl and json:gearbox.json
+
+c_ok "Starting."
+
+cd /home/gearbox/projects/default
+
+GBEP="$(which ${GEARBOX_ENTRYPOINT})"
+if [ "${GBEP}" != "" ]
+then
+	${GEARBOX_ENTRYPOINT_ARGS} ${GEARBOX_ARGS}
+else
+	# Add your service entry here, if no entrypoint defined in the ref container.
+	GBRUN="$(which ${GEARBOX_RUN})"
+	if [ "${GBRUN}" != "" ]
+	then
+		${GBRUN} ${GEARBOX_ARGS}
+	fi
+fi
+
