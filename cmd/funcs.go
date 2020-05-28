@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/wplib/deploywp/jsonTemplate"
+	"github.com/wplib/deploywp/jtc"
 	"strings"
 )
 
 
-func ProcessArgs(cmd *cobra.Command, args []string) *jsonTemplate.ArgTemplate {
-	tmpl := jsonTemplate.NewArgTemplate()
+func ProcessArgs(cmd *cobra.Command, args []string) *jtc.ArgTemplate {
+	tmpl := jtc.NewArgTemplate()
 
 	for range OnlyOnce {
 		var err error

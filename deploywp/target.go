@@ -2,7 +2,7 @@ package deploywp
 
 import (
 	"github.com/jinzhu/copier"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
+	"github.com/wplib/deploywp/jtc/helpers/helperTypes"
 	"github.com/wplib/deploywp/ux"
 )
 

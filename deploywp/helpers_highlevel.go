@@ -1,9 +1,9 @@
 package deploywp
 
 import (
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperGit"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
-	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
+	"github.com/wplib/deploywp/jtc/helpers/helperGit"
+	"github.com/wplib/deploywp/jtc/helpers/helperPath"
+	"github.com/wplib/deploywp/jtc/helpers/helperSystem"
 	"github.com/wplib/deploywp/ux"
 )
 

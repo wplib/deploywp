@@ -22,7 +22,7 @@ var runCmd = &cobra.Command{
 func Run(cmd *cobra.Command, args []string) {
 	for range OnlyOnce {
 		//Cmd.State = ux.NewState(Cmd.Debug)
-		//var tmpl *jsonTemplate.ArgTemplate
+		//var tmpl *jtc.ArgTemplate
 
 		tmpl := ProcessArgs(rootCmd, args)
 		Cmd.State = tmpl.State

@@ -20,7 +20,7 @@ var helpersCmd = &cobra.Command{
 func Helpers(cmd *cobra.Command, args []string) {
 	for range OnlyOnce {
 		//Cmd.State = ux.NewState(Cmd.Debug)
-		//var tmpl *jsonTemplate.ArgTemplate
+		//var tmpl *jtc.ArgTemplate
 
 		tmpl := ProcessArgs(rootCmd, args)
 		// Ignore errors as there's no args.

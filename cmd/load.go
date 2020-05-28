@@ -21,7 +21,7 @@ var loadCmd = &cobra.Command{
 func LoadTemplate(cmd *cobra.Command, args []string) {
 	for range OnlyOnce {
 		//Cmd.State = ux.NewState(Cmd.Debug)
-		//var tmpl *jsonTemplate.ArgTemplate
+		//var tmpl *jtc.ArgTemplate
 
 		/*
 		Allow this to be used as a UNIX script.

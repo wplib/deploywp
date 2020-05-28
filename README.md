@@ -6,7 +6,7 @@ App for deploying a WordPress site to Pantheon
 This package is a fork from JsonToConfig initially and provides a simple framework of "helpers", with all methods visible in both GoLang native and GoLang templates.
 
 ## Structure
-helper packages are defined within the jsonTemplate/helpers directory. All methods and functions are pulled in automatically on build using `pkgreflect`.
+helper packages are defined within the jtc/helpers directory. All methods and functions are pulled in automatically on build using `pkgreflect`.
 
 Each helper directory is divided into `frontend` and `backend` methods/functions.
 
