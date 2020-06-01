@@ -6,6 +6,7 @@ import "reflect"
 
 var Types = map[string]reflect.Type{
 	"Environment": reflect.TypeOf((*Environment)(nil)).Elem(),
+	"Prompt": reflect.TypeOf((*Prompt)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
@@ -14,6 +15,8 @@ var Functions = map[string]reflect.Value{
 	"HelperUserPromptBool": reflect.ValueOf(HelperUserPromptBool),
 	"HelperUserPromptHidden": reflect.ValueOf(HelperUserPromptHidden),
 	"PrintEnv": reflect.ValueOf(PrintEnv),
+	"UserPrompt": reflect.ValueOf(UserPrompt),
+	"UserPromptHidden": reflect.ValueOf(UserPromptHidden),
 }
 
 var Variables = map[string]reflect.Value{

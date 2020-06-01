@@ -8,9 +8,11 @@ var Types = map[string]reflect.Type{
 	"Files": reflect.TypeOf((*Files)(nil)).Elem(),
 	"Helper": reflect.TypeOf((*Helper)(nil)).Elem(),
 	"Helpers": reflect.TypeOf((*Helpers)(nil)).Elem(),
+	"SortedHelpers": reflect.TypeOf((*SortedHelpers)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
+	"AddHelpers": reflect.ValueOf(AddHelpers),
 	"DiscoverHelpers": reflect.ValueOf(DiscoverHelpers),
 	"PrintHelpers": reflect.ValueOf(PrintHelpers),
 }

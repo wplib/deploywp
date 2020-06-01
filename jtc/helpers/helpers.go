@@ -16,6 +16,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"sort"
 	"strings"
 	"text/template"
 )
@@ -75,6 +76,23 @@ func DiscoverHelpers() *ux.State {
 }
 
 
+// @TODO - Add the ability to import from an external package.
+// You need to run `pkgreflect jtc/helpers` after code changes.
+func AddHelpers(i interface{}) *ux.State {
+	state := ux.NewState(false)
+	var tfm template.FuncMap
+
+	for range OnlyOnce {
+		//for name, fn := range deploywp.GetHelpers {
+		//	tfm[name] = fn
+		//}
+	}
+
+	state.Response = tfm
+	return state
+}
+
+
 // This method will print exported helper functions within each helper package.
 // You need to run `pkgreflect jtc/helpers` after code changes.
 func PrintHelpers() string {
@@ -104,7 +122,16 @@ func PrintHelpers() string {
 
 		for fn, fp := range files {
 			ret += ux.SprintfWhite("\n# Helper functions within: %s\n", fn)
-			for _, hp := range fp {
+
+			// To store the keys in slice in sorted order
+			var keys SortedHelpers
+			for _, k := range fp {
+				keys = append(keys, k)
+			}
+			sort.Slice(keys, keys.Less)
+
+			//for _, hp := range fp {
+			for _, hp := range keys {
 				ret += fmt.Sprintf("%s( %s )\t=> ( %s )\n",
 					ux.SprintfGreen(hp.Name),
 					ux.SprintfCyan(hp.Args),
@@ -114,9 +141,14 @@ func PrintHelpers() string {
 				// fmt.Printf("%s\n\targs: %s\n\tReturn: %s\n", hp.Function, hp.args, hp.Return)
 			}
 		}
+
+		ret += ux.SprintfBlue("\nSee http://masterminds.github.io/sprig/ for additional functions...\n")
 	}
 
 	return ret
+}
+func (a SortedHelpers) Less(i, j int) bool {
+	return a[i].Name < a[j].Name
 }
 
 
@@ -163,3 +195,4 @@ type Helper struct {
 }
 type Helpers map[string]Helper
 type Files map[string]Helpers
+type SortedHelpers []Helper

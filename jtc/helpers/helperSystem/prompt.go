@@ -1,86 +1,26 @@
 package helperSystem
 
 import (
-	"bufio"
 	"fmt"
-	"golang.org/x/crypto/ssh/terminal"
-	"os"
-	"strings"
-	"syscall"
 )
 
+// @TODO - This is a workaround for the duplicates that appear with pkgreflect.
 
-// Usage:
-//		{{ $str := UserPrompt "Enter something %s:" "here" }}
-func HelperUserPrompt(prompt string, args ...interface{}) string {
-	var ret string
+type Prompt string
 
-	for range OnlyOnce {
-		fmt.Printf(prompt, args...)
 
-		r := bufio.NewReader(os.Stdin)
-
-		var err error
-		ret, err = r.ReadString('\n')
-		fmt.Printf("\n")
-		if err != nil {
-			break
-		}
-
-		ret = strings.TrimSuffix(ret, "\n")
-	}
-
-	return ret
+func UserPrompt(prompt string, args ...interface{}) string {
+	var p Prompt
+	p.Set(prompt, args)
+	return p.UserPrompt()
+}
+func (me *Prompt) Set(prompt string, args ...interface{}) {
+	*me = Prompt(fmt.Sprintf(prompt, args...))
 }
 
 
-// Usage:
-//		{{ $str := UserPromptHidden "Enter something %s:" "here" }}
-func HelperUserPromptHidden(prompt string, args ...interface{}) string {
-	var ret string
-
-	for range OnlyOnce {
-		fmt.Printf(prompt, args...)
-
-		hidden, err := terminal.ReadPassword(syscall.Stdin)
-		fmt.Printf("\n")
-		if err != nil {
-			break
-		}
-
-		ret = strings.TrimSuffix(string(hidden), "\n")
-	}
-
-	return ret
-}
-
-
-// Usage:
-//		{{ $str := UserPrompt "Enter something %s:" "here" }}
-func HelperUserPromptBool(prompt string, args ...interface{}) bool {
-	var ret bool
-
-	for range OnlyOnce {
-		fmt.Printf(prompt, args...)
-
-		r := bufio.NewReader(os.Stdin)
-
-		str, err := r.ReadString('\n')
-		fmt.Printf("\n")
-		if err != nil {
-			break
-		}
-		str = strings.TrimSpace(str)
-
-		switch strings.ToUpper(str) {
-			case "TRUE":
-				fallthrough
-			case "YES":
-				fallthrough
-			case "Y":
-				ret = true
-		}
-	}
-
-	return ret
+func UserPromptHidden(prompt string, args ...interface{}) string {
+	var p Prompt
+	p.Set(prompt, args)
+	return p.UserPromptHidden()
 }
