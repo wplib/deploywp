@@ -1,7 +1,7 @@
 package deploywp
 
 import (
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/JsonToConfig/ux"
 	"path/filepath"
 )
 

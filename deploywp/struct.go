@@ -1,8 +1,8 @@
 package deploywp
 
 import (
+	"github.com/newclarity/JsonToConfig/ux"
 	"github.com/wplib/deploywp/cmd/runtime"
-	"github.com/wplib/deploywp/ux"
 )
 
 const OnlyOnce = "1"
@@ -45,7 +45,7 @@ func NewJsonFile() *TypeDeployWp {
 	var jf TypeDeployWp
 
 	jf.State = ux.NewState(false)
-	jf.Runtime = Runtime{}
+	jf.Runtime.Exec = runtime.NewExec()
 
 	jf.Hosts.New()
 	jf.Source.New()

@@ -3,13 +3,104 @@
   <component name="ChangeListManager">
     <list default="true" id="56b4b170-76f7-4ada-8cff-27bcfeafc366" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperExec/helpers_test.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/pkgreflect.go" beforeDir="false" afterPath="$PROJECT_DIR$/jtc/helpers/helperSystem/pkgreflect.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/prompt.go" beforeDir="false" afterPath="$PROJECT_DIR$/jtc/helpers/helperSystem/prompt.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jtc/helpers/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/jtc/helpers/helpers.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jtc/helpers/pkgreflect.go" beforeDir="false" afterPath="$PROJECT_DIR$/jtc/helpers/pkgreflect.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ux/state.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/state.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ux/ux.go" beforeDir="false" afterPath="$PROJECT_DIR$/ux/ux.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/const.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/funcs.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/funcs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/load.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/load.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/root.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/root.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/run.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/run.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/runtime/structs.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/runtime/structs.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/version.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/version.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/helpers_highlevel.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/helpers_highlevel.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/helpers_workflow.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/helpers_workflow.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/hosts.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/hosts.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/paths.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/paths.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/source.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/source.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/source_build.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/source_build.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/source_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/source_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/source_revision.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/source_revision.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/struct.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/target.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/target.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/target_files.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/target_files.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/target_providers.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/target_providers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/target_revisions.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/target_revisions.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/files.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperCopy/copy.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperCopy/helpers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperCopy/helpers_rsync.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperCopy/init.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperCopy/pkgreflect.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperCopy/struct.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperCopy/struct_method.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperCopy/struct_path.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperExec/funcs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperExec/helpers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperExec/helpers_bash.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperExec/helpers_test.go.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperExec/init.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperExec/pkgreflect.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperExec/struct.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/const.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/funcs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/helpers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/helpers_branch.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/helpers_commit.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/helpers_const.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/helpers_exec.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/helpers_files.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/helpers_pull.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/helpers_repository.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/init.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/pkgreflect.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGit/struct.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGitHub/github.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGitHub/github_branch.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGitHub/github_repository.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGitHub/init.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperGitHub/pkgreflect.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperPath/dir.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperPath/file.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperPath/funcs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperPath/helpers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperPath/helpers_dir.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperPath/helpers_file.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperPath/init.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperPath/pkgreflect.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperPath/remove.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperPath/stat.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperPath/struct.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/env.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/error.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/file.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/funcs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/helpers_prompt.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/init.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/io.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/pkgreflect.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/prompt.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/prompt_darwin.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/prompt_linux.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/prompt_windows.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperSystem/system.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperTypes/arrays.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperTypes/init.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperTypes/numbers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperTypes/pkgreflect.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperTypes/reflects.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperTypes/strings.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperUx/init.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperUx/pkgreflect.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperUx/state.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helperUx/ux.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/helpers.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/helpers/pkgreflect.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/structs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/structs_json.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/jtc/template.go" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,7 +151,7 @@
       <module name="deploywp-code" />
       <working_directory value="$PROJECT_DIR$" />
       <go_parameters value="-i" />
-      <parameters value="-c --json tests/deploywp.json run prod" />
+      <parameters value="-c --json tests/deploywp.json build prod" />
       <kind value="DIRECTORY" />
       <filePath value="$PROJECT_DIR$/" />
       <package value="github.com/wplib/deploywp" />
@@ -95,11 +186,11 @@
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="964" y="367" key="#Go_Modules/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589158017843" />
-    <state x="-1292" y="196" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1590366325957">
-      <screen x="-1920" y="23" width="1920" height="1057" />
+    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591013784759">
+      <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="-1292" y="196" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1590366325957" />
-    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590154348202" />
+    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591013784759" />
     <state x="931" y="363" width="470" height="483" key="#com.intellij.tools.ToolEditorDialog" timestamp="1589190675421">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
@@ -108,46 +199,46 @@
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="746" y="84" key="#docker/Dockerfile/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589870918807" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.bottom" timestamp="1590208024113">
+    <state width="1701" height="1013" key="GridCell.Tab.0.bottom" timestamp="1591015617190">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590208024113" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.center" timestamp="1590208024112">
+    <state width="1701" height="1013" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591015617190" />
+    <state width="1701" height="1013" key="GridCell.Tab.0.center" timestamp="1591015617189">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179263" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590208024112" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.left" timestamp="1590208024112">
+    <state width="1701" height="1013" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591015617189" />
+    <state width="1701" height="1013" key="GridCell.Tab.0.left" timestamp="1591015617188">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179263" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590208024112" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.right" timestamp="1590208024113">
+    <state width="1701" height="1013" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591015617188" />
+    <state width="1701" height="1013" key="GridCell.Tab.0.right" timestamp="1591015617189">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590208024113" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.bottom" timestamp="1590208024114">
+    <state width="1701" height="1013" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591015617189" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.bottom" timestamp="1591015600182">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179265" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590208024114" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.center" timestamp="1590208024113">
+    <state width="1701" height="1013" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591015600182" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.center" timestamp="1591015600182">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590208024113" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.left" timestamp="1590208024113">
+    <state width="1701" height="1013" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591015600182" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.left" timestamp="1591015600181">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590208024113" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.right" timestamp="1590208024114">
+    <state width="1701" height="1013" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591015600181" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.right" timestamp="1591015600182">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179265" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1590208024114" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591015600182" />
     <state width="756" height="503" key="XDebugger.FullValuePopup" timestamp="1590150339059">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
@@ -225,29 +316,44 @@
           <option name="timeStamp" value="505" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/cmd/run.go</url>
-          <line>26</line>
-          <option name="timeStamp" value="518" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/cmd/run.go</url>
-          <line>33</line>
-          <option name="timeStamp" value="540" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/jsonTemplate/template.go</url>
           <line>51</line>
           <option name="timeStamp" value="542" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/cmd/load.go</url>
-          <line>30</line>
+          <line>25</line>
           <option name="timeStamp" value="546" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/cmd/root.go</url>
-          <line>40</line>
+          <line>92</line>
           <option name="timeStamp" value="547" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/helpers.go</url>
+          <line>30</line>
+          <option name="timeStamp" value="550" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jtcLAST/template.go</url>
+          <line>95</line>
+          <option name="timeStamp" value="552" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jtc/helpers/helperPath/helpers_file.go</url>
+          <line>40</line>
+          <option name="timeStamp" value="553" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/jtc/helpers/helperPath/file.go</url>
+          <line>134</line>
+          <option name="timeStamp" value="554" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/helpers_workflow.go</url>
+          <line>103</line>
+          <option name="timeStamp" value="568" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

@@ -1,7 +1,7 @@
 package deploywp
 
 import (
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/JsonToConfig/ux"
 	"time"
 )
 
@@ -91,7 +91,7 @@ import (
         - git commit -m 'Use commit message from deploy.functions.sh:236' .
                 - Include BUILD # from 8.
         - git push
- */
+*/
 
 
 // This is an alternative to running templates.

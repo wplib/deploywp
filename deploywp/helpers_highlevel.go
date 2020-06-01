@@ -1,10 +1,10 @@
 package deploywp
 
 import (
-	"github.com/wplib/deploywp/jtc/helpers/helperGit"
-	"github.com/wplib/deploywp/jtc/helpers/helperPath"
-	"github.com/wplib/deploywp/jtc/helpers/helperSystem"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/JsonToConfig/jtc/helpers/helperGit"
+	"github.com/newclarity/JsonToConfig/jtc/helpers/helperPath"
+	"github.com/newclarity/JsonToConfig/jtc/helpers/helperPrompt"
+	"github.com/newclarity/JsonToConfig/ux"
 )
 
 
@@ -238,7 +238,7 @@ func (e *TypeDeployWp) ObtainHost() *ux.State {
 				break
 			}
 
-			host = helperSystem.HelperUserPrompt("Enter host: ")
+			host = helperPrompt.HelperUserPrompt("Enter host: ")
 			if host != "" {
 				break
 			}

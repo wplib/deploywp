@@ -2,7 +2,7 @@ package deploywp
 
 import (
 	"github.com/mitchellh/mapstructure"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/JsonToConfig/ux"
 )
 
 type HelperDeployWp TypeDeployWp

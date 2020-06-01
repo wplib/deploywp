@@ -1,8 +1,8 @@
 package deploywp
 
 import (
-	"github.com/wplib/deploywp/jtc/helpers/helperTypes"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/JsonToConfig/jtc/helpers/helperTypes"
+	"github.com/newclarity/JsonToConfig/ux"
 )
 
 

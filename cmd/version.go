@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/wplib/deploywp/defaults"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/JsonToConfig/jtc"
+	"github.com/newclarity/JsonToConfig/ux"
 )
 
 
@@ -14,7 +15,7 @@ func init() {
 
 
 var versionCmd = &cobra.Command{
-	Use:   cmdVersion,
+	Use:   jtc.CmdVersion,
 	Short: ux.SprintfBlue("Show version of binary."),
 	Long:  ux.SprintfBlue(`...`),
 	Run:   Version,

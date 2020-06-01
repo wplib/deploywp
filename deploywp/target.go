@@ -2,8 +2,8 @@ package deploywp
 
 import (
 	"github.com/jinzhu/copier"
-	"github.com/wplib/deploywp/jtc/helpers/helperTypes"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/JsonToConfig/jtc/helpers/helperTypes"
+	"github.com/newclarity/JsonToConfig/ux"
 )
 
 
