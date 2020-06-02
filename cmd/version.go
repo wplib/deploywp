@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/wplib/deploywp/defaults"
-	"github.com/newclarity/JsonToConfig/jtc"
-	"github.com/newclarity/JsonToConfig/ux"
+	"github.com/newclarity/scribeHelpers/scribeLoader"
+	"github.com/newclarity/scribeHelpers/ux"
 )
 
 
@@ -15,7 +15,7 @@ func init() {
 
 
 var versionCmd = &cobra.Command{
-	Use:   jtc.CmdVersion,
+	Use:   scribeLoader.CmdVersion,
 	Short: ux.SprintfBlue("Show version of binary."),
 	Long:  ux.SprintfBlue(`...`),
 	Run:   Version,

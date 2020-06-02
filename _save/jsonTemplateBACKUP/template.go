@@ -6,7 +6,7 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperSystem"
 	"github.com/wplib/deploywp/only"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 	"os"
 	"os/exec"
 	"path"

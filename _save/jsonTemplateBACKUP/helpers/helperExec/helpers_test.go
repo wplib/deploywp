@@ -2,7 +2,7 @@ package helperExec
 
 import (
 	"github.com/davecgh/go-spew/spew"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 	"testing"
 )
 

@@ -1,6 +1,6 @@
 package deploywp
 
-import "github.com/wplib/deploywp/ux"
+import "github.com/newclarity/scribeHelpers/ux"
 
 
 type DeployWpGetter interface {

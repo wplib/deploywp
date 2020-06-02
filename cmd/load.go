@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/newclarity/JsonToConfig/jtc"
-	"github.com/newclarity/JsonToConfig/ux"
+	"github.com/newclarity/scribeHelpers/scribeLoader"
+	"github.com/newclarity/scribeHelpers/ux"
 )
 
 
@@ -14,7 +14,7 @@ func init() {
 
 // releaseCmd represents the release command
 var loadCmd = &cobra.Command{
-	Use:   jtc.CmdLoad,
+	Use:   scribeLoader.CmdLoad,
 	Short: ux.SprintfBlue("Load and execute a template file."),
 	Long: ux.SprintfBlue("Load and execute a template file."),
 	Run: LoadTemplate,

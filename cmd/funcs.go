@@ -2,14 +2,14 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/newclarity/JsonToConfig/jtc"
+	"github.com/newclarity/scribeHelpers/scribeLoader"
 	"path/filepath"
 )
 
 
-func ProcessArgs(cmd *cobra.Command, args []string) *jtc.ArgTemplate {
-	var tmpl *jtc.ArgTemplate
-	// tmpl := jtc.NewArgTemplate()
+func ProcessArgs(cmd *cobra.Command, args []string) *scribeLoader.ArgTemplate {
+	var tmpl *scribeLoader.ArgTemplate
+	// tmpl := scribeLoader.NewArgTemplate()
 
 	for range OnlyOnce {
 		tmpl = Cmd

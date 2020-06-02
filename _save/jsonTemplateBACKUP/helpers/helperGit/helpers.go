@@ -5,7 +5,7 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperExec"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
 	"github.com/wplib/deploywp/only"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 )
 
 type HelperGit TypeGit

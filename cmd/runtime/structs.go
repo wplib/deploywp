@@ -2,7 +2,7 @@ package runtime
 
 import (
 	"github.com/wplib/deploywp/defaults"
-	"github.com/newclarity/JsonToConfig/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 	"os"
 	"path"
 	"path/filepath"

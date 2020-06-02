@@ -2,7 +2,7 @@ package helperTypes
 
 import (
 	"github.com/wplib/deploywp/only"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 	"reflect"
 	"strings"
 )

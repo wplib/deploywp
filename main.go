@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/wplib/deploywp/cmd"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 	"os"
 )
 

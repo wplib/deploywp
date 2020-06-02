@@ -3,7 +3,7 @@ App for deploying a WordPress site to Pantheon
 
 
 ## Basic premise
-This package is a fork from JsonToConfig initially and provides a simple framework of "helpers", with all methods visible in both GoLang native and GoLang templates.
+This package is a fork from Scribe initially and provides a simple framework of "helpers", with all methods visible in both GoLang native and GoLang templates.
 
 ## Structure
 helper packages are defined within the jtc/helpers directory. All methods and functions are pulled in automatically on build using `pkgreflect`.

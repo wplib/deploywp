@@ -2,7 +2,7 @@ package helperGit
 
 import (
 	"github.com/wplib/deploywp/only"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 	"gopkg.in/src-d/go-git.v4"
 )
 

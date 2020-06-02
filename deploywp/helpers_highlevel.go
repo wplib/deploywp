@@ -1,10 +1,10 @@
 package deploywp
 
 import (
-	"github.com/newclarity/JsonToConfig/jtc/helpers/helperGit"
-	"github.com/newclarity/JsonToConfig/jtc/helpers/helperPath"
-	"github.com/newclarity/JsonToConfig/jtc/helpers/helperPrompt"
-	"github.com/newclarity/JsonToConfig/ux"
+	"github.com/newclarity/scribeHelpers/helperGit"
+	"github.com/newclarity/scribeHelpers/helperPath"
+	"github.com/newclarity/scribeHelpers/helperPrompt"
+	"github.com/newclarity/scribeHelpers/ux"
 )
 
 

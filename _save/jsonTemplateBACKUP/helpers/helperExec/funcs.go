@@ -2,7 +2,7 @@ package helperExec
 
 import (
 	"github.com/wplib/deploywp/only"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 	"os/exec"
 	"syscall"
 )

@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/newclarity/JsonToConfig/jtc"
+	"github.com/newclarity/scribeHelpers/scribeLoader"
 	"github.com/wplib/deploywp/deploywp"
-	"github.com/newclarity/JsonToConfig/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 )
 
 
@@ -14,7 +14,7 @@ func init() {
 
 
 var buildCmd = &cobra.Command{
-	Use:   jtc.CmdBuild,
+	Use:   scribeLoader.CmdBuild,
 	Short: ux.SprintfBlue("Build a Pantheon website."),
 	Long: ux.SprintfBlue("Build a Pantheon website."),
 	Run: Build,

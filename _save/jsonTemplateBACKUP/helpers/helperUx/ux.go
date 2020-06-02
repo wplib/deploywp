@@ -1,7 +1,7 @@
 package helperUx
 
 import (
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 )
 
 

@@ -1,7 +1,7 @@
 package deploywp
 
 import (
-	"github.com/newclarity/JsonToConfig/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 	"github.com/wplib/deploywp/cmd/runtime"
 )
 

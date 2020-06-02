@@ -5,7 +5,7 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperExec"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
 	"github.com/wplib/deploywp/only"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 	"gopkg.in/src-d/go-git.v4"
 	"gopkg.in/src-d/go-git.v4/plumbing"
 	"gopkg.in/src-d/go-git.v4/plumbing/object"

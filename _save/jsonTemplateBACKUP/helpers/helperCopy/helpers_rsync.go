@@ -3,7 +3,7 @@ package helperCopy
 import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperPath"
 	"github.com/wplib/deploywp/only"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 	"github.com/zloylos/grsync"
 	"time"
 )

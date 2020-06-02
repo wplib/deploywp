@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/newclarity/JsonToConfig/jtc"
-	"github.com/newclarity/JsonToConfig/ux"
+	"github.com/newclarity/scribeHelpers/scribeLoader"
+	"github.com/newclarity/scribeHelpers/ux"
 )
 
 
@@ -13,7 +13,7 @@ func init() {
 
 
 var helpersCmd = &cobra.Command{
-	Use:   jtc.CmdHelpers,
+	Use:   scribeLoader.CmdHelpers,
 	Short: ux.SprintfBlue("Show all built-in template helpers."),
 	Long:  ux.SprintfBlue("Show all built-in template helpers."),
 	Run:   Helpers,

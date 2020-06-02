@@ -13,7 +13,7 @@ import (
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperTypes"
 	"github.com/wplib/deploywp/jsonTemplate/helpers/helperUx"
 	"github.com/wplib/deploywp/only"
-	"github.com/wplib/deploywp/ux"
+	"github.com/newclarity/scribeHelpers/ux"
 	"path/filepath"
 	"reflect"
 	"runtime"
