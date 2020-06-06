@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/newclarity/scribeHelpers/scribeLoader"
+	"github.com/newclarity/scribeHelpers/loadTools"
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
@@ -13,7 +13,7 @@ func init() {
 
 
 var runCmd = &cobra.Command{
-	Use:   scribeLoader.CmdRun,
+	Use:   loadTools.CmdRun,
 	Short: ux.SprintfBlue("Execute resulting output file as a BASH script."),
 	Long: ux.SprintfBlue(`Execute resulting output file as a BASH script.
 You can also use this command as the start to '#!' scripts.
@@ -24,7 +24,7 @@ For example: #!/usr/bin/env scribe --json gearbox.json run
 func Run(cmd *cobra.Command, args []string) {
 	for range OnlyOnce {
 		Cmd.ExecShell = true
-		Cmd.Output.Name = scribeLoader.SelectConvert
+		Cmd.Output.Name = loadTools.SelectConvert
 
 		/*
 			Allow this to be used as a UNIX script.

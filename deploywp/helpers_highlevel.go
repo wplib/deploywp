@@ -1,9 +1,9 @@
 package deploywp
 
 import (
-	"github.com/newclarity/scribeHelpers/helperGit"
-	"github.com/newclarity/scribeHelpers/helperPath"
-	"github.com/newclarity/scribeHelpers/helperPrompt"
+	"github.com/newclarity/scribeHelpers/toolGit"
+	"github.com/newclarity/scribeHelpers/toolPath"
+	"github.com/newclarity/scribeHelpers/toolPrompt"
 	"github.com/newclarity/scribeHelpers/ux"
 )
 

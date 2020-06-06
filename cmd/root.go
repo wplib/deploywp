@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/newclarity/scribeHelpers/scribeLoader"
+	"github.com/newclarity/scribeHelpers/loadTools"
 	"github.com/newclarity/scribeHelpers/ux"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -24,7 +24,7 @@ type TypeCmd struct {
 	State        *ux.State
 }
 
-var Cmd *scribeLoader.ArgTemplate
+var Cmd *loadTools.ArgTemplate
 var ConfigFile string
 const flagConfigFile      = "config"
 const DefaultJsonFile     = "deploywp.json"
@@ -32,24 +32,24 @@ const DefaultTemplateFile = `{{ $dwp := LoadDeployWp .Json }}{{ $dwp.ExitOnError
 
 
 func init() {
-	Cmd = scribeLoader.NewArgTemplate(defaults.BinaryName, defaults.BinaryVersion)
+	Cmd = loadTools.NewArgTemplate(defaults.BinaryName, defaults.BinaryVersion)
 
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&ConfigFile, flagConfigFile, fmt.Sprintf("%s-config.json", defaults.BinaryName), ux.SprintfBlue("%s: config file.", defaults.BinaryName))
 	_ = rootCmd.PersistentFlags().MarkHidden(flagConfigFile)
 
-	rootCmd.PersistentFlags().StringVarP(&Cmd.Json.Name, scribeLoader.FlagJsonFile, "j", DefaultJsonFile, ux.SprintfBlue("Alternative JSON file."))
-	rootCmd.PersistentFlags().StringVarP(&Cmd.Template.Name, scribeLoader.FlagTemplateFile, "t", DefaultTemplateFile, ux.SprintfBlue("Alternative template file."))
-	rootCmd.PersistentFlags().StringVarP(&Cmd.Output.Name, scribeLoader.FlagOutputFile, "o", scribeLoader.DefaultOutFile, ux.SprintfBlue("Output file."))
+	rootCmd.PersistentFlags().StringVarP(&Cmd.Json.Name, loadTools.FlagJsonFile, "j", DefaultJsonFile, ux.SprintfBlue("Alternative JSON file."))
+	rootCmd.PersistentFlags().StringVarP(&Cmd.Template.Name, loadTools.FlagTemplateFile, "t", DefaultTemplateFile, ux.SprintfBlue("Alternative template file."))
+	rootCmd.PersistentFlags().StringVarP(&Cmd.Output.Name, loadTools.FlagOutputFile, "o", loadTools.DefaultOutFile, ux.SprintfBlue("Output file."))
 
-	rootCmd.PersistentFlags().BoolVarP(&Cmd.Chdir, scribeLoader.FlagChdir, "c", false, ux.SprintfBlue("Change to directory containing %s", DefaultJsonFile))
-	rootCmd.PersistentFlags().BoolVarP(&Cmd.QuietProgress, scribeLoader.FlagQuiet, "q", false, ux.SprintfBlue("Silence progress in shell scripts."))
+	rootCmd.PersistentFlags().BoolVarP(&Cmd.Chdir, loadTools.FlagChdir, "c", false, ux.SprintfBlue("Change to directory containing %s", DefaultJsonFile))
+	rootCmd.PersistentFlags().BoolVarP(&Cmd.QuietProgress, loadTools.FlagQuiet, "q", false, ux.SprintfBlue("Silence progress in shell scripts."))
 	//rootCmd.PersistentFlags().BoolVarP(&Cmd.DryRun, flagDryRun, "n", false, "Don't overwrite files.")
 
-	rootCmd.PersistentFlags().BoolVarP(&Cmd.Debug, scribeLoader.FlagDebug ,"d", false, ux.SprintfBlue("DEBUG mode."))
+	rootCmd.PersistentFlags().BoolVarP(&Cmd.Debug, loadTools.FlagDebug ,"d", false, ux.SprintfBlue("DEBUG mode."))
 
-	rootCmd.Flags().BoolP(scribeLoader.FlagVersion, "v", false, ux.SprintfBlue("Display version of " + defaults.BinaryName))
+	rootCmd.Flags().BoolP(loadTools.FlagVersion, "v", false, ux.SprintfBlue("Display version of " + defaults.BinaryName))
 }
 
 
@@ -93,11 +93,11 @@ func gbRootFunc(cmd *cobra.Command, args []string) {
 	for range OnlyOnce {
 		var ok bool
 		fl := cmd.Flags()
-		tmpl := scribeLoader.NewArgTemplate(defaults.BinaryName, defaults.BinaryVersion)
+		tmpl := loadTools.NewArgTemplate(defaults.BinaryName, defaults.BinaryVersion)
 
 		// ////////////////////////////////
 		// Show version.
-		ok, _ = fl.GetBool(scribeLoader.FlagVersion)
+		ok, _ = fl.GetBool(loadTools.FlagVersion)
 		if ok {
 			Version(cmd, args)
 			Cmd.State.Clear()
@@ -131,7 +131,7 @@ func Execute() *ux.State {
 		var err error
 
 		if Cmd == nil {
-			Cmd = scribeLoader.NewArgTemplate(defaults.BinaryName, defaults.BinaryVersion)
+			Cmd = loadTools.NewArgTemplate(defaults.BinaryName, defaults.BinaryVersion)
 		}
 
 		err = rootCmd.Execute()

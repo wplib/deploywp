@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/newclarity/scribeHelpers/scribeLoader"
+	"github.com/newclarity/scribeHelpers/loadTools"
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
@@ -14,7 +14,7 @@ func init() {
 
 // releaseCmd represents the release command
 var loadCmd = &cobra.Command{
-	Use:   scribeLoader.CmdLoad,
+	Use:   loadTools.CmdLoad,
 	Short: ux.SprintfBlue("Load and execute a template file."),
 	Long: ux.SprintfBlue("Load and execute a template file."),
 	Run: LoadTemplate,

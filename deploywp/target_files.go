@@ -1,7 +1,7 @@
 package deploywp
 
 import (
-	"github.com/newclarity/scribeHelpers/helperTypes"
+	"github.com/newclarity/scribeHelpers/toolTypes"
 	"github.com/newclarity/scribeHelpers/ux"
 	"strings"
 )

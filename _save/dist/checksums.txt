@@ -1,2 +1,0 @@
-a68843a55645dd1a0d0ad9421146947fb1f4425afa877e187c8c392d37b219ce  deploywp_v0.0.0-next_Linux_x86_64.tar.gz
-6a3d42befbfff1d3e70b826dfb111b260c65494f0c5eac27be0c12e487417178  deploywp_v0.0.0-next_Darwin_x86_64.tar.gz

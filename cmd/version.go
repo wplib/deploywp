@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/wplib/deploywp/defaults"
-	"github.com/newclarity/scribeHelpers/scribeLoader"
+	"github.com/newclarity/scribeHelpers/loadTools"
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
@@ -15,7 +15,7 @@ func init() {
 
 
 var versionCmd = &cobra.Command{
-	Use:   scribeLoader.CmdVersion,
+	Use:   loadTools.CmdVersion,
 	Short: ux.SprintfBlue("Show version of binary."),
 	Long:  ux.SprintfBlue(`...`),
 	Run:   Version,

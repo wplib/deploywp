@@ -42,7 +42,7 @@ func NewExec() *Exec {
 	for range OnlyOnce {
 		var err error
 
-		ret.State = ux.NewState(false)
+		ret.State = ux.NewState(Cmd.Runtime)
 		ret.State.SetPackage("")
 		ret.State.SetFunction("")
 

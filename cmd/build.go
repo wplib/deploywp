@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	"github.com/spf13/cobra"
-	"github.com/newclarity/scribeHelpers/scribeLoader"
-	"github.com/wplib/deploywp/deploywp"
+	"github.com/newclarity/scribeHelpers/loadTools"
 	"github.com/newclarity/scribeHelpers/ux"
+	"github.com/spf13/cobra"
+	"github.com/wplib/deploywp/deploywp"
 )
 
 
@@ -14,7 +14,7 @@ func init() {
 
 
 var buildCmd = &cobra.Command{
-	Use:   scribeLoader.CmdBuild,
+	Use:   loadTools.CmdBuild,
 	Short: ux.SprintfBlue("Build a Pantheon website."),
 	Long: ux.SprintfBlue("Build a Pantheon website."),
 	Run: Build,

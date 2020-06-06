@@ -2,7 +2,7 @@ package deploywp
 
 import (
 	"github.com/jinzhu/copier"
-	"github.com/newclarity/scribeHelpers/helperTypes"
+	"github.com/newclarity/scribeHelpers/toolTypes"
 	"github.com/newclarity/scribeHelpers/ux"
 )
 

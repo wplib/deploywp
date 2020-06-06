@@ -2,14 +2,14 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/newclarity/scribeHelpers/scribeLoader"
+	"github.com/newclarity/scribeHelpers/loadTools"
 	"path/filepath"
 )
 
 
-func ProcessArgs(cmd *cobra.Command, args []string) *scribeLoader.ArgTemplate {
-	var tmpl *scribeLoader.ArgTemplate
-	// tmpl := scribeLoader.NewArgTemplate()
+func ProcessArgs(cmd *cobra.Command, args []string) *loadTools.ArgTemplate {
+	var tmpl *loadTools.ArgTemplate
+	// tmpl := loadTools.NewArgTemplate()
 
 	for range OnlyOnce {
 		tmpl = Cmd

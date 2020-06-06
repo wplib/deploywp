@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/wplib/deploywp/cmd"
 	"github.com/newclarity/scribeHelpers/ux"
+	"github.com/wplib/deploywp/cmd"
 	"os"
 )
 
