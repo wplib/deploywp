@@ -3,131 +3,138 @@ package deploywp
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source
-func (me *TypeDeployWp) GetSource() *Source {
-	return &me.Source
+func (dwp *TypeDeployWp) GetSource() *Source {
+	return &dwp.Source
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source.Paths
-func (me *TypeDeployWp) GetSourcePaths() *Paths {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetSourcePaths() *Paths {
+	if state := dwp.IsNil(); state.IsError() {
 		return &Paths{}
 	}
-	return &me.Source.Paths
+	return &dwp.Source.Paths
 }
-func (me *TypeDeployWp) GetSourceAbsPaths() *Paths {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetSourceAbsPaths() *Paths {
+	if state := dwp.IsNil(); state.IsError() {
 		return &Paths{}
 	}
-	return &me.Source.AbsPaths
+	return &dwp.Source.AbsPaths
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source.Repository
-func (me *TypeDeployWp) GetSourceRepositoryProvider() string {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetSourceRepositoryProvider() string {
+	if state := dwp.IsNil(); state.IsError() {
 		return ""
 	}
-	return me.Source.GetRepositoryProvider()
+	return dwp.Source.GetRepositoryProvider()
 }
-func (me *TypeDeployWp) GetSourceRepositoryUrl() URL {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetSourceRepositoryUrl() URL {
+	if state := dwp.IsNil(); state.IsError() {
 		return ""
 	}
-	return me.Source.GetRepositoryUrl()
+	return dwp.Source.GetRepositoryUrl()
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source.Revision
-func (me *TypeDeployWp) GetSourceRevisionType() string {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetSourceRevisionType() string {
+	if state := dwp.IsNil(); state.IsError() {
 		return ""
 	}
-	return me.Source.GetRevisionType()
+	return dwp.Source.GetRevisionType()
 }
-func (me *TypeDeployWp) GetSourceRevisionName() string {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetSourceRevisionName() string {
+	if state := dwp.IsNil(); state.IsError() {
 		return ""
 	}
-	return me.Source.GetRevisionName()
+	return dwp.Source.GetRevisionName()
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Source.Build
-func (me *TypeDeployWp) GetSourceBuild() bool {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetSourceBuild() bool {
+	if state := dwp.IsNil(); state.IsError() {
 		return false
 	}
-	return me.Source.GetBuild()
+	return dwp.Source.GetBuild()
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target
-func (me *TypeDeployWp) GetTarget() *Target {
-	return &me.Target
+func (dwp *TypeDeployWp) GetTarget() *Target {
+	return &dwp.Target
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target.Files
-func (me *TypeDeployWp) GetTargetFiles(ftype interface{}) *FilesArray {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetTargetFiles(ftype string) *FilesArray {
+	if state := dwp.IsNil(); state.IsError() {
 		return &FilesArray{}
 	}
-	return me.Target.GetFiles(ftype)
+	return dwp.Target.GetFiles(ftype)
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target.Paths
-func (me *TypeDeployWp) GetTargetPaths() *Paths {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetTargetPaths() *Paths {
+	if state := dwp.IsNil(); state.IsError() {
 		return &Paths{}
 	}
-	return &me.Target.Paths
+	return &dwp.Target.Paths
 }
-func (me *TypeDeployWp) GetTargetAbsPaths() *Paths {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetTargetAbsPaths() *Paths {
+	if state := dwp.IsNil(); state.IsError() {
 		return &Paths{}
 	}
-	return &me.Target.AbsPaths
+	return &dwp.Target.AbsPaths
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target.Revisions
-func (me *TypeDeployWp) GetTargetRevision(host interface{}) *TargetRevision {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetTargetRevision(host string) *TargetRevision {
+	if state := dwp.IsNil(); state.IsError() {
 		return &TargetRevision{}
 	}
-	return me.Target.GetRevision(host)
+	return dwp.Target.GetRevisionByHost(host)
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Target.Providers
-func (me *TypeDeployWp) GetTargetProvider(provider interface{}) *Provider {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetTargetProvider(provider string) *Provider {
+	if state := dwp.IsNil(); state.IsError() {
 		return &Provider{}
 	}
-	return me.Target.GetProvider(provider)
+	return dwp.Target.GetProviderByName(provider)
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Hosts
-func (me *TypeDeployWp) GetHosts() *Hosts {
-	return &me.Hosts
+func (dwp *TypeDeployWp) GetHosts() *Hosts {
+	return &dwp.Hosts
 }
 
-func (me *TypeDeployWp) GetHost(host interface{}) *Host {
-	if state := me.IsNil(); state.IsError() {
+func (dwp *TypeDeployWp) GetHostByName(host string) *Host {
+	if state := dwp.IsNil(); state.IsError() {
 		return &Host{}
 	}
-	return me.Hosts.GetHost(host)
+	return dwp.Hosts.GetByName(host)
+}
+
+func (dwp *TypeDeployWp) GetHostByProvider(provider string) *Host {
+	if state := dwp.IsNil(); state.IsError() {
+		return &Host{}
+	}
+	return dwp.Hosts.GetByProvider(provider)
 }

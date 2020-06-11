@@ -1,7 +1,7 @@
 package deploywp
 
 import (
-	"github.com/newclarity/scribeHelpers/toolTypes"
+	"github.com/newclarity/scribeHelpers/toolRuntime"
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
@@ -11,63 +11,102 @@ type TargetRevision struct {
 	HostName   string `json:"host_name" mapstructure:"host_name"`
 	RefName    string `json:"ref_name" mapstructure:"ref_name"`
 
-	Valid bool
-	State *ux.State
+	Valid   bool
+	runtime *toolRuntime.TypeRuntime
+	state   *ux.State
 }
-type TargetRevisions []TargetRevision
+func (tr *TargetRevision) New(runtime *toolRuntime.TypeRuntime) *TargetRevision {
+	runtime = runtime.EnsureNotNil()
+	return &TargetRevision {
+		HostName:     "",
+		RefName:     "",
 
-func (me *TargetRevision) New() TargetRevision {
-	if me == nil {
-		me = &TargetRevision {
-			HostName:     "",
-			RefName:     "",
-			State: ux.NewState(false),
+		Valid: false,
+		runtime: runtime,
+		state:   ux.NewState(runtime.CmdName, runtime.Debug),
+	}
+}
+func (tr *TargetRevision) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(tr); state.IsError() {
+		return state
+	}
+	tr.state = tr.state.EnsureNotNil()
+	return tr.state
+}
+
+
+type TargetRevisions []TargetRevision
+func (tr *TargetRevisions) New() *TargetRevisions {
+	if tr == nil {
+		return &TargetRevisions{}
+	}
+	return tr
+}
+func (tr *TargetRevisions) Process(runtime *toolRuntime.TypeRuntime) *ux.State {
+	state := ux.NewState(runtime.CmdName, runtime.Debug)
+	for range onlyOnce {
+		for i, _ := range *tr {
+			//	(*tr)[i] = *((*tr)[i].New(runtime))
+			(*tr)[i].Valid = true
+			(*tr)[i].runtime = runtime
+			(*tr)[i].state = ux.NewState(runtime.CmdName, runtime.Debug)
 		}
 	}
-
-	return *me
+	return state
 }
 
-func (me *TargetRevisions) New() TargetRevisions {
-	if me == nil {
-		me = &TargetRevisions{}
-	}
 
-	return *me
-}
+func (tr *TargetRevisions) GetByHost(host string) *TargetRevision {
+	ret := (*TargetRevision).New(&TargetRevision{}, nil)
 
-//func (e *TargetRevisions) IsNil() *ux.State {
-//	if state := ux.IfNilReturnError(e); state.IsError() {
-//		return state
-//	}
-//	e.State = e.State.EnsureNotNil()
-//	return e.State
-//}
-
-
-func (me *TargetRevisions) GetRevision(host interface{}) *TargetRevision {
-	var ret TargetRevision
-
-	for range OnlyOnce {
-		value := helperTypes.ReflectString(host)
-		if value == nil {
-			ret.State.SetError("GetRevision arg not a string")
+	for range onlyOnce {
+		if host == "" {
+			ret.state.SetError("GetRevision hostname not a string")
 			break
 		}
 
-		for _, v := range *me {
-			if v.HostName == *value {
-				ret = v
-				ret.Valid = true
+		var ok bool
+		for _, v := range *tr {
+			if v.HostName == host {
+				ret = &v
+				ok = true
 				break
 			}
 		}
 
-		if !ret.Valid {
-			ret.State.SetError("GetRevision host_name not found")
+		if !ok {
+			ret.state.SetError("GetRevision hostname not found")
 			break
 		}
 	}
 
-	return &ret
+	return ret
+}
+
+
+func (tr *TargetRevisions) GetByRefName(ref string) *TargetRevision {
+	ret := (*TargetRevision).New(&TargetRevision{}, nil)
+
+	for range onlyOnce {
+		if ref == "" {
+			ret.state.SetError("GetRevision hostname not a string")
+			break
+		}
+
+		var ok bool
+		for _, v := range *tr {
+			if v.HostName == ref {
+				ret = &v
+				ok = true
+				break
+			}
+		}
+
+		if !ok {
+			ret.state.SetError("GetRevision hostname not found")
+			break
+		}
+	}
+
+	return ret
 }

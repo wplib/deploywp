@@ -98,7 +98,7 @@
 				},
 				"defaults": {
 					"repository": {
-						"url": "git clone ssh://codeserver.dev.{site_id}@codeserver.dev.{site_id}.drush.in:2222/~/repository.git"
+						"url": "ssh://codeserver.dev.{site_id}@codeserver.dev.{site_id}.drush.in:2222/~/repository.git"
 						},
 					"paths": {
 						"webroot_dir": "/code"

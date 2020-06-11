@@ -2,6 +2,7 @@ package deploywp
 
 import (
 	"github.com/jinzhu/copier"
+	"github.com/newclarity/scribeHelpers/toolRuntime"
 	"github.com/newclarity/scribeHelpers/toolTypes"
 	"github.com/newclarity/scribeHelpers/ux"
 )
@@ -17,81 +18,91 @@ type Target struct {
 	AbsFiles  Files
 
 	Valid bool
-	State *ux.State
+	runtime *toolRuntime.TypeRuntime
+	state   *ux.State
 }
+func (t *Target) New(runtime *toolRuntime.TypeRuntime) *Target {
+	runtime = runtime.EnsureNotNil()
+	return &Target{
+		Files:     *((*Files).New(&Files{}, runtime)),
+		Paths:     *((*Paths).New(&Paths{}, runtime)),
+		Providers: *((*Providers).New(&Providers{})),
+		Revisions: *((*TargetRevisions).New(&TargetRevisions{})),
+		AbsPaths:  *((*Paths).New(&Paths{}, runtime)),
+		AbsFiles:  *((*Files).New(&Files{}, runtime)),
 
-func (me *Target) New() Target {
-	me.Files.New()
-	me.Paths.New()
-	me.Providers.New()
-	me.Revisions.New()
-
-	me.AbsPaths.New()
-	me.AbsFiles.New()
-
-	me.State = ux.NewState(false)
-
-	return *me
+		Valid:   true,
+		runtime: runtime,
+		state:   ux.NewState(runtime.CmdName, runtime.Debug),
+	}
 }
-
-func (me *Target) Process() *ux.State {
-	if state := me.IsNil(); state.IsError() {
+func (t *Target) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(t); state.IsError() {
+		return state
+	}
+	t.state = t.state.EnsureNotNil()
+	return t.state
+}
+func (t *Target) Process() *ux.State {
+	if state := t.IsNil(); state.IsError() {
 		return state
 	}
 
-	for range OnlyOnce {
-		err := copier.Copy(&me.AbsPaths, &me.Paths)
-		me.State.SetError(err)
-		if me.State.IsError() {
+	for range onlyOnce {
+		err := copier.Copy(&t.AbsPaths, &t.Paths)
+		t.state.SetError(err)
+		if t.state.IsError() {
 			break
 		}
 
-		me.State = me.AbsPaths.ExpandPaths()
-		me.State.SetError(err)
-		if me.State.IsError() {
+		t.state = t.AbsPaths.ExpandPaths()
+		t.state.SetError(err)
+		if t.state.IsError() {
 			break
 		}
 
-		me.AbsFiles.Copy = append(me.AbsFiles.Copy, me.Files.Copy...)
-		me.AbsFiles.Delete = append(me.AbsFiles.Delete, me.Files.Delete...)
-		me.AbsFiles.Exclude = append(me.AbsFiles.Exclude, me.Files.Exclude...)
-		me.AbsFiles.Keep = append(me.AbsFiles.Keep, me.Files.Keep...)
+		t.AbsFiles.Copy = append(t.AbsFiles.Copy, t.Files.Copy...)
+		t.AbsFiles.Delete = append(t.AbsFiles.Delete, t.Files.Delete...)
+		t.AbsFiles.Exclude = append(t.AbsFiles.Exclude, t.Files.Exclude...)
+		t.AbsFiles.Keep = append(t.AbsFiles.Keep, t.Files.Keep...)
 
-		me.State = me.AbsFiles.Process(me.AbsPaths)
-		if me.State.IsError() {
+		t.state = t.AbsFiles.Process(t.AbsPaths)
+		if t.state.IsError() {
 			break
 		}
 
-		me.State = me.Files.Process(me.Paths)
-		if me.State.IsError() {
+		t.state = t.Files.Process(t.Paths)
+		if t.state.IsError() {
 			break
 		}
 
-		me.Valid = true
+		t.state = t.Providers.Process(t.runtime)
+		if t.state.IsError() {
+			break
+		}
+
+		t.state = t.Revisions.Process(t.runtime)
+		if t.state.IsError() {
+			break
+		}
+
+		t.Valid = true
 	}
 
-	return me.State
-}
-
-func (e *Target) IsNil() *ux.State {
-	if state := ux.IfNilReturnError(e); state.IsError() {
-		return state
-	}
-	e.State = e.State.EnsureNotNil()
-	return e.State
+	return t.state
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Files
-func (me *Target) GetFiles(ftype interface{}) *FilesArray {
+func (t *Target) GetFiles(ftype string) *FilesArray {
 	var ret *FilesArray
-	if state := me.IsNil(); state.IsError() {
+	if state := t.IsNil(); state.IsError() {
 		return &FilesArray{}
 	}
 
-	for range OnlyOnce {
-		ret = me.Files.GetFiles(ftype)
+	for range onlyOnce {
+		ret = t.Files.GetFiles(ftype)
 	}
 
 	return ret
@@ -100,19 +111,19 @@ func (me *Target) GetFiles(ftype interface{}) *FilesArray {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Paths
-func (me *Target) GetPaths(abs ...interface{}) *Paths {
+func (t *Target) GetPaths(abs ...interface{}) *Paths {
 	var ret *Paths
-	if state := me.IsNil(); state.IsError() {
+	if state := t.IsNil(); state.IsError() {
 		return &Paths{}
 	}
 
-	for range OnlyOnce {
-		if helperTypes.ReflectBoolArg(abs) {
-			ret = &me.AbsPaths
+	for range onlyOnce {
+		if toolTypes.ReflectBoolArg(abs) {
+			ret = &t.AbsPaths
 			break
 		}
 
-		ret = &me.Paths
+		ret = &t.Paths
 	}
 
 	return ret
@@ -121,31 +132,39 @@ func (me *Target) GetPaths(abs ...interface{}) *Paths {
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Providers
-func (me *Target) GetProvider(provider interface{}) *Provider {
+func (t *Target) GetProviderByName(provider string) *Provider {
 	var ret *Provider
-	if state := me.IsNil(); state.IsError() {
-		return &Provider{}
+	if state := t.IsNil(); state.IsError() {
+		return ret
 	}
-
-	for range OnlyOnce {
-		ret = me.Providers.GetProvider(provider)
+	return t.Providers.GetByName(provider)
+}
+func (t *Target) GetProviderBySiteId(siteId string) *Provider {
+	var ret *Provider
+	if state := t.IsNil(); state.IsError() {
+		return ret
 	}
-
+	ret = t.Providers.GetBySiteId(siteId)
 	return ret
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
 // Revisions
-func (me *Target) GetRevision(host interface{}) *TargetRevision {
+func (t *Target) GetRevisionByHost(host string) *TargetRevision {
 	var ret *TargetRevision
-	if state := me.IsNil(); state.IsError() {
+	if state := t.IsNil(); state.IsError() {
 		return &TargetRevision{}
 	}
+	ret = t.Revisions.GetByHost(host)
+	return ret
+}
 
-	for range OnlyOnce {
-		ret = me.Revisions.GetRevision(host)
+func (t *Target) GetRevisionByName(ref string) *TargetRevision {
+	var ret *TargetRevision
+	if state := t.IsNil(); state.IsError() {
+		return &TargetRevision{}
 	}
-
+	ret = t.Revisions.GetByRefName(ref)
 	return ret
 }

@@ -1,124 +1,81 @@
 package deploywp
 
 import (
-	"github.com/newclarity/scribeHelpers/toolTypes"
+	"github.com/newclarity/scribeHelpers/toolRuntime"
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
 
-type Provider struct {
-	Name     string   `json:"name"`
-	Meta     Meta     `json:"meta"`
-	Defaults Defaults `json:"defaults"`
-
-	Valid bool
-	State *ux.State
-}
 type Providers []Provider
-
-func (me *Provider) New() Provider {
-	if me == nil {
-		me = &Provider {
-			Name:     "",
-			Meta:     me.Meta.New(),
-			Defaults: me.Defaults.New(),
-			State: ux.NewState(false),
+func (ps *Providers) New() *Providers {
+	if ps == nil {
+		return &Providers{}
+	}
+	return ps
+}
+func (ps *Providers) Process(runtime *toolRuntime.TypeRuntime) *ux.State {
+	runtime = runtime.EnsureNotNil()
+	state := ux.NewState(runtime.CmdName, runtime.Debug)
+	for range onlyOnce {
+		for i, _ := range *ps {
+			(*ps)[i].Process(runtime)
 		}
 	}
-
-	return *me
-}
-
-func (me *Providers) New() Providers {
-	if me == nil {
-		me = &Providers {}
-	}
-
-	return *me
+	return state
 }
 
 
-//func (e *Providers) IsNil() *ux.State {
-//	if state := ux.IfNilReturnError(e); state.IsError() {
-//		return state
-//	}
-//	e.State = e.State.EnsureNotNil()
-//	return e.State
-//}
+func (ps *Providers) GetByName(provider string) *Provider {
+	ret := (*Provider).New(&Provider{}, nil)
 
-
-type Meta struct {
-	SiteID   string `json:"site_id"`
-	SiteName string `json:"site_name"`
-
-	State    *ux.State
-}
-func (me *Meta) New() Meta {
-	if me == nil {
-		me = &Meta{
-			SiteID:   "",
-			SiteName: "",
-		}
-	}
-
-	return *me
-}
-
-
-func (e *Meta) IsNil() *ux.State {
-	if state := ux.IfNilReturnError(e); state.IsError() {
-		return state
-	}
-	e.State = e.State.EnsureNotNil()
-	return e.State
-}
-
-
-type Defaults struct {
-	Paths DefaultsPaths `json:"paths"`
-	Repository DefaultsRepository `json:"repository"`
-}
-type DefaultsPaths struct {
-	WebrootDir string `json:"webroot_dir"`
-}
-type DefaultsRepository struct {
-	URL string `json:"url"`
-}
-func (me *Defaults) New() Defaults {
-	if me == nil {
-		me = &Defaults{
-			Paths:      DefaultsPaths{},
-			Repository: DefaultsRepository{},
-		}
-	}
-
-	return *me
-}
-
-
-func (me *Providers) GetProvider(provider interface{}) *Provider {
-	var ret Provider
-
-	for range OnlyOnce {
-		value := helperTypes.ReflectString(provider)
-		if value == nil {
-			ret.State.SetError("GetProvider arg not a string")
+	for range onlyOnce {
+		if provider == "" {
+			ret.state.SetError("GetProvider name empty")
 			break
 		}
 
-		for _, v := range *me {
-			if v.Name == *value {
-				ret = v
-				ret.Valid = true
+		var ok bool
+		for _, v := range *ps {
+			if v.Name == provider {
+				ret = &v
+				ok = true
 				break
 			}
 		}
 
-		if !ret.Valid {
-			ret.State.SetError("GetProvider hostname not found")
+		if !ok {
+			ret.state.SetError("GetProvider name not found")
 			break
 		}
 	}
 
-	return &ret
+	return ret
+}
+
+
+func (ps *Providers) GetBySiteId(siteId string) *Provider {
+	ret := (*Provider).New(&Provider{}, nil)
+
+	for range onlyOnce {
+		if siteId == "" {
+			ret.state.SetError("GetProvider siteId empty")
+			break
+		}
+
+		var ok bool
+		for _, v := range *ps {
+			if v.Meta.SiteID == siteId {
+				ret = &v
+				ok = true
+				break
+			}
+		}
+
+		if !ok {
+			ret.state.SetError("GetProvider siteId not found")
+			break
+		}
+	}
+
+	return ret
 }

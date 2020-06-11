@@ -1,6 +1,7 @@
 package deploywp
 
 import (
+	"github.com/newclarity/scribeHelpers/toolRuntime"
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
@@ -10,38 +11,39 @@ type Revision struct {
 	RefType string `json:"ref_type" mapstructure:"ref_type"`
 
 	Valid bool
-	State *ux.State
+	runtime *toolRuntime.TypeRuntime
+	state   *ux.State
 }
-
-
-func (me *Revision) New() Revision {
-	me = &Revision {
+func (r *Revision) New(runtime *toolRuntime.TypeRuntime) *Revision {
+	runtime = runtime.EnsureNotNil()
+	return &Revision {
 		RefName: "",
 		RefType: "",
-		State: ux.NewState(false),
-	}
-	return *me
-}
 
-func (e *Revision) IsNil() *ux.State {
-	if state := ux.IfNilReturnError(e); state.IsError() {
+		Valid:   true,
+		runtime: runtime,
+		state:   ux.NewState(runtime.CmdName, runtime.Debug),
+	}
+}
+func (r *Revision) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(r); state.IsError() {
 		return state
 	}
-	e.State = e.State.EnsureNotNil()
-	return e.State
+	r.state = r.state.EnsureNotNil()
+	return r.state
 }
 
 
-func (me *Revision) GetType() string {
-	if state := me.IsNil(); state.IsError() {
+func (r *Revision) GetType() string {
+	if state := r.IsNil(); state.IsError() {
 		return ""
 	}
-	return me.RefType
+	return r.RefType
 }
 
-func (me *Revision) GetName() string {
-	if state := me.IsNil(); state.IsError() {
+func (r *Revision) GetName() string {
+	if state := r.IsNil(); state.IsError() {
 		return ""
 	}
-	return me.RefName
+	return r.RefName
 }

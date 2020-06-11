@@ -9,8 +9,8 @@ type HelperDeployWp TypeDeployWp
 func (g *HelperDeployWp) Reflect() *TypeDeployWp {
 	return (*TypeDeployWp)(g)
 }
-func (g *TypeDeployWp) Reflect() *HelperDeployWp {
-	return (*HelperDeployWp)(g)
+func (dwp *TypeDeployWp) Reflect() *HelperDeployWp {
+	return (*HelperDeployWp)(dwp)
 }
 
 func (c *HelperDeployWp) IsNil() *ux.State {
@@ -22,53 +22,56 @@ func (c *HelperDeployWp) IsNil() *ux.State {
 }
 
 
-func HelperLoadDeployWp(str interface{}, args ...string) *TypeDeployWp {
-	j := NewJsonFile()
+func HelperLoadDeployWp(str interface{}, args []string) *TypeDeployWp {
+	//dwp := (*TypeDeployWp).New(nil, nil)
+	var dwp *TypeDeployWp
+	dwp = dwp.New(nil)
 
-	for range OnlyOnce {
+	for range onlyOnce {
 		var err error
 
-		err = mapstructure.Decode(str, &j)
-		j.State.SetError(err)
-		if j.State.IsError() {
+		dwp.Runtime.Args = args[1:]
+		err = mapstructure.Decode(str, &dwp)
+		dwp.State.SetError(err)
+		if dwp.State.IsError() {
 			break
 		}
 
-		j.State = j.Source.Process()
-		if j.State.IsError() {
+		dwp.State = dwp.Source.Process()
+		if dwp.State.IsError() {
 			break
 		}
 
-		j.State = j.Target.Process()
-		if j.State.IsError() {
+		dwp.State = dwp.Target.Process()
+		if dwp.State.IsError() {
 			break
 		}
 
-		j.State = j.Hosts.Process()
-		if j.State.IsError() {
+		dwp.State = dwp.Hosts.Process(dwp.Runtime)
+		if dwp.State.IsError() {
 			break
 		}
 
-		j.Valid = true
+		dwp.Valid = true
 	}
 
-	return j
+	return dwp
 }
 
 
 // Usage:
 //		{{ $cmd := LoadDeployWp }}
 //		{{ $cmd.PrintError }}
-func (e *TypeDeployWp) PrintError() string {
-	return e.State.SprintError()
+func (dwp *TypeDeployWp) PrintError() string {
+	return dwp.State.SprintError()
 }
 
 
 // Usage:
 //		{{ $cmd := LoadDeployWp }}
 //		{{ $cmd.ExitOnError }}
-func (e *TypeDeployWp) ExitOnError() string {
-	e.State.ExitOnError()
+func (dwp *TypeDeployWp) ExitOnError() string {
+	dwp.State.ExitOnError()
 	return ""
 }
 
@@ -76,7 +79,7 @@ func (e *TypeDeployWp) ExitOnError() string {
 // Usage:
 //		{{ $cmd := LoadDeployWp }}
 //		{{ $cmd.ExitOnWarning }}
-func (e *TypeDeployWp) ExitOnWarning() string {
-	e.State.ExitOnWarning()
+func (dwp *TypeDeployWp) ExitOnWarning() string {
+	dwp.State.ExitOnWarning()
 	return ""
 }

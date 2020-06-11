@@ -6,6 +6,8 @@ import (
 	"os"
 )
 
+//go:generate buildtool pkgreflect deploywp
+
 func init() {
 	_ = ux.Open("Gearbox: ")
 }

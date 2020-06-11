@@ -1,11 +1,12 @@
 package deploywp
 
 import (
+	"github.com/newclarity/scribeHelpers/toolRuntime"
 	"github.com/newclarity/scribeHelpers/ux"
-	"github.com/wplib/deploywp/cmd/runtime"
 )
 
-const OnlyOnce = "1"
+
+const onlyOnce = "1"
 
 type DeployWpGetter interface {
 }
@@ -16,42 +17,33 @@ type TypeDeployWp struct {
 	Source Source `json:"source"`
 	Target Target `json:"target"`
 
-	Runtime
-
-	Valid  bool
-	State  *ux.State
+	Valid   bool
+	Runtime *toolRuntime.TypeRuntime
+	State   *ux.State
 }
+func (dwp *TypeDeployWp) New(runtime *toolRuntime.TypeRuntime) *TypeDeployWp {
+	runtime = runtime.EnsureNotNil()
+	return &TypeDeployWp{
+		Hosts:  *((*Hosts).New(&Hosts{})),
+		Source: *((*Source).New(&Source{}, runtime)),
+		Target: *((*Target).New(&Target{}, runtime)),
 
-type Runtime struct {
-	Exec *runtime.Exec
+		Valid:   false,
+		Runtime: runtime,
+		State:   ux.NewState(runtime.CmdName, runtime.Debug),
+	}
+}
+func (dwp *TypeDeployWp) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(dwp); state.IsError() {
+		return state
+	}
+	dwp.State = dwp.State.EnsureNotNil()
+	return dwp.State
 }
 
 
 func ReflectDeployWp(ref interface{}) *TypeDeployWp {
 	return ref.(*TypeDeployWp)
-}
-
-
-func (e *TypeDeployWp) IsNil() *ux.State {
-	if state := ux.IfNilReturnError(e); state.IsError() {
-		return state
-	}
-	e.State = e.State.EnsureNotNil()
-	return e.State
-}
-
-
-func NewJsonFile() *TypeDeployWp {
-	var jf TypeDeployWp
-
-	jf.State = ux.NewState(false)
-	jf.Runtime.Exec = runtime.NewExec()
-
-	jf.Hosts.New()
-	jf.Source.New()
-	jf.Target.New()
-
-	return &jf
 }
 
 

@@ -1,98 +1,85 @@
 package deploywp
 
 import (
-	"github.com/newclarity/scribeHelpers/toolTypes"
+	"github.com/newclarity/scribeHelpers/toolRuntime"
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
 
-type Host struct {
-	HostName string `json:"host_name" mapstructure:"host_name"`
-	Label    string `json:"label"`
-	Provider string `json:"provider"`
-
-	Valid bool
-	State *ux.State
-}
 type Hosts []Host
-
-
-func NewHost() *Host {
-	me := &Host{
-		HostName: "",
-		Label:    "",
-		Provider: "",
-		Valid: false,
-		State: ux.NewState(false),
+func (h *Hosts) New() *Hosts {
+	if h == nil {
+		return &Hosts{}
 	}
-	return me
+	return h
 }
-
-func (me *Host) New() *Host {
-	me = &Host{
-		HostName: "",
-		Label:    "",
-		Provider: "",
-		Valid: true,
-		State: ux.NewState(false),
-	}
-	return me
-}
-
-func (me *Hosts) New() Hosts {
-	if me == nil {
-		me = &Hosts{ }
-	}
-
-	return *me
-}
-
-func (me *Hosts) Count() int {
-	return len(*me)
-}
-
-func (me *Hosts) Process() *ux.State {
-	state := ux.NewState(false)
-
-	for range OnlyOnce {
-		for h, _ := range *me {
-			(*me)[h].State = ux.NewState(false)
-			(*me)[h].Valid = true
+func (h *Hosts) Process(runtime *toolRuntime.TypeRuntime) *ux.State {
+	runtime = runtime.EnsureNotNil()
+	state := ux.NewState(runtime.CmdName, runtime.Debug)
+	for range onlyOnce {
+		for i, _ := range *h {
+			(*h)[i].Valid = true
+			(*h)[i].runtime = runtime
+			(*h)[i].state = ux.NewState(runtime.CmdName, runtime.Debug)
 		}
 	}
-
 	return state
 }
 
 
-//func (e *Hosts) IsNil() *ux.State {
-//	if state := ux.IfNilReturnError(e); state.IsError() {
-//		return state
-//	}
-//	e.State = e.State.EnsureNotNil()
-//	return e.State
-//}
+func (h *Hosts) Count() int {
+	return len(*h)
+}
 
 
-func (me *Hosts) GetHost(host interface{}) *Host {
-	ret := NewHost()
+func (h *Hosts) GetByName(host string) *Host {
+	ret := (*Host).New(&Host{}, nil)
 
-	for range OnlyOnce {
-		value := helperTypes.ReflectString(host)
-		if value == nil {
-			ret.State.SetError("GetHost arg not a string")
+	for range onlyOnce {
+		if host == "" {
+			ret.state.SetError("GetHostByName - hostname empty")
 			break
 		}
 
-		for _, v := range *me {
-			if v.HostName == *value {
+		var ok bool
+		for _, v := range *h {
+			if v.HostName == host {
 				ret = &v
+				ok = true
 				break
 			}
 		}
 
-		if !ret.Valid {
-			ret.State.SetError("GetHost hostname not found")
+		if !ok {
+			ret.state.SetError("GetHostByName - hostname not found")
+			break
+		}
+	}
+
+	return ret
+}
+
+
+func (h *Hosts) GetByProvider(provider string) *Host {
+	ret := (*Host).New(&Host{}, nil)
+
+	for range onlyOnce {
+		if provider == "" {
+			ret.state.SetError("GetHostByProvider - provider empty")
+			break
+		}
+
+		var ok bool
+		for _, v := range *h {
+			if v.Provider == provider {
+				ret = &v
+				ok = true
+				break
+			}
+		}
+
+		if !ok {
+			ret.state.SetError("GetHostByProvider - provider not found")
 			break
 		}
 	}

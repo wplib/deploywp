@@ -1,6 +1,7 @@
 package deploywp
 
 import (
+	"github.com/newclarity/scribeHelpers/toolRuntime"
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
@@ -9,32 +10,31 @@ type Build struct {
 	Empty bool
 
 	Valid bool
-	State *ux.State
+	runtime *toolRuntime.TypeRuntime
+	state   *ux.State
 }
-
-//var _ deploywp.BuildGetter = (*Build)(nil)
-
-func (me *Build) New() Build {
-	me = &Build {
+func (b *Build) New(runtime *toolRuntime.TypeRuntime) *Build {
+	runtime = runtime.EnsureNotNil()
+	return &Build {
 		Empty: false,
-		State: ux.NewState(false),
+
+		Valid:   true,
+		runtime: runtime,
+		state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
-	return *me
 }
-
-
-func (e *Build) IsNil() *ux.State {
-	if state := ux.IfNilReturnError(e); state.IsError() {
+func (b *Build) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(b); state.IsError() {
 		return state
 	}
-	e.State = e.State.EnsureNotNil()
-	return e.State
+	b.state = b.state.EnsureNotNil()
+	return b.state
 }
 
 
-func (me *Build) GetBuild() bool {
-	if state := me.IsNil(); state.IsError() {
+func (b *Build) GetBuild() bool {
+	if state := b.IsNil(); state.IsError() {
 		return false
 	}
-	return me.Empty
+	return b.Empty
 }

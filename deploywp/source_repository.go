@@ -1,6 +1,7 @@
 package deploywp
 
 import (
+	"github.com/newclarity/scribeHelpers/toolRuntime"
 	"github.com/newclarity/scribeHelpers/ux"
 	"strings"
 )
@@ -10,14 +11,33 @@ type Repository struct {
 	Provider string `json:"provider"`
 	URL      URL `json:"url"`
 
-	Valid bool
-	State *ux.State
+	Valid   bool
+	runtime *toolRuntime.TypeRuntime
+	state   *ux.State
+}
+func (r *Repository) New(runtime *toolRuntime.TypeRuntime) *Repository {
+	runtime = runtime.EnsureNotNil()
+	return &Repository{
+		Provider: "",
+		URL:      "",
+
+		Valid:   true,
+		runtime: runtime,
+		state:   ux.NewState(runtime.CmdName, runtime.Debug),
+	}
+}
+func (r *Repository) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(r); state.IsError() {
+		return state
+	}
+	r.state = r.state.EnsureNotNil()
+	return r.state
 }
 
 
 type URL string
-func (me *URL) ToString() string {
-	return string(*me)
+func (u *URL) String() string {
+	return string(*u)
 }
 
 type String string
@@ -26,48 +46,29 @@ func (me *String) ToString() string {
 }
 
 
-func (me *Repository) New() Repository {
-	me = &Repository{
-		Provider: "",
-		URL:      "",
-		State: ux.NewState(false),
-	}
-	return *me
-}
-
-
-func (e *Repository) IsNil() *ux.State {
-	if state := ux.IfNilReturnError(e); state.IsError() {
-		return state
-	}
-	e.State = e.State.EnsureNotNil()
-	return e.State
-}
-
-
-func (me *Repository) GetProvider() string {
-	if state := me.IsNil(); state.IsError() {
+func (r *Repository) GetProvider() string {
+	if state := r.IsNil(); state.IsError() {
 		return ""
 	}
-	return me.Provider
+	return r.Provider
 }
 
 
-func (me *Repository) GetUrl() URL {
-	if state := me.IsNil(); state.IsError() {
+func (r *Repository) GetUrl() URL {
+	if state := r.IsNil(); state.IsError() {
 		return ""
 	}
-	return me.URL
+	return r.URL
 }
 
 
-func (me *Repository) IsGitProvider() bool {
+func (r *Repository) IsGitProvider() bool {
 	var ok bool
-	if state := me.IsNil(); state.IsError() {
+	if state := r.IsNil(); state.IsError() {
 		return false
 	}
 
-	switch strings.ToLower(me.Provider) {
+	switch strings.ToLower(r.Provider) {
 		case "git":
 			fallthrough
 		case "github":
