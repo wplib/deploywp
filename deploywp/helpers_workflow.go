@@ -54,8 +54,7 @@ func (dwp *TypeDeployWp) Run() *ux.State {
 		ux.PrintfWhite("##############################\n")
 		ux.PrintfWhite("# Cleaning target repository #\n")
 		ux.PrintfWhite("##############################\n")
-		//srcGitRef.State = dwp.OpenTargetRepo()
-		time.Sleep(time.Second * 2)	// Simulate
+		dwp.State = dwp.CleanRepo(targetGitRef, false)
 		if dwp.State.IsError() {
 			break
 		}
@@ -65,7 +64,7 @@ func (dwp *TypeDeployWp) Run() *ux.State {
 		ux.PrintfWhite("#############################\n")
 		ux.PrintfWhite("# Syncing target repository #\n")
 		ux.PrintfWhite("#############################\n")
-		//srcGitRef.State = dwp.OpenTargetRepo()
+		//dwp.State = dwp.OpenTargetRepo()
 		time.Sleep(time.Second * 2)	// Simulate
 		if dwp.State.IsError() {
 			break
@@ -76,7 +75,7 @@ func (dwp *TypeDeployWp) Run() *ux.State {
 		ux.PrintfWhite("#########################################\n")
 		ux.PrintfWhite("# Running composer on target repository #\n")
 		ux.PrintfWhite("#########################################\n")
-		//srcGitRef.State = dwp.OpenTargetRepo()
+		//dwp.State = dwp.OpenTargetRepo()
 		time.Sleep(time.Second * 2)	// Simulate
 		if dwp.State.IsError() {
 			break
@@ -87,7 +86,7 @@ func (dwp *TypeDeployWp) Run() *ux.State {
 		ux.PrintfWhite("############################################\n")
 		ux.PrintfWhite("# Increment BUILD within target repository #\n")
 		ux.PrintfWhite("############################################\n")
-		//srcGitRef.State = dwp.OpenTargetRepo()
+		//dwp.State = dwp.OpenTargetRepo()
 		time.Sleep(time.Second * 2)	// Simulate
 		if dwp.State.IsError() {
 			break
@@ -98,7 +97,7 @@ func (dwp *TypeDeployWp) Run() *ux.State {
 		ux.PrintfWhite("########################################\n")
 		ux.PrintfWhite("# Commit target repository to Pantheon #\n")
 		ux.PrintfWhite("########################################\n")
-		//srcGitRef.State = dwp.OpenTargetRepo()
+		//dwp.State = dwp.OpenTargetRepo()
 		time.Sleep(time.Second * 2)	// Simulate
 		if dwp.State.IsError() {
 			break
@@ -109,7 +108,7 @@ func (dwp *TypeDeployWp) Run() *ux.State {
 		ux.PrintfWhite("############################\n")
 		ux.PrintfWhite("# Commit source repository #\n")
 		ux.PrintfWhite("############################\n")
-		//srcGitRef.State = dwp.OpenTargetRepo()
+		//dwp.State = dwp.OpenTargetRepo()
 		time.Sleep(time.Second * 2)	// Simulate
 		if dwp.State.IsError() {
 			break
