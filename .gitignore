@@ -2,3 +2,5 @@
 dist/
 bin/
 buildtools/*/*
+tests/src
+tests/target

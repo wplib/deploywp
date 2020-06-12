@@ -7,6 +7,7 @@ import (
 )
 
 const onlyOnce = "1"
+var onlyTwice = []string{"", ""}
 
 
 func init() {

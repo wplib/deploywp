@@ -25,24 +25,21 @@ func ProcessArgs(toolArgs *loadTools.TypeScribeArgs, cmd *cobra.Command, args []
 			break
 		}
 
-		ext := ""
-		if len(args) >= 1 {
-			ext := filepath.Ext(args[0])
-			if ext == ".json" {
-				toolArgs.Json.Filename = args[0]
-			} else if ext == ".tmpl" {
-				toolArgs.Template.Filename = args[0]
+		for range onlyTwice {
+			if len(args) >= 1 {
+				ext := filepath.Ext(args[0])
+				if ext == ".json" {
+					toolArgs.Json.Filename = args[0]
+					args = args[1:]
+				} else if ext == ".tmpl" {
+					toolArgs.Template.Filename = args[0]
+					args = args[1:]
+				} else {
+					break
+				}
 			}
 		}
-
-		if len(args) >= 2 {
-			ext = filepath.Ext(args[1])
-			if ext == ".json" {
-				toolArgs.Json.Filename = args[1]
-			} else if ext == ".tmpl" {
-				toolArgs.Template.Filename = args[1]
-			}
-		}
+		_ = Cmd.Runtime.SetArgs(args...)
 
 		state = toolArgs.ImportTools(&deploywp.GetHelpers)
 		if state.IsNotOk() {
@@ -63,6 +60,8 @@ func cmdBuild(cmd *cobra.Command, args []string) {
 	state := Cmd.State
 
 	for range onlyOnce {
+		Cmd.Chdir = true	// In this mode we always change directory to the JSON file.
+
 		state = ProcessArgs(Cmd, cmd, args)
 		if state.IsNotOk() {
 			state.PrintResponse()
@@ -77,6 +76,7 @@ func cmdBuild(cmd *cobra.Command, args []string) {
 
 		ux.PrintflnOk("Building website via deploywp.")
 		state = Cmd.Run()
+
 		//dwp := deploywp.HelperLoadDeployWp(Cmd.JsonStruct.Json, Cmd.Runtime.GetArgs()...)
 		//if dwp.State.IsNotOk() {
 		//	dwp.State.PrintResponse()
@@ -89,43 +89,12 @@ func cmdBuild(cmd *cobra.Command, args []string) {
 		//	//Cmd.State.Exit(1)
 		//	break
 		//}
-		//
-		//ux.PrintflnBlue("\n%s\nFINISHED", Cmd.State.SprintResponse())
 
 		state.PrintResponse()
+		ux.PrintflnBlue("\n# FINISHED")
 	}
 
 	Cmd.State = state
-
-	//for range onlyOnce {
-	//	Cmd.State = tmpl.Load()
-	//	if Cmd.State.IsNotOk() {
-	//		Cmd.State.PrintResponse()
-	//		break
-	//	}
-	//
-	//	ux.PrintflnOk("Running build.")
-	//	Cmd.State = tmpl.Run()
-	//	Cmd.State.PrintResponse()
-	//
-	//	//dwp := deploywp.TypeDeployWp{}
-	//	//dwp := deploywp.HelperLoadDeployWp(tmpl.JsonStruct.Json, tmpl.Exec.GetArgs()...)
-	//	//if dwp.State.IsNotOk() {
-	//	//	dwp.State.PrintResponse()
-	//	//	break
-	//	//}
-	//	//
-	//	//dwp.Exec = tmpl.JsonStruct.Exec
-	//	//Cmd.State = dwp.Run()
-	//	//
-	//	//if Cmd.State.IsNotOk() {
-	//	//	Cmd.State.SetExitCode(1)
-	//	//	//Cmd.State.Exit(1)
-	//	//	break
-	//	//}
-	//	//
-	//	//fmt.Printf("\n%s\nFINISHED\n", Cmd.State.SprintResponse())
-	//}
 }
 
 
@@ -231,42 +200,3 @@ func cmdRun(cmd *cobra.Command, args []string) {
 
 	Cmd.State = state
 }
-
-
-//func ProcessArgs(cmd *cobra.Command, args []string) *loadTools.ArgTemplate {
-//	var tmpl *loadTools.ArgTemplate
-//	// tmpl := loadTools.NewArgTemplate()
-//
-//	for range onlyOnce {
-//		tmpl = Cmd
-//
-//		_ = tmpl.Exec.SetArgs(cmd.Use)
-//		_ = tmpl.Exec.AddArgs(args...)
-//
-//		ext := ""
-//		if len(args) >= 1 {
-//			ext := filepath.Ext(args[0])
-//			if ext == ".json" {
-//				tmpl.Json.Name = args[0]
-//			} else if ext == ".tmpl" {
-//				tmpl.Template.Name = args[0]
-//			}
-//		}
-//
-//		if len(args) >= 2 {
-//			ext = filepath.Ext(args[1])
-//			if ext == ".json" {
-//				tmpl.Json.Name = args[1]
-//			} else if ext == ".tmpl" {
-//				tmpl.Template.Name = args[1]
-//			}
-//		}
-//
-//		tmpl.ValidateArgs()
-//		if tmpl.State.IsNotOk() {
-//			break
-//		}
-//	}
-//
-//	return tmpl
-//}

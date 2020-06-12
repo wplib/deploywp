@@ -142,7 +142,7 @@ func (dwp *TypeDeployWp) OpenTargetRepo() *toolGit.TypeGit {
 			break
 		}
 
-		path := dwp.Target.AbsPaths.GetBasePath()
+		path := dwp.GetTargetAbsPaths().GetBasePath()
 		if path == "" {
 			break
 		}

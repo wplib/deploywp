@@ -2,6 +2,7 @@ package deploywp
 
 import (
 	"github.com/newclarity/scribeHelpers/toolCopy"
+	"github.com/newclarity/scribeHelpers/toolExec"
 	"github.com/newclarity/scribeHelpers/toolGit"
 	"github.com/newclarity/scribeHelpers/toolPath"
 	"github.com/newclarity/scribeHelpers/toolPrompt"
@@ -10,6 +11,10 @@ import (
 )
 
 
+/*
+Part 2 - see docs.go
+Part 4 - see docs.go
+*/
 func (dwp *TypeDeployWp) OpenRepo(url string, path ...string) *toolGit.TypeGit {
 	gitRef := toolGit.New(dwp.Runtime)
 	if state := dwp.IsNil(); state.IsError() {
@@ -89,6 +94,7 @@ func (dwp *TypeDeployWp) OpenRepo(url string, path ...string) *toolGit.TypeGit {
 	}
 
 	gitRef.State = dwp.State
+	dwp.State.PrintResponse()
 	return gitRef
 }
 
@@ -134,10 +140,14 @@ func (dwp *TypeDeployWp) CheckoutRepo(gitRef *toolGit.TypeGit, versionType strin
 	}
 
 	gitRef.State = dwp.State
+	dwp.State.PrintResponse()
 	return dwp.State
 }
 
 
+/*
+Part 5 - see docs.go
+*/
 func (dwp *TypeDeployWp) CleanRepo(gitRef *toolGit.TypeGit, force bool) *ux.State {
 	if state := dwp.IsNil(); state.IsError() {
 		return state
@@ -158,86 +168,196 @@ func (dwp *TypeDeployWp) CleanRepo(gitRef *toolGit.TypeGit, force bool) *ux.Stat
 			}
 		}
 
-		ux.PrintflnBlue("# Removing files...")
-		dwp.State = gitRef.GitRm("rm", "-r", ".")
+
+		ux.PrintflnBlue("# Removing files (checked in) ...")
+		dwp.State = gitRef.GitRm("-r", ".")
 		//foo := dwp.State.OutputGrep("did not match any files")
-		if strings.Contains(dwp.State.GetError().Error(), "exit status 128") {
-			dwp.State.SetOk()
-		}
 		if dwp.State.IsError() {
-			dwp.State.SetError("Failed to remove files on target")
-			break
+			if strings.Contains(dwp.State.GetError().Error(), "exit status 128") {
+				dwp.State.SetOk()
+			} else {
+				dwp.State.SetError("Failed to remove files on target")
+				break
+			}
 		}
+
+
+		ux.PrintflnBlue("# Removing files (untracked) ...")
+		dwp.State = gitRef.GitClean("-d", "-f", ".")
+		//foo := dwp.State.OutputGrep("did not match any files")
+		if dwp.State.IsError() {
+			if strings.Contains(dwp.State.GetError().Error(), "exit status 128") {
+				dwp.State.SetOk()
+			} else {
+				dwp.State.SetError("Failed to remove files on target")
+				break
+			}
+		}
+
 
 		ux.PrintflnOk("# File removal completed OK.")
 		dwp.State.SetOk()
 	}
 
 	gitRef.State = dwp.State
+	dwp.State.PrintResponse()
 	return dwp.State
 }
 
 
 /*
-6. Copy directories into /tmp/deploywp/target/
-        - Honour {{ .target.files.exclude }} && {{ .target.files.copy }} && {{ .target.files.keep }}
-        - Copy {{ .source.paths.webroot_path }}/{{ .source.paths.wordpress.core_path }}
-                - To {{ .target.paths.webroot_path }}/{{ .target.paths.wordpress.core_path }}
-        - Copy {{ .source.paths.webroot_path }}/{{ .source.paths.wordpress.content_path }}
-                - To {{ .target.paths.webroot_path }}/{{ .target.paths.wordpress.content_path }}
-        - Copy {{ .source.paths.webroot_path }}/{{ .source.paths.wordpress.vendor }}
-                - To {{ .target.paths.webroot_path }}/{{ .target.paths.wordpress.vendor }}
+Part 6 - see docs.go
 */
-func (dwp *TypeDeployWp) CopyFiles() *ux.State {
+func (dwp *TypeDeployWp) CopyFiles(src string, dst string, exclude ...string) *ux.State {
 	if state := dwp.IsNil(); state.IsError() {
 		return state
 	}
 
 	for range onlyOnce {
-		srcAbs := dwp.GetSourceAbsPaths()
-		targetAbs := dwp.GetTargetAbsPaths()
-
 		fileCopy := toolCopy.New(dwp.Runtime)
 		if fileCopy.State.IsError() {
 			dwp.State = fileCopy.State
 			break
 		}
 
-		if !fileCopy.SetSourcePath(srcAbs.GetCorePath()) {
-			dwp.State.SetError("Failed to set source path - '%s'.", srcAbs.GetCorePath())
+		if !fileCopy.SetSourcePath(src) {
+			dwp.State.SetError("Failed to set source path - '%s'.", src)
 			break
 		}
 
-		if !fileCopy.SetDestinationPath(targetAbs.) {
-			dwp.State.SetError("Failed to set target path - '%s'.", targetAbs.)
+		if !fileCopy.SetDestinationPath(dst) {
+			dwp.State.SetError("Failed to set target path - '%s'.", dst)
 			break
 		}
 
-		// .
+		fileCopy.SetMethodRsync()
+		fileCopy.SetOverwrite()
+		fileCopy.SetExcludePaths(exclude...)
 
-		src := dwp.GetSourcePaths()
-		//srcAbs := dwp.GetSourceAbsPaths()
-		ux.PrintflnBlue("# SOURCE PATHS:")
-		ux.PrintflnOk("BasePath (abs):    %s", srcAbs.GetBasePath())
-		ux.PrintflnOk("BasePath:          %s", src.GetBasePath())
-		ux.PrintflnOk("WebRootPath:       %s", src.GetWebRootPath())
-		ux.PrintflnOk("ContentPath:       %s", src.GetContentPath())
-		ux.PrintflnOk("CorePath:          %s", src.GetCorePath())
-		ux.PrintflnOk("RootPath:          %s", src.GetRootPath())
-		ux.PrintflnOk("VendorPath:        %s", src.GetVendorPath())
+		ux.PrintflnBlue("# Copying files:")
+		ux.PrintflnBlue("    Source:      %s", fileCopy.GetSourcePath())
+		ux.PrintflnBlue("    Destination: %s", fileCopy.GetDestinationPath())
+		ux.PrintflnBlue("    Excludes:    %v", fileCopy.GetExcludePaths())
 
-		target := dwp.GetTargetPaths()
-		//targetAbs := dwp.GetTargetAbsPaths()
-		ux.PrintflnBlue("# TARGET PATHS:")
-		ux.PrintflnOk("BasePath (abs):    %s", targetAbs.GetBasePath())
-		ux.PrintflnOk("BasePath:          %s", target.GetBasePath())
-		ux.PrintflnOk("WebRootPath:       %s", target.GetWebRootPath())
-		ux.PrintflnOk("ContentPath:       %s", target.GetContentPath())
-		ux.PrintflnOk("CorePath:          %s", target.GetCorePath())
-		ux.PrintflnOk("RootPath:          %s", target.GetRootPath())
-		ux.PrintflnOk("VendorPath:        %s", target.GetVendorPath())
+		dwp.State = fileCopy.Copy()
+		if dwp.State.IsError() {
+			dwp.State = fileCopy.State
+			break
+		}
+
+		ux.PrintflnOk("Files copied with OK")
 	}
 
+	//dwp.State.PrintResponse()
+	return dwp.State
+}
+
+func (dwp *TypeDeployWp) CopyFile(src string, dst string) *ux.State {
+	if state := dwp.IsNil(); state.IsError() {
+		return state
+	}
+
+	for range onlyOnce {
+		fileCopy := toolCopy.New(dwp.Runtime)
+		if fileCopy.State.IsError() {
+			dwp.State = fileCopy.State
+			break
+		}
+
+		if !fileCopy.SetSourcePath(src) {
+			dwp.State.SetError("Failed to set source path - '%s'.", src)
+			break
+		}
+
+		if !fileCopy.SetDestinationPath(dst) {
+			dwp.State.SetError("Failed to set target path - '%s'.", dst)
+			break
+		}
+
+		fileCopy.SetOverwrite()
+		fileCopy.SetMethodCp()
+
+		ux.PrintflnBlue("# Copying file:")
+		ux.PrintflnBlue("    Source:      %s", fileCopy.GetSourcePath())
+		ux.PrintflnBlue("    Destination: %s", fileCopy.GetDestinationPath())
+
+		dwp.State = fileCopy.Copy()
+		if dwp.State.IsError() {
+			dwp.State = fileCopy.State
+			break
+		}
+
+		ux.PrintflnOk("Files copied with OK")
+	}
+
+	//dwp.State.PrintResponse()
+	return dwp.State
+}
+
+
+/*
+7. Run composer, (within /tmp/deploywp/target/).
+        - Fixup composer.json
+                - .extra.wordpress-webroot-path = {{ .target.paths.wordpress.root_path }}
+                - .extra.wordpress-core-path = {{ .target.paths.wordpress.core_path }}
+                - .extra.wordpress-content-path = {{ .target.paths.wordpress.content_path }}
+                - .config.vendor-dir = {{ .target.paths.webroot_path }}/{{ .target.paths.wordpress.vendor_path }}
+                - .extra.installer-paths.*
+                        - ReplacePrefix -> target references
+                                - {{ .target.paths.webroot_path }}/{{ .target.paths.wordpress.core_path }}/
+                                - {{ .target.paths.webroot_path }}/{{ .target.paths.wordpress.content_path }}/
+                                - {{ .target.paths.webroot_path }}/{{ .target.paths.wordpress.vendor_path }}/
+                                - {{ .target.paths.webroot_path }}/{{ .target.paths.wordpress.root_path }}/
+                                - Check Mike's BASH script.
+
+        - composer install
+        - find /tmp/deploywp/target/ -name composer.json -delete
+*/
+func (dwp *TypeDeployWp) RunComposer(dstDir string, args ...string) *ux.State {
+	if state := dwp.IsNil(); state.IsError() {
+		return state
+	}
+
+	for range onlyOnce {
+		exe := toolExec.New(dwp.Runtime)
+		if exe.State.IsNotOk() {
+			dwp.State = exe.State
+			break
+		}
+
+		dwp.State = exe.SetCmd("composer")
+		if dwp.State.IsNotOk() {
+			break
+		}
+
+		if !exe.IsRunnable() {
+			dwp.State.SetError()
+			break
+		}
+
+		dwp.State = exe.SetWorkingPath(dstDir)
+		if dwp.State.IsNotOk() {
+			break
+		}
+
+		dwp.State = exe.SetArgs(args...)
+		if dwp.State.IsNotOk() {
+			break
+		}
+
+		exe.ShowProgress()
+
+		ux.PrintflnBlue("# Running composer:")
+		ux.PrintflnBlue("    Additional Args: %s", strings.Join(exe.GetArgs(), " "))
+		ux.PrintflnBlue("    Working Dir:     %s", exe.GetWorkingPathAbs())
+
+		dwp.State = exe.Run()
+		if dwp.State.IsNotOk() {
+			break
+		}
+	}
+
+	dwp.State.PrintResponse()
 	return dwp.State
 }
 
@@ -271,6 +391,7 @@ func (dwp *TypeDeployWp) PrintPaths() *ux.State {
 		ux.PrintflnOk("VendorPath:        %s", target.GetVendorPath())
 	}
 
+	//dwp.State.PrintResponse()
 	return dwp.State
 }
 
@@ -304,5 +425,6 @@ func (dwp *TypeDeployWp) ObtainHost() *ux.State {
 		dwp.State.SetOutput(host)
 	}
 
+	dwp.State.PrintResponse()
 	return dwp.State
 }
