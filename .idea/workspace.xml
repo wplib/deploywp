@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="56b4b170-76f7-4ada-8cff-27bcfeafc366" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/helpers.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/helpers.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/commands.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/commands.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/runtime/structs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/version.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/version.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/defaults/version.go" beforeDir="false" afterPath="$PROJECT_DIR$/defaults/version.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +57,7 @@
       <module name="deploywp-code" />
       <working_directory value="$PROJECT_DIR$" />
       <go_parameters value="-i" />
-      <parameters value="build tests/deploywp.json prod" />
+      <parameters value="version check" />
       <kind value="DIRECTORY" />
       <filePath value="$PROJECT_DIR$/" />
       <package value="github.com/wplib/deploywp" />
@@ -91,11 +94,11 @@
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="964" y="367" key="#Go_Modules/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1589158017843" />
-    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591945072631">
+    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1591948384688">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="-1292" y="196" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1590366325957" />
-    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591945072631" />
+    <state x="628" y="188" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591948384688" />
     <state x="931" y="363" width="470" height="483" key="#com.intellij.tools.ToolEditorDialog" timestamp="1589190675421">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
@@ -108,46 +111,46 @@
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="377" y="287" key="#xdebugger.XInspectDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591925696155" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.bottom" timestamp="1591945316589">
+    <state width="1701" height="1013" key="GridCell.Tab.0.bottom" timestamp="1591948775199">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591945316589" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.center" timestamp="1591945316588">
+    <state width="1701" height="1013" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591948775199" />
+    <state width="1701" height="1013" key="GridCell.Tab.0.center" timestamp="1591948775199">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179263" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591945316588" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.left" timestamp="1591945316588">
+    <state width="1701" height="1013" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591948775199" />
+    <state width="1701" height="1013" key="GridCell.Tab.0.left" timestamp="1591948775198">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179263" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591945316588" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.right" timestamp="1591945316589">
+    <state width="1701" height="1013" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591948775198" />
+    <state width="1701" height="1013" key="GridCell.Tab.0.right" timestamp="1591948775199">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591945316589" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.bottom" timestamp="1591945316590">
+    <state width="1701" height="1013" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591948775199" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.bottom" timestamp="1591948775200">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179265" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591945316590" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.center" timestamp="1591945316590">
+    <state width="1701" height="1013" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591948775200" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.center" timestamp="1591948775199">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591945316590" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.left" timestamp="1591945316589">
+    <state width="1701" height="1013" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591948775199" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.left" timestamp="1591948775199">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591945316589" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.right" timestamp="1591945316590">
+    <state width="1701" height="1013" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591948775199" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.right" timestamp="1591948775200">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179265" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591945316590" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591948775200" />
     <state width="756" height="503" key="XDebugger.FullValuePopup" timestamp="1591937462877">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
@@ -247,6 +250,56 @@
           <url>file://$PROJECT_DIR$/deploywp/helpers_lowlevel.go</url>
           <line>406</line>
           <option name="timeStamp" value="747" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/cmd/version.go</url>
+          <line>135</line>
+          <option name="timeStamp" value="754" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/cmd/version.go</url>
+          <line>48</line>
+          <option name="timeStamp" value="756" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/cmd/version.go</url>
+          <line>45</line>
+          <option name="timeStamp" value="759" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/cmd/version.go</url>
+          <line>117</line>
+          <option name="timeStamp" value="764" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/../scribeHelpers/toolSelfUpdate/selfupdate.go</url>
+          <line>107</line>
+          <option name="timeStamp" value="765" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/../scribeHelpers/toolSelfUpdate/selfupdate.go</url>
+          <line>55</line>
+          <option name="timeStamp" value="766" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/../scribeHelpers/toolSelfUpdate/selfupdate.go</url>
+          <line>58</line>
+          <option name="timeStamp" value="767" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$USER_HOME$/go/pkg/mod/github.com/rhysd/go-github-selfupdate@v1.2.2/selfupdate/detect.go</url>
+          <line>146</line>
+          <option name="timeStamp" value="768" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$USER_HOME$/go/pkg/mod/github.com/rhysd/go-github-selfupdate@v1.2.2/selfupdate/detect.go</url>
+          <line>162</line>
+          <option name="timeStamp" value="770" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$USER_HOME$/go/pkg/mod/github.com/rhysd/go-github-selfupdate@v1.2.2/selfupdate/detect.go</url>
+          <line>113</line>
+          <option name="timeStamp" value="771" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

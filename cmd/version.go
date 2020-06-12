@@ -20,9 +20,9 @@ var versionCmd = &cobra.Command{
 	Long:  ux.SprintfMagenta(defaults.BinaryName) + ux.SprintfBlue(" - Show version of executable."),
 	Run: func(cmd *cobra.Command, args []string) {
 		Cmd.State = ProcessArgs(Cmd, cmd, args)
-		if Cmd.State.IsNotOk() {
-			return
-		}
+		//if Cmd.State.IsNotOk() {
+		//	return
+		//}
 
 		Cmd.State = Version(args...)
 	},
@@ -33,9 +33,9 @@ var selfUpdateCmd = &cobra.Command{
 	Long: ux.SprintfMagenta(defaults.BinaryName) + ux.SprintfBlue(" - Check and update the latest version."),
 	Run: func(cmd *cobra.Command, args []string) {
 		Cmd.State = ProcessArgs(Cmd, cmd, args)
-		if Cmd.State.IsNotOk() {
-			return
-		}
+		//if Cmd.State.IsNotOk() {
+		//	return
+		//}
 
 		Cmd.State = VersionUpdate()
 	},
