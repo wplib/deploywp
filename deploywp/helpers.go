@@ -23,14 +23,13 @@ func (c *HelperDeployWp) IsNil() *ux.State {
 
 
 func HelperLoadDeployWp(str interface{}, args []string) *TypeDeployWp {
-	//dwp := (*TypeDeployWp).New(nil, nil)
-	var dwp *TypeDeployWp
-	dwp = dwp.New(nil)
+	//var dwp *TypeDeployWp; dwp = dwp.New(nil)
+	dwp := (*TypeDeployWp).New(&TypeDeployWp{}, nil)
 
 	for range onlyOnce {
 		var err error
 
-		dwp.Runtime.Args = args[1:]
+		// dwp.Runtime.Args = args[1:]
 		err = mapstructure.Decode(str, &dwp)
 		dwp.State.SetError(err)
 		if dwp.State.IsError() {
