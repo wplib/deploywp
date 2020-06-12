@@ -14,6 +14,7 @@ func init() {
 
 func main() {
 	state := cmd.Execute()
+	state.PrintResponse()
 	ux.Close()
 	os.Exit(state.ExitCode)
 }
