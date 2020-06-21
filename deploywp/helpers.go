@@ -22,6 +22,30 @@ func (c *HelperDeployWp) IsNil() *ux.State {
 }
 
 
+func HelperBuildDeployWp(str interface{}, args []string) string {
+	var ret string
+
+	for range onlyOnce {
+		dwp := HelperLoadDeployWp(str, args)
+		if dwp.State.IsNotOk() {
+			dwp.State.PrintResponse()
+			break
+		}
+
+		dwp.State = dwp.Build()
+		if dwp.State.IsNotOk() {
+			dwp.State.SetExitCode(1)
+			dwp.State.PrintResponse()
+			break
+		}
+
+		dwp.Valid = true
+	}
+
+	return ret
+}
+
+
 func HelperLoadDeployWp(str interface{}, args []string) *TypeDeployWp {
 	//var dwp *TypeDeployWp; dwp = dwp.New(nil)
 	dwp := (*TypeDeployWp).New(&TypeDeployWp{}, nil)

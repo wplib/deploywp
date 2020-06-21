@@ -10,7 +10,7 @@ import (
 
 // This is an alternative to running templates.
 // In theory, the code here, should be able to be replicated in a template file without modification.
-func (dwp *TypeDeployWp) Run() *ux.State {
+func (dwp *TypeDeployWp) Build() *ux.State {
 	if state := dwp.IsNil(); state.IsError() {
 		return state
 	}

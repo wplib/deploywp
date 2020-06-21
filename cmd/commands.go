@@ -24,6 +24,7 @@ var buildCmd = &cobra.Command{
 	Use:   loadTools.CmdBuild,
 	Short: ux.SprintfMagenta(defaults.BinaryName) + ux.SprintfBlue(" - Build a Pantheon website."),
 	Long: ux.SprintfMagenta(defaults.BinaryName) + ux.SprintfBlue(" - Build a Pantheon website."),
+	Args: cobra.RangeArgs(1, 2),
 	Run: cmdBuild,
 }
 

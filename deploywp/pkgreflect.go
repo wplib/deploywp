@@ -33,6 +33,7 @@ var Types = map[string]reflect.Type{
 }
 
 var Functions = map[string]reflect.Value{
+	"HelperBuildDeployWp": reflect.ValueOf(HelperBuildDeployWp),
 	"HelperLoadDeployWp": reflect.ValueOf(HelperLoadDeployWp),
 	"IsValidVersionType": reflect.ValueOf(IsValidVersionType),
 	"ReflectDeployWp": reflect.ValueOf(ReflectDeployWp),

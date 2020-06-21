@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/wplib/deploywp/defaults"
+	"github.com/wplib/deploywp/deploywp"
 )
 
 
@@ -26,33 +27,44 @@ type TypeCmd struct {
 
 const DefaultJsonFile     = "deploywp.json"
 //const DefaultTemplateFile = `{{ $dwp := LoadDeployWp .Json (.Exec.GetArg 1) }}{{ $dwp.ExitOnError }}{{ $dwp.Run }}`
-const DefaultTemplateFile = `{{ $dwp := LoadDeployWp .Json .Exec.Args }}{{ $dwp.ExitOnError }}{{ $state := $dwp.Run }}{{ $state.ExitOnError }}`
+//const DefaultTemplateFile = `{{ $dwp := LoadDeployWp .Json .Exec.Args }}{{ $dwp.ExitOnError }}{{ $state := $dwp.Run }}{{ $state.ExitOnError }}`
+const DefaultTemplateFile = `{{ BuildDeployWp .Json .Exec.Args }}`
 
 var Cmd *loadTools.TypeScribeArgs
 var ConfigFile string
 const 	flagConfigFile  	= "config"
 func SetCmd() {
-	if Cmd == nil {
-		Cmd = loadTools.New(defaults.BinaryName, defaults.BinaryVersion, false)
-		Cmd.Runtime.SetRepos(defaults.SourceRepo, defaults.BinaryRepo)
+	for range onlyOnce {
+		if Cmd == nil {
+			Cmd = loadTools.New(defaults.BinaryName, defaults.BinaryVersion, false)
+
+			Cmd.Runtime.SetRepos(defaults.SourceRepo, defaults.BinaryRepo)
+			if Cmd.State.IsNotOk() {
+				break
+			}
+
+			// Import additional tools.
+			Cmd.ImportTools(&deploywp.GetHelpers)
+			if Cmd.State.IsNotOk() {
+				break
+			}
+		}
 	}
 }
 
 
 func init() {
 	SetCmd()
-
-	//Cmd = loadTools.NewArgTemplate(defaults.BinaryName, defaults.BinaryVersion)
-
+	defaults.New(rootCmd, Cmd)
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&ConfigFile, flagConfigFile, fmt.Sprintf("%s-config.json", defaults.BinaryName), ux.SprintfBlue("%s: config file.", defaults.BinaryName))
 	_ = rootCmd.PersistentFlags().MarkHidden(flagConfigFile)
 
-	rootCmd.PersistentFlags().StringVarP(&Cmd.Json.Filename, loadTools.FlagJsonFile, "j", DefaultJsonFile, ux.SprintfBlue("Alternative JSON file."))
-	rootCmd.PersistentFlags().StringVarP(&Cmd.Template.Filename, loadTools.FlagTemplateFile, "t", DefaultTemplateFile, ux.SprintfBlue("Alternative template file."))
-	rootCmd.PersistentFlags().StringVarP(&Cmd.Output.Filename, loadTools.FlagOutputFile, "o", loadTools.DefaultOutFile, ux.SprintfBlue("Output file."))
-	rootCmd.PersistentFlags().StringVarP(&Cmd.WorkingPath.Filename, loadTools.FlagWorkingPath, "p", loadTools.DefaultWorkingPath, ux.SprintfBlue("Set working path."))
+	rootCmd.PersistentFlags().StringVarP(&Cmd.Json.File, loadTools.FlagJsonFile, "j", DefaultJsonFile, ux.SprintfBlue("Alternative JSON file."))
+	rootCmd.PersistentFlags().StringVarP(&Cmd.Template.File, loadTools.FlagTemplateFile, "t", DefaultTemplateFile, ux.SprintfBlue("Alternative template file."))
+	rootCmd.PersistentFlags().StringVarP(&Cmd.Output.File, loadTools.FlagOutputFile, "o", loadTools.DefaultOutFile, ux.SprintfBlue("Output file."))
+	rootCmd.PersistentFlags().StringVarP(&Cmd.WorkingPath.File, loadTools.FlagWorkingPath, "p", loadTools.DefaultWorkingPath, ux.SprintfBlue("Set working path."))
 
 	rootCmd.PersistentFlags().BoolVarP(&Cmd.Chdir, loadTools.FlagChdir, "c", false, ux.SprintfBlue("Change to directory containing %s", DefaultJsonFile))
 	//rootCmd.PersistentFlags().BoolVarP(&Cmd.RemoveTemplate, loadTools.FlagRemoveTemplate, "", false, ux.SprintfBlue("Remove template file afterwards."))
@@ -112,13 +124,11 @@ func gbRootFunc(cmd *cobra.Command, args []string) {
 	for range onlyOnce {
 		var ok bool
 		fl := cmd.Flags()
-		//tmpl := loadTools.NewArgTemplate(defaults.BinaryName, defaults.BinaryVersion)
 
-		// ////////////////////////////////
 		// Show version.
 		ok, _ = fl.GetBool(loadTools.FlagVersion)
 		if ok {
-			VersionShow()
+			defaults.VersionShow()
 			Cmd.State.Clear()
 			break
 		}
@@ -175,10 +185,6 @@ func Execute() *ux.State {
 	for range onlyOnce {
 		SetHelp(rootCmd)
 		SetCmd()
-
-		//if Cmd == nil {
-		//	Cmd = loadTools.NewArgTemplate(defaults.BinaryName, defaults.BinaryVersion)
-		//}
 
 		err := rootCmd.Execute()
 		if err != nil {
