@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/newclarity/scribeHelpers/loadTools"
+	"github.com/newclarity/scribeHelpers/toolSelfUpdate"
 	"github.com/newclarity/scribeHelpers/ux"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -11,76 +12,66 @@ import (
 )
 
 
-type TypeCmd struct {
-	ConfigFile   string
+//type TypeCmd struct {
+//	ConfigFile   string
+//
+//	JsonFile     string
+//	TemplateFile string
+//	OutFile      string
+//
+//	Debug        bool
+//	Chdir        bool
+//	DryRun       bool
+//
+//	State        *ux.State
+//}
 
-	JsonFile     string
-	TemplateFile string
-	OutFile      string
-
-	Debug        bool
-	Chdir        bool
-	DryRun       bool
-
-	State        *ux.State
-}
 
 const DefaultJsonFile     = "deploywp.json"
 //const DefaultTemplateFile = `{{ $dwp := LoadDeployWp .Json (.Exec.GetArg 1) }}{{ $dwp.ExitOnError }}{{ $dwp.Run }}`
 //const DefaultTemplateFile = `{{ $dwp := LoadDeployWp .Json .Exec.Args }}{{ $dwp.ExitOnError }}{{ $state := $dwp.Run }}{{ $state.ExitOnError }}`
 const DefaultTemplateFile = `{{ BuildDeployWp .Json .Exec.Args }}`
 
-var Cmd *loadTools.TypeScribeArgs
+
+var CmdSelfUpdate *toolSelfUpdate.TypeSelfUpdate
+var CmdScribe *loadTools.TypeScribeArgs
 var ConfigFile string
 const 	flagConfigFile  	= "config"
-func SetCmd() {
-	for range onlyOnce {
-		if Cmd == nil {
-			Cmd = loadTools.New(defaults.BinaryName, defaults.BinaryVersion, false)
 
-			Cmd.Runtime.SetRepos(defaults.SourceRepo, defaults.BinaryRepo)
-			if Cmd.State.IsNotOk() {
-				break
-			}
 
-			// Import additional tools.
-			Cmd.ImportTools(&deploywp.GetHelpers)
-			if Cmd.State.IsNotOk() {
-				break
-			}
-		}
-	}
+var rootCmd = &cobra.Command{
+	Use:   defaults.BinaryName,
+	Short: "Pantheon release tool.",
+	Long: `Feed me a deploywp.json file and I'll do the rest.`,
+	Run: gbRootFunc,
 }
 
 
 func init() {
 	SetCmd()
-	defaults.New(rootCmd, Cmd)
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&ConfigFile, flagConfigFile, fmt.Sprintf("%s-config.json", defaults.BinaryName), ux.SprintfBlue("%s: config file.", defaults.BinaryName))
 	_ = rootCmd.PersistentFlags().MarkHidden(flagConfigFile)
 
-	rootCmd.PersistentFlags().StringVarP(&Cmd.Json.File, loadTools.FlagJsonFile, "j", DefaultJsonFile, ux.SprintfBlue("Alternative JSON file."))
-	rootCmd.PersistentFlags().StringVarP(&Cmd.Template.File, loadTools.FlagTemplateFile, "t", DefaultTemplateFile, ux.SprintfBlue("Alternative template file."))
-	rootCmd.PersistentFlags().StringVarP(&Cmd.Output.File, loadTools.FlagOutputFile, "o", loadTools.DefaultOutFile, ux.SprintfBlue("Output file."))
-	rootCmd.PersistentFlags().StringVarP(&Cmd.WorkingPath.File, loadTools.FlagWorkingPath, "p", loadTools.DefaultWorkingPath, ux.SprintfBlue("Set working path."))
-
-	rootCmd.PersistentFlags().BoolVarP(&Cmd.Chdir, loadTools.FlagChdir, "c", false, ux.SprintfBlue("Change to directory containing %s", DefaultJsonFile))
-	//rootCmd.PersistentFlags().BoolVarP(&Cmd.RemoveTemplate, loadTools.FlagRemoveTemplate, "", false, ux.SprintfBlue("Remove template file afterwards."))
-	//rootCmd.PersistentFlags().BoolVarP(&Cmd.ForceOverwrite, loadTools.FlagForce, "f", false, ux.SprintfBlue("Force overwrite of output files."))
-	//rootCmd.PersistentFlags().BoolVarP(&Cmd.RemoveOutput, loadTools.FlagRemoveOutput, "", false, ux.SprintfBlue("Remove output file afterwards."))
-	rootCmd.PersistentFlags().BoolVarP(&Cmd.QuietProgress, loadTools.FlagQuiet, "q", false, ux.SprintfBlue("Silence progress in shell scripts."))
-	//rootCmd.PersistentFlags().BoolVarP(&Cmd.DryRun, flagDryRun, "n", false, "Don't overwrite files.")
-
-	rootCmd.PersistentFlags().BoolVarP(&Cmd.Debug, loadTools.FlagDebug ,"d", false, ux.SprintfBlue("DEBUG mode."))
-
-	//rootCmd.PersistentFlags().BoolVarP(&Cmd.HelpAll, loadTools.FlagHelpAll, "", false, ux.SprintfBlue("Show all help."))
-	//rootCmd.PersistentFlags().BoolVarP(&Cmd.HelpVariables, loadTools.FlagHelpVariables, "", false, ux.SprintfBlue("Help on template variables."))
-	//rootCmd.PersistentFlags().BoolVarP(&Cmd.HelpFunctions, loadTools.FlagHelpFunctions, "", false, ux.SprintfBlue("Help on template functions."))
-	//rootCmd.PersistentFlags().BoolVarP(&Cmd.HelpExamples, loadTools.FlagHelpExamples, "", false, ux.SprintfBlue("Help on template examples."))
-
-	rootCmd.Flags().BoolP(loadTools.FlagVersion, "v", false, ux.SprintfBlue("Display version of " + defaults.BinaryName))
+	//rootCmd.PersistentFlags().StringVarP(&CmdScribe.Json.File, loadTools.FlagJsonFile, "j", DefaultJsonFile, ux.SprintfBlue("Alternative JSON file."))
+	//rootCmd.PersistentFlags().StringVarP(&CmdScribe.Template.File, loadTools.FlagTemplateFile, "t", DefaultTemplateFile, ux.SprintfBlue("Alternative template file."))
+	//rootCmd.PersistentFlags().StringVarP(&CmdScribe.Output.File, loadTools.FlagOutputFile, "o", loadTools.DefaultOutFile, ux.SprintfBlue("Output file."))
+	//rootCmd.PersistentFlags().StringVarP(&CmdScribe.WorkingPath.File, loadTools.FlagWorkingPath, "p", loadTools.DefaultWorkingPath, ux.SprintfBlue("Set working path."))
+	//
+	//rootCmd.PersistentFlags().BoolVarP(&CmdScribe.Chdir, loadTools.FlagChdir, "c", false, ux.SprintfBlue("Change to directory containing %s", DefaultJsonFile))
+	////rootCmd.PersistentFlags().BoolVarP(&CmdScribe.RemoveTemplate, loadTools.FlagRemoveTemplate, "", false, ux.SprintfBlue("Remove template file afterwards."))
+	////rootCmd.PersistentFlags().BoolVarP(&CmdScribe.ForceOverwrite, loadTools.FlagForce, "f", false, ux.SprintfBlue("Force overwrite of output files."))
+	////rootCmd.PersistentFlags().BoolVarP(&CmdScribe.RemoveOutput, loadTools.FlagRemoveOutput, "", false, ux.SprintfBlue("Remove output file afterwards."))
+	//rootCmd.PersistentFlags().BoolVarP(&CmdScribe.QuietProgress, loadTools.FlagQuiet, "q", false, ux.SprintfBlue("Silence progress in shell scripts."))
+	////rootCmd.PersistentFlags().BoolVarP(&CmdScribe.DryRun, flagDryRun, "n", false, "Don't overwrite files.")
+	//
+	//rootCmd.PersistentFlags().BoolVarP(&CmdScribe.Debug, loadTools.FlagDebug ,"d", false, ux.SprintfBlue("DEBUG mode."))
+	//
+	////rootCmd.PersistentFlags().BoolVarP(&CmdScribe.HelpAll, loadTools.FlagHelpAll, "", false, ux.SprintfBlue("Show all help."))
+	////rootCmd.PersistentFlags().BoolVarP(&CmdScribe.HelpVariables, loadTools.FlagHelpVariables, "", false, ux.SprintfBlue("Help on template variables."))
+	////rootCmd.PersistentFlags().BoolVarP(&CmdScribe.HelpFunctions, loadTools.FlagHelpFunctions, "", false, ux.SprintfBlue("Help on template functions."))
+	////rootCmd.PersistentFlags().BoolVarP(&CmdScribe.HelpExamples, loadTools.FlagHelpExamples, "", false, ux.SprintfBlue("Help on template examples."))
 }
 
 
@@ -110,17 +101,61 @@ func initConfig() {
 }
 
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   defaults.BinaryName,
-	Short: "Pantheon release tool.",
-	Long: `...`,
-	Run: gbRootFunc,
+func SetCmd() {
+	for range onlyOnce {
+		if CmdScribe == nil {
+			CmdScribe = loadTools.New(defaults.BinaryName, defaults.BinaryVersion, false)
+			CmdScribe.Runtime.SetRepos(defaults.SourceRepo, defaults.BinaryRepo)
+			if CmdScribe.State.IsNotOk() {
+				break
+			}
+
+			// Import additional tools.
+			CmdScribe.ImportTools(&deploywp.GetHelpers)
+			if CmdScribe.State.IsNotOk() {
+				break
+			}
+
+			CmdScribe.LoadCommands(rootCmd, false)
+			if CmdScribe.State.IsNotOk() {
+				break
+			}
+
+			// This executable is based on Scribe, but we are going to disable some things that we don't need.
+			CmdScribe.FlagHide(loadTools.FlagScribeFile)
+			CmdScribe.FlagSetDefault(loadTools.FlagJsonFile, DefaultJsonFile)
+			CmdScribe.FlagSetDefault(loadTools.FlagTemplateFile, DefaultTemplateFile)
+			//CmdScribe.FlagSetDefault(loadTools.FlagOutputFile, loadTools.DefaultOutFile)
+			//CmdScribe.FlagSetDefault(loadTools.FlagWorkingPath, loadTools.DefaultWorkingPath)
+
+			//CmdScribe.FlagSetDefault(loadTools.FlagChdir, "false")
+			CmdScribe.FlagHide(loadTools.FlagRemoveTemplate)
+			CmdScribe.FlagHide(loadTools.FlagForce)
+			CmdScribe.FlagHide(loadTools.FlagRemoveOutput)
+			//CmdScribe.FlagSetDefault(loadTools.FlagQuiet, "false")
+
+			//CmdScribe.FlagSetDefault(loadTools.FlagDebug, "false")
+
+			CmdScribe.FlagHide(loadTools.FlagHelpAll)
+			CmdScribe.FlagHide(loadTools.FlagHelpVariables)
+			CmdScribe.FlagHide(loadTools.FlagHelpFunctions)
+			CmdScribe.FlagHide(loadTools.FlagHelpExamples)
+		}
+
+		if CmdSelfUpdate == nil {
+			CmdSelfUpdate = toolSelfUpdate.New(CmdScribe.Runtime)
+			CmdSelfUpdate.LoadCommands(rootCmd, false)
+			if CmdSelfUpdate.State.IsNotOk() {
+				break
+			}
+		}
+
+		CmdScribe.SetHelp(rootCmd)
+	}
 }
 
-func gbRootFunc(cmd *cobra.Command, args []string) {
-	//Cmd.State = Cmd.State.EnsureNotNil()
 
+func gbRootFunc(cmd *cobra.Command, args []string) {
 	for range onlyOnce {
 		var ok bool
 		fl := cmd.Flags()
@@ -128,43 +163,17 @@ func gbRootFunc(cmd *cobra.Command, args []string) {
 		// Show version.
 		ok, _ = fl.GetBool(loadTools.FlagVersion)
 		if ok {
-			defaults.VersionShow()
-			Cmd.State.Clear()
+			CmdSelfUpdate.VersionShow()
+			CmdScribe.State.SetOk()
 			break
 		}
 
-		// Show HelpVariables.
-		ok, _ = fl.GetBool(loadTools.FlagHelpVariables)
-		if ok {
-			HelpVariables()
+		if CmdScribe.ParseScribeFlags(cmd) {
 			break
 		}
 
-		// Show HelpFunctions.
-		ok, _ = fl.GetBool(loadTools.FlagHelpFunctions)
-		if ok {
-			HelpFunctions()
-			break
-		}
-
-		// Show HelpExamples.
-		ok, _ = fl.GetBool(loadTools.FlagHelpExamples)
-		if ok {
-			HelpExamples()
-			break
-		}
-
-		// Show all help.
-		ok, _ = fl.GetBool(loadTools.FlagHelpAll)
-		if ok {
-			HelpAll()
-			break
-		}
-
-
-		Cmd.State = ProcessArgs(Cmd, cmd, args)
-		if Cmd.State.IsNotOk() {
-			Cmd.State.PrintResponse()
+		CmdScribe.State = CmdScribe.ProcessArgs(cmd.Use, args)
+		if CmdScribe.State.IsNotOk() {
 			_ = cmd.Help()
 			break
 		}
@@ -172,7 +181,7 @@ func gbRootFunc(cmd *cobra.Command, args []string) {
 		// Show help if no commands specified.
 		if len(args) == 0 {
 			_ = cmd.Help()
-			Cmd.State.Clear()
+			CmdScribe.State.SetOk()
 			break
 		}
 	}
@@ -183,15 +192,15 @@ func gbRootFunc(cmd *cobra.Command, args []string) {
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() *ux.State {
 	for range onlyOnce {
-		SetHelp(rootCmd)
-		SetCmd()
+		//SetHelp(rootCmd)
+		//SetCmd()
 
 		err := rootCmd.Execute()
 		if err != nil {
-			Cmd.State.SetError(err)
+			CmdScribe.State.SetError(err)
 			break
 		}
 	}
 
-	return Cmd.State
+	return CmdScribe.State
 }

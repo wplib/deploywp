@@ -33,8 +33,8 @@ func _GetVersion(c *cobra.Command) string {
 	var str string
 
 	if c.Parent() == nil {
-		str = ux.SprintfBlue("%s ", Cmd.Runtime.CmdName)
-		str += ux.SprintfCyan("v%s", Cmd.Runtime.CmdVersion)
+		str = ux.SprintfBlue("%s ", CmdScribe.Runtime.CmdName)
+		str += ux.SprintfCyan("v%s", CmdScribe.Runtime.CmdVersion)
 	}
 
 	return str
@@ -134,7 +134,7 @@ func HelpAll() {
 		HelpExamples()
 	}
 
-	Cmd.State.Clear()
+	CmdScribe.State.Clear()
 }
 
 
@@ -150,24 +150,24 @@ func Help() {
 		ux.PrintflnBlue("")
 	}
 
-	Cmd.State.Clear()
+	CmdScribe.State.Clear()
 }
 
 
 func HelpFunctions() {
-	Cmd.State.Clear()
+	CmdScribe.State.Clear()
 	return
 
 	for range onlyOnce {
-		Cmd.PrintTools()
+		CmdScribe.PrintTools()
 	}
 
-	Cmd.State.Clear()
+	CmdScribe.State.Clear()
 }
 
 
 func HelpVariables() {
-	Cmd.State.Clear()
+	CmdScribe.State.Clear()
 	return
 
 	for range onlyOnce {
@@ -177,8 +177,8 @@ func HelpVariables() {
 		fmt.Printf("%s - %s\n", ux.SprintfBlue("\t{{ .Env }}"), ux.SprintfWhite("A map containing runtime environment variables."))
 		fmt.Printf("\n")
 		fmt.Printf("%s - %s\n", ux.SprintfBlue("\t{{ .Exec.CmdName }}"), ux.SprintfWhite("Executable, (this program), used to produce the resulting file."))
-		fmt.Printf("%s - %s\n", ux.SprintfBlue("\t{{ .Exec.CmdVersion }}"), ux.SprintfWhite("Version of this executable."))
-		fmt.Printf("%s - %s\n", ux.SprintfBlue("\t{{ .Exec.Cmd }}"), ux.SprintfWhite("ARG[0] which should be the same as CmdName."))
+		fmt.Printf("%s - %s\n", ux.SprintfBlue("\t{{ .Exec.CmdSelfUpdate }}"), ux.SprintfWhite("Version of this executable."))
+		fmt.Printf("%s - %s\n", ux.SprintfBlue("\t{{ .Exec.CmdScribe }}"), ux.SprintfWhite("ARG[0] which should be the same as CmdName."))
 		fmt.Printf("%s - %s\n", ux.SprintfBlue("\t{{ .Exec.CmdDir }}"), ux.SprintfWhite("The absolute directory where this executable was run from."))
 		fmt.Printf("%s - %s\n", ux.SprintfBlue("\t{{ .Exec.CmdFile }}"), ux.SprintfWhite("The filename of this executable, (should be the same as CmdName)."))
 		fmt.Printf("%s - %s\n", ux.SprintfBlue("\t{{ .Exec.Env }}"), ux.SprintfWhite("An array containing runtime environment variables."))
@@ -202,7 +202,7 @@ func HelpVariables() {
 		fmt.Printf("\n")
 	}
 
-	Cmd.State.Clear()
+	CmdScribe.State.Clear()
 }
 
 
@@ -215,7 +215,7 @@ type Examples []Example
 
 
 func HelpExamples() {
-	Cmd.State.Clear()
+	CmdScribe.State.Clear()
 	return
 
 	for range onlyOnce {
@@ -294,5 +294,5 @@ func HelpExamples() {
 		}
 	}
 
-	Cmd.State.Clear()
+	CmdScribe.State.Clear()
 }

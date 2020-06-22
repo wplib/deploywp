@@ -1,14 +1,11 @@
 package cmd
 
 import (
-	"github.com/newclarity/scribeHelpers/loadTools"
-	"github.com/newclarity/scribeHelpers/ux"
-	"github.com/spf13/cobra"
 )
 
 
 //func ProcessArgs(toolArgs *loadTools.TypeScribeArgs, cmd *cobra.Command, args []string) *ux.State {
-//	state := Cmd.State
+//	state := CmdScribe.State
 //
 //	for range onlyOnce {
 //		state = toolArgs.ImportTools(&deploywp.GetHelpers)
@@ -48,7 +45,7 @@ import (
 //		//		}
 //		//	}
 //		//}
-//		//_ = Cmd.Runtime.SetArgs(args...)
+//		//_ = CmdScribe.Runtime.SetArgs(args...)
 //		//
 //		//state = toolArgs.ImportTools(&deploywp.GetHelpers)
 //		//if state.IsNotOk() {
@@ -65,134 +62,105 @@ import (
 //}
 
 
-func cmdBuild(cmd *cobra.Command, args []string) {
-	state := Cmd.State
-
-	for range onlyOnce {
-		Cmd.Chdir = true	// In this mode we always change directory to the JSON file.
-
-		state = Cmd.ProcessArgs(cmd.Use, args)
-		if state.IsNotOk() {
-			state.PrintResponse()
-			break
-		}
-
-		state = Cmd.Load()
-		if state.IsNotOk() {
-			state.PrintResponse()
-			break
-		}
-
-		ux.PrintflnOk("Building website via deploywp.")
-		state = Cmd.Run()
-
-		state.PrintResponse()
-		ux.PrintflnBlue("\n# FINISHED")
-	}
-
-	Cmd.State = state
-}
-
-
-func cmdTools(cmd *cobra.Command, args []string) {
-	state := Cmd.State
-
-	for range onlyOnce {
-		state = Cmd.ProcessArgs(cmd.Use, args)
-		// Ignore errors as there's no args.
-
-		Cmd.PrintTools()
-		state.Clear()
-	}
-
-	Cmd.State = state
-}
-
-
-func cmdConvert(cmd *cobra.Command, args []string) {
-	state := Cmd.State
-
-	for range onlyOnce {
-		Cmd.RemoveTemplate = true
-		Cmd.Output.File = loadTools.CmdConvert
-
-		state = Cmd.ProcessArgs(cmd.Use, args)
-		if state.IsNotOk() {
-			state.PrintResponse()
-			break
-		}
-
-		state = Cmd.Load()
-		if state.IsNotOk() {
-			state.PrintResponse()
-			break
-		}
-
-		//ux.PrintflnOk("Converting file '%s' => '%s'", Cmd.Template.GetPath(), Cmd.Output.GetPath())
-		state = Cmd.Run()
-		state.PrintResponse()
-	}
-
-	Cmd.State = state
-}
-
-
-func cmdLoad(cmd *cobra.Command, args []string) {
-	state := Cmd.State
-
-	for range onlyOnce {
-		state = Cmd.ProcessArgs(cmd.Use, args)
-		if state.IsNotOk() {
-			state.PrintResponse()
-			break
-		}
-
-		state = Cmd.Load()
-		if state.IsNotOk() {
-			state.PrintResponse()
-			break
-		}
-
-		//ux.PrintflnOk("Loading template '%s' and saving result to '%s'", Cmd.Template.Filename, Cmd.Output.Filename)
-		state = Cmd.Run()
-		state.PrintResponse()
-	}
-
-	Cmd.State = state
-}
-
-
-func cmdRun(cmd *cobra.Command, args []string) {
-	state := Cmd.State
-
-	for range onlyOnce {
-		Cmd.ExecShell = true
-		Cmd.Output.File = loadTools.SelectConvert
-		Cmd.StripHashBang = true
-
-		/*
-			Allow this to be used as a UNIX script.
-			The following should be placed on the first line.
-			#!/usr/bin/env scribe load
-		*/
-
-		state = Cmd.ProcessArgs(cmd.Use, args)
-		if state.IsNotOk() {
-			state.PrintResponse()
-			break
-		}
-
-		//ux.PrintflnOk("Executing file '%s' => '%s'", Cmd.Template.Filename, Cmd.Output.Filename)
-		state = Cmd.Load()
-		if state.IsNotOk() {
-			state.PrintResponse()
-			break
-		}
-
-		//ux.PrintflnOk("Loading file '%s' => '%s'", Cmd.Template.Filename, Cmd.Output.Filename)
-		state = Cmd.Run()
-		state.PrintResponse()
-	}
-
-	Cmd.State = state
-}
+//func cmdTools(cmd *cobra.Command, args []string) {
+//	state := CmdScribe.State
+//
+//	for range onlyOnce {
+//		state = CmdScribe.ProcessArgs(cmd.Use, args)
+//		// Ignore errors as there's no args.
+//
+//		CmdScribe.PrintTools()
+//		state.Clear()
+//	}
+//
+//	CmdScribe.State = state
+//}
+//
+//
+//func cmdConvert(cmd *cobra.Command, args []string) {
+//	state := CmdScribe.State
+//
+//	for range onlyOnce {
+//		CmdScribe.RemoveTemplate = true
+//		CmdScribe.Output.File = loadTools.CmdConvert
+//
+//		state = CmdScribe.ProcessArgs(cmd.Use, args)
+//		if state.IsNotOk() {
+//			state.PrintResponse()
+//			break
+//		}
+//
+//		state = CmdScribe.Load()
+//		if state.IsNotOk() {
+//			state.PrintResponse()
+//			break
+//		}
+//
+//		//ux.PrintflnOk("Converting file '%s' => '%s'", CmdScribe.Template.GetPath(), CmdScribe.Output.GetPath())
+//		state = CmdScribe.Run()
+//		state.PrintResponse()
+//	}
+//
+//	CmdScribe.State = state
+//}
+//
+//
+//func cmdLoad(cmd *cobra.Command, args []string) {
+//	state := CmdScribe.State
+//
+//	for range onlyOnce {
+//		state = CmdScribe.ProcessArgs(cmd.Use, args)
+//		if state.IsNotOk() {
+//			state.PrintResponse()
+//			break
+//		}
+//
+//		state = CmdScribe.Load()
+//		if state.IsNotOk() {
+//			state.PrintResponse()
+//			break
+//		}
+//
+//		//ux.PrintflnOk("Loading template '%s' and saving result to '%s'", CmdScribe.Template.Filename, CmdScribe.Output.Filename)
+//		state = CmdScribe.Run()
+//		state.PrintResponse()
+//	}
+//
+//	CmdScribe.State = state
+//}
+//
+//
+//func cmdRun(cmd *cobra.Command, args []string) {
+//	state := CmdScribe.State
+//
+//	for range onlyOnce {
+//		CmdScribe.ExecShell = true
+//		CmdScribe.Output.File = loadTools.SelectConvert
+//		CmdScribe.StripHashBang = true
+//
+//		/*
+//			Allow this to be used as a UNIX script.
+//			The following should be placed on the first line.
+//			#!/usr/bin/env scribe load
+//		*/
+//
+//		state = CmdScribe.ProcessArgs(cmd.Use, args)
+//		if state.IsNotOk() {
+//			state.PrintResponse()
+//			break
+//		}
+//
+//		//ux.PrintflnOk("Executing file '%s' => '%s'", CmdScribe.Template.Filename, CmdScribe.Output.Filename)
+//		state = CmdScribe.Load()
+//		if state.IsNotOk() {
+//			state.PrintResponse()
+//			break
+//		}
+//
+//		//ux.PrintflnOk("Loading file '%s' => '%s'", CmdScribe.Template.Filename, CmdScribe.Output.Filename)
+//		state = CmdScribe.Run()
+//		state.PrintResponse()
+//	}
+//
+//	CmdScribe.State = state
+//}
