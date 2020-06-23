@@ -1,12 +1,10 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/newclarity/scribeHelpers/loadTools"
 	"github.com/newclarity/scribeHelpers/toolSelfUpdate"
 	"github.com/newclarity/scribeHelpers/ux"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"github.com/wplib/deploywp/defaults"
 	"github.com/wplib/deploywp/deploywp"
 )
@@ -35,8 +33,8 @@ const DefaultTemplateFile = `{{ BuildDeployWp .Json .Exec.Args }}`
 
 var CmdSelfUpdate *toolSelfUpdate.TypeSelfUpdate
 var CmdScribe *loadTools.TypeScribeArgs
-var ConfigFile string
-const 	flagConfigFile  	= "config"
+//var ConfigFile string
+//const 	flagConfigFile  	= "config"
 
 
 var rootCmd = &cobra.Command{
@@ -49,10 +47,11 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	SetCmd()
-	cobra.OnInitialize(initConfig)
-
-	rootCmd.PersistentFlags().StringVar(&ConfigFile, flagConfigFile, fmt.Sprintf("%s-config.json", defaults.BinaryName), ux.SprintfBlue("%s: config file.", defaults.BinaryName))
-	_ = rootCmd.PersistentFlags().MarkHidden(flagConfigFile)
+	//cobra.OnInitialize(initConfig)
+	//cobra.EnableCommandSorting = false
+	//
+	//rootCmd.PersistentFlags().StringVar(&ConfigFile, flagConfigFile, fmt.Sprintf("%s-config.json", defaults.BinaryName), ux.SprintfBlue("%s: config file.", defaults.BinaryName))
+	//_ = rootCmd.PersistentFlags().MarkHidden(flagConfigFile)
 
 	//rootCmd.PersistentFlags().StringVarP(&CmdScribe.Json.File, loadTools.FlagJsonFile, "j", DefaultJsonFile, ux.SprintfBlue("Alternative JSON file."))
 	//rootCmd.PersistentFlags().StringVarP(&CmdScribe.Template.File, loadTools.FlagTemplateFile, "t", DefaultTemplateFile, ux.SprintfBlue("Alternative template file."))
@@ -76,29 +75,29 @@ func init() {
 
 
 // initConfig reads in config file and ENV variables if set.
-func initConfig() {
-	if ConfigFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(ConfigFile)
-	} else {
-		// Find home directory.
-		//home, err := homedir.Dir()
-		//if err != nil {
-		//	fmt.Println(err)
-		//	os.Exit(1)
-		//}
-
-		viper.AddConfigPath(".")
-		viper.SetConfigName(defaults.BinaryName + "-config")
-	}
-
-	viper.AutomaticEnv() // read in environment variables that match
-
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		fmt.Println("Using config file:", viper.ConfigFileUsed())
-	}
-}
+//func initConfig() {
+//	if ConfigFile != "" {
+//		// Use config file from the flag.
+//		viper.SetConfigFile(ConfigFile)
+//	} else {
+//		// Find home directory.
+//		//home, err := homedir.Dir()
+//		//if err != nil {
+//		//	fmt.Println(err)
+//		//	os.Exit(1)
+//		//}
+//
+//		viper.AddConfigPath(".")
+//		viper.SetConfigName(defaults.BinaryName + "-config")
+//	}
+//
+//	viper.AutomaticEnv() // read in environment variables that match
+//
+//	// If a config file is found, read it in.
+//	if err := viper.ReadInConfig(); err == nil {
+//		fmt.Println("Using config file:", viper.ConfigFileUsed())
+//	}
+//}
 
 
 func SetCmd() {
@@ -117,6 +116,11 @@ func SetCmd() {
 			}
 
 			CmdScribe.LoadCommands(rootCmd, false)
+			if CmdScribe.State.IsNotOk() {
+				break
+			}
+
+			CmdScribe.AddConfigOption(false, false)
 			if CmdScribe.State.IsNotOk() {
 				break
 			}
@@ -200,7 +204,31 @@ func Execute() *ux.State {
 			CmdScribe.State.SetError(err)
 			break
 		}
+
+		CmdScribe.State = CheckReturns()
 	}
 
 	return CmdScribe.State
+}
+
+
+func CheckReturns() *ux.State {
+	astate := CmdScribe.State
+	for range onlyOnce {
+		if CmdScribe.State.IsNotOk() {
+			state = CmdScribe.State
+			break
+		}
+
+		if CmdSelfUpdate.State.IsNotOk() {
+			state = CmdSelfUpdate.State
+			break
+		}
+
+		//if CobraHelp.State.IsNotOk() {
+		//	state = CobraHelp.State
+		//	break
+		//}
+	}
+	return state
 }
