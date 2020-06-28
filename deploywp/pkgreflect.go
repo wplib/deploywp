@@ -12,7 +12,6 @@ var Types = map[string]reflect.Type{
 	"DeployWpGetter": reflect.TypeOf((*DeployWpGetter)(nil)).Elem(),
 	"Files": reflect.TypeOf((*Files)(nil)).Elem(),
 	"FilesArray": reflect.TypeOf((*FilesArray)(nil)).Elem(),
-	"HelperDeployWp": reflect.TypeOf((*HelperDeployWp)(nil)).Elem(),
 	"Host": reflect.TypeOf((*Host)(nil)).Elem(),
 	"Hosts": reflect.TypeOf((*Hosts)(nil)).Elem(),
 	"Meta": reflect.TypeOf((*Meta)(nil)).Elem(),
@@ -27,27 +26,30 @@ var Types = map[string]reflect.Type{
 	"Target": reflect.TypeOf((*Target)(nil)).Elem(),
 	"TargetRevision": reflect.TypeOf((*TargetRevision)(nil)).Elem(),
 	"TargetRevisions": reflect.TypeOf((*TargetRevisions)(nil)).Elem(),
+	"ToolDeployWp": reflect.TypeOf((*ToolDeployWp)(nil)).Elem(),
 	"TypeDeployWp": reflect.TypeOf((*TypeDeployWp)(nil)).Elem(),
 	"URL": reflect.TypeOf((*URL)(nil)).Elem(),
 	"Wordpress": reflect.TypeOf((*Wordpress)(nil)).Elem(),
 }
 
 var Functions = map[string]reflect.Value{
-	"HelperBuildDeployWp": reflect.ValueOf(HelperBuildDeployWp),
-	"HelperLoadDeployWp": reflect.ValueOf(HelperLoadDeployWp),
+	"GetStructTag": reflect.ValueOf(GetStructTag),
 	"IsValidVersionType": reflect.ValueOf(IsValidVersionType),
 	"ReflectDeployWp": reflect.ValueOf(ReflectDeployWp),
+	"ToolBuildDeployWp": reflect.ValueOf(ToolBuildDeployWp),
+	"ToolLoadDeployWp": reflect.ValueOf(ToolLoadDeployWp),
 }
 
 var Variables = map[string]reflect.Value{
-	"GetHelpers": reflect.ValueOf(&GetHelpers),
+	"GetTools": reflect.ValueOf(&GetTools),
 }
 
 var Consts = map[string]reflect.Value{
-	"HelperPrefix": reflect.ValueOf(HelperPrefix),
+	"DefaultSourceBasePath": reflect.ValueOf(DefaultSourceBasePath),
 	"TargetActionCopy": reflect.ValueOf(TargetActionCopy),
 	"TargetActionDelete": reflect.ValueOf(TargetActionDelete),
 	"TargetActionExclude": reflect.ValueOf(TargetActionExclude),
 	"TargetActionKeep": reflect.ValueOf(TargetActionKeep),
+	"ToolPrefix": reflect.ValueOf(ToolPrefix),
 }
 

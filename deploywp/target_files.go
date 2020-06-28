@@ -8,28 +8,30 @@ import (
 
 
 type Files struct {
-	Copy    FilesArray `json:"copy"`
-	Delete  FilesArray `json:"delete"`
-	Exclude FilesArray `json:"exclude"`
-	Keep    FilesArray `json:"keep"`
+	Copy    FilesArray `json:"copy"`	// mapstructure:",squash"`
+	Delete  FilesArray `json:"delete"`	// mapstructure:",squash"`
+	Exclude FilesArray `json:"exclude"`	// mapstructure:",squash"`
+	Keep    FilesArray `json:"keep"`	// mapstructure:",squash"`
 
 	Valid   bool
 	runtime *toolRuntime.TypeRuntime
 	state   *ux.State
 }
+
 func (f *Files) New(runtime *toolRuntime.TypeRuntime) *Files {
 	runtime = runtime.EnsureNotNil()
 	return &Files{
-		Copy:    *(*FilesArray).New(&FilesArray{}),
-		Delete:  *(*FilesArray).New(&FilesArray{}),
-		Exclude: *(*FilesArray).New(&FilesArray{}),
-		Keep:    *(*FilesArray).New(&FilesArray{}),
+		Copy:    *(*FilesArray).New(&FilesArray{}, runtime),
+		Delete:  *(*FilesArray).New(&FilesArray{}, runtime),
+		Exclude: *(*FilesArray).New(&FilesArray{}, runtime),
+		Keep:    *(*FilesArray).New(&FilesArray{}, runtime),
 
 		Valid:   true,
 		runtime: runtime,
 		state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
 }
+
 func (f *Files) IsNil() *ux.State {
 	if state := ux.IfNilReturnError(f); state.IsError() {
 		return state
@@ -37,6 +39,40 @@ func (f *Files) IsNil() *ux.State {
 	f.state = f.state.EnsureNotNil()
 	return f.state
 }
+
+func (f *Files) IsValid() bool {
+	if state := ux.IfNilReturnError(f); state.IsError() {
+		return false
+	}
+	for range onlyOnce {
+		if f.Copy.IsNotValid() {
+			//f.state = f.Copy.state
+			f.Valid = false
+			break
+		}
+		if f.Delete.IsNotValid() {
+			//f.state = f.Delete.state
+			f.Valid = false
+			break
+		}
+		if f.Exclude.IsNotValid() {
+			//f.state = f.Exclude.state
+			f.Valid = false
+			break
+		}
+		if f.Keep.IsNotValid() {
+			//f.state = f.Keep.state
+			f.Valid = false
+			break
+		}
+		f.Valid = true
+	}
+	return f.Valid
+}
+func (f *Files) IsNotValid() bool {
+	return !f.IsValid()
+}
+
 func (f *Files) Process(paths Paths) *ux.State {
 	if state := f.IsNil(); state.IsError() {
 		return state
@@ -87,13 +123,47 @@ func (f *Files) Process(paths Paths) *ux.State {
 }
 
 
+//type FilesArray struct{
+//	Array []string `json:"array"`
+//
+//	Valid   bool
+//	runtime *toolRuntime.TypeRuntime
+//	state   *ux.State
+//}
 type FilesArray []string
-func (fa *FilesArray) New() *FilesArray {
-	if fa == nil {
-		return &FilesArray{}
+
+func (fa *FilesArray) New(runtime *toolRuntime.TypeRuntime) *FilesArray {
+	runtime = runtime.EnsureNotNil()
+	return &FilesArray {
+		//Array: []string{},
+		//
+		//Valid: false,
+		//runtime: runtime,
+		//state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
-	return fa
 }
+
+func (fa *FilesArray) IsValid() bool {
+	var ok bool
+	if state := ux.IfNilReturnError(fa); state.IsError() {
+		return ok
+	}
+	for range onlyOnce {
+		ok = true
+		//for _, f := range fa.Array {
+		for _, f := range *fa {
+			if f == "" {
+				ok = false
+				break
+			}
+		}
+	}
+	return ok
+}
+func (fa *FilesArray) IsNotValid() bool {
+	return !fa.IsValid()
+}
+
 func (fa *FilesArray) Process(runtime *toolRuntime.TypeRuntime) *ux.State {
 	state := ux.NewState(runtime.CmdName, runtime.Debug)
 	for range onlyOnce {
@@ -103,15 +173,21 @@ func (fa *FilesArray) Process(runtime *toolRuntime.TypeRuntime) *ux.State {
 	}
 	return state
 }
-func (fa *FilesArray) FindBySomething() *FilesArray {
-	ret := (*FilesArray).New(&FilesArray{})
-	for range onlyOnce {
-		//for i, _ := range *fa {
-		//	(*fa)[i] = *((*fa)[i].New(runtime))
-		//}
-	}
-	return ret
+
+func (fa *FilesArray) Append(add *FilesArray) {
+	//fa.Array = append(fa.Array, add.Array...)
+	*fa = append(*fa, *add...)
 }
+
+//func (fa *FilesArray) FindBySomething() *FilesArray {
+//	ret := (*FilesArray).New(&FilesArray{})
+//	for range onlyOnce {
+//		//for i, _ := range *fa {
+//		//	(*fa)[i] = *((*fa)[i].New(runtime))
+//		//}
+//	}
+//	return ret
+//}
 
 
 const (
@@ -122,7 +198,7 @@ const (
 )
 
 func (f *Files) GetFiles(action string) *FilesArray {
-	ret := (*FilesArray).New(&FilesArray{})
+	ret := (*FilesArray).New(&FilesArray{}, f.runtime)
 	if state := f.IsNil(); state.IsError() {
 		return ret
 	}

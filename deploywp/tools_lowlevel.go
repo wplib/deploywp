@@ -22,8 +22,8 @@ func (dwp *TypeDeployWp) OpenRepo(url string, path ...string) *toolGit.TypeGit {
 	}
 
 	for range onlyOnce {
-		ux.PrintflnBlue("# Opening Git repository.")
-		ux.PrintflnOk("Repo Url: '%s'", url)
+		ux.PrintflnBlue("# Opening Git repository '%s'.", url)
+		//ux.PrintflnGreen("Repo Url: '%s'", url)
 
 
 		// Check repo exists and clone if not.
@@ -53,11 +53,11 @@ func (dwp *TypeDeployWp) OpenRepo(url string, path ...string) *toolGit.TypeGit {
 
 		dwp.State = pathRef.StatPath()
 		if pathRef.NotExists() {
-			ux.PrintflnBlue("# Repository cannot be cloned.")
+			ux.PrintflnRed("# Repository cannot be cloned.")
 			dwp.State.SetError("Repository cannot be cloned.")
 			break
 		}
-		ux.PrintflnOk("Path:     '%s'", pathRef.GetPathAbs())
+		ux.PrintflnBlue("# Repository path: '%s'", pathRef.GetPathAbs())
 
 
 		dwp.State = gitRef.SetPath(path...)
@@ -70,26 +70,26 @@ func (dwp *TypeDeployWp) OpenRepo(url string, path ...string) *toolGit.TypeGit {
 			break
 		}
 
-		dwp.State = gitRef.GetUrl()
-		if dwp.State.IsError() {
+		_, dwp.State = gitRef.GetUrl()
+		if gitRef.State.IsError() {
 			break
 		}
-		ux.PrintflnOk("Repo Url: '%s'", gitRef.Url)
+		//ux.PrintflnGreen("Repo Url: '%s'", gitRef.Url)
 		if gitRef.Url != url {
 			ux.PrintflnWarning("# Repo URL is different.")
 			ux.PrintflnWarning("    - Requested: %s", url)
 			ux.PrintflnWarning("    - Directory: %s", gitRef.Url)
 		}
 
-		dwp.State = gitRef.GetBranch()
-		if dwp.State.IsError() {
-			break
-		}
-		branch := dwp.State.Output
-		ux.PrintflnOk("Current Branch: '%s'", branch)
+		//dwp.State = gitRef.GetBranch()
+		//if dwp.State.IsError() {
+		//	break
+		//}
+		//branch := dwp.State.Output
+		//ux.PrintflnGreen("Current Branch: '%s'", branch)
 
 
-		ux.PrintflnOk("# Repository opened OK.")
+		ux.PrintflnGreen("# Repository opened OK.")
 		dwp.State.SetOk()
 	}
 
@@ -116,13 +116,13 @@ func (dwp *TypeDeployWp) CheckoutRepo(gitRef *toolGit.TypeGit, versionType strin
 
 		ux.PrintflnBlue("# Verify %s '%s' exists in repository '%s'.", versionType, version, gitRef.Url)
 		if versionType == "branch" {
-			dwp.State = gitRef.BranchExists(version)
+			_, dwp.State = gitRef.BranchExists(version)
 			if dwp.State.IsError() {
 				ux.PrintflnError("# %s '%s' does not exist in repository '%s'.", versionType, version, gitRef.Url)
 				break
 			}
 		} else {
-			dwp.State = gitRef.TagExists(version)
+			_, dwp.State = gitRef.TagExists(version)
 			if dwp.State.IsError() {
 				ux.PrintflnError("# %s '%s' does not exist in repository '%s'.", versionType, version, gitRef.Url)
 				break
@@ -135,8 +135,35 @@ func (dwp *TypeDeployWp) CheckoutRepo(gitRef *toolGit.TypeGit, versionType strin
 			break
 		}
 
-		ux.PrintflnOk("# %s '%s' checked out OK.", versionType, version)
+		ux.PrintflnGreen("# %s '%s' checked out OK.", strings.Title(versionType), version)
 		dwp.State.SetOk()
+	}
+
+	gitRef.State = dwp.State
+	dwp.State.PrintResponse()
+	return dwp.State
+}
+
+
+func (dwp *TypeDeployWp) PrintRepo(gitRef *toolGit.TypeGit) *ux.State {
+	if state := dwp.IsNil(); state.IsError() {
+		return state
+	}
+
+	for range onlyOnce {
+		p := gitRef.GetPath()
+		u, _ := gitRef.GetUrl()
+		b, _ := gitRef.GetBranch()
+		t, _ := gitRef.GetTags()
+		s := gitRef.GetStatus().GetOutput()
+
+		ux.PrintflnBlue("\n# SOURCE REPO:")
+		ux.PrintflnGreen("Provider:  GitHub")
+		ux.PrintflnGreen("Path:      %s", p)
+		ux.PrintflnGreen("Url:       %s", u)
+		ux.PrintflnGreen("Branch(current):    %s", b)
+		ux.PrintflnGreen("Tags(available):    %s", strings.Join(t, " "))
+		ux.PrintflnGreen("Status:    %s", s)
 	}
 
 	gitRef.State = dwp.State
@@ -195,7 +222,7 @@ func (dwp *TypeDeployWp) CleanRepo(gitRef *toolGit.TypeGit, force bool) *ux.Stat
 		}
 
 
-		ux.PrintflnOk("# File removal completed OK.")
+		ux.PrintflnGreen("# File removal completed OK.")
 		dwp.State.SetOk()
 	}
 
@@ -245,7 +272,7 @@ func (dwp *TypeDeployWp) CopyFiles(src string, dst string, exclude ...string) *u
 			break
 		}
 
-		ux.PrintflnOk("Files copied with OK")
+		ux.PrintflnGreen("Files copied with OK")
 	}
 
 	//dwp.State.PrintResponse()
@@ -287,7 +314,7 @@ func (dwp *TypeDeployWp) CopyFile(src string, dst string) *ux.State {
 			break
 		}
 
-		ux.PrintflnOk("Files copied with OK")
+		ux.PrintflnGreen("Files copied with OK")
 	}
 
 	//dwp.State.PrintResponse()
@@ -371,24 +398,30 @@ func (dwp *TypeDeployWp) PrintPaths() *ux.State {
 		src := dwp.GetSourcePaths()
 		srcAbs := dwp.GetSourceAbsPaths()
 		ux.PrintflnBlue("# SOURCE PATHS:")
-		ux.PrintflnOk("BasePath (abs):    %s", srcAbs.GetBasePath())
-		ux.PrintflnOk("BasePath:          %s", src.GetBasePath())
-		ux.PrintflnOk("WebRootPath:       %s", src.GetWebRootPath())
-		ux.PrintflnOk("ContentPath:       %s", src.GetContentPath())
-		ux.PrintflnOk("CorePath:          %s", src.GetCorePath())
-		ux.PrintflnOk("RootPath:          %s", src.GetRootPath())
-		ux.PrintflnOk("VendorPath:        %s", src.GetVendorPath())
+		ux.PrintflnGreen("BasePath (abs):    %s", srcAbs.GetBasePath())
+		ux.PrintflnGreen("BasePath:          %s", src.GetBasePath())
+		ux.PrintflnGreen("WebRootPath:       %s", src.GetWebRootPath())
+		ux.PrintflnGreen("ContentPath:       %s", src.GetContentPath())
+		ux.PrintflnGreen("CorePath:          %s", src.GetCorePath())
+		ux.PrintflnGreen("RootPath:          %s", src.GetRootPath())
+		ux.PrintflnGreen("VendorPath:        %s", src.GetVendorPath())
+
+
+		//targetRepo := dwp.Target.GetRepository()
+		//ux.PrintflnBlue("# TARGET REPO:")
+		//ux.PrintflnGreen("Provider:          %s", targetRepo.GetProvider())
+		//ux.PrintflnGreen("Url:               %s", targetRepo.GetUrl())
 
 		target := dwp.GetTargetPaths()
 		targetAbs := dwp.GetTargetAbsPaths()
 		ux.PrintflnBlue("# TARGET PATHS:")
-		ux.PrintflnOk("BasePath (abs):    %s", targetAbs.GetBasePath())
-		ux.PrintflnOk("BasePath:          %s", target.GetBasePath())
-		ux.PrintflnOk("WebRootPath:       %s", target.GetWebRootPath())
-		ux.PrintflnOk("ContentPath:       %s", target.GetContentPath())
-		ux.PrintflnOk("CorePath:          %s", target.GetCorePath())
-		ux.PrintflnOk("RootPath:          %s", target.GetRootPath())
-		ux.PrintflnOk("VendorPath:        %s", target.GetVendorPath())
+		ux.PrintflnGreen("BasePath (abs):    %s", targetAbs.GetBasePath())
+		ux.PrintflnGreen("BasePath:          %s", target.GetBasePath())
+		ux.PrintflnGreen("WebRootPath:       %s", target.GetWebRootPath())
+		ux.PrintflnGreen("ContentPath:       %s", target.GetContentPath())
+		ux.PrintflnGreen("CorePath:          %s", target.GetCorePath())
+		ux.PrintflnGreen("RootPath:          %s", target.GetRootPath())
+		ux.PrintflnGreen("VendorPath:        %s", target.GetVendorPath())
 	}
 
 	//dwp.State.PrintResponse()
@@ -396,35 +429,35 @@ func (dwp *TypeDeployWp) PrintPaths() *ux.State {
 }
 
 
-func (dwp *TypeDeployWp) ObtainHost() *ux.State {
+func (dwp *TypeDeployWp) GetHost() string {
+	var ret string
 	if state := dwp.IsNil(); state.IsError() {
-		return state
+		return ret
 	}
 
 	for range onlyOnce {
-		var host string
-		for range onlyOnce {
-			dwp.State.SetOk()
+		//for range onlyOnce {
+		dwp.State.SetOk()
 
-			host = dwp.Runtime.GetArg(0)
-			if host != "" {
-				break
-			}
-
-			host = toolPrompt.ToolUserPrompt("Enter host: ")
-			if host != "" {
-				break
-			}
-
-			dwp.State.SetError("host is empty")
-		}
-		if dwp.State.IsError() {
+		ret = dwp.Runtime.GetArg(0)
+		if ret != "" {
 			break
 		}
 
-		dwp.State.SetOutput(host)
+		ret = toolPrompt.ToolUserPrompt("Enter host: ")
+		if ret != "" {
+			break
+		}
+
+		dwp.State.SetError("host is empty")
+		//}
+
+		//if dwp.State.IsError() {
+		//	break
+		//}
+		//dwp.State.SetOutput(host)
 	}
 
 	dwp.State.PrintResponse()
-	return dwp.State
+	return ret
 }

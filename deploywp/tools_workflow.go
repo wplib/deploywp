@@ -1,6 +1,8 @@
 package deploywp
 
 import (
+	"fmt"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/newclarity/scribeHelpers/ux"
 	"os"
 	"path/filepath"
@@ -53,6 +55,12 @@ func (dwp *TypeDeployWp) Build() *ux.State {
 			targetGitRef := dwp.OpenTargetRepo()
 			if targetGitRef.State.IsError() {
 				dwp.State = targetGitRef.State
+				break
+			}
+			ux.PrintfWhite("\n\n")
+
+			dwp.State = dwp.PrintRepo(targetGitRef)
+			if dwp.State.IsError() {
 				break
 			}
 			ux.PrintfWhite("\n\n")
@@ -150,5 +158,38 @@ func (dwp *TypeDeployWp) Build() *ux.State {
 		ux.PrintfWhite("\n\n")
 	}
 
+	return dwp.State
+}
+
+
+func (dwp *TypeDeployWp) TestNewUxState() *ux.State {
+	if state := dwp.IsNil(); state.IsError() {
+		return state
+	}
+
+	// Testing ux.State changes.
+	var foo []string
+	foo = []string{"one", "two", ""}
+	dwp.State.SetResponse(&foo)
+	foor := dwp.State.GetResponse()
+	spew.Dump(foor)
+	fmt.Printf("GetType: %s\n", foor.GetType().String())
+
+	var foo2 *[]string
+	foo2 = &foo
+	dwp.State.SetResponse(&foo2)
+	foo2r := dwp.State.GetResponse()
+	spew.Dump(foo2r)
+	fmt.Printf("GetType: %s\n", foo2r.GetType().String())
+
+	foo3i := "hello"
+	foo3 := &foo3i
+	dwp.State.SetResponse(foo3)
+	foo3r := dwp.State.GetResponse()
+	spew.Dump(foo3r)
+	fmt.Printf("GetType: %s\n", foo3r.GetType().String())
+
+	// Testing ux.State changes.
+	os.Exit(1)
 	return dwp.State
 }

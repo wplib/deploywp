@@ -51,12 +51,6 @@ func (dwp *TypeDeployWp) OpenSourceRepo() *toolGit.TypeGit {
 			break
 		}
 
-		//ux.PrintflnBlue("# Source repository details.")
-		//ux.PrintflnOk("Provider: '%s'", provider)
-		//ux.PrintflnOk("Url:      '%s'", url)
-		//ux.PrintflnOk("Path:     '%s'", path)
-		//ux.PrintflnOk("%s:   '%s'", strings.Title(refType), refName)
-
 		gitRef = dwp.OpenRepo(url.String(), path)
 		if gitRef.State.IsNotOk() {
 			dwp.State = gitRef.State
@@ -69,52 +63,10 @@ func (dwp *TypeDeployWp) OpenSourceRepo() *toolGit.TypeGit {
 			break
 		}
 
-		//gitRef = toolGit.New(dwp.Runtime)
-		//if gitRef.State.IsError() {
-		//	dwp.State = gitRef.State
-		//	break
-		//}
-		//
-		//pathRef := toolPath.New(dwp.Runtime)
-		//pathRef.SetPath(path)
-		//gitRef.State = pathRef.StatPath()
-		////if gitRef.State.IsError() {
-		////	break
-		////}
-		//
-		//if pathRef.NotExists() {
-		//	ux.PrintflnBlue("# Source repository, doesn't exist - cloning.")
-		//	dwp.State = gitRef.SetPath(path)
-		//	if dwp.State.IsError() {
-		//		break
-		//	}
-		//
-		//	dwp.State = gitRef.SetUrl(url.ToString())
-		//	if dwp.State.IsError() {
-		//		break
-		//	}
-		//
-		//	dwp.State = gitRef.Clone()
-		//	if dwp.State.IsError() {
-		//		break
-		//	}
-		//}
-		//
-		//
-		//ux.PrintflnBlue("# Opening source repository.")
-		//dwp.State = gitRef.SetPath(path)
-		//if dwp.State.IsError() {
-		//	break
-		//}
-		//dwp.State = gitRef.Open()
-		//if dwp.State.IsError() {
-		//	break
-		//}
-		//
-		//if gitRef.Url != url.ToString() {
-		//	ux.PrintfWarning("# Source repository URL was changed.")
-		//}
-		//ux.PrintflnOk("# Source repository opened OK.")
+		dwp.State = dwp.PrintRepo(gitRef)
+		if dwp.State.IsError() {
+			break
+		}
 
 		dwp.State.SetOk()
 	}
@@ -133,11 +85,11 @@ func (dwp *TypeDeployWp) OpenTargetRepo() *toolGit.TypeGit {
 	for range onlyOnce {
 		ux.PrintflnBlue("# Checking target repository details.")
 
-		dwp.State = dwp.ObtainHost()
+		hostArg := dwp.GetHost()
 		if dwp.State.IsError() {
 			break
 		}
-		host := dwp.Hosts.GetByName(dwp.State.Output)
+		host := dwp.Hosts.GetByName(hostArg)
 		if host.state.IsError() {
 			break
 		}
@@ -161,14 +113,14 @@ func (dwp *TypeDeployWp) OpenTargetRepo() *toolGit.TypeGit {
 			break
 		}
 
-		ux.PrintflnBlue("# Target repository.")
-		ux.PrintflnOk("Path: '%s'", path)
-		ux.PrintflnOk("HostName: '%s'", host.HostName)
-		ux.PrintflnOk("Label:    '%s'", host.Label)
-		ux.PrintflnOk("Provider: '%s'", host.Provider)
-		ux.PrintflnOk("Repo Url: '%s'", repoUrl)
-		ux.PrintflnOk("Web Root: '%s'", webRoot)
-		ux.PrintflnOk("Branch:   '%s'", revision.RefName)
+		//ux.PrintflnBlue("# Target repository.")
+		//ux.PrintflnOk("Path: '%s'", path)
+		//ux.PrintflnOk("Repo Url: '%s'", repoUrl)
+		//ux.PrintflnOk("Branch:   '%s'", revision.RefName)
+		//ux.PrintflnOk("HostName: '%s'", host.HostName)
+		//ux.PrintflnOk("Label:    '%s'", host.Label)
+		//ux.PrintflnOk("Provider: '%s'", host.Provider)
+		//ux.PrintflnOk("Web Root: '%s'", webRoot)
 
 		gitRef = dwp.OpenRepo(repoUrl, path)
 		if gitRef.State.IsError() {
@@ -180,6 +132,15 @@ func (dwp *TypeDeployWp) OpenTargetRepo() *toolGit.TypeGit {
 		if dwp.State.IsError() {
 			break
 		}
+
+		dwp.State = dwp.PrintRepo(gitRef)
+		if dwp.State.IsError() {
+			break
+		}
+		ux.PrintflnOk("HostName: '%s'", host.HostName)
+		ux.PrintflnOk("Label:    '%s'", host.Label)
+		ux.PrintflnOk("Provider: '%s'", host.Provider)
+		ux.PrintflnOk("Web Root: '%s'", webRoot)
 
 		dwp.State.SetOk()
 	}

@@ -6,13 +6,48 @@ import (
 )
 
 
+//type Providers struct{
+//	providersArray
+//
+//	Valid   bool
+//	runtime *toolRuntime.TypeRuntime
+//	state   *ux.State
+//}
+//type providersArray []Provider
 type Providers []Provider
-func (ps *Providers) New() *Providers {
-	if ps == nil {
-		return &Providers{}
+
+
+func (ps *Providers) New(runtime *toolRuntime.TypeRuntime) *Providers {
+	runtime = runtime.EnsureNotNil()
+	return &Providers {
+		//providersArray: providersArray{},
+		//
+		//Valid: false,
+		//runtime: runtime,
+		//state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
-	return ps
 }
+
+func (ps *Providers) IsValid() bool {
+	var ok bool
+	if state := ux.IfNilReturnError(ps); state.IsError() {
+		return ok
+	}
+	for range onlyOnce {
+		ok = true
+		for _, f := range *ps {
+			if f.IsNotValid() {
+				ok = false
+				break
+			}
+		}
+	}
+	return ok
+}
+func (ps *Providers) IsNotValid() bool {
+	return !ps.IsValid()
+}
+
 func (ps *Providers) Process(runtime *toolRuntime.TypeRuntime) *ux.State {
 	runtime = runtime.EnsureNotNil()
 	state := ux.NewState(runtime.CmdName, runtime.Debug)

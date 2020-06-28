@@ -18,9 +18,11 @@ type Paths struct {
 	runtime *toolRuntime.TypeRuntime
 	state   *ux.State
 }
+
 func (p *Paths) New(runtime *toolRuntime.TypeRuntime) *Paths {
 	runtime = runtime.EnsureNotNil()
 	return &Paths {
+		BasePath: "",	// This will change based on whether it's a "target" or a "src" path.
 		WebrootPath: "",
 		Wordpress:   *((*Wordpress).New(&Wordpress{}, runtime)),
 
@@ -29,12 +31,41 @@ func (p *Paths) New(runtime *toolRuntime.TypeRuntime) *Paths {
 		state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
 }
+
 func (p *Paths) IsNil() *ux.State {
 	if state := ux.IfNilReturnError(p); state.IsError() {
 		return state
 	}
 	p.state = p.state.EnsureNotNil()
 	return p.state
+}
+
+func (p *Paths) IsValid() bool {
+	if state := ux.IfNilReturnError(p); state.IsError() {
+		return false
+	}
+	for range onlyOnce {
+		if p.BasePath == "" {
+			p.state.SetError("Empty paths.%s", GetStructTag(p, "BasePath"))
+			p.Valid = false
+			break
+		}
+		if p.WebrootPath == "" {
+			p.state.SetError("Empty paths.%s", GetStructTag(p, "WebrootPath"))
+			p.Valid = false
+			break
+		}
+		if p.Wordpress.IsNotValid() {
+			p.state = p.Wordpress.state
+			p.Valid = false
+			break
+		}
+		p.Valid = true
+	}
+	return p.Valid
+}
+func (p *Paths) IsNotValid() bool {
+	return !p.IsValid()
 }
 
 
@@ -48,6 +79,7 @@ type Wordpress struct {
 	runtime *toolRuntime.TypeRuntime
 	state   *ux.State
 }
+
 func (wp *Wordpress) New(runtime *toolRuntime.TypeRuntime) *Wordpress {
 	runtime = runtime.EnsureNotNil()
 	return &Wordpress {
@@ -61,12 +93,46 @@ func (wp *Wordpress) New(runtime *toolRuntime.TypeRuntime) *Wordpress {
 		state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
 }
+
 func (wp *Wordpress) IsNil() *ux.State {
 	if state := ux.IfNilReturnError(wp); state.IsError() {
 		return state
 	}
 	wp.state = wp.state.EnsureNotNil()
 	return wp.state
+}
+
+func (wp *Wordpress) IsValid() bool {
+	if state := ux.IfNilReturnError(wp); state.IsError() {
+		return false
+	}
+	for range onlyOnce {
+		if wp.ContentPath == "" {
+			wp.state.SetError("Empty wordpress.%s", GetStructTag(wp, "ContentPath"))
+			wp.Valid = false
+			break
+		}
+		if wp.CorePath == "" {
+			wp.state.SetError("Empty wordpress.%s", GetStructTag(wp, "CorePath"))
+			wp.Valid = false
+			break
+		}
+		if wp.RootPath == "" {
+			wp.state.SetError("Empty wordpress.%s", GetStructTag(wp, "RootPath"))
+			wp.Valid = false
+			break
+		}
+		if wp.VendorPath == "" {
+			wp.state.SetError("Empty wordpress.%s", GetStructTag(wp, "VendorPath"))
+			wp.Valid = false
+			break
+		}
+		wp.Valid = true
+	}
+	return wp.Valid
+}
+func (wp *Wordpress) IsNotValid() bool {
+	return !wp.IsValid()
 }
 
 

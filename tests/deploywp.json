@@ -1,7 +1,7 @@
 {
 	"source": {
 		"paths": {
-			"base_path": "src",
+			"base_path": "",
 			"webroot_path": "www",
 			"wordpress": {
 				"content_path": "/content",

@@ -129,12 +129,14 @@ func (dwp *TypeDeployWp) GetHostByName(host string) *Host {
 	if state := dwp.IsNil(); state.IsError() {
 		return &Host{}
 	}
-	return dwp.Hosts.GetByName(host)
+	//return dwp.Hosts.GetByName(host)
+	return &Host{}
 }
 
 func (dwp *TypeDeployWp) GetHostByProvider(provider string) *Host {
 	if state := dwp.IsNil(); state.IsError() {
 		return &Host{}
 	}
-	return dwp.Hosts.GetByProvider(provider)
+	//return dwp.Hosts.GetByProvider(provider)
+	return &Host{}
 }

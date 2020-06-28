@@ -5,15 +5,15 @@ import (
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
-type HelperDeployWp TypeDeployWp
-func (g *HelperDeployWp) Reflect() *TypeDeployWp {
+type ToolDeployWp TypeDeployWp
+func (g *ToolDeployWp) Reflect() *TypeDeployWp {
 	return (*TypeDeployWp)(g)
 }
-func (dwp *TypeDeployWp) Reflect() *HelperDeployWp {
-	return (*HelperDeployWp)(dwp)
+func (dwp *TypeDeployWp) Reflect() *ToolDeployWp {
+	return (*ToolDeployWp)(dwp)
 }
 
-func (c *HelperDeployWp) IsNil() *ux.State {
+func (c *ToolDeployWp) IsNil() *ux.State {
 	if state := ux.IfNilReturnError(c); state.IsError() {
 		return state
 	}
@@ -22,11 +22,11 @@ func (c *HelperDeployWp) IsNil() *ux.State {
 }
 
 
-func HelperBuildDeployWp(str interface{}, args []string) string {
+func ToolBuildDeployWp(str interface{}, args []string) string {
 	var ret string
 
 	for range onlyOnce {
-		dwp := HelperLoadDeployWp(str, args)
+		dwp := ToolLoadDeployWp(str, args)
 		if dwp.State.IsNotOk() {
 			dwp.State.PrintResponse()
 			break
@@ -46,15 +46,16 @@ func HelperBuildDeployWp(str interface{}, args []string) string {
 }
 
 
-func HelperLoadDeployWp(str interface{}, args []string) *TypeDeployWp {
-	//var dwp *TypeDeployWp; dwp = dwp.New(nil)
+func ToolLoadDeployWp(str interface{}, args []string) *TypeDeployWp {
 	dwp := (*TypeDeployWp).New(&TypeDeployWp{}, nil)
 
 	for range onlyOnce {
-		var err error
+		if str == nil {
+			dwp.State.SetError("JSON is empty")
+			break
+		}
 
-		// dwp.Runtime.Args = args[1:]
-		err = mapstructure.Decode(str, &dwp)
+		err := mapstructure.Decode(str, &dwp)
 		dwp.State.SetError(err)
 		if dwp.State.IsError() {
 			break

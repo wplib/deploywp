@@ -15,6 +15,7 @@ type Repository struct {
 	runtime *toolRuntime.TypeRuntime
 	state   *ux.State
 }
+
 func (r *Repository) New(runtime *toolRuntime.TypeRuntime) *Repository {
 	runtime = runtime.EnsureNotNil()
 	return &Repository{
@@ -26,6 +27,7 @@ func (r *Repository) New(runtime *toolRuntime.TypeRuntime) *Repository {
 		state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
 }
+
 func (r *Repository) IsNil() *ux.State {
 	if state := ux.IfNilReturnError(r); state.IsError() {
 		return state
@@ -34,15 +36,61 @@ func (r *Repository) IsNil() *ux.State {
 	return r.state
 }
 
+func (r *Repository) IsValid() bool {
+	if state := ux.IfNilReturnError(r); state.IsError() {
+		return false
+	}
+	for range onlyOnce {
+		if r.Provider == "" {
+			r.state.SetError("Empty repository.%s", GetStructTag(r, "Provider"))
+			r.Valid = false
+			break
+		}
+		if r.URL == "" {
+			r.state.SetError("Empty repository.%s", GetStructTag(r, "URL"))
+			r.Valid = false
+			break
+		}
+		r.Valid = true
+	}
+	return r.Valid
+}
+func (r *Repository) IsNotValid() bool {
+	return !r.IsValid()
+}
+
 
 type URL string
 func (u *URL) String() string {
 	return string(*u)
 }
 
+func (u *URL) IsValid() bool {
+	var ok bool
+	if state := ux.IfNilReturnError(u); state.IsError() {
+		return ok
+	}
+	for range onlyOnce {
+		if u == nil {
+			ok = false
+			break
+		}
+		if *u == "" {
+			ok = false
+			break
+		}
+		ok = true
+	}
+	return ok
+}
+func (u *URL) IsNotValid() bool {
+	return !u.IsValid()
+}
+
+
 type String string
-func (me *String) ToString() string {
-	return string(*me)
+func (s *String) ToString() string {
+	return string(*s)
 }
 
 

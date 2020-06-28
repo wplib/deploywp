@@ -33,6 +33,7 @@ replace github.com/newclarity/scribeHelpers/toolSelfUpdate => ../scribeHelpers/t
 replace github.com/newclarity/scribeHelpers/toolGhr => ../scribeHelpers/toolGhr
 
 require (
+	github.com/davecgh/go-spew v1.1.1
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/jinzhu/copier v0.0.0-20190924061706-b57f9002281a
 	github.com/mitchellh/mapstructure v1.3.2
@@ -45,13 +46,13 @@ require (
 	github.com/newclarity/scribeHelpers/toolGitHub v0.0.0-20200622120433-71e52f9004e9 // indirect
 	github.com/newclarity/scribeHelpers/toolPath v0.0.0-20200622120433-71e52f9004e9
 	github.com/newclarity/scribeHelpers/toolPrompt v0.0.0-20200622120433-71e52f9004e9
-	github.com/newclarity/scribeHelpers/toolRuntime v0.0.0-20200622120433-71e52f9004e9
+	github.com/newclarity/scribeHelpers/toolRuntime v0.0.0-20200623081955-45abb1cbefe9
 	github.com/newclarity/scribeHelpers/toolSelfUpdate v0.0.0-20200622120433-71e52f9004e9
 	github.com/newclarity/scribeHelpers/toolService v0.0.0-20200622120433-71e52f9004e9 // indirect
 	github.com/newclarity/scribeHelpers/toolSystem v0.0.0-20200622120433-71e52f9004e9 // indirect
 	github.com/newclarity/scribeHelpers/toolTypes v0.0.0-20200622120433-71e52f9004e9
 	github.com/newclarity/scribeHelpers/toolUx v0.0.0-20200622120433-71e52f9004e9 // indirect
-	github.com/newclarity/scribeHelpers/ux v0.0.0-20200622120433-71e52f9004e9
+	github.com/newclarity/scribeHelpers/ux v0.0.0-20200623081955-45abb1cbefe9
 	github.com/pelletier/go-toml v1.8.0 // indirect
 	github.com/spf13/afero v1.3.0 // indirect
 	github.com/spf13/cast v1.3.1 // indirect

@@ -6,42 +6,48 @@ import (
 )
 
 
-type TargetRevision struct {
-	AutoDeploy bool   `json:"auto_deploy" mapstructure:"auto_deploy"`
-	HostName   string `json:"host_name" mapstructure:"host_name"`
-	RefName    string `json:"ref_name" mapstructure:"ref_name"`
-
-	Valid   bool
-	runtime *toolRuntime.TypeRuntime
-	state   *ux.State
-}
-func (tr *TargetRevision) New(runtime *toolRuntime.TypeRuntime) *TargetRevision {
-	runtime = runtime.EnsureNotNil()
-	return &TargetRevision {
-		HostName:     "",
-		RefName:     "",
-
-		Valid: false,
-		runtime: runtime,
-		state:   ux.NewState(runtime.CmdName, runtime.Debug),
-	}
-}
-func (tr *TargetRevision) IsNil() *ux.State {
-	if state := ux.IfNilReturnError(tr); state.IsError() {
-		return state
-	}
-	tr.state = tr.state.EnsureNotNil()
-	return tr.state
-}
-
-
+//type TargetRevisions struct{
+//	revisionsArray
+//
+//	Valid   bool
+//	runtime *toolRuntime.TypeRuntime
+//	state   *ux.State
+//}
+//type revisionsArray []TargetRevision
 type TargetRevisions []TargetRevision
-func (tr *TargetRevisions) New() *TargetRevisions {
-	if tr == nil {
-		return &TargetRevisions{}
+
+
+func (tr *TargetRevisions) New(runtime *toolRuntime.TypeRuntime) *TargetRevisions {
+	runtime = runtime.EnsureNotNil()
+	return &TargetRevisions {
+		//revisionsArray: revisionsArray{},
+		//
+		//Valid: false,
+		//runtime: runtime,
+		//state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
-	return tr
 }
+
+func (tr *TargetRevisions) IsValid() bool {
+	var ok bool
+	if state := ux.IfNilReturnError(tr); state.IsError() {
+		return ok
+	}
+	for range onlyOnce {
+		ok = true
+		for _, t := range *tr {
+			if t.IsNotValid() {
+				ok = false
+				break
+			}
+		}
+	}
+	return ok
+}
+func (tr *TargetRevisions) IsNotValid() bool {
+	return !tr.IsValid()
+}
+
 func (tr *TargetRevisions) Process(runtime *toolRuntime.TypeRuntime) *ux.State {
 	state := ux.NewState(runtime.CmdName, runtime.Debug)
 	for range onlyOnce {

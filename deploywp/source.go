@@ -6,6 +6,8 @@ import (
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
+const DefaultSourceBasePath = "/tmp/deploywp"
+
 
 type Source struct {
 	Build      Build      `json:"build"`
@@ -14,13 +16,15 @@ type Source struct {
 	Revision   Revision   `json:"revision"`
 
 	AbsPaths   Paths
-	Valid   bool
-	runtime *toolRuntime.TypeRuntime
-	state   *ux.State
+
+	Valid      bool
+	runtime    *toolRuntime.TypeRuntime
+	state      *ux.State
 }
+
 func (s *Source) New(runtime *toolRuntime.TypeRuntime) *Source {
 	runtime = runtime.EnsureNotNil()
-	return &Source{
+	ret := &Source{
 		Build:      *((*Build).New(&Build{}, runtime)),
 		Paths:      *((*Paths).New(&Paths{}, runtime)),
 		Repository: *((*Repository).New(&Repository{}, runtime)),
@@ -31,7 +35,11 @@ func (s *Source) New(runtime *toolRuntime.TypeRuntime) *Source {
 		runtime: runtime,
 		state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
+	ret.Paths.BasePath = DefaultSourceBasePath
+
+	return ret
 }
+
 func (s *Source) IsNil() *ux.State {
 	if state := ux.IfNilReturnError(s); state.IsError() {
 		return state
@@ -39,6 +47,46 @@ func (s *Source) IsNil() *ux.State {
 	s.state = s.state.EnsureNotNil()
 	return s.state
 }
+
+func (s *Source) IsValid() bool {
+	if state := ux.IfNilReturnError(s); state.IsError() {
+		return false
+	}
+	for range onlyOnce {
+		if s.Build.IsNotValid() {
+			s.state = s.Build.state
+			s.Valid = false
+			break
+		}
+		if s.Paths.IsNotValid() {
+			s.state = s.Paths.state
+			s.Valid = false
+			break
+		}
+		if s.Repository.IsNotValid() {
+			s.state = s.Repository.state
+			s.Valid = false
+			break
+		}
+		if s.Revision.IsNotValid() {
+			s.state = s.Revision.state
+			s.Valid = false
+			break
+		}
+
+		if s.AbsPaths.IsNotValid() {
+			s.state = s.AbsPaths.state
+			s.Valid = false
+			break
+		}
+		s.Valid = true
+	}
+	return s.Valid
+}
+func (s *Source) IsNotValid() bool {
+	return !s.IsValid()
+}
+
 func (s *Source) Process() *ux.State {
 	if state := s.IsNil(); state.IsError() {
 		return state
@@ -49,6 +97,10 @@ func (s *Source) Process() *ux.State {
 		s.state = s.AbsPaths.ExpandPaths()
 		if s.state.IsError() {
 			break
+		}
+
+		if s.Paths.BasePath == "" {
+			s.Paths.BasePath = DefaultSourceBasePath
 		}
 		s.Valid = true
 	}
@@ -74,6 +126,20 @@ func (s *Source) GetPaths(abs ...interface{}) *Paths {
 	}
 
 	return ret
+}
+
+func (s *Source) SetBasePath(path ...string) *ux.State {
+	if state := s.IsNil(); state.IsError() {
+		return state
+	}
+
+	for range onlyOnce {
+		if s.Repository.IsValid() {
+			s.state.SetError("")
+		}
+	}
+
+	return s.state
 }
 
 
@@ -147,6 +213,22 @@ func (s *Source) GetBuild() bool {
 
 	for range onlyOnce {
 		ret = s.Build.GetBuild()
+	}
+
+	return ret
+}
+
+
+func (s *Source) PrintRepo() string {
+	var ret string
+	if state := s.IsNil(); state.IsError() {
+		return ret
+	}
+
+	for range onlyOnce {
+		ret += ux.SprintfBlue("# SOURCE REPO:\n")
+		ret += ux.SprintfOk("Provider:          %s\n", s.Repository.GetProvider())
+		ret += ux.SprintfOk("Url:               %s\n", s.Repository.GetUrl())
 	}
 
 	return ret

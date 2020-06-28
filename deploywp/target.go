@@ -11,8 +11,8 @@ import (
 type Target struct {
 	Files     Files           `json:"files"`
 	Paths     Paths           `json:"paths"`
-	Providers Providers       `json:"providers"`
-	Revisions TargetRevisions `json:"revisions"`
+	Providers Providers       `json:"providers"`	// mapstructure:",squash"`
+	Revisions TargetRevisions `json:"revisions"`	// mapstructure:",squash"`
 
 	AbsPaths  Paths
 	AbsFiles  Files
@@ -21,13 +21,14 @@ type Target struct {
 	runtime *toolRuntime.TypeRuntime
 	state   *ux.State
 }
+
 func (t *Target) New(runtime *toolRuntime.TypeRuntime) *Target {
 	runtime = runtime.EnsureNotNil()
 	return &Target{
 		Files:     *((*Files).New(&Files{}, runtime)),
 		Paths:     *((*Paths).New(&Paths{}, runtime)),
-		Providers: *((*Providers).New(&Providers{})),
-		Revisions: *((*TargetRevisions).New(&TargetRevisions{})),
+		Providers: *((*Providers).New(&Providers{}, runtime)),
+		Revisions: *((*TargetRevisions).New(&TargetRevisions{}, runtime)),
 		AbsPaths:  *((*Paths).New(&Paths{}, runtime)),
 		AbsFiles:  *((*Files).New(&Files{}, runtime)),
 
@@ -36,6 +37,7 @@ func (t *Target) New(runtime *toolRuntime.TypeRuntime) *Target {
 		state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
 }
+
 func (t *Target) IsNil() *ux.State {
 	if state := ux.IfNilReturnError(t); state.IsError() {
 		return state
@@ -43,6 +45,52 @@ func (t *Target) IsNil() *ux.State {
 	t.state = t.state.EnsureNotNil()
 	return t.state
 }
+
+func (t *Target) IsValid() bool {
+	if state := ux.IfNilReturnError(t); state.IsError() {
+		return false
+	}
+	for range onlyOnce {
+		if t.Files.IsNotValid() {
+			t.state = t.Files.state
+			t.Valid = false
+			break
+		}
+		if t.Paths.IsNotValid() {
+			t.state = t.Paths.state
+			t.Valid = false
+			break
+		}
+		if t.Providers.IsNotValid() {
+			//t.state = t.Providers.state
+			t.Valid = false
+			break
+		}
+		if t.Revisions.IsNotValid() {
+			//t.state = t.Revisions.state
+			t.Valid = false
+			break
+		}
+
+		if t.AbsPaths.IsNotValid() {
+			t.state = t.AbsPaths.state
+			t.Valid = false
+			break
+		}
+		if t.AbsFiles.IsNotValid() {
+			t.state = t.AbsFiles.state
+			t.Valid = false
+			break
+		}
+
+		t.Valid = true
+	}
+	return t.Valid
+}
+func (t *Target) IsNotValid() bool {
+	return !t.IsValid()
+}
+
 func (t *Target) Process() *ux.State {
 	if state := t.IsNil(); state.IsError() {
 		return state
@@ -61,10 +109,10 @@ func (t *Target) Process() *ux.State {
 			break
 		}
 
-		t.AbsFiles.Copy = append(t.AbsFiles.Copy, t.Files.Copy...)
-		t.AbsFiles.Delete = append(t.AbsFiles.Delete, t.Files.Delete...)
-		t.AbsFiles.Exclude = append(t.AbsFiles.Exclude, t.Files.Exclude...)
-		t.AbsFiles.Keep = append(t.AbsFiles.Keep, t.Files.Keep...)
+		t.AbsFiles.Copy.Append(&t.Files.Copy)
+		t.AbsFiles.Delete.Append(&t.Files.Delete)
+		t.AbsFiles.Exclude.Append(&t.Files.Exclude)
+		t.AbsFiles.Keep.Append(&t.Files.Keep)
 
 		t.state = t.AbsFiles.Process(t.AbsPaths)
 		if t.state.IsError() {

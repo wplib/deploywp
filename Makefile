@@ -1,4 +1,5 @@
 ################################################################################
+SHELL=/bin/bash
 ifeq (, $(shell which buildtool))
 $(warning "Installing buildtool...")
 $(warning "go get github.com/gearboxworks/buildtool")
@@ -10,10 +11,18 @@ $(error "No buildtool found...")
 endif
 ################################################################################
 
+args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
+
 all:
-	@echo "build		- Build for local testing."
-	@echo "release		- Build for published release."
-	@echo "push		- Push repo to GitHub."
+	@:
+
+%:
+	@:
+
+################################################################################
+
+help:
+	@$(BUILDTOOL) $@ $(args)
 	@echo ""
 	@echo "build-docker	- Build Docker cotainer."
 	@echo "test-run		- Run a test using native GoLang."
@@ -23,20 +32,52 @@ all:
 	@$(BUILDTOOL) get all
 
 build:
-	@make pkgreflect
-	@$(BUILDTOOL) build
+	@$(BUILDTOOL) $@ $(args)
 
-release:
-	@make pkgreflect
-	@$(BUILDTOOL) release
+clone:
+	@$(BUILDTOOL) $@ $(args)
 
-push:
-	@make pkgreflect
-	@$(BUILDTOOL) push
+commit:
+	@$(BUILDTOOL) $@ $(args)
+
+get:
+	@$(BUILDTOOL) $@ $(args)
+
+ghr:
+	@$(BUILDTOOL) $@ $(args)
+
+go:
+	@$(BUILDTOOL) $@ $(args)
 
 pkgreflect:
-	@$(BUILDTOOL) pkgreflect jtc/helpers
+	@$(BUILDTOOL) $@ $(args)
 
+pull:
+	@$(BUILDTOOL) $@ $(args)
+
+push:
+	@$(BUILDTOOL) $@ $(args)
+
+release:
+	@$(BUILDTOOL) $@ $(args)
+
+selfupdate:
+	@$(BUILDTOOL) $@ $(args)
+
+set:
+	@$(BUILDTOOL) $@ $(args)
+
+sync:
+	@$(BUILDTOOL) $@ $(args)
+
+version:
+	@$(BUILDTOOL) $@ $(args)
+
+vfsgen:
+	@$(BUILDTOOL) $@ $(args)
+
+
+################################################################################
 build-docker:
 	@make -C docker
 

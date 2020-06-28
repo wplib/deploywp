@@ -14,6 +14,7 @@ type Revision struct {
 	runtime *toolRuntime.TypeRuntime
 	state   *ux.State
 }
+
 func (r *Revision) New(runtime *toolRuntime.TypeRuntime) *Revision {
 	runtime = runtime.EnsureNotNil()
 	return &Revision {
@@ -25,12 +26,36 @@ func (r *Revision) New(runtime *toolRuntime.TypeRuntime) *Revision {
 		state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
 }
+
 func (r *Revision) IsNil() *ux.State {
 	if state := ux.IfNilReturnError(r); state.IsError() {
 		return state
 	}
 	r.state = r.state.EnsureNotNil()
 	return r.state
+}
+
+func (r *Revision) IsValid() bool {
+	if state := ux.IfNilReturnError(r); state.IsError() {
+		return false
+	}
+	for range onlyOnce {
+		if r.RefName == "" {
+			r.state.SetError("Empty revision.%s", GetStructTag(r, "RefName"))
+			r.Valid = false
+			break
+		}
+		if r.RefType == "" {
+			r.state.SetError("Empty revision.%s", GetStructTag(r, "RefType"))
+			r.Valid = false
+			break
+		}
+		r.Valid = true
+	}
+	return r.Valid
+}
+func (r *Revision) IsNotValid() bool {
+	return !r.IsValid()
 }
 
 

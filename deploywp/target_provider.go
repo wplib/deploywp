@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+
 type Provider struct {
 	Name     string   `json:"name"`
 	Meta     Meta     `json:"meta"`
@@ -16,6 +17,7 @@ type Provider struct {
 	runtime *toolRuntime.TypeRuntime
 	state   *ux.State
 }
+
 func (p *Provider) New(runtime *toolRuntime.TypeRuntime) *Provider {
 	runtime = runtime.EnsureNotNil()
 	return &Provider {
@@ -29,6 +31,43 @@ func (p *Provider) New(runtime *toolRuntime.TypeRuntime) *Provider {
 		state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
 }
+
+func (p *Provider) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(p); state.IsError() {
+		return state
+	}
+	p.state = p.state.EnsureNotNil()
+	return p.state
+}
+
+func (p *Provider) IsValid() bool {
+	if state := ux.IfNilReturnError(p); state.IsError() {
+		return false
+	}
+	for range onlyOnce {
+		if p.Name == "" {
+			p.state.SetError("Empty target.provider.%s", GetStructTag(p, "Name"))
+			p.Valid = false
+			break
+		}
+		if p.Meta.IsNotValid() {
+			p.state = p.Meta.state
+			p.Valid = false
+			break
+		}
+		if p.Defaults.IsNotValid() {
+			p.state = p.Defaults.state
+			p.Valid = false
+			break
+		}
+		p.Valid = true
+	}
+	return p.Valid
+}
+func (p *Provider) IsNotValid() bool {
+	return !p.IsValid()
+}
+
 func (p *Provider) Process(runtime *toolRuntime.TypeRuntime) *ux.State {
 	runtime = runtime.EnsureNotNil()
 	state := ux.NewState(runtime.CmdName, runtime.Debug)
@@ -39,15 +78,6 @@ func (p *Provider) Process(runtime *toolRuntime.TypeRuntime) *ux.State {
 		p.Meta.Process(runtime)
 	}
 	return state
-}
-
-
-func (p *Provider) IsNil() *ux.State {
-	if state := ux.IfNilReturnError(p); state.IsError() {
-		return state
-	}
-	p.state = p.state.EnsureNotNil()
-	return p.state
 }
 
 
