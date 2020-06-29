@@ -13,10 +13,11 @@ type DeployWpGetter interface {
 
 
 type TypeDeployWp struct {
-	Hosts   Hosts  `json:"hosts"`	// mapstructure:",squash"`
-	Source  Source `json:"source"`
-	Target  Target `json:"target"`
+	Hosts       Hosts       `json:"hosts"`	// mapstructure:",squash"`
+	Source      Source      `json:"source"`
+	Destination Destination `json:"destination"`
 
+	Print   UxPrint
 	Valid   bool
 	Runtime *toolRuntime.TypeRuntime
 	State   *ux.State
@@ -25,9 +26,9 @@ type TypeDeployWp struct {
 func (dwp *TypeDeployWp) New(runtime *toolRuntime.TypeRuntime) *TypeDeployWp {
 	runtime = runtime.EnsureNotNil()
 	return &TypeDeployWp{
-		Hosts:  *((*Hosts).New(&Hosts{}, runtime)),
-		Source: *((*Source).New(&Source{}, runtime)),
-		Target: *((*Target).New(&Target{}, runtime)),
+		Hosts:       *((*Hosts).New(&Hosts{}, runtime)),
+		Source:      *((*Source).New(&Source{}, runtime)),
+		Destination: *((*Destination).New(&Destination{}, runtime)),
 
 		Valid:   false,
 		Runtime: runtime,
@@ -58,8 +59,8 @@ func (dwp *TypeDeployWp) IsValid() bool {
 			dwp.Valid = false
 			break
 		}
-		if dwp.Target.IsNotValid() {
-			dwp.State = dwp.Target.state
+		if dwp.Destination.IsNotValid() {
+			dwp.State = dwp.Destination.state
 			dwp.Valid = false
 			break
 		}

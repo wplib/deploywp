@@ -46,7 +46,7 @@ func (p *Provider) IsValid() bool {
 	}
 	for range onlyOnce {
 		if p.Name == "" {
-			p.state.SetError("Empty target.provider.%s", GetStructTag(p, "Name"))
+			p.state.SetError("Empty destination.provider.%s", GetStructTag(p, "Name"))
 			p.Valid = false
 			break
 		}
@@ -95,7 +95,7 @@ func (p *Provider) GetRepository() string {
 
 		url = strings.ReplaceAll(p.Defaults.Repository.URL, "{site_id}", p.Meta.SiteID)
 		if url == "" {
-			p.state.SetError(".target.providers.defaults.repository is nil")
+			p.state.SetError(".destination.providers.defaults.repository is nil")
 			break
 		}
 		p.state.SetOk()
@@ -118,7 +118,7 @@ func (p *Provider) GetWebroot(addPrefix ...string) string {
 		}
 
 		if p.Defaults.Paths.WebrootDir == "" {
-			p.state.SetError(".target.providers.defaults.paths.webroot_dir is nil")
+			p.state.SetError(".destination.providers.defaults.paths.webroot_dir is nil")
 			break
 		}
 

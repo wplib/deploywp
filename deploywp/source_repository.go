@@ -59,6 +59,10 @@ func (r *Repository) IsNotValid() bool {
 	return !r.IsValid()
 }
 
+func (r *Repository) GetUrlAsDir() string {
+	return r.URL.GetAsDir()
+}
+
 
 type URL string
 func (u *URL) String() string {
@@ -85,6 +89,13 @@ func (u *URL) IsValid() bool {
 }
 func (u *URL) IsNotValid() bool {
 	return !u.IsValid()
+}
+
+func (u *URL) GetAsDir() string {
+	ts := strings.TrimPrefix(u.String(), "https://")
+	ts = strings.TrimSuffix(ts, ".git")
+	ts = strings.ReplaceAll(ts, "/", "_")
+	return ts
 }
 
 

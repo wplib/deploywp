@@ -85,6 +85,8 @@ func init() {
 			}
 		}
 
+		//rootCmd.Flags().BoolVarP(&CmdScribe.Debug, loadTools.FlagDebug ,"d", false, ux.SprintfBlue("DEBUG mode."))
+
 		CmdScribe.SetHelp(rootCmd)
 	}
 }
@@ -125,6 +127,7 @@ func gbRootFunc(cmd *cobra.Command, args []string) {
 
 func Execute() *ux.State {
 	for range onlyOnce {
+		//foo := CmdScribe.GetCmd()
 		err := rootCmd.Execute()
 		if err != nil {
 			CmdScribe.State.SetError(err)

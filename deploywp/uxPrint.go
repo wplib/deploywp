@@ -1,0 +1,181 @@
+// Simple Ux.Print indenting mechanism.
+package deploywp
+
+import (
+	"fmt"
+	"github.com/newclarity/scribeHelpers/ux"
+	"runtime"
+	"strings"
+)
+
+
+type UxPrint struct {
+	verbose bool
+
+	callOrder []caller
+}
+type caller struct {
+	Func string
+	Text string
+	SubPrint bool
+	Indent int
+}
+
+
+func (up *UxPrint) Notify(format string, args ...interface{}) {
+	if up.verbose {
+		ux.PrintflnBlue(format, args...)
+	}
+	return
+}
+
+
+func (up *UxPrint) IntentBegin(format string, args ...interface{}) {
+	//if up.callOrder == nil {
+	//	up.callOrder = []caller{}
+	//}
+
+	pc, file, _, _ := runtime.Caller(1)
+	details := runtime.FuncForPC(pc)
+	file = fmt.Sprintf("%s", details.Name())
+	txt := fmt.Sprintf(format + " ... ", args...)
+
+	last := up.getLast()
+	if file != last.Func {
+		last.SubPrint = true
+		up.callOrder = append(up.callOrder, caller{Func: file, Text: txt, SubPrint: false, Indent: last.Indent+1})
+	} else {
+		up.getLast().Text = txt
+	}
+	ux.PrintfBlue(up.indent() + txt)
+}
+
+
+func (up *UxPrint) IntentEnd(state *ux.State) {
+	for range onlyOnce {
+		pc, file, _, _ := runtime.Caller(1)
+		details := runtime.FuncForPC(pc)
+		file = fmt.Sprintf("%s", details.Name())
+
+		var isLast bool
+		if up.isLast(file) {
+			isLast = true
+		}
+
+		last := up.trimTo(file)
+		if last.Func != file {
+			break
+		}
+		if last.SubPrint {
+			if isLast {
+				break
+			}
+			ux.PrintfBlue(up.indentPrint(last.Indent) + last.Text)
+		}
+		up.IntentResponse(state, "")
+	}
+	return
+}
+
+
+func (up *UxPrint) isLast(fn string) bool {
+	var ok bool
+	for range onlyOnce {
+		l := len(up.callOrder)
+		if l == 0 {
+			break
+		}
+		if up.callOrder[l-1].Func != fn {
+			break
+		}
+		ok = true
+	}
+	return ok
+}
+
+
+func (up *UxPrint) trimTo(name string) caller {
+	var c caller
+	for i := len(up.callOrder)-1; i >= 0; i-- {
+		if up.callOrder[i].Func == name {
+			c = up.callOrder[i]
+			up.callOrder = up.callOrder[:i]
+			break
+		}
+	}
+	return c
+}
+
+
+func (up *UxPrint) getLast() *caller {
+	if len(up.callOrder) == 0 {
+		return &caller{}
+	}
+	return &(up.callOrder[len(up.callOrder)-1])
+}
+
+
+func (up *UxPrint) indent() string {
+	c := up.getLast().Indent
+	if c > 0 {
+		c--
+	}
+	return up.indentPrint(c)
+}
+
+
+func (up *UxPrint) indentPrint(c int) string {
+	return fmt.Sprintf("\n%s- ", strings.Repeat("\t", c))
+}
+
+
+func (up *UxPrint) Intent(format string, args ...interface{}) {
+	ux.PrintfWhite(up.indentPrint(up.getLast().Indent) + format + " ... ", args...)
+	up.getLast().SubPrint = true
+	return
+}
+
+
+func (up *UxPrint) IntentResponse(state *ux.State, format string, args ...interface{}) {
+	switch {
+		case state.IsOk():
+			if format == "" {
+				format = "OK"
+			}
+			ux.PrintfGreen(format, args...)
+
+		case state.IsWarning():
+			if format == "" {
+				format = state.GetWarning().Error()
+			}
+			ux.PrintfYellow(format, args...)
+
+		case state.IsError():
+			if format == "" {
+				format = state.GetError().Error()
+			}
+			ux.PrintfRed(format, args...)
+	}
+	up.getLast().SubPrint = true
+	return
+}
+
+
+func (up *UxPrint) Ok(format string, args ...interface{}) {
+	if up.verbose {
+		ux.PrintflnOk(format, args...)
+	}
+	return
+}
+
+
+func (up *UxPrint) Warning(format string, args ...interface{}) {
+	ux.PrintflnWarning(format, args...)
+	return
+}
+
+
+func (up *UxPrint) Error(format string, args ...interface{}) {
+	ux.PrintflnError(format, args...)
+	return
+}

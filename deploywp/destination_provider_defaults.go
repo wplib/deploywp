@@ -33,12 +33,12 @@ func (d *Defaults) IsValid() bool {
 	}
 	for range onlyOnce {
 		if d.Paths.IsNotValid() {
-			d.state.SetError("Empty target.provider.defaults.%s", GetStructTag(d, "Paths"))
+			d.state.SetError("Empty destination.provider.defaults.%s", GetStructTag(d, "Paths"))
 			ok = false
 			break
 		}
 		if d.Repository.IsNotValid() {
-			d.state.SetError("Empty target.provider.defaults.%s", GetStructTag(d, "Repository"))
+			d.state.SetError("Empty destination.provider.defaults.%s", GetStructTag(d, "Repository"))
 			ok = false
 			break
 		}

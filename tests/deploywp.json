@@ -1,7 +1,7 @@
 {
 	"source": {
 		"paths": {
-			"base_path": "",
+			"base_path": "src",
 			"webroot_path": "www",
 			"wordpress": {
 				"content_path": "/content",
@@ -25,9 +25,9 @@
 		}
 	},
 
-	"target": {
+	"destination": {
 		"paths": {
-			"base_path": "target",
+			"base_path": "",
 			"webroot_path": "",
 			"wordpress": {
 				"content_path": "/wp-content",
@@ -69,7 +69,7 @@
 			]
 		},
 
-		"revisions": [
+		"targets": [
 			{
 				"ref_name": "master",
 				"host_name": "prod"

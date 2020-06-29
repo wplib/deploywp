@@ -6,7 +6,7 @@ import (
 )
 
 
-type TargetRevision struct {
+type Target struct {
 	AutoDeploy bool   `json:"auto_deploy" mapstructure:"auto_deploy"`
 	HostName   string `json:"host_name" mapstructure:"host_name"`
 	RefName    string `json:"ref_name" mapstructure:"ref_name"`
@@ -16,9 +16,9 @@ type TargetRevision struct {
 	state   *ux.State
 }
 
-func (tr *TargetRevision) New(runtime *toolRuntime.TypeRuntime) *TargetRevision {
+func (tr *Target) New(runtime *toolRuntime.TypeRuntime) *Target {
 	runtime = runtime.EnsureNotNil()
-	return &TargetRevision {
+	return &Target{
 		HostName:     "",
 		RefName:     "",
 
@@ -28,7 +28,7 @@ func (tr *TargetRevision) New(runtime *toolRuntime.TypeRuntime) *TargetRevision 
 	}
 }
 
-func (tr *TargetRevision) IsNil() *ux.State {
+func (tr *Target) IsNil() *ux.State {
 	if state := ux.IfNilReturnError(tr); state.IsError() {
 		return state
 	}
@@ -36,18 +36,18 @@ func (tr *TargetRevision) IsNil() *ux.State {
 	return tr.state
 }
 
-func (tr *TargetRevision) IsValid() bool {
+func (tr *Target) IsValid() bool {
 	if state := ux.IfNilReturnError(tr); state.IsError() {
 		return false
 	}
 	for range onlyOnce {
 		if tr.HostName == "" {
-			tr.state.SetError("Empty target.revision.%s", GetStructTag(tr, "HostName"))
+			tr.state.SetError("Empty destination.revision.%s", GetStructTag(tr, "HostName"))
 			tr.Valid = false
 			break
 		}
 		if tr.RefName == "" {
-			tr.state.SetError("Empty target.revision.%s", GetStructTag(tr, "RefName"))
+			tr.state.SetError("Empty destination.revision.%s", GetStructTag(tr, "RefName"))
 			tr.Valid = false
 			break
 		}
@@ -55,6 +55,6 @@ func (tr *TargetRevision) IsValid() bool {
 	}
 	return tr.Valid
 }
-func (tr *TargetRevision) IsNotValid() bool {
+func (tr *Target) IsNotValid() bool {
 	return !tr.IsValid()
 }

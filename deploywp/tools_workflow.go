@@ -5,9 +5,22 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/newclarity/scribeHelpers/ux"
 	"os"
-	"path/filepath"
 	"time"
 )
+
+
+//func (dwp *TypeDeployWp) test() {
+//	stateError := ux.NewState("test", false)
+//	stateError.SetError("Hey it failed")
+//
+//	dwp.Print.IntentBegin("LEVEL 3")
+//	dwp.Print.Intent("first print")
+//	dwp.Print.IntentResponse(stateError,"should have passed")
+//	return
+//	dwp.Print.Intent("second print")
+//	dwp.Print.IntentResponse(stateError,"should have errored")
+//	dwp.Print.IntentEnd(stateError)
+//}
 
 
 // This is an alternative to running templates.
@@ -18,144 +31,100 @@ func (dwp *TypeDeployWp) Build() *ux.State {
 	}
 
 	for range onlyOnce {
-		ux.PrintfBlue("%s v%s\n", dwp.Runtime.CmdFile, dwp.Runtime.CmdVersion)
-		ux.PrintfGreen("args: %s\n", dwp.Runtime.GetArgs())
-		ux.PrintfWhite("\n\n")
+		dwp.Print.Notify("%s v%s", dwp.Runtime.CmdFile, dwp.Runtime.CmdVersion)
+		dwp.Print.Notify("args: %s", dwp.Runtime.GetArgs())
+
+
+		//stateOk := ux.NewState("foo", false)
+		//stateOk.SetOk()
+		//stateError := ux.NewState("foo", false)
+		//stateError.SetError("Hey it failed")
+		//dwp.Print.IntentBegin("LEVEL 1")
+		//dwp.Print.Intent("first print")
+		//dwp.Print.IntentResponse(stateOk,"should have passed")
+		//dwp.Print.Intent("second print")
+		//dwp.Print.IntentResponse(stateError,"should have errored")
+		//dwp.Print.IntentBegin("LEVEL 2")
+		//dwp.Print.Intent("first print")
+		//dwp.Print.IntentResponse(stateOk,"should have passed")
+		//dwp.Print.Intent("second print")
+		//dwp.Print.IntentResponse(stateError,"")
+		//dwp.test()
+		//dwp.Print.IntentEnd(stateError)
 
 
 		{
-			ux.PrintfWhite("##########################\n")
-			ux.PrintfWhite("# Print path information #\n")
-			ux.PrintfWhite("##########################\n")
-			dwp.State = dwp.PrintPaths()
-			if dwp.State.IsError() {
-				break
-			}
-			ux.PrintfWhite("\n\n")
-		}
-
-
-		{
-			ux.PrintfWhite("#############################\n")
-			ux.PrintfWhite("# Opening source repository #\n")
-			ux.PrintfWhite("#############################\n")
 			srcGitRef := dwp.OpenSourceRepo()
 			if srcGitRef.State.IsError() {
 				dwp.State = srcGitRef.State
 				break
 			}
-			ux.PrintfWhite("\n\n")
+			dwp.State = dwp.PrintSourcePaths()
+			if dwp.State.IsError() {
+				break
+			}
 		}
 
 
 		{
-			ux.PrintfWhite("#############################\n")
-			ux.PrintfWhite("# Opening target repository #\n")
-			ux.PrintfWhite("#############################\n")
-			targetGitRef := dwp.OpenTargetRepo()
-			if targetGitRef.State.IsError() {
-				dwp.State = targetGitRef.State
+			destinationGitRef := dwp.OpenDestinationRepo()
+			if destinationGitRef.State.IsError() {
+				dwp.State = destinationGitRef.State
 				break
 			}
-			ux.PrintfWhite("\n\n")
-
-			dwp.State = dwp.PrintRepo(targetGitRef)
+			dwp.State = dwp.PrintDestinationPaths()
 			if dwp.State.IsError() {
 				break
 			}
-			ux.PrintfWhite("\n\n")
 
-			ux.PrintfWhite("##############################\n")
-			ux.PrintfWhite("# Cleaning target repository #\n")
-			ux.PrintfWhite("##############################\n")
-			dwp.State = dwp.CleanRepo(targetGitRef, true)
+			dwp.State = dwp.CleanRepo(destinationGitRef, true)
 			if dwp.State.IsError() {
 				break
 			}
-			ux.PrintfWhite("\n\n")
 		}
 
 
 		{
-			ux.PrintfWhite("#############################\n")
-			ux.PrintfWhite("# Syncing target repository #\n")
-			ux.PrintfWhite("#############################\n")
-			//excludeFiles := []string{"composer.json"}
-			excludeFiles := []string{""}
 			srcPath := dwp.GetSourceAbsPaths()
-			dstPath := dwp.GetTargetAbsPaths()
-			dwp.State = dwp.CopyFiles(srcPath.GetCorePath(), dstPath.GetCorePath(), excludeFiles...)
+			dstPath := dwp.GetDestinationAbsPaths()
+			dwp.State = dwp.UpdateDestination(srcPath, dstPath)
 			if dwp.State.IsError() {
 				break
 			}
-			dwp.State = dwp.CopyFiles(srcPath.GetContentPath(), dstPath.GetContentPath(), excludeFiles...)
-			if dwp.State.IsError() {
-				break
-			}
-			dwp.State = dwp.CopyFiles(srcPath.GetVendorPath(), dstPath.GetVendorPath(), excludeFiles...)
-			if dwp.State.IsError() {
-				break
-			}
-			dwp.State = dwp.CopyFiles(filepath.Join(srcPath.GetBasePath(), "composer.json"), dstPath.GetBasePath())
-			if dwp.State.IsError() {
-				break
-			}
-			dwp.State = dwp.CopyFiles(filepath.Join(srcPath.GetWebRootPath(), "pantheon.upstream.yml"), dstPath.GetBasePath())
-			if dwp.State.IsError() {
-				break
-			}
-			dwp.State = dwp.CopyFiles(filepath.Join(srcPath.GetWebRootPath(), "pantheon.yml"), dstPath.GetBasePath())
-			if dwp.State.IsError() {
-				break
-			}
-			ux.PrintfWhite("\n\n")
 		}
 
 
 		{
-			ux.PrintfWhite("#########################################\n")
-			ux.PrintfWhite("# Running composer on target repository #\n")
-			ux.PrintfWhite("#########################################\n")
-			dwp.State = dwp.RunComposer(dwp.GetTargetAbsPaths().GetBasePath(), "install")
+			dwp.State = dwp.RunComposer(dwp.GetDestinationAbsPaths().GetBasePath(), "install")
 			if dwp.State.IsError() {
 				break
 			}
-			ux.PrintfWhite("\n\n")
 		}
 
 		os.Exit(1)
 
-		ux.PrintfWhite("############################################\n")
-		ux.PrintfWhite("# Increment BUILD within target repository #\n")
-		ux.PrintfWhite("############################################\n")
-		//dwp.State = dwp.OpenTargetRepo()
+		dwp.Print.Intent("# Increment BUILD within destination repository #")
+		//dwp.State = dwp.OpenDestinationRepo()
 		time.Sleep(time.Second * 2)	// Simulate
 		if dwp.State.IsError() {
 			break
 		}
-		ux.PrintfWhite("\n\n")
 
 
-		ux.PrintfWhite("########################################\n")
-		ux.PrintfWhite("# Commit target repository to Pantheon #\n")
-		ux.PrintfWhite("########################################\n")
-		//dwp.State = dwp.OpenTargetRepo()
+		dwp.Print.Intent("# Commit destination repository to Pantheon #")
+		//dwp.State = dwp.OpenDestinationRepo()
 		time.Sleep(time.Second * 2)	// Simulate
 		if dwp.State.IsError() {
 			break
 		}
-		ux.PrintfWhite("\n\n")
 
 
-		ux.PrintfWhite("############################\n")
-		ux.PrintfWhite("# Commit source repository #\n")
-		ux.PrintfWhite("############################\n")
-		//dwp.State = dwp.OpenTargetRepo()
+		dwp.Print.Intent("# Commit source repository #")
+		//dwp.State = dwp.OpenDestinationRepo()
 		time.Sleep(time.Second * 2)	// Simulate
 		if dwp.State.IsError() {
 			break
 		}
-		ux.PrintfWhite("\n\n")
 	}
 
 	return dwp.State

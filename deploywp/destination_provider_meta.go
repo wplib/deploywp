@@ -41,12 +41,12 @@ func (m *Meta) IsValid() bool {
 	}
 	for range onlyOnce {
 		if m.SiteID == "" {
-			m.state.SetError("Empty target.provider.meta.%s", GetStructTag(m, "SiteID"))
+			m.state.SetError("Empty destination.provider.meta.%s", GetStructTag(m, "SiteID"))
 			m.Valid = false
 			break
 		}
 		if m.SiteName == "" {
-			m.state.SetError("Empty target.provider.meta.%s", GetStructTag(m, "SiteName"))
+			m.state.SetError("Empty destination.provider.meta.%s", GetStructTag(m, "SiteName"))
 			m.Valid = false
 			break
 		}

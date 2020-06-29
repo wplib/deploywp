@@ -6,8 +6,6 @@ import (
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
-const DefaultSourceBasePath = "/tmp/deploywp"
-
 
 type Source struct {
 	Build      Build      `json:"build"`
@@ -35,7 +33,7 @@ func (s *Source) New(runtime *toolRuntime.TypeRuntime) *Source {
 		runtime: runtime,
 		state:   ux.NewState(runtime.CmdName, runtime.Debug),
 	}
-	ret.Paths.BasePath = DefaultSourceBasePath
+	//ret.Paths.BasePath = DefaultSourceBasePath
 
 	return ret
 }
@@ -93,15 +91,16 @@ func (s *Source) Process() *ux.State {
 	}
 
 	for range onlyOnce {
+		if s.Paths.BasePath == "" {
+			s.Paths.BasePath = "."
+		}
+
 		s.AbsPaths = s.Paths
 		s.state = s.AbsPaths.ExpandPaths()
 		if s.state.IsError() {
 			break
 		}
 
-		if s.Paths.BasePath == "" {
-			s.Paths.BasePath = DefaultSourceBasePath
-		}
 		s.Valid = true
 	}
 

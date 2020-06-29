@@ -80,38 +80,38 @@ func (f *Files) Process(paths Paths) *ux.State {
 
 	for range onlyOnce {
 		for i, p := range f.Copy {
-			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath())
-			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath())
-			p = strings.ReplaceAll(p, "{wordpress.vendor_path}", paths.GetVendorPath())
-			p = strings.ReplaceAll(p, "{wordpress.core_path}", paths.GetCorePath())
-			p = strings.ReplaceAll(p, "{wordpress.root_path}", paths.GetRootPath())
+			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath(false))
+			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath(false))
+			p = strings.ReplaceAll(p, "{wordpress.vendor_path}", paths.GetVendorPath(false))
+			p = strings.ReplaceAll(p, "{wordpress.core_path}", paths.GetCorePath(false))
+			p = strings.ReplaceAll(p, "{wordpress.root_path}", paths.GetRootPath(false))
 			f.Copy[i] = p
 		}
 
 		for i, p := range f.Delete {
-			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath())
-			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath())
-			p = strings.ReplaceAll(p, "{wordpress.vendor_path}", paths.GetVendorPath())
-			p = strings.ReplaceAll(p, "{wordpress.core_path}", paths.GetCorePath())
-			p = strings.ReplaceAll(p, "{wordpress.root_path}", paths.GetRootPath())
+			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath(false))
+			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath(false))
+			p = strings.ReplaceAll(p, "{wordpress.vendor_path}", paths.GetVendorPath(false))
+			p = strings.ReplaceAll(p, "{wordpress.core_path}", paths.GetCorePath(false))
+			p = strings.ReplaceAll(p, "{wordpress.root_path}", paths.GetRootPath(false))
 			f.Delete[i] = p
 		}
 
 		for i, p := range f.Exclude {
-			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath())
-			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath())
-			p = strings.ReplaceAll(p, "{wordpress.vendor_path}", paths.GetVendorPath())
-			p = strings.ReplaceAll(p, "{wordpress.core_path}", paths.GetCorePath())
-			p = strings.ReplaceAll(p, "{wordpress.root_path}", paths.GetRootPath())
+			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath(false))
+			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath(false))
+			p = strings.ReplaceAll(p, "{wordpress.vendor_path}", paths.GetVendorPath(false))
+			p = strings.ReplaceAll(p, "{wordpress.core_path}", paths.GetCorePath(false))
+			p = strings.ReplaceAll(p, "{wordpress.root_path}", paths.GetRootPath(false))
 			f.Exclude[i] = p
 		}
 
 		for i, p := range f.Keep {
-			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath())
-			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath())
-			p = strings.ReplaceAll(p, "{wordpress.vendor_path}", paths.GetVendorPath())
-			p = strings.ReplaceAll(p, "{wordpress.core_path}", paths.GetCorePath())
-			p = strings.ReplaceAll(p, "{wordpress.root_path}", paths.GetRootPath())
+			p = strings.ReplaceAll(p, "{webroot_path}", paths.GetWebRootPath(false))
+			p = strings.ReplaceAll(p, "{wordpress.content_path}", paths.GetContentPath(false))
+			p = strings.ReplaceAll(p, "{wordpress.vendor_path}", paths.GetVendorPath(false))
+			p = strings.ReplaceAll(p, "{wordpress.core_path}", paths.GetCorePath(false))
+			p = strings.ReplaceAll(p, "{wordpress.root_path}", paths.GetRootPath(false))
 			f.Keep[i] = p
 		}
 
@@ -191,10 +191,10 @@ func (fa *FilesArray) Append(add *FilesArray) {
 
 
 const (
-	TargetActionCopy = "copy"
-	TargetActionDelete = "delete"
-	TargetActionExclude = "exclude"
-	TargetActionKeep = "keep"
+	DestinationActionCopy = "copy"
+	DestinationActionDelete = "delete"
+	DestinationActionExclude = "exclude"
+	DestinationActionKeep = "keep"
 )
 
 func (f *Files) GetFiles(action string) *FilesArray {
@@ -205,22 +205,22 @@ func (f *Files) GetFiles(action string) *FilesArray {
 
 	for range onlyOnce {
 		if action == "" {
-			//ret.Error = errors.New("GetTargetFiles arg not a string")
+			//ret.Error = errors.New("GetDestinationFiles arg not a string")
 			break
 		}
 
 		switch action {
-			case TargetActionCopy:
+			case DestinationActionCopy:
 				ret = &f.Copy
-			case TargetActionDelete:
+			case DestinationActionDelete:
 				ret = &f.Delete
-			case TargetActionExclude:
+			case DestinationActionExclude:
 				ret = &f.Exclude
-			case TargetActionKeep:
+			case DestinationActionKeep:
 				ret = &f.Keep
 
 			default:
-				//ret.Error = errors.New("GetTargetFiles file type not defined")
+				//ret.Error = errors.New("GetDestinationFiles file type not defined")
 		}
 	}
 

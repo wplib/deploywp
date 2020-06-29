@@ -2,6 +2,7 @@ package deploywp
 
 import (
 	"github.com/newclarity/scribeHelpers/toolGit"
+	"github.com/newclarity/scribeHelpers/toolPath"
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
@@ -12,139 +13,199 @@ func (dwp *TypeDeployWp) OpenSourceRepo() *toolGit.TypeGit {
 		return &toolGit.TypeGit{State: state}
 	}
 
+	dwp.Print.IntentBegin("Opening source repository")
 	for range onlyOnce {
-		ux.PrintflnBlue("# Checking source repository.")
+		gitRef.State.SetOk()
+		source := dwp.Source
 
-		repo := dwp.Source.GetRepository()
+		repo := source.GetRepository()
 		provider := repo.GetProvider()
 		if provider == "" {
-			dwp.State.SetError(".source.repository.provider is nil")
+			gitRef.State.SetError(".source.repository.provider is nil")
 			break
 		}
 
 		if !repo.IsGitProvider() {
-			dwp.State.SetWarning(".source.repository.provider '%s' is not supported", provider)
+			gitRef.State.SetWarning(".source.repository.provider '%s' is not supported", provider)
 			break
 		}
 
 		url := repo.GetUrl()
 		if url == "" {
-			dwp.State.SetError(".source.repository.url is nil")
+			gitRef.State.SetError(".source.repository.url is nil")
 			break
 		}
 
-		path := dwp.Source.AbsPaths.GetBasePath()
-		if path == "" {
-			dwp.State.SetError(".source.paths.base_path is nil")
-			break
-		}
-
-		refType := dwp.Source.GetRevisionType()
+		refType := source.GetRevisionType()
 		if refType == "" {
-			dwp.State.SetError(".source.revision.ref_type is nil")
+			gitRef.State.SetError(".source.revision.ref_type is nil")
 			break
 		}
 
-		refName := dwp.Source.GetRevisionName()
+		refName := source.GetRevisionName()
 		if refName == "" {
-			dwp.State.SetError(".source.revision.ref_name is nil")
+			gitRef.State.SetError(".source.revision.ref_name is nil")
 			break
 		}
 
-		gitRef = dwp.OpenRepo(url.String(), path)
+
+		pathRef := toolPath.New(dwp.Runtime)
+		if pathRef.State.IsNotOk() {
+			gitRef.State = pathRef.State
+			break
+		}
+		pathRef.SetPath(source.AbsPaths.GetBasePath())
+
+		gitRef = dwp.OpenRepo(url.String(), pathRef)
 		if gitRef.State.IsNotOk() {
-			dwp.State = gitRef.State
 			break
 		}
 
-		dwp.State = dwp.CheckoutRepo(gitRef, refType, refName)
+		gitRef.State = dwp.CheckoutRepo(gitRef, refType, refName)
 		if gitRef.State.IsNotOk() {
-			dwp.State = gitRef.State
 			break
 		}
 
-		dwp.State = dwp.PrintRepo(gitRef)
-		if dwp.State.IsError() {
-			break
+		if dwp.Runtime.Verbose {
+			gitRef.State = dwp.PrintRepo(gitRef)
+			if gitRef.State.IsError() {
+				break
+			}
 		}
 
-		dwp.State.SetOk()
+		gitRef.State.SetOk()
 	}
+	dwp.Print.IntentEnd(gitRef.State)
 
-	gitRef.State = dwp.State
 	return gitRef
 }
 
 
-func (dwp *TypeDeployWp) OpenTargetRepo() *toolGit.TypeGit {
+func (dwp *TypeDeployWp) OpenDestinationRepo() *toolGit.TypeGit {
 	gitRef := toolGit.New(dwp.Runtime)
 	if state := dwp.IsNil(); state.IsError() {
 		return &toolGit.TypeGit{State: state}
 	}
 
+	dwp.Print.IntentBegin("Opening destination repository")
 	for range onlyOnce {
-		ux.PrintflnBlue("# Checking target repository details.")
+		gitRef.State.SetOk()
+		destination := dwp.Destination
 
-		hostArg := dwp.GetHost()
-		if dwp.State.IsError() {
-			break
-		}
-		host := dwp.Hosts.GetByName(hostArg)
-		if host.state.IsError() {
-			break
-		}
-
-		path := dwp.GetTargetAbsPaths().GetBasePath()
-		if path == "" {
+		host := destination.GetSelectedHost()
+		if host.state.IsNotOk() {
+			gitRef.State = host.state
 			break
 		}
 
-		provider := dwp.Target.GetProviderByName(host.Provider)
+
+		provider := destination.GetProviderByName(host.Provider)
 		if provider.state.IsError() {
-			dwp.State = provider.state
+			gitRef.State = provider.state
 			break
 		}
 
 		webRoot := provider.GetWebroot()
 		repoUrl := provider.GetRepository()
-		revision := dwp.Target.GetRevisionByHost(host.HostName)
+		revision := destination.GetTargetByHost(host.HostName)
 		if revision.state.IsError() {
-			dwp.State = revision.state
+			gitRef.State = revision.state
 			break
 		}
 
-		//ux.PrintflnBlue("# Target repository.")
-		//ux.PrintflnOk("Path: '%s'", path)
-		//ux.PrintflnOk("Repo Url: '%s'", repoUrl)
-		//ux.PrintflnOk("Branch:   '%s'", revision.RefName)
-		//ux.PrintflnOk("HostName: '%s'", host.HostName)
-		//ux.PrintflnOk("Label:    '%s'", host.Label)
-		//ux.PrintflnOk("Provider: '%s'", host.Provider)
-		//ux.PrintflnOk("Web Root: '%s'", webRoot)
+		//dwp.Print.Intent("Destination repository")
+		//dwp.Print.Ok("Path: '%s'", path)
+		//dwp.Print.Ok("Repo Url: '%s'", repoUrl)
+		//dwp.Print.Ok("Branch:   '%s'", revision.RefName)
+		//dwp.Print.Ok("HostName: '%s'", host.HostName)
+		//dwp.Print.Ok("Label:    '%s'", host.Label)
+		//dwp.Print.Ok("Provider: '%s'", host.Provider)
+		//dwp.Print.Ok("Web Root: '%s'", webRoot)
 
-		gitRef = dwp.OpenRepo(repoUrl, path)
+
+		pathRef := toolPath.New(dwp.Runtime)
+		if pathRef.State.IsNotOk() {
+			gitRef.State = pathRef.State
+			break
+		}
+		pathRef.SetPath(destination.GetBasePath())
+
+		gitRef = dwp.OpenRepo(repoUrl, pathRef)
 		if gitRef.State.IsError() {
-			dwp.State = gitRef.State
+			gitRef.State = gitRef.State
 			break
 		}
 
- 		dwp.State = dwp.CheckoutRepo(gitRef, "tag", revision.RefName)
-		if dwp.State.IsError() {
+		gitRef.State = dwp.CheckoutRepo(gitRef, "tag", revision.RefName)
+		if gitRef.State.IsError() {
 			break
 		}
 
-		dwp.State = dwp.PrintRepo(gitRef)
-		if dwp.State.IsError() {
-			break
-		}
-		ux.PrintflnOk("HostName: '%s'", host.HostName)
-		ux.PrintflnOk("Label:    '%s'", host.Label)
-		ux.PrintflnOk("Provider: '%s'", host.Provider)
-		ux.PrintflnOk("Web Root: '%s'", webRoot)
+		if dwp.Runtime.Verbose {
+			gitRef.State = dwp.PrintRepo(gitRef)
+			if gitRef.State.IsError() {
+				break
+			}
 
-		dwp.State.SetOk()
+			dwp.Print.IntentResponse(gitRef.State, "")
+			dwp.Print.Ok("HostName: '%s'", host.HostName)
+			dwp.Print.Ok("Label:    '%s'", host.Label)
+			dwp.Print.Ok("Provider: '%s'", host.Provider)
+			dwp.Print.Ok("Web Root: '%s'", webRoot)
+		}
+
+		gitRef.State.SetOk()
+	}
+	dwp.Print.IntentEnd(gitRef.State)
+
+	return gitRef
+}
+
+
+func (dwp *TypeDeployWp) PrintSourcePaths() *ux.State {
+	if state := dwp.IsNil(); state.IsError() {
+		return state
 	}
 
-	gitRef.State = dwp.State
-	return gitRef
+	dwp.Print.IntentBegin("Source Path Check")
+	for range onlyOnce {
+		src := dwp.GetSourcePaths()
+		if src == nil {
+			dwp.State.SetError("no srource paths")
+		}
+		//srcAbs := dwp.GetSourceAbsPaths()
+		//dwp.Print.Ok("BasePath (abs):    %s", srcAbs.GetBasePath())
+		dwp.Print.Ok("BasePath:          %s", src.GetBasePath())
+		dwp.Print.Ok("WebRootPath:       %s", src.GetWebRootPath(false))
+		dwp.Print.Ok("ContentPath:       %s", src.GetContentPath(false))
+		dwp.Print.Ok("CorePath:          %s", src.GetCorePath(false))
+		dwp.Print.Ok("RootPath:          %s", src.GetRootPath(false))
+		dwp.Print.Ok("VendorPath:        %s", src.GetVendorPath(false))
+	}
+	dwp.Print.IntentEnd(dwp.State)
+
+	return dwp.State
+}
+
+
+func (dwp *TypeDeployWp) PrintDestinationPaths() *ux.State {
+	if state := dwp.IsNil(); state.IsError() {
+		return state
+	}
+
+	dwp.Print.IntentBegin("Destination Paths")
+	for range onlyOnce {
+		destination := dwp.GetDestinationPaths()
+		//destinationAbs := dwp.GetDestinationAbsPaths()
+		//dwp.Print.Ok("BasePath (abs):    %s", destinationAbs.GetBasePath())
+		dwp.Print.Ok("BasePath:          %s", destination.GetBasePath())
+		dwp.Print.Ok("WebRootPath:       %s", destination.GetWebRootPath(false))
+		dwp.Print.Ok("ContentPath:       %s", destination.GetContentPath(false))
+		dwp.Print.Ok("CorePath:          %s", destination.GetCorePath(false))
+		dwp.Print.Ok("RootPath:          %s", destination.GetRootPath(false))
+		dwp.Print.Ok("VendorPath:        %s", destination.GetVendorPath(false))
+	}
+	dwp.Print.IntentEnd(dwp.State)
+
+	return dwp.State
 }

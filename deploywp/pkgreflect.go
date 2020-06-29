@@ -10,6 +10,7 @@ var Types = map[string]reflect.Type{
 	"DefaultsPaths": reflect.TypeOf((*DefaultsPaths)(nil)).Elem(),
 	"DefaultsRepository": reflect.TypeOf((*DefaultsRepository)(nil)).Elem(),
 	"DeployWpGetter": reflect.TypeOf((*DeployWpGetter)(nil)).Elem(),
+	"Destination": reflect.TypeOf((*Destination)(nil)).Elem(),
 	"Files": reflect.TypeOf((*Files)(nil)).Elem(),
 	"FilesArray": reflect.TypeOf((*FilesArray)(nil)).Elem(),
 	"Host": reflect.TypeOf((*Host)(nil)).Elem(),
@@ -24,11 +25,11 @@ var Types = map[string]reflect.Type{
 	"State": reflect.TypeOf((*State)(nil)).Elem(),
 	"String": reflect.TypeOf((*String)(nil)).Elem(),
 	"Target": reflect.TypeOf((*Target)(nil)).Elem(),
-	"TargetRevision": reflect.TypeOf((*TargetRevision)(nil)).Elem(),
-	"TargetRevisions": reflect.TypeOf((*TargetRevisions)(nil)).Elem(),
+	"Targets": reflect.TypeOf((*Targets)(nil)).Elem(),
 	"ToolDeployWp": reflect.TypeOf((*ToolDeployWp)(nil)).Elem(),
 	"TypeDeployWp": reflect.TypeOf((*TypeDeployWp)(nil)).Elem(),
 	"URL": reflect.TypeOf((*URL)(nil)).Elem(),
+	"UxPrint": reflect.TypeOf((*UxPrint)(nil)).Elem(),
 	"Wordpress": reflect.TypeOf((*Wordpress)(nil)).Elem(),
 }
 
@@ -45,11 +46,11 @@ var Variables = map[string]reflect.Value{
 }
 
 var Consts = map[string]reflect.Value{
-	"DefaultSourceBasePath": reflect.ValueOf(DefaultSourceBasePath),
-	"TargetActionCopy": reflect.ValueOf(TargetActionCopy),
-	"TargetActionDelete": reflect.ValueOf(TargetActionDelete),
-	"TargetActionExclude": reflect.ValueOf(TargetActionExclude),
-	"TargetActionKeep": reflect.ValueOf(TargetActionKeep),
+	"DefaultDestinationBasePath": reflect.ValueOf(DefaultDestinationBasePath),
+	"DestinationActionCopy": reflect.ValueOf(DestinationActionCopy),
+	"DestinationActionDelete": reflect.ValueOf(DestinationActionDelete),
+	"DestinationActionExclude": reflect.ValueOf(DestinationActionExclude),
+	"DestinationActionKeep": reflect.ValueOf(DestinationActionKeep),
 	"ToolPrefix": reflect.ValueOf(ToolPrefix),
 }
 

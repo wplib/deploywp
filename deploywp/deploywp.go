@@ -67,55 +67,55 @@ func (dwp *TypeDeployWp) GetSourceBuild() bool {
 
 
 // ////////////////////////////////////////////////////////////////////////////////
-// Target
-func (dwp *TypeDeployWp) GetTarget() *Target {
-	return &dwp.Target
+// Destination
+func (dwp *TypeDeployWp) GetDestination() *Destination {
+	return &dwp.Destination
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
-// Target.Files
-func (dwp *TypeDeployWp) GetTargetFiles(ftype string) *FilesArray {
+// Destination.Files
+func (dwp *TypeDeployWp) GetDestinationFiles(ftype string) *FilesArray {
 	if state := dwp.IsNil(); state.IsError() {
 		return &FilesArray{}
 	}
-	return dwp.Target.GetFiles(ftype)
+	return dwp.Destination.GetFiles(ftype)
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
-// Target.Paths
-func (dwp *TypeDeployWp) GetTargetPaths() *Paths {
+// Destination.Paths
+func (dwp *TypeDeployWp) GetDestinationPaths() *Paths {
 	if state := dwp.IsNil(); state.IsError() {
 		return &Paths{}
 	}
-	return &dwp.Target.Paths
+	return &dwp.Destination.Paths
 }
-func (dwp *TypeDeployWp) GetTargetAbsPaths() *Paths {
+func (dwp *TypeDeployWp) GetDestinationAbsPaths() *Paths {
 	if state := dwp.IsNil(); state.IsError() {
 		return &Paths{}
 	}
-	return &dwp.Target.AbsPaths
+	return &dwp.Destination.AbsPaths
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
-// Target.Revisions
-func (dwp *TypeDeployWp) GetTargetRevision(host string) *TargetRevision {
+// Destination.Revisions
+func (dwp *TypeDeployWp) GetDestinationRevision(host string) *Target {
 	if state := dwp.IsNil(); state.IsError() {
-		return &TargetRevision{}
+		return &Target{}
 	}
-	return dwp.Target.GetRevisionByHost(host)
+	return dwp.Destination.GetTargetByHost(host)
 }
 
 
 // ////////////////////////////////////////////////////////////////////////////////
-// Target.Providers
-func (dwp *TypeDeployWp) GetTargetProvider(provider string) *Provider {
+// Destination.Providers
+func (dwp *TypeDeployWp) GetDestinationProvider(provider string) *Provider {
 	if state := dwp.IsNil(); state.IsError() {
 		return &Provider{}
 	}
-	return dwp.Target.GetProviderByName(provider)
+	return dwp.Destination.GetProviderByName(provider)
 }
 
 

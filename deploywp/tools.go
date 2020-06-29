@@ -5,20 +5,21 @@ import (
 	"github.com/newclarity/scribeHelpers/ux"
 )
 
+
 type ToolDeployWp TypeDeployWp
-func (g *ToolDeployWp) Reflect() *TypeDeployWp {
-	return (*TypeDeployWp)(g)
+func (dwp *ToolDeployWp) Reflect() *TypeDeployWp {
+	return (*TypeDeployWp)(dwp)
 }
 func (dwp *TypeDeployWp) Reflect() *ToolDeployWp {
 	return (*ToolDeployWp)(dwp)
 }
 
-func (c *ToolDeployWp) IsNil() *ux.State {
-	if state := ux.IfNilReturnError(c); state.IsError() {
+func (dwp *ToolDeployWp) IsNil() *ux.State {
+	if state := ux.IfNilReturnError(dwp); state.IsError() {
 		return state
 	}
-	c.State = c.State.EnsureNotNil()
-	return c.State
+	dwp.State = dwp.State.EnsureNotNil()
+	return dwp.State
 }
 
 
@@ -61,17 +62,22 @@ func ToolLoadDeployWp(str interface{}, args []string) *TypeDeployWp {
 			break
 		}
 
+		dwp.State = dwp.Hosts.Process(dwp.Runtime)
+		if dwp.State.IsError() {
+			break
+		}
+
+		dwp.State = dwp.SelectDestinationHost()
+		if dwp.State.IsError() {
+			break
+		}
+
 		dwp.State = dwp.Source.Process()
 		if dwp.State.IsError() {
 			break
 		}
 
-		dwp.State = dwp.Target.Process()
-		if dwp.State.IsError() {
-			break
-		}
-
-		dwp.State = dwp.Hosts.Process(dwp.Runtime)
+		dwp.State = dwp.Destination.Process()
 		if dwp.State.IsError() {
 			break
 		}
@@ -83,26 +89,12 @@ func ToolLoadDeployWp(str interface{}, args []string) *TypeDeployWp {
 }
 
 
-// Usage:
-//		{{ $cmd := LoadDeployWp }}
-//		{{ $cmd.PrintError }}
-func (dwp *TypeDeployWp) PrintError() string {
-	return dwp.State.SprintError()
-}
-
-
-// Usage:
-//		{{ $cmd := LoadDeployWp }}
-//		{{ $cmd.ExitOnError }}
 func (dwp *TypeDeployWp) ExitOnError() string {
 	dwp.State.ExitOnError()
 	return ""
 }
 
 
-// Usage:
-//		{{ $cmd := LoadDeployWp }}
-//		{{ $cmd.ExitOnWarning }}
 func (dwp *TypeDeployWp) ExitOnWarning() string {
 	dwp.State.ExitOnWarning()
 	return ""
