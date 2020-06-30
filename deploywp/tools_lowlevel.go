@@ -22,27 +22,10 @@ func (dwp *TypeDeployWp) OpenRepo(url string, pathRef *toolPath.TypeOsPath) *too
 		return &toolGit.TypeGit{State: state}
 	}
 
+	// dwp.Print.Intent("Opening repo '%s'", url)
+	//dwp.Print.Notify(1, "Opening repo '%s'", url)
+	dwp.Print.Notify(1, "Opening")
 	for range onlyOnce {
-		// Check repo exists and clone if not.
-		gitRef.State = pathRef.StatPath()
-		if pathRef.NotExists() {
-			dwp.Print.IntentBegin("Cloning repo '%s'", url)
-			gitRef.State = gitRef.SetPath(pathRef.GetPath())
-			if gitRef.State.IsError() {
-				break
-			}
-			gitRef.State = gitRef.SetUrl(url)
-			if gitRef.State.IsError() {
-				break
-			}
-			gitRef.State = gitRef.Clone()
-			if gitRef.State.IsError() {
-				break
-			}
-			dwp.Print.IntentResponse(gitRef.State, "")
-		}
-
-		dwp.Print.IntentBegin("Opening repo '%s'", url)
 		gitRef.State = pathRef.StatPath()
 		if pathRef.NotExists() {
 			gitRef.State.SetError("Repository cannot be opened.")
@@ -67,12 +50,13 @@ func (dwp *TypeDeployWp) OpenRepo(url string, pathRef *toolPath.TypeOsPath) *too
 		gitRef.State.SetOk()
 
 		if gitRef.Url != url {
-			dwp.Print.IntentResponse(gitRef.State, "Repo URL differs - requested:'%s' path:'%s'", url, gitRef.Url)
+			// dwp.Print.IntentAppend("Repo URL differs - requested:'%s' path:'%s'", url, gitRef.Url)
 		}
-		dwp.Print.IntentResponse(gitRef.State, gitRef.State.Sprint())
+		// dwp.Print.IntentResponse(gitRef.State)
 	}
+	// dwp.Print.IntentResponse(gitRef.State)
+	dwp.Print.PrintResponse(gitRef.State)
 
-	dwp.Print.IntentEnd(gitRef.State)
 	return gitRef
 }
 
@@ -83,66 +67,35 @@ func (dwp *TypeDeployWp) CloneRepo(url string, pathRef *toolPath.TypeOsPath) *to
 		return &toolGit.TypeGit{State: state}
 	}
 
-	dwp.Print.IntentBegin("Cloning '%s'", url)
+	// dwp.Print.Intent("Cloning '%s'", url)
+	//dwp.Print.Notify(1, "Cloning '%s'", url)
+	dwp.Print.Notify(1, "Cloning")
 	for range onlyOnce {
 		// Check repo exists and clone if not.
 		gitRef.State = pathRef.StatPath()
-		if pathRef.NotExists() {
-			gitRef.State = gitRef.SetPath(pathRef.GetPath())
-			if gitRef.State.IsError() {
-				dwp.Print.IntentResponse(gitRef.State, gitRef.State.Sprint())
-				break
-			}
-			gitRef.State = gitRef.SetUrl(url)
-			if gitRef.State.IsError() {
-				dwp.Print.IntentResponse(gitRef.State, gitRef.State.Sprint())
-				break
-			}
-			gitRef.State = gitRef.Clone()
-			if gitRef.State.IsError() {
-				dwp.Print.IntentResponse(gitRef.State, gitRef.State.Sprint())
-				break
-			}
-			dwp.Print.IntentResponse(gitRef.State, "")
+		if pathRef.Exists() {
 			break
 		}
-
-
-		gitRef.State = pathRef.StatPath()
-		if pathRef.NotExists() {
-			//ux.PrintflnRed("Repository cannot be cloned.")
-			gitRef.State.SetError("Repository cannot be cloned.")
-			dwp.Print.IntentResponse(gitRef.State, gitRef.State.Sprint())
-			break
-		}
-		//dwp.Print.Ok("Repository path: '%s'", pathRef.GetPathAbs())
-
-
 		gitRef.State = gitRef.SetPath(pathRef.GetPath())
 		if gitRef.State.IsError() {
-			dwp.Print.IntentResponse(gitRef.State, gitRef.State.Sprint())
 			break
 		}
-
-		gitRef.State = gitRef.Open()
+		gitRef.State = gitRef.SetUrl(url)
 		if gitRef.State.IsError() {
-			dwp.Print.IntentResponse(gitRef.State, gitRef.State.Sprint())
 			break
 		}
-
-		_, gitRef.State = gitRef.GetUrl()
+		gitRef.State = gitRef.Clone()
 		if gitRef.State.IsError() {
-			dwp.Print.IntentResponse(gitRef.State, gitRef.State.Sprint())
 			break
 		}
 
 		gitRef.State.SetOk()
-
 		if gitRef.Url != url {
-			dwp.Print.IntentResponse(gitRef.State, "Repo URL differs - requested:'%s' path:'%s'", url, gitRef.Url)
+			// dwp.Print.IntentAppend("Repo URL differs - requested:'%s' path:'%s'", url, gitRef.Url)
 		}
 	}
-	dwp.Print.IntentEnd(gitRef.State)
+	// dwp.Print.IntentResponse(gitRef.State)
+	dwp.Print.PrintResponse(gitRef.State)
 
 	return gitRef
 }
@@ -153,7 +106,8 @@ func (dwp *TypeDeployWp) CheckoutRepo(gitRef *toolGit.TypeGit, versionType strin
 		return state
 	}
 
-	dwp.Print.IntentBegin("Checkout %s:%s", strings.Title(versionType), version)
+	// dwp.Print.Intent("Checkout %s:%s", strings.Title(versionType), version)
+	dwp.Print.Notify(1, "Checkout %s:%s", strings.Title(versionType), version)
 	for range onlyOnce {
 		if gitRef.IsNotExisting() {
 			gitRef.State.SetError("Repository not open.")
@@ -188,9 +142,10 @@ func (dwp *TypeDeployWp) CheckoutRepo(gitRef *toolGit.TypeGit, versionType strin
 		//dwp.Print.Ok("%s '%s' checked out OK.", strings.Title(versionType), version)
 		gitRef.State.SetOk()
 	}
-	dwp.Print.IntentEnd(gitRef.State)
+	// dwp.Print.IntentResponse(gitRef.State)
+	dwp.Print.PrintResponse(gitRef.State)
 
-	return dwp.State
+	return gitRef.State
 }
 
 
@@ -202,59 +157,54 @@ func (dwp *TypeDeployWp) CleanRepo(gitRef *toolGit.TypeGit, force bool) *ux.Stat
 		return state
 	}
 
-	dwp.Print.IntentBegin("Cleaning destination repository '%s'", gitRef.Base.GetPath())
+	dwp.Print.Notify(1, "Cleaning")
+	//dwp.Print.Notify(1, "Cleaning destination repository '%s'", gitRef.Base.GetPath())
 	for range onlyOnce {
 		if gitRef.IsNotExisting() {
-			dwp.State.SetError("Repository not open.")
+			gitRef.State.SetError("Repository not open.")
 			break
 		}
 		if !force {
 			//dwp.Print.Warning("\nAbout to remove all files within the '%s' repo...", gitRef.Base.GetPathAbs())
 			ok := toolPrompt.ToolUserPromptBool("Do you want to remove repo files?")
 			if !ok {
-				dwp.Print.Warning("Aborting... ")
-				dwp.State.SetError("Abort due to user response.")
-				dwp.Print.IntentResponse(dwp.State, "")
+				dwp.Print.Warning(1,"Aborting... ")
+				gitRef.State.SetError("Abort due to user response.")
 				break
 			}
 		}
 
 
-		dwp.Print.Intent("Removing files (checked in)")
-		dwp.State = gitRef.GitRm("-r", ".")
-		//foo := dwp.State.OutputGrep("did not match any files")
-		if dwp.State.IsError() {
-			if strings.Contains(dwp.State.GetError().Error(), "exit status 128") {
-				dwp.State.SetOk()
+		dwp.Print.Append(" (checked in)")
+		gitRef.State = gitRef.GitRm("-r", ".")
+		if gitRef.State.IsError() {
+			if strings.Contains(gitRef.State.GetError().Error(), "exit status 128") {
+				gitRef.State.SetOk()
 			} else {
-				dwp.Print.IntentResponse(dwp.State, "")
-				dwp.State.SetError("Failed to remove files on destination")
+				gitRef.State.SetError("Failed to remove files on destination")
 				break
 			}
 		}
-		dwp.Print.IntentResponse(dwp.State, "")
+		dwp.Print.PrintResponse(gitRef.State)
 
 
-		dwp.Print.Intent("Removing files (untracked)")
-		dwp.State = gitRef.GitClean("-d", "-f", ".")
-		//foo := dwp.State.OutputGrep("did not match any files")
-		if dwp.State.IsError() {
-			if strings.Contains(dwp.State.GetError().Error(), "exit status 128") {
-				dwp.State.SetOk()
+		dwp.Print.Append(" (untracked)")
+		gitRef.State = gitRef.GitClean("-d", "-f", ".")
+		if gitRef.State.IsError() {
+			if strings.Contains(gitRef.State.GetError().Error(), "exit status 128") {
+				gitRef.State.SetOk()
 			} else {
-				dwp.State.SetError("Failed to remove files on destination")
-				dwp.Print.IntentResponse(dwp.State, "")
+				gitRef.State.SetError("Failed to remove files on destination")
 				break
 			}
 		}
-		dwp.Print.IntentResponse(dwp.State, "")
+		dwp.Print.PrintResponse(gitRef.State)
 
-		//dwp.Print.Ok("File removal completed OK.")
-		dwp.State.SetOk()
+		gitRef.State.SetOk()
 	}
-	dwp.Print.IntentEnd(dwp.State)
+	dwp.Print.PrintResponse(gitRef.State)
 
-	return dwp.State
+	return gitRef.State
 }
 
 
@@ -263,7 +213,8 @@ func (dwp *TypeDeployWp) UpdateDestination(srcPath *Paths, dstPath *Paths) *ux.S
 		return state
 	}
 
-	dwp.Print.IntentBegin("Update destination")
+	// dwp.Print.Intent( "Update destination")
+	dwp.Print.Notify(1,  "Update destination")
 	for range onlyOnce {
 		//excludeFiles := []string{"composer.json"}
 		excludeFiles := []string{""}
@@ -294,7 +245,8 @@ func (dwp *TypeDeployWp) UpdateDestination(srcPath *Paths, dstPath *Paths) *ux.S
 
 		dwp.State.SetOk()
 	}
-	dwp.Print.IntentEnd(dwp.State)
+	dwp.Print.PrintResponse(dwp.State)
+	// dwp.Print.IntentResponse(dwp.State)
 
 	return dwp.State
 }
@@ -308,7 +260,8 @@ func (dwp *TypeDeployWp) CopyFiles(src string, dst string, exclude ...string) *u
 		return state
 	}
 
-	dwp.Print.IntentBegin("Copying files %s -> %s", src, dst)
+	// dwp.Print.Intent("Copying files to %s", dst)
+	dwp.Print.Notify(2, "Copying to %s", dst)
 	for range onlyOnce {
 		fileCopy := toolCopy.New(dwp.Runtime)
 		if fileCopy.State.IsError() {
@@ -341,19 +294,22 @@ func (dwp *TypeDeployWp) CopyFiles(src string, dst string, exclude ...string) *u
 			break
 		}
 
-		dwp.Print.Ok("Files copied with OK")
+		dwp.State.SetOk()
 	}
-	dwp.Print.IntentEnd(dwp.State)
+	dwp.Print.PrintResponse(dwp.State)
+	// dwp.Print.IntentResponse(dwp.State)
 
 	return dwp.State
 }
+
 
 func (dwp *TypeDeployWp) CopyFile(src string, dst string) *ux.State {
 	if state := dwp.IsNil(); state.IsError() {
 		return state
 	}
 
-	dwp.Print.IntentBegin("Copying file")
+	// dwp.Print.Intent( "Copying file %s -> %s", src, dst)
+	dwp.Print.Notify(2,  "Copying to %s", dst)
 	for range onlyOnce {
 		fileCopy := toolCopy.New(dwp.Runtime)
 		if fileCopy.State.IsError() {
@@ -374,19 +330,16 @@ func (dwp *TypeDeployWp) CopyFile(src string, dst string) *ux.State {
 		fileCopy.SetOverwrite()
 		fileCopy.SetMethodCp()
 
-		dwp.Print.Intent("Copying file:")
-		dwp.Print.Intent("    Source:      %s", fileCopy.GetSourcePath())
-		dwp.Print.Intent("    Destination: %s", fileCopy.GetDestinationPath())
-
 		dwp.State = fileCopy.Copy()
 		if dwp.State.IsError() {
 			dwp.State = fileCopy.State
 			break
 		}
 
-		dwp.Print.Ok("Files copied with OK")
+		dwp.State.SetOk("")
 	}
-	dwp.Print.IntentEnd(dwp.State)
+	dwp.Print.PrintResponse(dwp.State)
+	// dwp.Print.IntentResponse(dwp.State)
 
 	return dwp.State
 }
@@ -415,7 +368,8 @@ func (dwp *TypeDeployWp) RunComposer(dstDir string, args ...string) *ux.State {
 		return state
 	}
 
-	dwp.Print.IntentBegin("Running composer")
+	// dwp.Print.Intent( "Running composer")
+	dwp.Print.Notify(1,  "Running composer")
 	for range onlyOnce {
 		exe := toolExec.New(dwp.Runtime)
 		if exe.State.IsNotOk() {
@@ -443,18 +397,18 @@ func (dwp *TypeDeployWp) RunComposer(dstDir string, args ...string) *ux.State {
 			break
 		}
 
-		exe.ShowProgress()
+		//exe.ShowProgress()
 
-		dwp.Print.Intent("Running composer\n")
-		dwp.Print.Intent("    Additional Args: %s\n", strings.Join(exe.GetArgs(), " "))
-		dwp.Print.Intent("    Working Dir:     %s\n", exe.GetWorkingPathAbs())
+		//dwp.Print.Intent("    Additional Args: %s\n", strings.Join(exe.GetArgs(), " "))
+		//dwp.Print.Intent("    Working Dir:     %s\n", exe.GetWorkingPathAbs())
 
 		dwp.State = exe.Run()
 		if dwp.State.IsNotOk() {
 			break
 		}
 	}
-	dwp.Print.IntentEnd(dwp.State)
+	dwp.Print.PrintResponse(dwp.State)
+	// dwp.Print.IntentResponse(dwp.State)
 
 	return dwp.State
 }
@@ -465,7 +419,8 @@ func (dwp *TypeDeployWp) SelectDestinationHost() *ux.State {
 		return state
 	}
 
-	dwp.Print.IntentBegin("Select host")
+	// dwp.Print.Intent( "Select host")
+	dwp.Print.Notify(0,  "Select host")
 	for range onlyOnce {
 		host := dwp.GetHost()
 		if host == "" {
@@ -485,7 +440,8 @@ func (dwp *TypeDeployWp) SelectDestinationHost() *ux.State {
 
 		dwp.State.SetOk()
 	}
-	dwp.Print.IntentEnd(dwp.State)
+	dwp.Print.PrintResponse(dwp.State)
+	// dwp.Print.IntentResponse(dwp.State)
 
 	return dwp.State
 }
@@ -529,13 +485,14 @@ func (dwp *TypeDeployWp) PrintRepo(gitRef *toolGit.TypeGit) *ux.State {
 		t, _ := gitRef.GetTags()
 		s := gitRef.GetStatus().GetOutput()
 
-		dwp.Print.Intent("SOURCE REPO:")
-		dwp.Print.Ok("Provider:  GitHub")
-		dwp.Print.Ok("Path:      %s", p)
-		dwp.Print.Ok("Url:       %s", u)
-		dwp.Print.Ok("Branch(current):    %s", b)
-		dwp.Print.Ok("Tags(available):    %s", strings.Join(t, " "))
-		dwp.Print.Ok("Status:    %s", s)
+		// dwp.Print.Intent( "Source Repository")
+		dwp.Print.Notify(1,  "Source Repository")
+		dwp.Print.Ok(1, "Provider:  GitHub")
+		dwp.Print.Ok(1, "Path:      %s", p)
+		dwp.Print.Ok(1, "Url:       %s", u)
+		dwp.Print.Ok(1, "Branch(current):    %s", b)
+		dwp.Print.Ok(1, "Tags(available):    %s", strings.Join(t, " "))
+		dwp.Print.Ok(1, "Status:    %s", s)
 	}
 
 	return gitRef.State

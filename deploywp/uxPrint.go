@@ -11,70 +11,154 @@ import (
 
 type UxPrint struct {
 	verbose bool
+	newLine bool
+	//indentValue int
+	last *caller
 
+	alreadyPrinted bool
 	callOrder []caller
 }
 type caller struct {
 	Func string
 	Text string
-	SubPrint bool
+	SubPrint int
 	Indent int
 }
 
 
-func (up *UxPrint) Notify(format string, args ...interface{}) {
-	if up.verbose {
-		ux.PrintflnBlue(format, args...)
-	}
-	return
+func (up *UxPrint) Intent(format string, args ...interface{}) {
+	str, _ := up.sprintf(format + " ... ", args...)
+	str = up.indent() + str
+	ux.PrintfBlue(str)
 }
 
 
-func (up *UxPrint) IntentBegin(format string, args ...interface{}) {
-	//if up.callOrder == nil {
-	//	up.callOrder = []caller{}
-	//}
-
-	pc, file, _, _ := runtime.Caller(1)
-	details := runtime.FuncForPC(pc)
-	file = fmt.Sprintf("%s", details.Name())
-	txt := fmt.Sprintf(format + " ... ", args...)
-
-	last := up.getLast()
-	if file != last.Func {
-		last.SubPrint = true
-		up.callOrder = append(up.callOrder, caller{Func: file, Text: txt, SubPrint: false, Indent: last.Indent+1})
-	} else {
-		up.getLast().Text = txt
-	}
-	ux.PrintfBlue(up.indent() + txt)
-}
-
-
-func (up *UxPrint) IntentEnd(state *ux.State) {
+func (up *UxPrint) IntentResponse(state *ux.State) {
 	for range onlyOnce {
-		pc, file, _, _ := runtime.Caller(1)
-		details := runtime.FuncForPC(pc)
-		file = fmt.Sprintf("%s", details.Name())
+		switch {
+			case state.IsOk():
+				format := state.GetOk().Error()
+				if format == "" {
+					format = "OK"
+				}
+				var noprint bool
+				format, noprint = up.sprintf(format)
+				if noprint {
+					break
+				}
+				ux.PrintfGreen(format)
 
-		var isLast bool
-		if up.isLast(file) {
-			isLast = true
+			case state.IsWarning():
+				format := state.GetWarning().Error()
+				if format == "" {
+					format = "WARNING"
+				}
+				var noprint bool
+				format, noprint = up.sprintf(format)
+				if noprint {
+					break
+				}
+				ux.PrintfYellow(format)
+
+			case state.IsError():
+				format := state.GetError().Error()
+				if format == "" {
+					format = "ERROR"
+				}
+				var noprint bool
+				format, noprint = up.sprintf(format)
+				if noprint {
+					break
+				}
+				ux.PrintfRed(format)
 		}
+	}
+}
 
-		last := up.trimTo(file)
-		if last.Func != file {
+
+func (up *UxPrint) IntentAppend(format string, args ...interface{}) {
+	for range onlyOnce {
+		if len(up.callOrder) == 0 {
+			up.new()
+		}
+		txt := fmt.Sprintf(format + " ... ", args...)
+
+		callerName := up.getCaller(parent)
+		up.last = up.getLast()
+		if up.last.Func == callerName {
+			// Last caller is the same.
+			up.last.Text = txt
+			ux.PrintfBlue(up.indent() + txt)
 			break
 		}
-		if last.SubPrint {
-			if isLast {
+
+		index := up.findCaller(callerName)
+		if index > 0 {
+			up.trimCaller(index+1)
+			ux.PrintfBlue(up.indent() + txt)
+			break
+		}
+
+		up.addCaller(caller{Func: callerName, Text: txt, SubPrint: 0, Indent: up.last.Indent + 1})
+		ux.PrintfBlue(txt)
+	}
+}
+
+
+func (up *UxPrint) sprintf(format string, args ...interface{}) (string, bool) {
+	var txt string
+	var noprint bool
+	for range onlyOnce {
+		if len(up.callOrder) == 0 {
+			up.new()
+		}
+		txt = fmt.Sprintf(format, args...)
+
+		callerName := up.getCaller(parent)
+		up.last = up.getLast()
+		if up.last.Func == callerName {
+			// Last caller is the same.
+			if up.last.Text == txt {
+				noprint = true
 				break
 			}
-			ux.PrintfBlue(up.indentPrint(last.Indent) + last.Text)
+			up.last.Text = txt
+			break
 		}
-		up.IntentResponse(state, "")
+
+		index := up.findCaller(callerName)
+		if index > 0 {
+			up.trimCaller(index+1)
+			noprint = true
+			break
+		}
+
+		callersCaller := up.getCaller(parentsParent)
+		index = up.findCaller(callersCaller)
+		if index == 0 {
+			up.new()
+			up.last = up.getLast()
+		}
+
+        up.addCaller(caller{Func: callerName, Text: txt, SubPrint: 0, Indent: up.last.Indent + 1})
 	}
-	return
+	return txt, noprint
+}
+
+
+const parent = 3
+const parentsParent = 4
+func (up *UxPrint) getCaller(count int) string {
+	pc, file, _, _ := runtime.Caller(count)
+	details := runtime.FuncForPC(pc)
+	file = fmt.Sprintf("%s", details.Name())
+	return file
+}
+
+
+func (up *UxPrint) new() {
+	up.callOrder = []caller{}
+	up.callOrder = append(up.callOrder, caller{})
 }
 
 
@@ -94,16 +178,27 @@ func (up *UxPrint) isLast(fn string) bool {
 }
 
 
-func (up *UxPrint) trimTo(name string) caller {
-	var c caller
-	for i := len(up.callOrder)-1; i >= 0; i-- {
-		if up.callOrder[i].Func == name {
-			c = up.callOrder[i]
-			up.callOrder = up.callOrder[:i]
+func (up *UxPrint) findCaller(name string) int {
+	var c int
+	for c = len(up.callOrder)-1; c > 0; c-- {
+		if up.callOrder[c].Func == name {
 			break
 		}
 	}
 	return c
+}
+
+
+func (up *UxPrint) addCaller(c caller) {
+	up.last.SubPrint++
+	up.callOrder = append(up.callOrder, c)
+	up.last = up.getLast()
+}
+
+
+func (up *UxPrint) trimCaller(index int) {
+	up.callOrder = up.callOrder[:index]
+	up.last = up.getLast()
 }
 
 
@@ -120,6 +215,18 @@ func (up *UxPrint) indent() string {
 	if c > 0 {
 		c--
 	}
+	//if c > 0 {
+	//	c--
+	//}
+	c2 := len(up.callOrder)
+	if c2 > 0 {
+		c2--
+	}
+	if c2 > 0 {
+		c2--
+	}
+
+	//c := up.getLast().Indent
 	return up.indentPrint(c)
 }
 
@@ -129,53 +236,85 @@ func (up *UxPrint) indentPrint(c int) string {
 }
 
 
-func (up *UxPrint) Intent(format string, args ...interface{}) {
-	ux.PrintfWhite(up.indentPrint(up.getLast().Indent) + format + " ... ", args...)
-	up.getLast().SubPrint = true
+func (up *UxPrint) Notify(indent int, format string, args ...interface{}) {
+	var prefix string
+	var suffix string
+	if indent >= 0 {
+		prefix = up.indentPrint(indent)
+		suffix = " ... "
+	}
+	ux.PrintfBlue(prefix + format + suffix, args...)
+	up.alreadyPrinted = false
 	return
 }
 
 
-func (up *UxPrint) IntentResponse(state *ux.State, format string, args ...interface{}) {
-	switch {
+func (up *UxPrint) Append(format string, args ...interface{}) {
+	ux.PrintfBlue(format + ":", args...)
+	up.alreadyPrinted = false
+	return
+}
+
+
+func (up *UxPrint) PrintResponse(state *ux.State) {
+	for range onlyOnce {
+		if up.alreadyPrinted {
+			break
+		}
+		switch {
 		case state.IsOk():
+			format := state.GetOk().Error()
 			if format == "" {
 				format = "OK"
 			}
-			ux.PrintfGreen(format, args...)
+			ux.PrintfGreen(format)
 
 		case state.IsWarning():
+			format := state.GetWarning().Error()
 			if format == "" {
-				format = state.GetWarning().Error()
+				format = "WARNING"
 			}
-			ux.PrintfYellow(format, args...)
+			ux.PrintfYellow(format)
 
 		case state.IsError():
+			format := state.GetError().Error()
 			if format == "" {
-				format = state.GetError().Error()
+				format = "ERROR"
 			}
-			ux.PrintfRed(format, args...)
+			ux.PrintfRed(format)
+		}
+		up.alreadyPrinted = true
 	}
-	up.getLast().SubPrint = true
-	return
 }
 
 
-func (up *UxPrint) Ok(format string, args ...interface{}) {
+func (up *UxPrint) Ok(indent int, format string, args ...interface{}) {
 	if up.verbose {
-		ux.PrintflnOk(format, args...)
+		if indent == 0 {
+			up.indentPrint(indent)
+		}
+		ux.PrintfOk(format, args...)
+		up.alreadyPrinted = false
 	}
 	return
 }
 
 
-func (up *UxPrint) Warning(format string, args ...interface{}) {
-	ux.PrintflnWarning(format, args...)
+func (up *UxPrint) Warning(indent int, format string, args ...interface{}) {
+	if indent == 0 {
+		up.indentPrint(indent)
+	}
+	ux.PrintfWarning(format, args...)
+	up.alreadyPrinted = false
 	return
 }
 
 
-func (up *UxPrint) Error(format string, args ...interface{}) {
-	ux.PrintflnError(format, args...)
+func (up *UxPrint) Error(indent int, format string, args ...interface{}) {
+	if indent == 0 {
+		up.indentPrint(indent)
+	}
+	ux.PrintfError(format, args...)
+	up.alreadyPrinted = false
 	return
 }

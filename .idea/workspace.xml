@@ -2,29 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="56b4b170-76f7-4ada-8cff-27bcfeafc366" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/deploywp/uxPrint.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/root.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/root.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/deploywp.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/deploywp.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/docs.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/docs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/paths.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/paths.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/pkgreflect.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/pkgreflect.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/source.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/source.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/source_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/source_repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/struct.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/struct.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/target.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/target_files.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/target_provider.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/target_provider_defaults.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/target_provider_meta.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/target_providers.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/target_revision.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/target_revisions.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deploywp/tools.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/tools.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploywp/tools_highlevel.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/tools_highlevel.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploywp/tools_lowlevel.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/tools_lowlevel.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deploywp/tools_workflow.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/tools_workflow.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/deploywp.json" beforeDir="false" afterPath="$PROJECT_DIR$/tests/deploywp.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/deploywp/uxPrint.go" beforeDir="false" afterPath="$PROJECT_DIR$/deploywp/uxPrint.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,46 +111,46 @@
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state x="377" y="287" key="#xdebugger.XInspectDialog/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1591925696155" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.bottom" timestamp="1593432627608">
+    <state width="1701" height="1013" key="GridCell.Tab.0.bottom" timestamp="1593501774989">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593432627608" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.center" timestamp="1593432627607">
+    <state width="1701" height="1013" key="GridCell.Tab.0.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593501774989" />
+    <state width="1701" height="1013" key="GridCell.Tab.0.center" timestamp="1593501774987">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179263" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593432627607" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.left" timestamp="1593432627606">
+    <state width="1701" height="1013" key="GridCell.Tab.0.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593501774987" />
+    <state width="1701" height="1013" key="GridCell.Tab.0.left" timestamp="1593501774987">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179263" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593432627606" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.right" timestamp="1593432627607">
+    <state width="1701" height="1013" key="GridCell.Tab.0.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593501774987" />
+    <state width="1701" height="1013" key="GridCell.Tab.0.right" timestamp="1593501774988">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="1013" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593432627607" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.bottom" timestamp="1593432621528">
+    <state width="1701" height="1013" key="GridCell.Tab.0.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593501774988" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.bottom" timestamp="1593501775270">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179265" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593432621528" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.center" timestamp="1593432621526">
+    <state width="1701" height="1013" key="GridCell.Tab.1.bottom/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593501775270" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.center" timestamp="1593501775269">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593432621526" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.left" timestamp="1593432621526">
+    <state width="1701" height="1013" key="GridCell.Tab.1.center/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593501775269" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.left" timestamp="1593501775269">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179264" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593432621526" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.right" timestamp="1593432621527">
+    <state width="1701" height="1013" key="GridCell.Tab.1.left/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593501775269" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.right" timestamp="1593501775269">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
     <state width="1701" height="311" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@-1920.23.1920.1057" timestamp="1589804179265" />
-    <state width="1701" height="1013" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593432621527" />
+    <state width="1701" height="1013" key="GridCell.Tab.1.right/0.23.1920.1008/-1920.23.1920.1057@0.23.1920.1008" timestamp="1593501775269" />
     <state width="756" height="503" key="XDebugger.FullValuePopup" timestamp="1593419582498">
       <screen x="0" y="23" width="1920" height="1008" />
     </state>
@@ -275,39 +257,169 @@
           <option name="timeStamp" value="929" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
-          <line>355</line>
-          <option name="timeStamp" value="960" />
+          <url>file://$PROJECT_DIR$/deploywp/tools_workflow.go</url>
+          <line>108</line>
+          <option name="timeStamp" value="1083" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
-          <line>417</line>
-          <option name="timeStamp" value="962" />
+          <url>file://$PROJECT_DIR$/deploywp/tools_workflow.go</url>
+          <line>116</line>
+          <option name="timeStamp" value="1084" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
-          <line>390</line>
-          <option name="timeStamp" value="972" />
+          <url>file://$PROJECT_DIR$/deploywp/tools_workflow.go</url>
+          <line>50</line>
+          <option name="timeStamp" value="1156" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
-          <line>144</line>
-          <option name="timeStamp" value="992" />
+          <url>file://$PROJECT_DIR$/deploywp/tools_workflow.go</url>
+          <line>59</line>
+          <option name="timeStamp" value="1192" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_workflow.go</url>
+          <line>35</line>
+          <option name="timeStamp" value="1193" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_workflow.go</url>
+          <line>24</line>
+          <option name="timeStamp" value="1194" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/deploywp/tools_workflow.go</url>
           <line>15</line>
-          <option name="timeStamp" value="1034" />
+          <option name="timeStamp" value="1195" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/deploywp/tools_workflow.go</url>
-          <line>21</line>
-          <option name="timeStamp" value="1035" />
+          <line>84</line>
+          <option name="timeStamp" value="1202" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_workflow.go</url>
+          <line>93</line>
+          <option name="timeStamp" value="1204" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_highlevel.go</url>
+          <line>105</line>
+          <option name="timeStamp" value="1217" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_highlevel.go</url>
+          <line>201</line>
+          <option name="timeStamp" value="1219" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
-          <line>85</line>
-          <option name="timeStamp" value="1039" />
+          <line>59</line>
+          <option name="timeStamp" value="1221" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>99</line>
+          <option name="timeStamp" value="1222" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>147</line>
+          <option name="timeStamp" value="1223" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>206</line>
+          <option name="timeStamp" value="1224" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>250</line>
+          <option name="timeStamp" value="1225" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>343</line>
+          <option name="timeStamp" value="1230" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>301</line>
+          <option name="timeStamp" value="1231" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>412</line>
+          <option name="timeStamp" value="1233" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>25</line>
+          <option name="timeStamp" value="1246" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>70</line>
+          <option name="timeStamp" value="1247" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>109</line>
+          <option name="timeStamp" value="1248" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>216</line>
+          <option name="timeStamp" value="1250" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>263</line>
+          <option name="timeStamp" value="1251" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>311</line>
+          <option name="timeStamp" value="1252" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>371</line>
+          <option name="timeStamp" value="1253" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_lowlevel.go</url>
+          <line>159</line>
+          <option name="timeStamp" value="1254" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_highlevel.go</url>
+          <line>191</line>
+          <option name="timeStamp" value="1255" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_highlevel.go</url>
+          <line>219</line>
+          <option name="timeStamp" value="1256" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_highlevel.go</url>
+          <line>229</line>
+          <option name="timeStamp" value="1257" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_highlevel.go</url>
+          <line>243</line>
+          <option name="timeStamp" value="1258" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_highlevel.go</url>
+          <line>16</line>
+          <option name="timeStamp" value="1259" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/deploywp/tools_highlevel.go</url>
+          <line>94</line>
+          <option name="timeStamp" value="1260" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

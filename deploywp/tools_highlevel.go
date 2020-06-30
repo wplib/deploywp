@@ -13,7 +13,8 @@ func (dwp *TypeDeployWp) OpenSourceRepo() *toolGit.TypeGit {
 		return &toolGit.TypeGit{State: state}
 	}
 
-	dwp.Print.IntentBegin("Opening source repository")
+	// dwp.Print.Intent("Opening source repository")
+	dwp.Print.Notify(0, "Opening source repository")
 	for range onlyOnce {
 		gitRef.State.SetOk()
 		source := dwp.Source
@@ -56,6 +57,15 @@ func (dwp *TypeDeployWp) OpenSourceRepo() *toolGit.TypeGit {
 		}
 		pathRef.SetPath(source.AbsPaths.GetBasePath())
 
+		// Check repo exists and clone if not.
+		gitRef.State = pathRef.StatPath()
+		if pathRef.NotExists() {
+			gitRef = dwp.CloneRepo(url.String(), pathRef)
+			if gitRef.State.IsNotOk() {
+				break
+			}
+		}
+
 		gitRef = dwp.OpenRepo(url.String(), pathRef)
 		if gitRef.State.IsNotOk() {
 			break
@@ -71,11 +81,16 @@ func (dwp *TypeDeployWp) OpenSourceRepo() *toolGit.TypeGit {
 			if gitRef.State.IsError() {
 				break
 			}
+			gitRef.State = dwp.PrintSourcePaths()
+			if gitRef.State.IsError() {
+				break
+			}
 		}
 
 		gitRef.State.SetOk()
 	}
-	dwp.Print.IntentEnd(gitRef.State)
+	// dwp.Print.IntentResponse(gitRef.State)
+	dwp.Print.PrintResponse(gitRef.State)
 
 	return gitRef
 }
@@ -87,7 +102,8 @@ func (dwp *TypeDeployWp) OpenDestinationRepo() *toolGit.TypeGit {
 		return &toolGit.TypeGit{State: state}
 	}
 
-	dwp.Print.IntentBegin("Opening destination repository")
+	// dwp.Print.Intent("Opening destination repository")
+	dwp.Print.Notify(0, "Opening destination repository")
 	for range onlyOnce {
 		gitRef.State.SetOk()
 		destination := dwp.Destination
@@ -130,6 +146,15 @@ func (dwp *TypeDeployWp) OpenDestinationRepo() *toolGit.TypeGit {
 		}
 		pathRef.SetPath(destination.GetBasePath())
 
+		// Check repo exists and clone if not.
+		gitRef.State = pathRef.StatPath()
+		if pathRef.NotExists() {
+			gitRef = dwp.CloneRepo(repoUrl, pathRef)
+			if gitRef.State.IsNotOk() {
+				break
+			}
+		}
+
 		gitRef = dwp.OpenRepo(repoUrl, pathRef)
 		if gitRef.State.IsError() {
 			gitRef.State = gitRef.State
@@ -147,16 +172,22 @@ func (dwp *TypeDeployWp) OpenDestinationRepo() *toolGit.TypeGit {
 				break
 			}
 
-			dwp.Print.IntentResponse(gitRef.State, "")
-			dwp.Print.Ok("HostName: '%s'", host.HostName)
-			dwp.Print.Ok("Label:    '%s'", host.Label)
-			dwp.Print.Ok("Provider: '%s'", host.Provider)
-			dwp.Print.Ok("Web Root: '%s'", webRoot)
+			// dwp.Print.IntentResponse(gitRef.State)
+			dwp.Print.Ok(1,"HostName: '%s'", host.HostName)
+			dwp.Print.Ok(1,"Label:    '%s'", host.Label)
+			dwp.Print.Ok(1,"Provider: '%s'", host.Provider)
+			dwp.Print.Ok(1,"Web Root: '%s'", webRoot)
+
+			gitRef.State = dwp.PrintDestinationPaths()
+			if gitRef.State.IsError() {
+				break
+			}
 		}
 
 		gitRef.State.SetOk()
 	}
-	dwp.Print.IntentEnd(gitRef.State)
+	// dwp.Print.IntentResponse(gitRef.State)
+	dwp.Print.PrintResponse(gitRef.State)
 
 	return gitRef
 }
@@ -167,22 +198,24 @@ func (dwp *TypeDeployWp) PrintSourcePaths() *ux.State {
 		return state
 	}
 
-	dwp.Print.IntentBegin("Source Path Check")
+	// dwp.Print.Intent("Source Path Check")
+	dwp.Print.Notify(0, "Source Path Check")
 	for range onlyOnce {
 		src := dwp.GetSourcePaths()
 		if src == nil {
-			dwp.State.SetError("no srource paths")
+			dwp.State.SetError("no source paths")
 		}
 		//srcAbs := dwp.GetSourceAbsPaths()
 		//dwp.Print.Ok("BasePath (abs):    %s", srcAbs.GetBasePath())
-		dwp.Print.Ok("BasePath:          %s", src.GetBasePath())
-		dwp.Print.Ok("WebRootPath:       %s", src.GetWebRootPath(false))
-		dwp.Print.Ok("ContentPath:       %s", src.GetContentPath(false))
-		dwp.Print.Ok("CorePath:          %s", src.GetCorePath(false))
-		dwp.Print.Ok("RootPath:          %s", src.GetRootPath(false))
-		dwp.Print.Ok("VendorPath:        %s", src.GetVendorPath(false))
+		dwp.Print.Ok(1,"BasePath:          %s", src.GetBasePath())
+		dwp.Print.Ok(1,"WebRootPath:       %s", src.GetWebRootPath(false))
+		dwp.Print.Ok(1,"ContentPath:       %s", src.GetContentPath(false))
+		dwp.Print.Ok(1,"CorePath:          %s", src.GetCorePath(false))
+		dwp.Print.Ok(1,"RootPath:          %s", src.GetRootPath(false))
+		dwp.Print.Ok(1,"VendorPath:        %s", src.GetVendorPath(false))
 	}
-	dwp.Print.IntentEnd(dwp.State)
+	// dwp.Print.IntentResponse(dwp.State)
+	dwp.Print.PrintResponse(dwp.State)
 
 	return dwp.State
 }
@@ -193,19 +226,20 @@ func (dwp *TypeDeployWp) PrintDestinationPaths() *ux.State {
 		return state
 	}
 
-	dwp.Print.IntentBegin("Destination Paths")
+	// dwp.Print.Intent("Destination Path Check")
+	dwp.Print.Notify(0, "Destination Path Check")
 	for range onlyOnce {
 		destination := dwp.GetDestinationPaths()
 		//destinationAbs := dwp.GetDestinationAbsPaths()
 		//dwp.Print.Ok("BasePath (abs):    %s", destinationAbs.GetBasePath())
-		dwp.Print.Ok("BasePath:          %s", destination.GetBasePath())
-		dwp.Print.Ok("WebRootPath:       %s", destination.GetWebRootPath(false))
-		dwp.Print.Ok("ContentPath:       %s", destination.GetContentPath(false))
-		dwp.Print.Ok("CorePath:          %s", destination.GetCorePath(false))
-		dwp.Print.Ok("RootPath:          %s", destination.GetRootPath(false))
-		dwp.Print.Ok("VendorPath:        %s", destination.GetVendorPath(false))
+		dwp.Print.Ok(1,"BasePath:          %s", destination.GetBasePath())
+		dwp.Print.Ok(1,"WebRootPath:       %s", destination.GetWebRootPath(false))
+		dwp.Print.Ok(1,"ContentPath:       %s", destination.GetContentPath(false))
+		dwp.Print.Ok(1,"CorePath:          %s", destination.GetCorePath(false))
+		dwp.Print.Ok(1,"RootPath:          %s", destination.GetRootPath(false))
+		dwp.Print.Ok(1,"VendorPath:        %s", destination.GetVendorPath(false))
 	}
-	dwp.Print.IntentEnd(dwp.State)
+	// dwp.Print.IntentResponse(dwp.State)
 
 	return dwp.State
 }

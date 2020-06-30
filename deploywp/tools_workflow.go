@@ -9,17 +9,34 @@ import (
 )
 
 
-//func (dwp *TypeDeployWp) test() {
+//func (dwp *TypeDeployWp) test1() {
 //	stateError := ux.NewState("test", false)
 //	stateError.SetError("Hey it failed")
 //
-//	dwp.Print.IntentBegin("LEVEL 3")
-//	dwp.Print.Intent("first print")
-//	dwp.Print.IntentResponse(stateError,"should have passed")
-//	return
-//	dwp.Print.Intent("second print")
-//	dwp.Print.IntentResponse(stateError,"should have errored")
-//	dwp.Print.IntentEnd(stateError)
+//	dwp.Print.Intent("test 1 part 1")
+//	dwp.Print.IntentResponse(stateError)
+//	dwp.Print.Intent("test 1 part 2")
+//	dwp.Print.IntentResponse(stateError)
+//}
+//func (dwp *TypeDeployWp) test2() {
+//	stateOk := ux.NewState("test2", false)
+//	stateOk.SetOk("All OK")
+//
+//	dwp.Print.Intent("test 2 part 1")
+//	dwp.Print.IntentResponse(stateOk)
+//	dwp.Print.Intent("test 2 part 2")
+//	dwp.test3()
+//	dwp.Print.IntentResponse(stateOk)
+//	dwp.Print.Intent("test 2 part 3")
+//}
+//func (dwp *TypeDeployWp) test3() {
+//	stateOk := ux.NewState("test3", false)
+//	stateOk.SetOk("All OK")
+//
+//	dwp.Print.Intent( "test 3 part 1")
+//	dwp.Print.IntentResponse(stateOk)
+//	dwp.Print.Intent("test 3 part 2")
+//	dwp.Print.IntentResponse(stateOk)
 //}
 
 
@@ -31,36 +48,43 @@ func (dwp *TypeDeployWp) Build() *ux.State {
 	}
 
 	for range onlyOnce {
-		dwp.Print.Notify("%s v%s", dwp.Runtime.CmdFile, dwp.Runtime.CmdVersion)
-		dwp.Print.Notify("args: %s", dwp.Runtime.GetArgs())
+		dwp.Print.Notify(0, "%s v%s", dwp.Runtime.CmdFile, dwp.Runtime.CmdVersion)
+		dwp.Print.Notify(0, "args: %s", dwp.Runtime.GetArgs())
 
 
-		//stateOk := ux.NewState("foo", false)
+		//stateOk := ux.NewState("error", false)
 		//stateOk.SetOk()
-		//stateError := ux.NewState("foo", false)
+		//stateError := ux.NewState("ok", false)
 		//stateError.SetError("Hey it failed")
-		//dwp.Print.IntentBegin("LEVEL 1")
-		//dwp.Print.Intent("first print")
-		//dwp.Print.IntentResponse(stateOk,"should have passed")
-		//dwp.Print.Intent("second print")
-		//dwp.Print.IntentResponse(stateError,"should have errored")
-		//dwp.Print.IntentBegin("LEVEL 2")
-		//dwp.Print.Intent("first print")
-		//dwp.Print.IntentResponse(stateOk,"should have passed")
-		//dwp.Print.Intent("second print")
-		//dwp.Print.IntentResponse(stateError,"")
-		//dwp.test()
-		//dwp.Print.IntentEnd(stateError)
+		//
+		//dwp.Print.Intent( "First thingy - item 1")
+		//dwp.Print.IntentResponse(stateOk)
+		//dwp.Print.Intent( "First thingy - item 2")
+		//dwp.Print.IntentResponse(stateOk)
+		//dwp.Print.Intent( "First thingy - item 3")
+		//dwp.Print.IntentResponse(stateError)
+		//
+		//dwp.test1()
+		//
+		//dwp.Print.Intent( "Second thingy - item 1")
+		//dwp.Print.IntentResponse(stateOk)
+		//dwp.Print.Intent( "Second thingy - item 2")
+		//dwp.Print.Intent( "Second thingy - item 3")
+		//dwp.Print.IntentResponse(stateError)
+		//
+		//dwp.test2()
+		//
+		//dwp.Print.Intent( "Third thingy - item 1")
+		//dwp.Print.IntentResponse(stateOk)
+		//dwp.Print.IntentResponse(stateOk)
+		//dwp.Print.Intent( "Third thingy - item 3")
+		//dwp.Print.IntentResponse(stateError)
 
 
 		{
 			srcGitRef := dwp.OpenSourceRepo()
 			if srcGitRef.State.IsError() {
 				dwp.State = srcGitRef.State
-				break
-			}
-			dwp.State = dwp.PrintSourcePaths()
-			if dwp.State.IsError() {
 				break
 			}
 		}
@@ -72,11 +96,6 @@ func (dwp *TypeDeployWp) Build() *ux.State {
 				dwp.State = destinationGitRef.State
 				break
 			}
-			dwp.State = dwp.PrintDestinationPaths()
-			if dwp.State.IsError() {
-				break
-			}
-
 			dwp.State = dwp.CleanRepo(destinationGitRef, true)
 			if dwp.State.IsError() {
 				break
@@ -103,7 +122,7 @@ func (dwp *TypeDeployWp) Build() *ux.State {
 
 		os.Exit(1)
 
-		dwp.Print.Intent("# Increment BUILD within destination repository #")
+		// dwp.Print.Intent("Increment BUILD", "Increment BUILD within destination repository")
 		//dwp.State = dwp.OpenDestinationRepo()
 		time.Sleep(time.Second * 2)	// Simulate
 		if dwp.State.IsError() {
@@ -111,7 +130,7 @@ func (dwp *TypeDeployWp) Build() *ux.State {
 		}
 
 
-		dwp.Print.Intent("# Commit destination repository to Pantheon #")
+		// dwp.Print.Intent("Commit to Pantheon", "Commit destination repository to Pantheon")
 		//dwp.State = dwp.OpenDestinationRepo()
 		time.Sleep(time.Second * 2)	// Simulate
 		if dwp.State.IsError() {
@@ -119,7 +138,7 @@ func (dwp *TypeDeployWp) Build() *ux.State {
 		}
 
 
-		dwp.Print.Intent("# Commit source repository #")
+		// dwp.Print.Intent("Commit source", "Commit source repository")
 		//dwp.State = dwp.OpenDestinationRepo()
 		time.Sleep(time.Second * 2)	// Simulate
 		if dwp.State.IsError() {
