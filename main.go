@@ -9,7 +9,7 @@ import (
 //go:generate buildtool pkgreflect deploywp
 
 func init() {
-	_ = ux.Open("Gearbox: ")
+	_, _ = ux.Open("deploywp", true)
 }
 
 func main() {

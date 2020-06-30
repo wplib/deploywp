@@ -262,26 +262,32 @@ func (up *UxPrint) PrintResponse(state *ux.State) {
 			break
 		}
 		switch {
-		case state.IsOk():
-			format := state.GetOk().Error()
-			if format == "" {
-				format = "OK"
-			}
-			ux.PrintfGreen(format)
+			case state.ExitCode > 0:
+				ux.PrintfRed("FAILED")
 
-		case state.IsWarning():
-			format := state.GetWarning().Error()
-			if format == "" {
-				format = "WARNING"
-			}
-			ux.PrintfYellow(format)
+			case state.IsError():
+				format := state.GetError().Error()
+				if format == "" {
+					format = "ERROR"
+				}
+				ux.PrintfRed(format)
 
-		case state.IsError():
-			format := state.GetError().Error()
-			if format == "" {
-				format = "ERROR"
-			}
-			ux.PrintfRed(format)
+			case state.IsWarning():
+				format := state.GetWarning().Error()
+				if format == "" {
+					format = "WARNING"
+				}
+				ux.PrintfYellow(format)
+
+			case state.IsOk():
+				format := state.GetOk().Error()
+				if format == "" {
+					format = "OK"
+				}
+				ux.PrintfGreen(format)
+
+			default:
+				ux.PrintfGreen("OK")
 		}
 		up.alreadyPrinted = true
 	}
